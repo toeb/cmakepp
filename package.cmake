@@ -1,3 +1,8 @@
+if(NOT COMMAND export_function)
+  macro(export_function name)
+    include("${CMAKE_CURRENT_LIST_DIR}/${name}.cmake")
+  endmacro()
+endif()
 
 export_function(obj_create)
 export_function(obj_getbyid)
@@ -28,12 +33,3 @@ export_function(map_getkeys)
 export_function(map_get)
 export_function(map_set)
 
-
-import(object)
-obj_getbyid(string_class "Object")
-if(NOT string_class)
-	obj_create(string_class "Object")
-	obj_settype(${string_class} "Object")
-
-
-endif()
