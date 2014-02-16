@@ -1,0 +1,5 @@
+function(obj_nullcheck ref)
+ if(NOT EXISTS ${ref})
+  message(FATAL_ERROR "null reference '${ref}'")
+ endif()
+endfunction()

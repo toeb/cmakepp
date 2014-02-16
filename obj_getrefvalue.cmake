@@ -1,0 +1,7 @@
+function(obj_getrefvalue ref result)
+	if(EXISTS "${ref}")
+		file(READ "${ref}" res)
+		return_value(${res})
+	endif()
+	return_value(NOTFOUND)
+endfunction()

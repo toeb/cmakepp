@@ -1,0 +1,7 @@
+function(map_set ref key)
+ map_getkeys( ${ref} keys)
+ list(APPEND keys ${key})
+ list(REMOVE_DUPLICATES keys)
+ obj_set(${ref} "__keys__" "${keys}")
+ obj_set(${ref} "${key}" ${ARGN})
+endfunction()

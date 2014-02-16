@@ -1,0 +1,8 @@
+#returns the prop_ref for obj[key] or notfound (if object itself has the property)
+function(obj_getownref ref result key)
+	obj_hasownproperty(${ref} _hasprop ${key})
+	if(_hasprop)
+		return_value("${ref}/${key}")
+	endif()
+	return_value(NOTFOUND)
+endfunction()
