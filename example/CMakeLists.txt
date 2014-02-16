@@ -1,38 +1,54 @@
 cmake_minimum_required(VERSION 2.8)
+# include standalone version of oo-cmake
+# when not using cutil this  includes the function files as well as
+# the dependent functions
 include("../oo-cmake.cmake")
-
 
 message("creating a simple inheritance example")
 
+#create animal object
 obj_create(animal)
-	obj_create(mamal)
-	obj_create(dog)
-	obj_create(cat)
-	obj_create(bird)
 
-	obj_set(
-		${animal} 
-		"eat" 
-		RAW 
-		"function(eat this result)\n  obj_get(\${this} food food) \n message(\"I am eating \${food}\")\n return_value(\"I eat \${food}\") \n endfunction() "
-	)
-
-	obj_setprototype(${bird} ${animal})
-	obj_setprototype(${mamal} ${animal})
-	obj_setprototype(${dog} ${mamal})
-	obj_setprototype(${cat} ${mamal})
-
-	obj_set(${dog} food Dogfood)
-	obj_set(${cat} food Catfood)
-	obj_set(${bird} food Birdfood)
+# set object method eat
+# this method prints out which food the animal is eating
+# existing functions can also be appliead via obj_bindcall(${ref} func arg1 arg2 arg3)
+obj_set(
+	${animal}  	#reference to animal object
+	"eat"  		#name of property
+	RAW  		# RAW indictates that the data is to be treated as a raw string not a list (hinders evaluation)
+	"function(eat this)
+	  obj_get(\${this} food food) 
+	  message(\"I am eating \${food}\") 
+	 endfunction()"
+)
 
 
+# create mamal object
+obj_create(mamal)
+obj_setprototype(${mamal} ${animal})
 
-	obj_callmember(${bird} eat res1)
-	obj_callmember(${dog} eat res2)
-	obj_callmember(${cat} eat res3)
+#create bird object
+obj_create(bird)					#create instance
+obj_setprototype(${bird} ${animal})	#set prototype animal
+obj_set(${bird} food Birdfood)		#set bird's food property to "Birdfood"
+
+#create dog object
+obj_create(dog)						#create instance
+obj_setprototype(${dog} ${mamal})	#set prototype mamal
+obj_set(${dog} food Dogfood)		#set dogs food property to "Dogfood"
+
+#create cat object
+obj_create(cat)						#create instance
+obj_setprototype(${cat} ${mamal})	#set prototype mamal
+obj_set(${cat} food Catfood)		#set cat's food property to "Catfood"
 
 
-	assert_stringequal("should return correct food" "I eat Birdfood" ${res1})
-	assert_stringequal("should return correct food" "I eat Dogfood" ${res2})
-	assert_stringequal("should return correct food" "I eat Catfood" ${res3})
+# call eat function for different objects
+obj_callmember(${bird} eat) 
+obj_callmember(${dog} eat)
+obj_callmember(${cat} eat)
+
+#output should be
+#I am eating Birdfood
+#I am eating Dogfood
+#I am eating Catfood
