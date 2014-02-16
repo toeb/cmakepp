@@ -3,7 +3,7 @@
 
 macro(tests)
 
-import(object)
+import(oo-cmake)
 
 test_register(shouldCreateAObject)
 function(${current_test_name})
