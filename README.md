@@ -76,24 +76,24 @@ People familiar with JavaScript will be familiar with this appoach.  I will writ
 You can use the following commands
 
 ```
-obj_create(out_ref) #returns a ref to a new object. this object is persistent and will exist until obj_delete is called, internally the object is represented by a folder
-obj_delete(in_ref) # deletes a object (deletes the folder internally)
-obj_find(refOrId)
-obj_get(ref value_ref key)
-obj_set(ref key value)
-obj_getref()
-obj_getownproperty
-obj_setownproperty
-obj_has(ref result key)
-obj_hasownproperty
-obj_call
-obj_bindcall
-obj_setprototype
-obj_getprototype
-obj_settype
-obj_gettype
-obj_getkeys
-obj_getownkeys
+obj_create(out_ref [objectpath]) 		#returns a ref to a new object. this object is persistent and will exist until obj_delete is called, internally the object is represented by a folder
+obj_delete(in_ref) 						# deletes a object (deletes the folder internally)
+obj_find(refOrId)						# searches for a named object or id
+obj_get(ref value  key)					# gets a property  ${value} = ref[key] the prototype chain is considered
+obj_set(ref key value)					# sets a property  ref[key] = value
+obj_getref(ref prop_ref key)			# returns the reference to a property (a file)
+obj_getownproperty(ref value key)		# returns the value for property if the property belongs to ref	
+obj_setownproperty(ref key value)   	# sets the own property ref[key] =value
+obj_has(ref result key)					# sets result to true if ref[key] exists
+obj_hasownproperty(ref result key)	 	# sets result to true if ref[key] exists and is owned by ref
+obj_callmember(ref methodname args...)	# calls a stored memberfunction (first argument passed is ref)
+obj_bindcall(ref methodname args...)	# calls a defined function setting first argument to ref
+obj_setprototype(ref proto_ref)			# sets the prototype for ref
+obj_getprototype(ref proto_ref)			# returns the prototyp for ref
+obj_settype(ref type) 					# sets the type for ref
+obj_gettype(ref type) 					# gets the type for ref
+obj_getkeys(ref keys) 					# returns all defined properties for ref
+obj_getownkeys(ref keys)				# returns all defined properties that ref owns
 
 ```
 
