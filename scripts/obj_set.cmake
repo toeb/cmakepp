@@ -1,3 +1,3 @@
-function(obj_set ref key )
-	obj_setownproperty(${ref} ${key} ${ARGN})
+function(obj_set this key)
+	obj_setownproperty(${this} ${key} ${ARGN})
 endfunction()

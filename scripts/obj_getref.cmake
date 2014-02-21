@@ -1,8 +1,8 @@
 #returns the id of a specific property 
-function(obj_getref ref result key)
-	obj_getownref(${ref} prop_ref ${key})
+function(obj_getref this result key)
+	obj_getownref(${this} prop_ref ${key})
 	if(NOT prop_ref)
-		obj_getprototype(${ref} proto)
+		obj_getprototype(${this} proto)
 		if(proto)
 			obj_getref(${proto} prop_ref ${key})
 		endif()

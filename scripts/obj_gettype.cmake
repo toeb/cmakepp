@@ -1,4 +1,4 @@
-function(obj_gettype  ref result)
-  obj_getownproperty(${ref} type "__type__")
+function(obj_gettype this result)
+  obj_getownproperty(${this} type "__type__")
   return_value(${type})
 endfunction()

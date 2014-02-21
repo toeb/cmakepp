@@ -1,0 +1,7 @@
+function(obj_getrefvalue this result)
+	if(EXISTS "${this}")
+		file(READ "${this}" res)
+		return_value(${res})
+	endif()
+	return_value(NOTFOUND)
+endfunction()

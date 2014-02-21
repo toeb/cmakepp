@@ -1,6 +1,0 @@
-function(map_create result)
- obj_create(id)
- obj_settype(${id} "map")
- obj_set(${id} "__keys__" "")
- return_value(${id})
-endfunction()

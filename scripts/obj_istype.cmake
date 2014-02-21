@@ -1,5 +1,5 @@
-function(obj_istype  ref result typename)
-	obj_gettype( ${ref} actual)
+function(obj_istype this result typename)
+	obj_gettype(${this} actual)
 	if("${actual}" STREQUAL "${typename}")
 		return_value(true)
 	 else()

@@ -1,0 +1,5 @@
+function(print this)
+	debug_message("printing object ${this}")
+	obj_callmember(${this} "to_string" str )
+	message("${str}")
+endfunction()

@@ -1,4 +1,4 @@
-function(obj_settype ref typename)
-  obj_nullcheck(${ref})
-  obj_setownproperty(${ref} "__type__" ${typename})
+function(obj_settype this typename)
+  obj_nullcheck(${this})
+  obj_setownproperty(${this} "__type__" ${typename})
 endfunction()

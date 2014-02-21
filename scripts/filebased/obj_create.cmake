@@ -14,6 +14,5 @@ function(obj_create result)
 
  file(MAKE_DIRECTORY ${ref})
 
- obj_settype(${ref} "object")
  return_value(${ref})
 endfunction()

@@ -1,7 +1,9 @@
-macro(obj_callmember ref key)
-	obj_nullcheck(${ref})
-	obj_get(${ref} func ${key})
-	#message(${func})
-	eval(${func})
-	obj_bindcall(${ref} ${key} ${ARGN})
+macro(obj_callmember this key)
+	debug_message("calling ${key} on ${this} with ${ARGN}")
+	obj_nullcheck(${this})
+	obj_getref(${this} func ${key})
+	import_function(${func} as obj_callmember_memberfunction REDEFINE)
+
+	obj_callmember_memberfunction(${this} ${ARGN})
+
 endmacro()

@@ -1,6 +1,0 @@
-function(map_getkeys ref result)
-  obj_nullcheck(${ref})
-  obj_typecheck(${ref} "map")
-  obj_get( ${ref} keys "__keys__")
-  return_value(${keys})
-endfunction()
