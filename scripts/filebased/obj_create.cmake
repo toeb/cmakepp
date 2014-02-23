@@ -1,18 +1,36 @@
+#usage
+# obj_create(result:<ref> [TRANSIENT(default)|PERSISTENT] NAMED)
+# transient objects are deleted when cmake closes NAMED is optional at the moment
+
 function(obj_create result)
- if(${ARGC} GREATER 1)
- 	# custom object id
- 	set(ref ${ARGV1})
- else()
- 	random_file(ref "${cutil_data_dir}/objects/{{id}}")
- endif()
+	set(options TRANSIENT PERSISTENT)
+	set(oneValueArgs NAMED)
+	set(multiValueArgs)
+	set(prefix)
+	cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+	
+
+
+	if(_UNPARSED_ARGUMENTS)
+ 		# custom object id
+ 		list(GET _UNPARSED_ARGUMENTS 0 ref)
+ 	else()
+ 		if(_TRANSIENT OR NOT _PERSISTENT)
+			random_file(ref "${cutil_data_dir}/objects/object_{{id}}")
+ 		else() 			
+			random_file(ref "${cutil_temp_dir}/objects/object_{{id}}")
+ 		endif()
+
+
+ 	endif()
  
- #check if object exists
- obj_exists(objectExists ${ref})
- if(objectExists)
- 	message(FATAL_ERROR "object '${ref}' already exists")
- endif()
+ 	#check if object exists
+ 	obj_exists(objectExists ${ref})
+ 	if(objectExists)
+ 		message(FATAL_ERROR "object '${ref}' already exists")
+ 	endif()
 
- file(MAKE_DIRECTORY ${ref})
+	file(MAKE_DIRECTORY ${ref})
 
- return_value(${ref})
+ 	return_value(${ref})
 endfunction()
