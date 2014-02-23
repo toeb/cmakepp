@@ -6,10 +6,13 @@
 # obj_bindcall(${this} somemethod 1 2 3)
 # is evaluated to somemethod(${this} 1 2 3)
 # if you know the name of the function statically you do not need to use this function
-macro(obj_bindcall this function_name)
+macro(obj_bindcall object function_name)
   set(args ${ARGN}) 
   list_to_string(args args " ")  
   debug_message("binding ${function_name} to ${this} and calling with (${args})")
-  debug_message("${function_name}(${this} ${args})")
-  eval("${function_name}(${this} ${args})")
+  obj_pushcontext(${object})
+  debug_message("${function_name}(\${this} \${args})")
+  eval("${function_name}(\\\${this} \\\${args})")
+  obj_popcontext()
+
 endmacro()

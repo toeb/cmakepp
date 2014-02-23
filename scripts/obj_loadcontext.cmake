@@ -1,0 +1,8 @@
+function(obj_loadcontext ctx)
+	debug_message("loading context ${ctx}")
+	obj_getkeys(${ctx} keys)
+	foreach(key ${keys})
+		obj_get(${ctx} value ${key})
+		set(${key} "${value}" PARENT_SCOPE)
+	endforeach()
+endfunction()

@@ -1,0 +1,10 @@
+
+macro(obj_popcontext)
+	pop_front("callstack" current_context)
+	obj_savecontext(${current_context})
+	peek_front("callstack" current_context)
+	if(current_context)
+		obj_loadcontext(${current_context})
+	endif()
+	set(this ${current_context})
+endmacro()

@@ -1,5 +1,5 @@
 
 macro(this_call)
 	this_check()
-	obj_call(${this} ${ARGN})
+	obj_callmember(${this} ${ARGN})
 endmacro()

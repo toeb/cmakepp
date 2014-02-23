@@ -6,7 +6,7 @@ package_property(package_description "adds prototypical object oriented function
 package_property(package_version "1.0")
 package_property(package_license "MIT")
 package_property(package_single_version true)
-package_property(package_cmake_exports "scripts/this/*" "scripts/filebased/*"  "scripts/*" )
+package_property(package_cmake_exports "scripts/obj_callobject" "scripts/this/*" "scripts/filebased/*"  "scripts/*" )
 package_property(package_install_script)
 package_property(package_cutil_main_script)
 package_property(package_cutil_actions)
