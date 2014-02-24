@@ -7,6 +7,7 @@
 # is evaluated to somemethod(${this} 1 2 3)
 # if you know the name of the function statically you do not need to use this function
 macro(obj_bindcall object function_name)
+	# here is the problem!  sometimes function_name contains a function
   set(args ${ARGN}) 
   list_to_string(args args " ")  
   debug_message("binding ${function_name} to ${this} and calling with (${args})")

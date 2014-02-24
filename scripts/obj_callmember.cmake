@@ -11,8 +11,7 @@ macro(obj_callmember this key)
 	obj_get(${this} func2 ${key})
 	#message("the func 2 ${func2}")
 	#import_function(${func2} as obj_callmember_memberfunction REDEFINE)
-	
-	obj_bindcall(${this} ${func2} ${ARGN})
+	obj_bindcall(${this} "${func2}" ${ARGN})
 	#obj_callmember_memberfunction(${this} ${ARGN})
 
 endmacro()
