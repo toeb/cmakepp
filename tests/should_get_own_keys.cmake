@@ -1,5 +1,4 @@
-
-	function(should_get_own_keys)
+function(should_get_own_keys)
 		obj_create(obj)
 		obj_setownproperty(${obj} "test1" "a")
 		obj_setownproperty(${obj} "test2" "a")

@@ -5,19 +5,19 @@ function(should_thiscall)
 
 		function(inner1)
 			this_set(var1 "hello1")
-			message("hello ${var1} ${this}")
+			
+			obj_set(${this} var1 "hello1")
 		endfunction()
 		function(inner2)
 			this_set(var2 "hello2")
 		endfunction()
-		
 
 		this_bindcall(inner1)
 		this_bindcall(inner2)
 
 
-
 		
+
 
 		assert(${var1} STREQUAL "hello1")
 		assert(${var2} STREQUAL "hello2")

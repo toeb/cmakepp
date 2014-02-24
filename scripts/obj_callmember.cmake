@@ -7,8 +7,12 @@ macro(obj_callmember this key)
 		message(FATAL_ERROR "could not find function '${key}' from object '${this}'")
 	endif()
 	# maybe generate a unique name here?
-	import_function(${func} as obj_callmember_memberfunction REDEFINE)
+	#message("funcy ${func}")
+	obj_get(${this} func2 ${key})
+	#message("the func 2 ${func2}")
+	#import_function(${func2} as obj_callmember_memberfunction REDEFINE)
 	
-	obj_callmember_memberfunction(${this} ${ARGN})
+	obj_bindcall(${this} ${func2} ${ARGN})
+	#obj_callmember_memberfunction(${this} ${ARGN})
 
 endmacro()

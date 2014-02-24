@@ -1,0 +1,7 @@
+function(new_functor result function_ref)
+	obj_create(this)
+	obj_create(proto)
+	obj_setprototype(${this} ${proto})
+	obj_set(${this} __call__ "${function_ref}")
+	return_value(${this})
+endfunction()

@@ -12,7 +12,7 @@ macro(obj_bindcall object function_name)
   debug_message("binding ${function_name} to ${this} and calling with (${args})")
   obj_pushcontext(${object})
   debug_message("${function_name}(\${this} \${args})")
-  eval("${function_name}(\\\${this} \\\${args})")
+  eval("${function_name}(${ARGN})")
   obj_popcontext()
 
 endmacro()

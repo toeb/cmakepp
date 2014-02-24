@@ -1,5 +1,4 @@
-
-	function(nested_bind_call_sameobject)
+function(nested_bind_call_sameobject)
 		function(testfunc1)
 			set(inner ${this} PARENT_SCOPE)
 		endfunction()
