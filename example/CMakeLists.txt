@@ -12,14 +12,9 @@ obj_create(animal)
 # set object method eat
 # this method prints out which food the animal is eating
 # existing functions can also be appliead via obj_bindcall(${ref} func arg1 arg2 arg3)
-obj_set(
+obj_setfunction(
 	${animal}  	#reference to animal object
-	"eat"  		#name of property
-	RAW  		# RAW indictates that the data is to be treated as a raw string not a list (hinders evaluation)
-	"function(eat this)
-	  obj_get(\${this} food food) 
-	  message(\"I am eating \${food}\") 
-	 endfunction()"
+	" function( eat ) \n obj_get(\${this} food food) \n message(\"I am eating \${food}\") \n	 endfunction()"
 )
 
 

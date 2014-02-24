@@ -1,5 +1,5 @@
 #imports a function from a file
-#
+# todo function(eat) fails because name is not reaplaced
 
 function(import_function)
   set(options REDEFINE ONCE)
@@ -7,7 +7,6 @@ function(import_function)
   set(multiValueArgs)
   set(prefix)
   cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-
 
   if(NOT _UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "missing function to import")
@@ -76,7 +75,7 @@ function(import_function)
   inject_function(function_string  "${function_string}" ON_CALL "${on_call}" BEFORE_FUNCTION "${before_function}" RENAME "${function_name}")
 
   file(WRITE "${cutil_cache_dir}/${hash}" "${function_string}")
-  #message("import_function ${function_string}" )
+ # message("import_function ${function_string}" )
   import_function_string("${function_string}")
  
   

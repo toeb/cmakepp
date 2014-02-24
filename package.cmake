@@ -8,7 +8,7 @@ package_property(package_license "MIT")
 package_property(package_single_version true)
 package_property(package_cmake_exports 
 	scripts/debugging/debug_message.cmake
-	scripts/core*
+	scripts/core/*
 	scripts/string/replace_first.cmake
 	scripts/include_once.cmake
 	#scripts/core/return_value.cmake
