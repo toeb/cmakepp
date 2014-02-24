@@ -1,0 +1,10 @@
+
+function(list_select result lst selector)
+	lambda(selector "${selector}")
+	import_function("${selector}" as selector_function REDEFINE)
+	foreach(item ${lst})
+		selector_function(res ${item})
+		list(APPEND result_list ${res})
+	endforeach()
+	return_value(${result_list})
+endfunction()

@@ -1,0 +1,7 @@
+function(is_function_ref result func)
+	if(NOT ${func})
+		return_value(false)
+	endif()
+	is_function(res "${${func}}")
+	return_value(${res})
+endfunction()

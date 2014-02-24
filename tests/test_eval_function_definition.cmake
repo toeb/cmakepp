@@ -1,0 +1,8 @@
+function(test_eval_function_definition)
+	eval("function(myfoo result arg1) \n  return_value(\\\${arg1}) \n endfunction()")
+	assert(COMMAND myfoo)
+	assert(NOT res)
+	myfoo(res "hello")
+	assert(res)
+	assert("hello" STREQUAL ${res})
+endfunction()

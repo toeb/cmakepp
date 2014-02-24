@@ -1,0 +1,13 @@
+# loads a package and executes its entry point with the input arguments if found (<package_name>_main)
+function(run package) 
+	import(${package} current_package)
+  can_import(can_run "${current_package_package_dir}/main")
+  if(can_run)
+    import_function("${current_package_package_dir}/main" as run_function)
+    # set variables which main functions may use
+    set(package_dir ${current_package_package_dir})
+    run_function(${ARGN})
+  else()
+    message(STATUS "could not find main method for package '${package}'")
+  endif()
+endfunction()

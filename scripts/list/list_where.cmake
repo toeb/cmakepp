@@ -1,0 +1,13 @@
+
+function(list_where filtered lst predicate)
+	lambda(predicate "${predicate}")
+	message("${predicate}")
+	import_function("${predicate}" as predicate_function)
+	foreach(item ${lst})
+		predicate_function(res2 "${item}")
+		if(res2)
+			list(APPEND result_list ${item})
+		endif()
+	endforeach()
+	set(${filtered} ${result_list} PARENT_SCOPE)
+endfunction()

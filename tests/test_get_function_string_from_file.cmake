@@ -1,0 +1,7 @@
+function(get_function_string_from_file)
+	file_make_temporary(fn "function(fu)\nmessage(\"${ARGN}\")\nendfunction()")
+	get_function_string(res "${fn}")
+	assert(res)
+	assert(${res} STREQUAL "function(fu)\nmessage(\"${ARGN}\")\nendfunction()")
+	file(REMOVE ${fn})	
+endfunction()

@@ -1,0 +1,8 @@
+macro( return_if_run_before id)
+	string(MAKE_C_IDENTIFIER ${id} guard)
+	get_property(was_run GLOBAL PROPERTY ${guard})
+	if(was_run)
+		return()
+	endif()
+	set_property(GLOBAL PROPERTY ${guard} true)
+endmacro()

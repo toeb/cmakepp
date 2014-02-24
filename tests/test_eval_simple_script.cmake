@@ -1,0 +1,6 @@
+function(test_eval)
+	set(test_var)
+	assert(NOT test_var)
+	eval("set(test_var hello)")
+	assert(test_var)
+endfunction()

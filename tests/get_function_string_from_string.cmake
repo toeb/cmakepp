@@ -1,0 +1,6 @@
+function(test)
+	get_function_string(str "function(fu)\nmessage(\${ARGN} \${arg})\nendfunction()")
+	assert(str)
+	assert(${str} STREQUAL "function(fu)\nmessage(\${ARGN} \${arg})\nendfunction()")
+	#message("${str}")
+endfunction()
