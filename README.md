@@ -4,6 +4,12 @@ oo-cmake
 objects, methods, maps, inheritance, oo-cmake goodness
 
 
+# Warnings
+
+cmake only has a global namespace for functions.  when importing functions you have to be very careful not to overwrite existing functions.  
+
+
+
 # Example
 
 ```

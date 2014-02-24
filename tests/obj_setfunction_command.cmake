@@ -1,0 +1,11 @@
+function(test)
+	obj_create(obj)
+	function(fu)
+
+	endfunction()
+	obj_setfunction(${obj} fu)
+	obj_get(${obj} res fu)
+	assert(res)
+	is_function_string(is_func_string "${res}")
+	assert(is_func_string)
+endfunction()

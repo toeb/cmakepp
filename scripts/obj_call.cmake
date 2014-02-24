@@ -1,8 +1,8 @@
 macro(obj_call this)
 	is_object(obj_call_is_obj ${this})
 	is_member(obj_call_is_mem ${this})
-	is_function(obj_call_is_func ${this})
-
+	is_function(obj_call_is_func ${this})		
+		
 	if(obj_call_is_obj)
 		obj_callobject(${this} ${ARGN})
 	elseif(obj_call_is_mem AND obj_call_is_func)

@@ -1,0 +1,12 @@
+function(test)
+	function(fu)
+		set(result "hello" PARENT_SCOPE)
+	endfunction()
+
+	obj_newfunctor(functor fu)
+	assert(functor)
+	obj_isfunctor(is_functor ${functor})
+	assert(is_functor)
+	obj_callobject(${functor})
+	assert(result)
+endfunction()

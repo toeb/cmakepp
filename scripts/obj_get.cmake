@@ -5,6 +5,7 @@ function(obj_get this result key)
 	endif()
 	obj_getrefvalue(${prop_ref} value)
 	# just to make sure value is not evaluated too much
-	set(${result} ${value} PARENT_SCOPE)
+	
+	set(${result} "${value}" PARENT_SCOPE)
 	
 endfunction()

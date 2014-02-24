@@ -1,0 +1,11 @@
+#
+function(test)
+	obj_create(obj)
+	function(fu)
+		set(result "hello" PARENT_SCOPE)
+	endfunction()
+	obj_setfunction(${obj} fu)	
+	obj_callmember(${obj} fu)
+	assert(result)
+	assert(${result} STREQUAL "hello")
+endfunction()
