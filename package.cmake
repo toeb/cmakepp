@@ -38,6 +38,7 @@ package_property(package_cmake_exports
 	scripts/file/*
 	scripts/function/*
 	scripts/map/*
+	scripts/scope/*
 	scripts/debugging/*
 	scripts/object/this/* 
 	scripts/object/filebased/*  

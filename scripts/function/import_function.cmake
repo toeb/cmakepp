@@ -74,7 +74,7 @@ function(import_function)
 
   inject_function(function_string  "${function_string}" ON_CALL "${on_call}" BEFORE_FUNCTION "${before_function}" RENAME "${function_name}")
 
-  #file(WRITE "${cutil_cache_dir}/${hash}" "${function_string}")
+  file(WRITE "${cutil_cache_dir}/${hash}" "${function_string}")
  # message("import_function ${function_string}" )
   import_function_string("${function_string}")
  
