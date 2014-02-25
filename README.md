@@ -1,16 +1,131 @@
 oo-cmake
 ========
 
-objects, methods, maps, inheritance, oo-cmake goodness
+objects, methods, functions, maps, inheritance, oo-cmake goodness
+
+# Installing
+
+Download the code and include oo-cmake.cmake in your CMakeLists.txt (or other cmake script)
+be sure to use an up to date version of cmake.  oo-cmake.cmake adds this:
+
+```
+cmake_minimum_required(VERSION 2.8.12)
+
+cmake_policy(SET CMP0007 NEW)
+cmake_policy(SET CMP0012 NEW)
+```
+# Testing
+
+To test the code (alot is tested but not all) run the following in the root dir of oo-cmake 
+``` 
+cmake -P oo-cmake-tests.cmake 
+```
+
+# Functions
+
+To correctly work with object oriented programming in cmake dynamic functions are a must
+I have written some methods for handling, parsing, injecting, importing, saving, loading functions
+Try the following example to get an overview of what is possible
+
+```
+
+## creating functions
+
+## the plain cmake function (with input and output vars)
+## =====================================================
+# defining a function:
+function(my_function arg)
+	set(result "${arg}" PARENT_SCOPE)
+endfunction()
+# calling the function:
+my_function("sample1")
+assert(result)
+assert(${result} STREQUAL "sample1")
 
 
-# Warnings
+# -> things to note about plain cmake functions:  
+# -> cmake only has one global namespace for functions (no scoping like with variables)
+# -> functions can be overwritten (even functions defined by cmake)
+# -> functions cannot be called dynamically (ala '${dynamic_name}(args)')
+# -> functions can be defined dynamically ( function(${dynamic_name} arg1 arg2) .... endfunction())
 
-cmake only has a global namespace for functions.  when importing functions you have to be very careful not to overwrite existing functions.  
+## dynamically calling a function  'call_function'
+## ===============================================
+set(function_name my_function)
+call_function(${function_name} sample2)
+
+assert(result)
+assert(${result} STREQUAL "sample2")
 
 
+## declaring, defining and calling a unique dynamic function
+## =========================================================
+new_function(my_unique_function)
+assert(COMMAND ${my_unique_function})
+message("${my_unique_function}")
+# my_unique_function now contains a unique string e.g. func_nTGSmkIGHL
+# it is only declared. uncommenting the following line results in a FATAL_ERROR
+# call_function(${my_unique_function})
+#the function still has to be defined: 
+function(${my_unique_function} arg1 arg2)
+	set(result "${arg2} ${arg1}" PARENT_SCOPE)
+endfunction()
+# call function
+call_function(${my_unique_function} world hello)
+assert(${result} STREQUAL "hello world")
 
-# Example
+
+## calling a function string
+## =========================
+# you can call any string that is a cmake function
+# it does not matter what name the function has
+# be sure to escape the string correctly
+# WARNING using ; and ${ARGN} or carriage returns may lead to unexpected results 
+# incorrectly escaping variables will be cause of many a bug
+call_function("function(fu arg1 arg2) \n message(nuna) \nset(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" a b)
+assert("${result}" STREQUAL "a a b b")
+
+
+## calling a function file
+## =======================
+# you can also call any file that contains a function (the first function will be called)
+# WARNING: there is still a bug that does not allow tabs before the signature and newlines in the signature (this will be fixed soon)
+# create a file containing a function
+file_make_temporary(file_name "function(fu arg1 arg2) \n message(nanu) \n set(result \"\${arg1} \${arg2}\" PARENT_SCOPE) \n endfunction()")
+call_function(${file_name} b a )
+assert(${result} STREQUAL "b a ")
+
+
+## importing a function
+## ====================
+#any kind of function can be imported 
+# the REDEFINE flag allows afunction to be overwritten (not setting it would cause an error if a function fuu already exists (2. and 3. call))
+# a usefull application iterating a list of files containing unit test functions and calling each with the same name
+# also when working with packages this allows functions to be defined in a specified namespace
+import_function(my_function as fuu REDEFINE)
+fuu(sample4)
+assert(${result} STREQUAL "sample4")
+import_function(${file_name} as fuu REDEFINE)
+fuu(a b) 
+assert(${result} STREQUAL "a b")
+import_function("function(fu arg1 arg2) \n message(nuna) \nset(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" as fuu REDEFINE)
+fuu(a b)
+assert(${result} STREQUAL "a a b b")
+
+
+## injecting
+## =========
+
+
+## parsing
+## =======
+
+```
+
+
+# Simple Inheritance Example
+
+See the following for  a very verbose sample of inheritance (one of the first ones)
 
 ```
 cmake_minimum_required(VERSION 2.8)
@@ -26,16 +141,13 @@ obj_create(animal)
 
 # set object method eat
 # this method prints out which food the animal is eating
-# existing functions can also be appliead via obj_bindcall(${ref} func arg1 arg2 arg3)
-obj_set(
-	${animal}  	#reference to animal object
-	"eat"  		#name of property
-	RAW  		# RAW indictates that the data is to be treated as a raw string not a list (hinders evaluation)
-	"function(eat this)
-	  obj_get(\${this} food food) 
-	  message(\"I am eating \${food}\") 
-	 endfunction()"
+# existing functions can also be applied via obj_bindcall(${ref} func arg1 arg2 arg3)
+
+obj_setfunction(
+	${animal} 
+	"function(eat result)\n  obj_get(\${this} food food) \n  \n return_value(\"I eat \${food}\") \n endfunction() "
 )
+
 
 
 # create mamal object
