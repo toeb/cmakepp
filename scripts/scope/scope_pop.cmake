@@ -1,7 +1,5 @@
-
-
-
-
+# removes the top scope from the scope stack
+# sets all values in current scope
 macro(scope_pop)
 	pop_front(scopes scope)
 	map_keys(${scope} keys)

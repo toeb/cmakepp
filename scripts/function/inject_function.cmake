@@ -8,7 +8,7 @@ function(inject_function result input_function)
 	cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 	
 	#todo:  find functions with signatures contains carriage returns and tabs
-	# todo: allow function names that start with f u n c t i on
+	# fixed: todo: allow function names that start with f u n c t i on
 
 	get_function_string(function_string "${input_function}")
 	function_signature_regex(regex)
@@ -19,9 +19,11 @@ function(inject_function result input_function)
 		if(found)
 			#rename function if a rename argument is specified
 			if(_RENAME)	
-				string(REGEX REPLACE "${regex}"  "\\2" function_name "${line}")
+				#string(REGEX REPLACE "${regex}"  "\\2" function_name "${line}")
+				string(REGEX REPLACE "${regex}"  "\\1(${_RENAME} \\3)" new_line "${line}")
+				#message("inject ${tst}")
 				#message("newline ${line} ${new_line} ${_RENAME} ${function_name}" )
-				replace_first(new_line "${function_name}" "${_RENAME}" "${line}")
+				#replace_first(new_line "${function_name}" "${_RENAME}" "${line}")
 
 			else()
 				set(new_line "${line}")

@@ -1,4 +1,5 @@
 function(test_eval_function_definition)
+	set(res)
 	eval("function(myfoo result arg1) \n  return_value(\\\${arg1}) \n endfunction()")
 	assert(COMMAND myfoo)
 	assert(NOT res)

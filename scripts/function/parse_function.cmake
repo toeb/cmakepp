@@ -7,7 +7,7 @@ function(parse_function result function_string)
    string(REGEX REPLACE ${regex} "\\2" func_name "${signature}" )
    string(REGEX REPLACE ${regex} "\\3" func_args "${signature}" )
 
-
+   string(STRIP "${func_name}" func_name)
 
    # get args
    string(FIND "${func_args}" ")" endOfArgsIndex)

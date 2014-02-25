@@ -1,4 +1,8 @@
 function(map_delete this)
+	map_exists(${this} res)
+	if(NOT res)
+		return()
+	endif()
 	map_check(${this})
 	map_keys(${this} keys)
 

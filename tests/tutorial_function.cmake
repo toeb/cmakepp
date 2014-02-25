@@ -53,8 +53,8 @@ assert(${result} STREQUAL "hello world")
 # be sure to escape the string correctly
 # WARNING using ; and ${ARGN} or carriage returns may lead to unexpected results 
 # incorrectly escaping variables will be cause of many a bug
-call_function("function(fu arg1 arg2) \n set(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" a b)
-#assert("${result}" STREQUAL "a a b b")
+call_function("function(fu arg1 arg2)\n set(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" a b)
+assert("${result}" STREQUAL "a a b b")
 
 
 ## calling a function file
@@ -64,7 +64,7 @@ call_function("function(fu arg1 arg2) \n set(result \"\${arg1} \${arg1} \${arg2}
 # create a file containing a function
 file_make_temporary(file_name "function(fu arg1 arg2) \n set(result \"\${arg1} \${arg2}\" PARENT_SCOPE) \n endfunction()")
 call_function(${file_name} b a )
-#assert(${result} STREQUAL "b a ")
+assert(${result} STREQUAL "b a")
 
 
 ## importing a function
@@ -74,14 +74,16 @@ call_function(${file_name} b a )
 # a usefull application iterating a list of files containing unit test functions and calling each with the same name
 # also when working with packages this allows functions to be defined in a specified namespace
 import_function(my_function as fuu REDEFINE)
-#fuu(sample4)
-#assert(${result} STREQUAL "sample4")
+fuu(sample4)
+assert(${result} STREQUAL "sample4")
 import_function(${file_name} as fuu REDEFINE)
-#fuu(a b) 
-#assert(${result} STREQUAL "a b")
-import_function("function(fu arg1 arg2) \n message(nuna) \nset(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" as fuu REDEFINE)
-#fuu(a b)
-#assert(${result} STREQUAL "a a b b")
+fuu(a b) 
+assert(${result} STREQUAL "a b")
+import_function("function(fu arg1 arg2) \n set(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" as fuu REDEFINE)
+fuu(a b)
+assert(${result} STREQUAL "a a b b")
+
+
 
 
 ## injecting

@@ -1,6 +1,3 @@
-
-
-
 macro(scope_push)
 	map_create(scope)
 	push_front(scopes ${scope})

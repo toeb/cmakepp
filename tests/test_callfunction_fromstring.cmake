@@ -1,6 +1,6 @@
 function(test_callfunction_fromstring)
 	set(res)
-	set(thefunc "function(afunction result argument )\n  set(\\\${result} \"_\\\${argument}\" PARENT_SCOPE) \nendfunction()")
+	set(thefunc "function(afunction result argument )\n  set(\${result} \"_\${argument}\" PARENT_SCOPE) \nendfunction()")
 	call_function("${thefunc}" resi argi)
 	assert(resi)
 	assert("_argi" STREQUAL "${resi}")

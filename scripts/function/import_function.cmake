@@ -1,6 +1,8 @@
 #imports a function from a file
 # todo function(eat) fails because name is not reaplaced
-
+# todo function(thefunction result) \n fails
+# todo \r\n\t in signature
+# todo function name starting with function fail
 function(import_function)
   set(options REDEFINE ONCE)
   set(oneValueArgs as)
@@ -25,9 +27,8 @@ function(import_function)
 
   # get function implementation this fails if func is not a function
   get_function_string(function_string "${func}")
-
   string(MD5 hash "${function_string}")
-  if(EXISTS "${cutil_cache_dir}/${hash}")
+  if(EXISTS "${cutil_cache_dir}/${hash}" AND NOT ${_REDEFINE})
     include ("${cutil_cache_dir}/${hash}")
    # message("cached found ${func} at ${cutil_cache_dir}/${hash}:0")
     return()
@@ -39,7 +40,7 @@ function(import_function)
   endif()
 
 
-  debug_message("importing function ${func_name} as ${function_name}")
+ debug_message("importing function '${func_name}' as '${function_name}'")
 #print_locals()
   #message(FATAL_ERROR "name ${func_name}")
 

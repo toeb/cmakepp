@@ -1,7 +1,6 @@
+#this test clears the current scope. calls a test function and elevates all newly
+# defined variables to the parent scope
 function(scoping)
-	
-	#print_locals()
-	
 	function(test)
 		scope_push()
 		set(a "helo")
@@ -9,14 +8,10 @@ function(scoping)
 		scope_elevate()
 		scope_pop()
 	endfunction()
-
 	scope_clear()
-	print_locals()
-	message("    ")
-
+	assert(NOT a)
+	assert(NOT b)
 	test()
-
-	print_locals()
-
-
+	assert(a)
+	assert(b)
 endfunction()

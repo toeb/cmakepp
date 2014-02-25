@@ -1,0 +1,7 @@
+macro(scope_elevate_values map)
+	map_keys(${map} keys)
+	foreach(key ${keys})
+		map_tryget(${map} val ${key})
+		set(${key} ${val} PARENT_SCOPE)
+	endforeach()
+endmacro()

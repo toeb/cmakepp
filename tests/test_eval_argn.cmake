@@ -1,7 +1,7 @@
 function(test_eval_argn)
 	message(STATUS "this does not work because ARGN is evaluated differently to much")
 	eval("function(fuuu result args) \n  set(\\\${result} \\\${args} PARENT_SCOPE) \n  endfunction()")
-
+	set(res)
 	assert(NOT res)
 	fuuu(res "a;b;c")
 	assert(res)
