@@ -4,12 +4,11 @@
 # Unfortunately, no built-in stuff for this: http://public.kitware.com/Bug/view.php?id=4034
 macro(eval code)
   random_file(file_name "${cutil_temp_dir}/eval_{{id}}.cmake")
-  # create a tempory file to include
-  #insert code to be evaled
-  #temp_name(file_name)
+  # create a temporary file to include
+  # insert code to be eval'ed
   file(WRITE ${file_name} "${code}")
 
-  debug_message("evaluating ${file_name} : ${code}")
+  #debug_message("evaluating ${file_name} : ${code}")
   
   #include code
   include(${file_name})

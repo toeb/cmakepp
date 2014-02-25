@@ -4,7 +4,7 @@ function(obj_getownkeys this result)
   	get_filename_component(key ${prop_ref} NAME_WE)
   	set(keys ${keys} ${key})
   endforeach()
-  debug_message("${this} has following keys: ${keys}")
+  #debug_message("${this} has following keys: ${keys}")
 
   return_value(${keys})
 endfunction()
