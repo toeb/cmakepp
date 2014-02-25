@@ -1,3 +1,5 @@
+# creates a functor from a cmake function
+# a functor is a callable object
 function(obj_newfunctor result function_ref)
 	is_function(is_func ${function_ref})
 	if(NOT is_func)

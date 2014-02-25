@@ -1,4 +1,16 @@
-
+# a helper for setting a function
+# accepts a object reference and a function or a object reference a key and a function
+# if only this and the function is provided the function name will be used as key
+# else the specified key is used
+# example:
+# obj is a object reference
+# function(func arg)
+# message("${hello} world")
+# endfunction()
+# obj_setfunction(${obj} func)
+# obj_callmember(${obj} func hello)
+# result:
+# hello world
 function(obj_setfunction this)
 	set(args ${ARGN})
 	list(LENGTH args argc)
@@ -6,15 +18,11 @@ function(obj_setfunction this)
 		message(FATAL_ERROR "expected a function to set")
 	endif()
 	if(${argc} EQUAL 1)
-
-		#list(GET args 0 func)
 		get_function_string(func "${ARGV1}")
 		parse_function(func "${func}")
 		set(key "${func_name}")
 	
 	elseif(${argc} EQUAL 2)
-		#list(GET args 0 key)
-		#LIST(GET args 1 func)
 		get_function_string(func "${ARGV2}")
 		set(key "${ARGV1}")
 	endif()

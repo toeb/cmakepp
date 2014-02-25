@@ -1,4 +1,4 @@
 macro(this_get member_name)
 	this_check()
-	obj_import_member(${this} ${member_name})
+	obj_get(${this} ${${member_name}} ${member_name})
 endmacro()

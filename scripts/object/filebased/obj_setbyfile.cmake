@@ -1,6 +1,0 @@
-function(obj_setbyfile this key file_name)
-	if(EXISTS "${this}/${file_name}")
-		message(FATAL_ERROR "property ${file_name} already exists on object ${this}")
-	endif()
-	file(COPY "${file_name}" "${this}")
-endfunction()

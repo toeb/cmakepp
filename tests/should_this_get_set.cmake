@@ -3,7 +3,7 @@ function(should_thisgetset)
 	obj_set(${obj} "val1" "32")
 	obj_pushcontext(${obj})
 		assert(32 EQUAL ${val1})
-		var("val2" 100)
+		this_set("val2" 100)
 
 	obj_popcontext()
 	

@@ -1,8 +1,0 @@
-macro(var key)
-	this_check()
-	if(NOT ARGN)
-		this_set(${key} NOTFOUND)
-		return()
-	endif()
-	this_set(${key} "${ARGN}")
-endmacro()

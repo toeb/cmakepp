@@ -1,6 +1,6 @@
 
 function(map_get this result key )
-	map_check(${this})
+	#map_check(${this})
 	map_has(${this}  has_key ${key})
 	if(NOT has_key)
 		message(FATAL_ERROR "map '${this}' does not have key '${key}'")

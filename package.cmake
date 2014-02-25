@@ -42,7 +42,7 @@ package_property(package_cmake_exports
 	scripts/object/this/* 
 	scripts/object/filebased/*  
 	scripts/object/*
-	classes/*
+	scripts/classes/*
 	scripts/*
 )
 package_property(package_install_script)

@@ -1,0 +1,8 @@
+function(map_tryget map result key)
+	map_has(${map} res ${key})
+	if(NOT res)
+		return_value(NOTFOUND)
+	endif()
+	map_get(${map} res ${key})
+	return_value(${res})
+endfunction()

@@ -5,5 +5,5 @@
 # reference
 macro(this_getref member_name)
 	this_check()
-	obj_import_ref(${this} ${ref_name})
+	obj_getref(${this} ${${member_name}} ${member_name})
 endmacro()
