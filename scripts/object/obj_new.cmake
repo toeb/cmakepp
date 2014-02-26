@@ -4,27 +4,29 @@ function(obj_new result  )
 	
 	if(${ARGC} GREATER 1)
 		set(constructor ${ARGV1})
+	else()
+		set(constructor Object)
 	endif()
 
-	# hacked = this should go somewhere different - obj_typefind?  types should be registeredsomehow
-	if(NOT constructor)
-		get_property(types GLOBAL PROPERTY types)
-		if(NOT types)
-			map_create(types)
-			set_property(GLOBAL PROPERTY ${types})
-		endif()
-		
-		map_tryget(${types} Object Object)
+	## special handling of Object
+	if(${constructor} STREQUAL Object)
+		get_property(Object GLOBAL PROPERTY Object)
 		if(NOT Object)
-
-			obj_newfunctor(Object Object)
-			map_set(${types} Object ${Object})
+			obj_create(Object)
+			obj_create(ObjectProto)
+			obj_setprototype(${Object} ${ObjectProto})
+			get_function_string(func Object)
+			obj_set(${Object} __call__ "${func}")
+			set_property(GLOBAL PROPERTY Object ${Object})
 		endif()
 		set(constructor ${Object})
+	else()
+		#ensure constructor is a functor
+		obj_makefunctor(constructor ${constructor})	
+				
 	endif()
 
-	#ensure constructor is a functor
-	obj_makefunctor(constructor ${constructor})
+
 	#create the new object
 	obj_create(object)
 	#object inherits prototype of functor
