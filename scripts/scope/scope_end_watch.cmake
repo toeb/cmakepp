@@ -14,9 +14,10 @@
 			scope_end_watch_before
 			#hack
 			cutil_current_working_dir 
+			# debugging vars
+			imported_function_name
 			# function vars
 			ARGN ARGV ARGC ARGV0 ARGV1 ARGV2 ARGV3 ARGV4 ARGV5 ARGV6 ARG7 ARGV8 ARGV9)
-
 
 		foreach(var ${scope_end_watch_now})
 

@@ -9,7 +9,7 @@ function(obj_makefunctor result functor)
 	#this is superfluos because obj_newfunctor also performs this check
 	is_function(is_func ${functor})
 	if(NOT is_func)
-		message(FATAL_ERROR "obj_makefunctor expects a function or functor as input argument")
+		message(FATAL_ERROR "obj_makefunctor expects a function or functor as input argument but got '${functor}'")
 	endif()
 	# create the functor
 	obj_newfunctor(res "${functor}")

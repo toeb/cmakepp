@@ -1,5 +1,5 @@
 function(obj_getrefvalue this result)
-	if(EXISTS "${this}")
+	if(EXISTS "${this}" AND NOT IS_DIRECTORY ${this} )
 		file(READ "${this}" res)
 		set(${result} "${res}" PARENT_SCOPE)
 		return()

@@ -22,6 +22,7 @@ function(get_function_string result func)
 
 	if(is_file)
 		load_function(file_content "${func}")
+		get_function_string(file_content "${file_content}")
 		set(${result} ${file_content} PARENT_SCOPE)
 		return()
 	endif()

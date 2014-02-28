@@ -4,9 +4,10 @@ function(obj_savecontext ctx)
 		return()
 	endif()
 	foreach(key ${keys})
-		debug_message("saving ${key} to ${${key}}")
+		#debug_message("saving ${key} to ${${key}}")
 		obj_set(${ctx} "${key}" "${${key}}")
 	endforeach()
+
 
 
 endfunction()

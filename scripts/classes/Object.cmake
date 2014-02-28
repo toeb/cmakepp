@@ -1,5 +1,5 @@
 function(Object)
-	#formats the current object
+	#formats the current object 
 	obj_declarefunction(${__proto__} to_string)
 
 	function(${to_string} result)
@@ -8,7 +8,8 @@ function(Object)
 		obj_getkeys(${this} keys)
 
 		foreach(key ${keys})
-			obj_get(${this} value ${key})					
+			obj_get(${this} value ${key})				
+			obj_hasownproperty(${this} is_own ${key})	
 			if(value)
 				is_function(function_found ${value})
 				is_object(object_found ${value})
@@ -27,12 +28,18 @@ function(Object)
 			else()
 				set(value "\"${value}\"")
 			endif()
+			if(is_own)
+				set(is_own "*")
+			else()
+				set(is_own " ")
+			endif()
 
+			set(nextValue "${is_own}${key}: ${value}")
 
 			if(res)
-				set(res "${res}\n ${key}: ${value}, ")	
+				set(res "${res}\n ${nextValue}, ")	
 			else()
-				set(res " ${key}: ${value}, ")
+				set(res " ${nextValue}, ")
 			endif()
 		endforeach()
 

@@ -12,6 +12,8 @@ function(execution_context_test)
 	assert(NOT this)
 	assert(NOT test)
 
+
+	peek_front("callstack" beforeContext)
 	#push obj on context stack
 	obj_pushcontext(${obj})
 		# now this is bound to obj
@@ -58,7 +60,9 @@ function(execution_context_test)
 
 		obj_popcontext()
 	#this should be unset now
-	assert(NOT this)
+
+	#message("execution context test '${this}'")
+	assert(${this} STREQUAL ${beforeContext})
 
 
 	# check if all properties are correct

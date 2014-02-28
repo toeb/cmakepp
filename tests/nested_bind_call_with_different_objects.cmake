@@ -21,5 +21,5 @@ function(nested_bind_call_different_objects)
 	assert(outer_ref)
 	assert(${outer_ref} STREQUAL ${obj})
 	assert(${inner_ref} STREQUAL ${expected_inner_ref})
-	assert(NOT this)
+	
 endfunction()

@@ -1,6 +1,5 @@
-
 function(assert)
 	if(NOT (${ARGN}))
-		message(FATAL_ERROR "assertion failed: ${ARGN}")
+		message(FATAL_ERROR "assertion failed: '${ARGN}' (${imported_caller_function_name})")
 	endif()
 endfunction()

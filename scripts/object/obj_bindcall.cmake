@@ -5,10 +5,15 @@ macro(obj_bindcall object func)
   set(args ${ARGN}) 
   list_to_string(args args " ")  
   #debug_message("binding ${func} to ${this} and calling with (${args})")
+
   obj_pushcontext(${object})
+
   #debug_message("${func}(\${this} \${args})")
   import_function("${func}" as bound_function REDEFINE)
+
   bound_function(${ARGN})
+
   obj_popcontext()
+
 
 endmacro()

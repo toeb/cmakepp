@@ -47,7 +47,7 @@ function(import_function)
   #message("function is ${func_type} named ${func_name} with args: ${func_args}")
 
   # code which is run everytime a function is called
-  if(show_debug)
+  if(inject_debug_info)
     set(on_call 
     "set(imported_caller_function_name ${imported_function_name})
     set(imported_function_name ${function_name})")

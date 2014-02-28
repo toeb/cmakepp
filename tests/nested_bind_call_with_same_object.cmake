@@ -14,5 +14,5 @@ function(nested_bind_call_sameobject)
 
 		assert(${inner} STREQUAL "${obj}")
 		assert(${outer} STREQUAL "${obj}")
-		assert(NOT this)
+		#assert(NOT this)
 	endfunction()

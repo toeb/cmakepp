@@ -29,10 +29,12 @@ function(obj_new result  )
 
 	#create the new object
 	obj_create(object)
+	obj_create(prototype)
 	#object inherits prototype of functor
 	obj_getprototype("${constructor}" proto)
-	obj_setprototype(${object} ${proto})
-
+	obj_setprototype(${prototype} ${proto})
+	obj_setprototype(${object} ${prototype})
+	
 	# bind new object to __call__ method of constructor functor
 	obj_get(${constructor} call __call__)
 	obj_bindcall(${object} ${call} instance ${ARGN})
