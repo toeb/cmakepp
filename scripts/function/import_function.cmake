@@ -9,7 +9,7 @@ function(import_function)
   set(multiValueArgs)
   set(prefix)
   cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-
+  #_UNPARSED_ARGUMENTS
   if(NOT _UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "missing function to import")
   endif()
@@ -28,8 +28,8 @@ function(import_function)
   # get function implementation this fails if func is not a function
   get_function_string(function_string "${func}")
   string(MD5 hash "${function_string}")
-  if(EXISTS "${cutil_cache_dir}/${hash}" AND NOT ${_REDEFINE})
-    include ("${cutil_cache_dir}/${hash}")
+  if(EXISTS "${cutil_cache_dir}/${hash}.cmake" AND NOT ${_REDEFINE})
+    include ("${cutil_cache_dir}/${hash}.cmake")
    # message("cached found ${func} at ${cutil_cache_dir}/${hash}:0")
     return()
   endif()
@@ -75,7 +75,7 @@ function(import_function)
 
   inject_function(function_string  "${function_string}" ON_CALL "${on_call}" BEFORE_FUNCTION "${before_function}" RENAME "${function_name}")
 
-  file(WRITE "${cutil_cache_dir}/${hash}" "${function_string}")
+  file(WRITE "${cutil_cache_dir}/${hash}.cmake" "${function_string}")
  # message("import_function ${function_string}" )
   import_function_string("${function_string}")
  
