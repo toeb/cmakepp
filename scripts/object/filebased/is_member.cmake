@@ -7,8 +7,8 @@ function(is_member result ref)
 	if(IS_DIRECTORY ${ref})
 		return_value(false)
 	endif()
-
-	get_filename_component(obj ${ref} DIRECTORY )
+# in 2812 use DIRECTOY INSTEAD OF PATH
+	get_filename_component(obj ${ref} PATH )
 	is_object(isobj ${obj})
 	return_value(${isobj})
 endfunction()
