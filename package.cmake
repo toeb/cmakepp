@@ -8,13 +8,10 @@ package_property(license "MIT")
 package_property(single_version true)
 package_property(cmake_exports 
 	scripts/debugging/debug_message.cmake
-	scripts/core/*
+	scripts/core/*.cmake
 	scripts/string/replace_first.cmake
 	scripts/include_once.cmake
-	#scripts/core/return_value.cmake
-	#scripts/core/return_prefixed_value.cmake
 	scripts/file/random_file.cmake
-	#scripts/core/make_guid.cmake
 	scripts/function/function_signature_regex.cmake
 	scripts/function/is_function_file.cmake
 	scripts/function/is_function_ref.cmake
@@ -31,21 +28,21 @@ package_property(cmake_exports
 	scripts/function/parse_function.cmake
 	scripts/function/inject_function.cmake
 	scripts/function/import_function.cmake
-	scripts/*
-	scripts/string/*
-	scripts/list/*
-	scripts/stack/*
-	scripts/file/*
-	scripts/function/*
-	scripts/map/*
-	scripts/scope/*
-	scripts/debugging/*
-	scripts/object/this/* 
-	scripts/object/filebased/*  
-	scripts/object/*
-	scripts/classes/*
-	scripts/ref/*
-	scripts/*
+	scripts/*.cmake
+	scripts/string/*.cmake
+	scripts/list/*.cmake
+	scripts/stack/*.cmake
+	scripts/file/*.cmake
+	scripts/function/*.cmake
+	scripts/map/*.cmake
+	scripts/scope/*.cmake
+	scripts/debugging/*.cmake
+	scripts/object/this/*.cmake
+	scripts/object/filebased/*.cmake
+	scripts/object/*.cmake
+	scripts/classes/*.cmake
+	scripts/ref/*.cmake
+	scripts/*.cmake
 )
 package_property(install_script)
 package_property(cutil_main_script)

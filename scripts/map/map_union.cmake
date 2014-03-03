@@ -1,0 +1,20 @@
+# creates a union from all all maps passed as ARGN and combines them in result
+# you can merge two maps by typing map_union(${map1} ${map1} ${map2})
+# maps are merged in order ( the last one takes precedence)
+function(map_union result)
+	set(lst ${ARGN})
+	
+	set(res ${${result}})
+	if(NOT res)
+		map_create(res)
+	endif()
+	foreach(map ${lst})
+		map_keys(${map} keys)
+		foreach(key ${keys})
+			map_tryget(${map} val ${key})
+			map_set(${res} ${key} ${val})
+		endforeach()
+	endforeach()
+	return_value(${res})
+endfunction()
+
