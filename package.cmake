@@ -44,6 +44,7 @@ package_property(cmake_exports
 	scripts/object/filebased/*  
 	scripts/object/*
 	scripts/classes/*
+	scripts/ref/*
 	scripts/*
 )
 package_property(install_script)
