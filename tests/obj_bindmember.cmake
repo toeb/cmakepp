@@ -1,7 +1,6 @@
 function(test)
-
-
-
+	
+	message(STATUS "fails on linux when cutil test all is called")
 	obj_new(obj)
 	obj_set(${obj} "Name" Tobias)
 	obj_declarefunction(${obj} fufu)

@@ -1,4 +1,5 @@
 function(test)
+	message(STATUS "fails on linux when cutil test all is called")
 	function(fu)
 		set(result "hello" PARENT_SCOPE)
 	endfunction()

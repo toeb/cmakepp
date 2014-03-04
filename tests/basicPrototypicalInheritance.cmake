@@ -1,4 +1,3 @@
-
 function(basicPrototypicalInheritance)
   obj_create(base)
   obj_create(derived)
