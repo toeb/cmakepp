@@ -5,7 +5,7 @@
 macro(scope_clear)
 	get_cmake_property(vars VARIABLES)
 	if(ARGN)
-		list(REMOVE_ITEM vars "${ARGN}")
+		list(REMOVE_ITEM vars ${ARGN})
 	endif()
 	foreach(var ${vars})
 		set(${var})
