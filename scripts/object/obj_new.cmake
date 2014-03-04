@@ -37,7 +37,11 @@ function(obj_new result  )
 	
 	# bind new object to __call__ method of constructor functor
 	obj_get(${constructor} call __call__)
-	obj_bindcall(${object} ${call} instance ${ARGN})
+	set(instance)
+	set(args ${ARGN})
+	CDR(args ${args})
+	# constructor may return via global returning mechanism
+	obj_bindcall(${object} ${call}  ${args})
 
 	#set objects constructor property to the constructor
 	obj_set(${object} "__ctor__" ${constructor})
