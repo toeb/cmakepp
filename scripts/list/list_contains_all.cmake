@@ -1,0 +1,10 @@
+# returns true if lst contains every element of ARGN 
+function(list_contains_all result lst )
+	foreach(arg ${ARGN})
+		list(FIND ${lst} "${arg}" idx)
+		if(${idx} LESS 0)
+			return_value(false)
+		endif()
+	endforeach()
+	return_value(true)
+endfunction()
