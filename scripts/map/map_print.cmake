@@ -1,4 +1,4 @@
-
+# prints all values of the map
 function(map_print this)
 	map_keys(${this} keys)
 	foreach(key ${keys})

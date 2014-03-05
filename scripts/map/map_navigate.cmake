@@ -1,5 +1,5 @@
 #navigates a map structure
-# use . and [] operators to select next element in map
+# use '.' and '[]' operators to select next element in map
 # e.g.  map_navigate(<map_ref> res "propa.propb[3].probc[3][4].propd")
 function(map_navigate map result path)
 

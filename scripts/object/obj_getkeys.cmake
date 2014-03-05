@@ -1,4 +1,4 @@
-
+# returns all keys for the specified object
 function(obj_getkeys this result)
 	obj_getownkeys(${this} ownkeys)
 	obj_getprototype(${this} proto)

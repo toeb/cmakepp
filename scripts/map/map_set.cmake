@@ -1,5 +1,4 @@
-
-
+# set a value in the map
 function(map_set this key value)
 	#map_check(${this})
 	map_has(${this}  has_key ${key})

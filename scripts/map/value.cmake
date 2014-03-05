@@ -8,6 +8,12 @@ function(value)
   	if(NOT _VALUE)
 		set(_VALUE ${_UNPARSED_ARGUMENTS})
   	endif()
+    
+    if(current_key)
+      set(_KEY ${current_key})
+      set(current_key PARENT_SCOPE)
+    endif()
+
   	if(_KEY)
       if(NOT _APPEND)
   		  map_set(${current_element} "${_KEY}" "${_VALUE}")

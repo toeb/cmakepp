@@ -1,0 +1,5 @@
+function(list_new result)
+	ref_new(res list ${ARGN})
+	set(${result} ${res} PARENT_SCOPE)
+	#return_result(${res})
+endfunction()

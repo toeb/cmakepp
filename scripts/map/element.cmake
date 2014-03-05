@@ -20,7 +20,7 @@
 # you can access the map structur with map_* operators 
 # expecially in map_navigate is useful with nested structures
 function(element)
-	set(options END)
+	set(options END MAP LIST)
   	set(oneValueArgs)
   	set(multiValueArgs)
   	set(prefix)
@@ -32,6 +32,14 @@ function(element)
   		list(GET _UNPARSED_ARGUMENTS 0 name)
 
   	endif()
+    if(NOT current_element)
+      set(current_key PARENT_SCOPE)
+    endif()
+    if(current_key)
+      set(_KEY ${current_key})
+      set(current_key PARENT_SCOPE)
+    endif()
+
   	# element ends remove element from stack and retruns
   	if(_END)
   		pop_back(element_stack res)
@@ -46,8 +54,14 @@ function(element)
   	endif()
 
   	# else a new element is started . a element is always a ref
-  	ref_new(res)
-
+    if(_MAP)
+      map_create(res)
+  	elseif(_LIST)
+      list_new(res)
+    else()
+       map_create(res)
+    endif()
+    
   	# if element is a child element then set current_element in parent scope
   	if(current_element)
   		# if element is a named element set map entry for current element
