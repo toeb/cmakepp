@@ -38,7 +38,7 @@ function(get_function_string result func)
 	is_function_cmake(is_cmake_func "${func}")
 
 	if(is_cmake_func)
-		set(${result} "macro(${func})\n #debug_message(\"wrapper for '${func}' called \")\nif(NOT COMMAND \"${func}\") \n message(FATAL_ERROR \"wrapper for '${func}' failed because '${func}' is not defined \") \n endif() \n ${func}(\${ARGN}) \n endmacro ()" PARENT_SCOPE)
+		set(${result} "macro(${func})\n ${func}(\${ARGN})\nendmacro()" PARENT_SCOPE)
 		return()
 	endif()
 

@@ -1,9 +1,67 @@
 function(test)
 
+	# round trip serialize special symbols
+	
+	element(MAP)
+		value(KEY k1 a b c)
+
+	element(END original)
+
+	json_serialize(json "${original}")	
+	json_deserialize(copy "${json}")
+
+	map_equal(res ${original} ${copy})
+	assert(res)
+	
+
+	# test for indentations
+	element(uut LIST)
+		element(MAP)
+			value(KEY k1 1)
+			value(KEY k2 2)
+			value(KEY k3 3)
+			element(k4 MAP)				
+				value(KEY k1 1)
+				value(KEY k2 2)
+				value(KEY k3 3 4 5)
+			element(END)
+		element(END)
+		element(LIST)
+			value(1)
+			value(2)
+		element(END)
+		value(a)
+		value(b)
+	element(END)
+	json_serialize(res ${uut} INDENTED)
+
+# check escape characters
+	json_serialize(res "\"\"\\\n\r\t")
+	assert("${res}" STREQUAL "\"\\\"\\\"\\\\\\n\\r\\t\"")
+
+# cehck list handling
+	set(lst a b c)
+	json_serialize(res "${lst}")
+	json_deserialize(res "${res}")
+	assert(EQUALS ${lst} a b c)
+
+
+	#return()
+
+	ref_isvalid("a;b;c;d" isref)
+	assert(NOT isref)
+
+	# map with cmake list value
+	element(uut MAP)
+	value(KEY k1 a b c d)
+	element(END)
+	json_serialize(res ${uut})
+	
 
 	json_deserialize(res "\"a;b;c\"")
 	assert(EQUALS "a;b;c" ${res} )
 	
+
 	ref_gettype("ref:global:type:123asd123" res)
 	assert(${res} STREQUAL type)
 	ref_gettype("ref:global:map:123asd123" res)
@@ -37,26 +95,6 @@ function(test)
 	assert("[{\"k1\":\"1\",\"k2\":\"2\",\"k3\":\"3\"},[\"1\",\"2\"],\"a\",\"b\"]" STREQUAL ${res})
 
 
-	# test for indentations
-		element(uut LIST)
-		element(MAP)
-			value(KEY k1 1)
-			value(KEY k2 2)
-			value(KEY k3 3)
-			element(k4 MAP)				
-				value(KEY k1 1)
-				value(KEY k2 2)
-				value(KEY k3 3)
-			element(END)
-		element(END)
-		element(LIST)
-			value(1)
-			value(2)
-		element(END)
-		value(a)
-		value(b)
-	element(END)
-	json_serialize(res ${uut} INDENTED)
 
 
 
@@ -97,7 +135,7 @@ function(test)
 	# serialize a cmake list value
 	json_serialize(res "a;b;c")
 	assert(res)
-	assert(EQUALS "\"a;b;c\"" ${res})
+	assert(EQUALS "\"a\\\\;b\\\\;c\"" ${res})
 
 	#empty object
 	element(uut MAP)
@@ -155,6 +193,7 @@ function(test)
 	element(END)
 	json_serialize(res ${uut})
 	assert("[{\"k1\":\"1\"}]" STREQUAL ${res})
+
 
 	# deserialize a empty value
 	json_deserialize(res "")

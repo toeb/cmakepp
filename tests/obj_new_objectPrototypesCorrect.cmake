@@ -1,16 +1,24 @@
 function(test)
 
-	function(ClassA)
+
+	#print_locals()
+	function(ClassAB)
 		#message("protoA ${__proto__}")
 		obj_declarefunction(${__proto__} methodA)
 	endfunction()
-	function(ClassB)
+	function(ClassBB)
 		#message("protoB ${__proto__}")
 		obj_declarefunction(${__proto__} methodB)
 	endfunction()
 
-	obj_new(objA ClassA)
-	obj_new(objB ClassB)
+
+
+	obj_new(objA ClassAB)
+
+	obj_new(objB ClassBB)
+
+	ref_print(${objA})
+	ref_print(${objB})
 
 
 
