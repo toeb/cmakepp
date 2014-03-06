@@ -7,7 +7,6 @@ function(test)
 	assert(res)
 	set(res)
 	obj_callmember(${obj} to_string res)
-	message("${res}")
 	assert(res)
 
 

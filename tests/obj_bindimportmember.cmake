@@ -17,9 +17,9 @@ function(test)
 
 	assert(COMMAND boundfu22)
 	boundfu22(muuu)
-	result()
-	assert(result)
-	assert("${result}" STREQUAL "hello Tobias muuu")
+	result(res)
+	assert(res)
+	assert("${res}" STREQUAL "hello Tobias muuu")
 
 
 endfunction()

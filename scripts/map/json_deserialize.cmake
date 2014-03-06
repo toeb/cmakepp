@@ -77,7 +77,7 @@ function(json_deserialize result json)
 	endif()
 
 	element(END root)
-	ref_get(res ${root})
+	ref_get( ${root} res)
 
 	return_value(${res})
 endfunction()

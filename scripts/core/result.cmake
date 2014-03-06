@@ -1,3 +1,3 @@
-macro(result)
-	get_property(result GLOBAL PROPERTY __result)
+macro(result var_name)
+	get_property(${var_name} GLOBAL PROPERTY __result)
 endmacro()

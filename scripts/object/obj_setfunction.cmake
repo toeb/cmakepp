@@ -27,5 +27,6 @@ function(obj_setfunction this)
 		set(key "${ARGV1}")
 	endif()
 	#message("obj_setfunction: ${this} ${key} ${func}")
+
 	obj_set(${this} ${key} "${func}")	
 endfunction()

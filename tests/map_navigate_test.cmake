@@ -51,4 +51,11 @@ function(test)
 	map_navigate(res "uut.[2].k2[2]")
 	assert(${res} STREQUAL "III")
 
+	
+	# check special symbols
+	map_create(res)
+	map_set(${res} "k1" "\${ARGN} \; ;")
+	map_navigate(val "res.k1")
+	assert(EQUALS "${val}"  "\${ARGN} \; ;")
+
 endfunction()

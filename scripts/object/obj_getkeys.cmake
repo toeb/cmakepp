@@ -1,7 +1,9 @@
 # returns all keys for the specified object
 function(obj_getkeys this result)
 	obj_getownkeys(${this} ownkeys)
+	set(proto)
 	obj_getprototype(${this} proto)
+	#message("1")
 	if(proto)
 		obj_getkeys(${proto} parentkeys)
 	endif()

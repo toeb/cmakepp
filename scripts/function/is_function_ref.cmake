@@ -1,7 +1,10 @@
 function(is_function_ref result func)
-	if(NOT ${func})
-		return_value(false)
+	ref_isvalid("${func}" is_ref)
+	if(NOT is_ref)
+		return(false)
 	endif()
-	is_function(res "${${func}}")
+	ref_get(${func} val)
+	is_function(res "${val}")
 	return_value(${res})
+	
 endfunction()

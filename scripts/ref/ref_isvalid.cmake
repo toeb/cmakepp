@@ -1,4 +1,4 @@
-function(ref_isvalid result ref)
+function(ref_isvalid ref result)
 	string(REGEX MATCH "^ref:" res "${ref}" )
 	if(res)
 		return_value(true)

@@ -4,14 +4,15 @@ function(nested_bind_call_sameobject)
 		endfunction()
 
 		function(testfunc2)
-			obj_bindcall(${this} testfunc1)
+			 testfunc1()
 			set(inner ${inner} PARENT_SCOPE)
 			set(outer ${this} PARENT_SCOPE)
 		endfunction()
 
 		obj_create(obj)
-		obj_bindcall(${obj} testfunc2)
-
+		obj_pushcontext(${obj})
+		testfunc2()
+		obj_popcontext()
 		assert(${inner} STREQUAL "${obj}")
 		assert(${outer} STREQUAL "${obj}")
 		#assert(NOT this)

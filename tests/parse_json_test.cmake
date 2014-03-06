@@ -163,13 +163,13 @@ function(test)
 	# deserialize a empty object
 	json_deserialize(res "{}")
 	assert(res)
-	ref_isvalid(is_ref ${res} )
+	ref_isvalid( ${res}  is_ref)
 	assert(is_ref MESSAGE "expected res to be a ref")
 
 	# desirialize a empty array
 	json_deserialize(res "[]")
 	assert(res)
-	ref_isvalid(is_ref ${res})
+	ref_isvalid( ${res} is_ref)
 	assert(is_ref MESSAGE "expected res to be a ref")
 
 	# deserialize a simple value

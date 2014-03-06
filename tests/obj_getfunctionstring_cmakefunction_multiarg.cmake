@@ -6,6 +6,5 @@ function(test)
 	endfunction()
 
 	get_function_string(res ${testfu})
-
-	message(${res})
+assert(res)
 endfunction()

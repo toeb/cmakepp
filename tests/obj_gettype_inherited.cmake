@@ -22,7 +22,7 @@ function(test)
 	assert("${res2}" STREQUAL "ClassB")
 
 	obj_gethierarchy(${obj2} hier)
-	message("hierarchy: ${hier}")
+	
 	assert(hier)
 	list(FIND hier "ClassA" index)
 	assert(index)

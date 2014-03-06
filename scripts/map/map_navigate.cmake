@@ -21,7 +21,7 @@ function(map_navigate result navigation_expression)
 	endif()
 
 	# check if ref is valid
-	ref_isvalid(is_ref ${ref})
+	ref_isvalid( ${ref} is_ref)
 	if(NOT is_ref)
 		message(FATAL_ERROR "map_navigate: expected a reference")
 	endif()
@@ -31,7 +31,7 @@ function(map_navigate result navigation_expression)
 	
 	# loop through parts and try to navigate 
 	# if any part of the path is invalid return NOTFOUND
-	set(current ${ref})
+	set(current "${ref}")
 	foreach(part ${parts})
 		string(REGEX MATCH "[a-zA-Z0-9][a-zA-Z0-9]*" index "${part}")
 		string(SUBSTRING "${part}" 0 1 index_type)	
@@ -40,11 +40,11 @@ function(map_navigate result navigation_expression)
 			map_tryget(${current} current "${index}")
 		elseif(index_type STREQUAL "[")
 			# get by index
-			ref_get(lst ${current})
+			ref_get( ${current} lst)
 			list(GET lst ${index} keyOrValue)
 			map_tryget(${current} current ${keyOrValue})
 			if(NOT current)
-				set(current ${keyOrValue})
+				set(current "${keyOrValue}")
 			endif()
 		endif()
 		if(NOT current)
@@ -53,6 +53,6 @@ function(map_navigate result navigation_expression)
 	endforeach()
 
 	# current  contains the navigated value
-	return_value("${current}")
+	set(${result} "${current}" PARENT_SCOPE)
 endfunction()
 	

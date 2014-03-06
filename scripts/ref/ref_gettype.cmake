@@ -1,5 +1,5 @@
 function(ref_gettype ref result)
-	ref_isvalid( is_ref ${ref})
+	ref_isvalid(  ${ref} is_ref)
 	if(NOT is_ref)
 		return_value(NOTFOUND)
 	endif()

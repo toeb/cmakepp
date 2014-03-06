@@ -13,17 +13,17 @@ function(obj_new result  )
 		get_property(Object GLOBAL PROPERTY Object)
 		if(NOT Object)
 			obj_create(Object)
+			#message("obj_new: creating Object base class in '${Object}'")
 			obj_create(ObjectProto)
 			obj_setprototype(${Object} ${ObjectProto})
 			get_function_string(func Object)
-			obj_set(${Object} __call__ "${func}")
+			obj_set(${Object} "__call__" "${func}")
 			set_property(GLOBAL PROPERTY Object ${Object})
 		endif()
 		set(constructor ${Object})
 	else()
 		#ensure constructor is a functor
-		obj_makefunctor(constructor ${constructor})	
-				
+		obj_makefunctor(constructor "${constructor}")
 	endif()
 
 
@@ -31,17 +31,31 @@ function(obj_new result  )
 	obj_create(object)
 	obj_create(prototype)
 	#object inherits prototype of functor
-	obj_getprototype("${constructor}" proto)
+	obj_getprototype(${constructor} proto)
 	obj_setprototype(${prototype} ${proto})
 	obj_setprototype(${object} ${prototype})
 	
 	# bind new object to __call__ method of constructor functor
-	obj_get(${constructor} call __call__)
+	
+
+
 	set(instance)
 	set(args ${ARGN})
-	CDR(args ${args})
-	# constructor may return via global returning mechanism
-	obj_bindcall(${object} ${call}  ${args})
+	if(args)
+		list(REMOVE_AT args 0)
+	endif()
+
+	set(call)
+	obj_get(${constructor} call_constructor __call__)
+
+	# constructor may return via global returning mechanism	
+
+	obj_pushcontext(${object})
+	import_function("${call_constructor}" as bound_function REDEFINE)
+
+	bound_function(${args})
+	obj_popcontext()
+
 
 	#set objects constructor property to the constructor
 	obj_set(${object} "__ctor__" ${constructor})

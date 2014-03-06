@@ -1,29 +1,14 @@
 function(test)
-	
-
 	function(inner)
 		return_result("hello world")	
-		
-	
 	endfunction()
 
 	function(testfu)
 		inner()
 	endfunction()
 
-
-
-
-
-
-
-
-
 	testfu()
-	result()
+	result(res)
 
-	assert(${result} STREQUAL "hello world")
-
-
-
+	assert("${res}" STREQUAL "hello world")
 endfunction()

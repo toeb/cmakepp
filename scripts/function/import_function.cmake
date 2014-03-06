@@ -20,20 +20,21 @@ function(import_function)
     message(FATAL_ERROR "invalid usage of import_function")
   endif()
 
-  list(GET _UNPARSED_ARGUMENTS 0 func)
+  list(GET _UNPARSED_ARGUMENTS 0 _import_function_func)
   #message("${_UNPARSED_ARGUMENTS}")
   set(function_name ${_as})
 
 
-  # get function implementation this fails if func is not a function
-  get_function_string(function_string "${func}")
+  # get function implementation this fails if _import_function_func is not a function
+
+  get_function_string(function_string "${_import_function_func}")
   string(MD5 hash "${function_string}")
   if(EXISTS "${cutil_cache_dir}/${hash}.cmake" AND NOT ${_REDEFINE})
     include ("${cutil_cache_dir}/${hash}.cmake")
-   # message("cached found ${func} at ${cutil_cache_dir}/${hash}:0")
+   # message("cached found ${_import_function_func} at ${cutil_cache_dir}/${hash}:0")
     return()
   endif()
-  parse_function(func "${function_string}")
+  parse_function(_import_function_func "${function_string}")
 
   if(NOT function_name)
     set(function_name "${func_name}")

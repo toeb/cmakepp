@@ -1,18 +1,21 @@
 macro(obj_callmember this key)
 	debug_message("calling ${key} on ${this} with ${ARGN}")
 	obj_nullcheck(${this})
-	obj_getref(${this} func ${key})
 
-	if(NOT func)
+	# cannot pass func directly because it would be destroy inner
+	# refferences to ${ARGN} because of the macro directives
+
+	# create a temporary ref
+	obj_get(${this} __func ${key})
+
+	if(NOT __func)
 		message(FATAL_ERROR "could not find function '${key}' from object '${this}'")
 	endif()
-	# maybe generate a unique name here?
-	#message("funcy ${func}")
-	#obj_get(${this} func2 ${key})
-	#message("the func 2 ${func2}")
-	#import_function(${func2} as obj_callmember_memberfunction REDEFINE)
 	
-	obj_bindcall(${this} "${func}" ${ARGN})
-	#obj_callmember_memberfunction(${this} ${ARGN})
+	obj_pushcontext(${this})
+	import_function("${__func}" as bound_function REDEFINE)
+	bound_function(${ARGN})
+	obj_popcontext()
+
 
 endmacro()

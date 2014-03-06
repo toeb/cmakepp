@@ -12,9 +12,9 @@ function(should_thiscall)
 			this_set(var2 "hello2")
 		endfunction()
 
-		this_bindcall(inner1)
-		this_bindcall(inner2)
 
+		inner1()
+		inner2()
 
 		
 
@@ -27,7 +27,8 @@ function(should_thiscall)
 
 
 	obj_create(obj)
-	obj_bindcall(${obj} outer)
-
+	obj_pushcontext(${obj})
+	outer()
+	obj_popcontext()
 
 endfunction()

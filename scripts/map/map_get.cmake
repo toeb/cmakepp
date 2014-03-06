@@ -8,5 +8,6 @@ function(map_get this result key )
 
 	set(property_ref "${this}_${key}")
 	get_property(property_val GLOBAL PROPERTY "${property_ref}")
-	set(${result} ${property_val} PARENT_SCOPE)
+
+	set(${result} "${property_val}" PARENT_SCOPE)
 endfunction()

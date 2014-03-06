@@ -7,8 +7,9 @@ function(bind_call_should_provide_context)
 		set(ref ${this} PARENT_SCOPE)
 	endfunction()
 
-	obj_bindcall(${obj} testfunc)
-
+	obj_pushcontext(${obj})
+	testfunc()
+	obj_popcontext()
 	assert(was_called)
 	assert(${ref} STREQUAL ${obj})
 endfunction()

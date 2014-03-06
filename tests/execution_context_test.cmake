@@ -3,7 +3,6 @@ function(execution_context_test)
 	set(this)
 	# create an object
 	obj_create(obj)
-	assert(EXISTS ${obj})
 
 	# set an object property
 	obj_set(${obj} test hello)

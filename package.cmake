@@ -9,11 +9,14 @@ package_property(single_version true)
 package_property(cmake_exports 
 	scripts/debugging/debug_message.cmake
 	scripts/core/*.cmake
+	scripts/ref/ref_isvalid.cmake
+	scripts/ref/ref_get.cmake
 	scripts/string/replace_first.cmake
 	scripts/include_once.cmake
 	scripts/file/random_file.cmake
 	scripts/function/function_signature_regex.cmake
 	scripts/function/is_function_file.cmake
+	
 	scripts/function/is_function_ref.cmake
 	scripts/function/is_function_cmake.cmake
 	scripts/function/is_function_string.cmake

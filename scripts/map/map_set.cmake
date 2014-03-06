@@ -1,5 +1,5 @@
 # set a value in the map
-function(map_set this key value)
+function(map_set this key )
 	#map_check(${this})
 	map_has(${this}  has_key ${key})
 	if(NOT has_key)
@@ -9,5 +9,6 @@ function(map_set this key value)
 	endif()
 
 	set(property_ref "${this}_${key}")
-	set_property(GLOBAL PROPERTY "${property_ref}" "${value}")
+	set_property(GLOBAL PROPERTY "${property_ref}" "${ARGN}")
+	
 endfunction()
