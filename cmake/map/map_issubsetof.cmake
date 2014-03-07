@@ -1,0 +1,13 @@
+function(map_issubsetof result superset subset)
+	map_keys(${subset} keys)
+	foreach(key ${keys})
+		map_tryget(${superset} superValue ${key})
+		map_get(${subset} subValue ${key})
+		list_equal(res "${superValue}" "${subValue}")
+		if(NOT res)
+			return_value(false)
+		endif()
+
+	endforeach()
+	return_value(true)
+endfunction()

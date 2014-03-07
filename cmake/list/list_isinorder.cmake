@@ -1,0 +1,16 @@
+# returns true if value ${a} comes before value ${b} in list _lst
+# sets ${result} to true or false
+function(list_isinorder result _lst a b)
+	list(FIND _lst ${a} indexA)
+	list(FIND _lst ${b} indexB)
+	if(${indexA} LESS 0)
+		return_value(false)
+	endif()
+	if(${indexB} LESS 0)
+		return_value(false)
+	endif()
+	if(${indexA} LESS ${indexB})
+		return_value(true)
+	endif()
+	return_value(false)
+endfunction()

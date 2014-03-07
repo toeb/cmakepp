@@ -18,7 +18,9 @@ function(obj_new result)
 
 
 	set(args ${ARGN})
-	list(REMOVE_AT args 0)
+	if(args)
+		list(REMOVE_AT args 0)
+	endif()
 	result_clear()
 	obj_callmember(${instance} __init__ ${args})
 	result(inst)
