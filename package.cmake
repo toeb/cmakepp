@@ -45,7 +45,9 @@ package_property(cmake_exports
 	scripts/object/*.cmake
 	scripts/classes/*.cmake
 	scripts/ref/*.cmake
+	scripts/web/*.cmake
 	scripts/*.cmake
+
 )
 package_property(install_script)
 package_property(cutil_main_script)

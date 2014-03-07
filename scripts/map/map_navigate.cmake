@@ -32,13 +32,13 @@ function(map_navigate result navigation_expression)
 	endif()
 
 	# match all navigation expression parts
-	string(REGEX MATCHALL  "(\\[([0-9][0-9]*)\\])|(\\.[a-zA-Z0-9][a-zA-Z0-9]*)" parts "${navigation_expression}")
+	string(REGEX MATCHALL  "(\\[([0-9][0-9]*)\\])|(\\.[a-zA-Z0-9_\\-][a-zA-Z0-9_\\-]*)" parts "${navigation_expression}")
 	
 	# loop through parts and try to navigate 
 	# if any part of the path is invalid return NOTFOUND
 	set(current "${ref}")
 	foreach(part ${parts})
-		string(REGEX MATCH "[a-zA-Z0-9][a-zA-Z0-9]*" index "${part}")
+		string(REGEX MATCH "[a-zA-Z0-9_\\-][a-zA-Z0-9_\\-]*" index "${part}")
 		string(SUBSTRING "${part}" 0 1 index_type)	
 		if(index_type STREQUAL ".")
 			# get by key
