@@ -1,0 +1,12 @@
+
+function(map_format result input)
+	string(REGEX MATCHALL "{([^}{]*)}" matches "${input}")
+	foreach(match ${matches})
+		string(LENGTH ${match} len)
+		math(EXPR len "${len} - 2")
+		string(SUBSTRING ${match} 1 ${len} nav)
+		map_navigate(res "${nav}")
+		string(REGEX REPLACE "${match}" "${res}" input "${input}")
+	endforeach()
+	return_value("${input}")
+endfunction()

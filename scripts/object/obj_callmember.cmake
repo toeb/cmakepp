@@ -1,4 +1,6 @@
 macro(obj_callmember this key)
+
+	result_clear()
 	debug_message("calling ${key} on ${this} with ${ARGN}")
 	obj_nullcheck(${this})
 
@@ -11,7 +13,6 @@ macro(obj_callmember this key)
 	if(NOT __func)
 		message(FATAL_ERROR "could not find function '${key}' from object '${this}'")
 	endif()
-	
 	obj_pushcontext(${this})
 	import_function("${__func}" as bound_function REDEFINE)
 	bound_function(${ARGN})

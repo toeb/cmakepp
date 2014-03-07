@@ -7,12 +7,17 @@ function(map_navigate result navigation_expression)
 		return_value(NOTFOUND)
 	endif()
 
+	# if navigation expression is a simple var just return it
+	if("${navigation_expression}")
+		return_value(${${navigation_expression}})
+	endif()
 
 	# split off reference from navigation expression
 	unset(ref)
 	string(REGEX MATCH "^[^\\[|\\.]*" ref "${navigation_expression}")
 	string(LENGTH "${ref}" len )
 	string(SUBSTRING "${navigation_expression}" ${len} -1 navigation_expression )
+
 
 
 	# if ref is a ref to a ref dereference it :D 

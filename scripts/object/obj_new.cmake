@@ -16,8 +16,11 @@ function(obj_new result)
 
 	obj_setprototype(${instance} ${base})
 
+
+	set(args ${ARGN})
+	list(REMOVE_AT args 0)
 	result_clear()
-	obj_callmember(${instance} __init__)
+	obj_callmember(${instance} __init__ ${args})
 	result(inst)
 	if(inst)
 		set(instance ${inst})
