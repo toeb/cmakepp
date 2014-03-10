@@ -1,0 +1,12 @@
+# returns true if res is a vlaid reference and its type is 'list'
+function(list_isvalid  ref result)
+	ref_isvalid( ${ref} isref)
+	if(NOT isref)
+		return_value(false)
+	endif()
+	ref_gettype( ${ref} type)
+	if(NOT "${type}" STREQUAL "list")
+		return_value(false)
+	endif()
+	return_value(true)
+endfunction()

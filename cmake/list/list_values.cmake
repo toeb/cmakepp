@@ -1,0 +1,8 @@
+function(list_values result ref)
+	list_isvalid(islist ${ref})
+	if(NOT islist)
+		return_value()
+	endif()
+	ref_get(${ref} values)
+	set(${result} "${values}" PARENT_SCOPE)
+endfunction()

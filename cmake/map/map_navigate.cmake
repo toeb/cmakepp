@@ -2,9 +2,9 @@
 # use '.' and '[]' operators to select next element in map
 # e.g.  map_navigate(<map_ref> res "propa.propb[3].probc[3][4].propd")
 function(map_navigate result navigation_expression)
-	# path is empty => NOTFOUND
+	# path is empty => ""
 	if(navigation_expression STREQUAL "")
-		return_value(NOTFOUND)
+		return_value("")
 	endif()
 
 	# if navigation expression is a simple var just return it
@@ -35,7 +35,7 @@ function(map_navigate result navigation_expression)
 	string(REGEX MATCHALL  "(\\[([0-9][0-9]*)\\])|(\\.[a-zA-Z0-9_\\-][a-zA-Z0-9_\\-]*)" parts "${navigation_expression}")
 	
 	# loop through parts and try to navigate 
-	# if any part of the path is invalid return NOTFOUND
+	# if any part of the path is invalid return ""
 	set(current "${ref}")
 	foreach(part ${parts})
 		string(REGEX MATCH "[a-zA-Z0-9_\\-][a-zA-Z0-9_\\-]*" index "${part}")
@@ -53,7 +53,7 @@ function(map_navigate result navigation_expression)
 			endif()
 		endif()
 		if(NOT current)
-			return_value(NOTFOUND)
+			return_value("")
 		endif()
 	endforeach()
 
