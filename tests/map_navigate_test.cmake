@@ -16,7 +16,7 @@ function(test)
 
 	# empty path
 	map_navigate(res "")
-	assert(${res} STREQUAL "NOTFOUND")
+	assert("_${res}" STREQUAL "_")
 	
 
 	# unevaluated ref

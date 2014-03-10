@@ -1,6 +1,6 @@
 function(test)
 
-function(map_query result query)
+function(map_query_ext result query)
 	# get definitions
 	string(STRIP "${query}" query)
 	set(regex "(from .* in .*(,.* in .*)*)((where).*)")
@@ -11,9 +11,12 @@ function(map_query result query)
 	string(SUBSTRING "${query}" ${len} -1 query)
 	string(STRIP "${query}" query)
 
-	# get query predicate
-	string(REGEX REPLACE "where(.*)" "\\1" where "${query}")
+
+	# get query predicate and selection term
+	string(REGEX REPLACE "where(.*)select(.*)" "\\1" where "${query}")
+	string(REGEX REPLACE "where(.*)select(.*)" "\\2" select "${query}")
 	string(STRIP "${where}" where)
+	string(STRIP "${select}" select)
 	string_split(where_parts "${where}" " ")
 
 	# get definition parts
@@ -31,12 +34,14 @@ function(map_query result query)
 	endforeach()
 	element(END defs)
 
-	ref_print(${defs})
+	#ref_print(${defs})
 
 
 
-	message("source: ${query}")	
-	message("where: ${where}")
+	#message("source: ${query}")	
+	#message("where: ${where}")
+	#message("select: ${select}")
+
 
 	map_keys(${defs} keys)
 	list(LENGTH keys keys_length)
@@ -49,14 +54,14 @@ function(map_query result query)
 		set(bounds ${bounds} ${len})
 		set(indices ${indices} 0)
 	endforeach()
-	message("${bounds} bounds ")
-	message("${indices} indices")
+	#message("${bounds} bounds ")
+	#message("${indices} indices")
 	math(EXPR keys_length "${keys_length} -1")
 
 	map_values(${defs} values ${keys})
 
-		message("${keys}")
-		message("${values}")
+		#message("${keys}")
+		#message("${values}")
 		set(res)
 	while(true)
 		# set values
@@ -82,12 +87,14 @@ function(map_query result query)
 
 		# return value
 		if(${current_where})
-			element()
-			foreach(key ${keys})
-				value(KEY ${key} "${${key}}")
-			endforeach()
-			element(END val)
-			set(res ${res} ${val})
+			map_select(selection "${select}")
+			message("res select ${select} : ${selection}")
+			#element()
+			#foreach(key ${keys})
+			#	value(KEY ${key} "${${key}}")
+			#endforeach()
+			#element(END val)
+			set(res "${res}" "${selection}")
 		endif()
 
 		# increment indices
@@ -136,38 +143,12 @@ set(listB 1 3 5 3)
 set(listC 1 4 4 3)
 set(listD 1 5  5 5 3 )
 
-#map_query(res "from a in listA, b in listB,c in listC, d in listD where a STREQUAL b AND b STREQUAL c AND d STREQUAL c ")
-#foreach(r ${res})
-#	ref_print(${r})
-#endforeach()
-#return()
-function(map_select result query)
-	string(STRIP "${query}" query)
-	string(FIND "${query}" "new" res)
-	if(${res} EQUAL 0)
+map_query_ext(res "from a in listA, b in listB,c in listC, d in listD where a STREQUAL b AND b STREQUAL c AND d STREQUAL c select new { \"lol\":\"{a}\"}")
+foreach(r ${res})
+	ref_print(${r})
+endforeach()
+return()
 
-		string(SUBSTRING "${query}" 3 -1 query)
-		json_deserialize(obj "${query}")
-
-		map_graphsearch(res ${obj})
-
-		map_keys(${obj} keys)
-		foreach(key ${keys})
-			map_get(${obj} value ${key})
-			map_select(res "${value}")
-			#map_navigate(res "${value}")
-
-			message("navigated: ${res}")
-			map_set(${obj} "${key}" "${res}")
-		endforeach()
-		set(${result} "${obj}" PARENT_SCOPE)
-		return()
-	endif()
-
-	set(res)
-	map_format(res "${query}")
-	set(${result} ${res} PARENT_SCOPE)
-endfunction()
 
 
 #return()
@@ -184,6 +165,7 @@ assert("1" STREQUAL "${res}")
 
 
 element(MAP)
+
 	value(KEY k1 v1)
 	value(KEY k2 v2)
 	value(KEY k3 v3)
@@ -199,18 +181,7 @@ element(MAP)
 	element(END)
 element(END uut)
 
-function(myvisit)
-	ref_isvalid(${current} isref)
-	if(NOT isref)
-		return()
-	endif()
-
-	message("current is ${current}")
-endfunction()
-map_graphsearch(${uut} VISIT myvisit)
 
 
-map_select(res "new { \"a\" : \"uut.k3\", \"b\" :  { \"a\" : \"uut.k4[0]\"}, \"c\": \"uut.k5.k2\"}")
-ref_print(${res})
 
 endfunction()

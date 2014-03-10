@@ -7,9 +7,6 @@ function(map_graphsearch)
   	#_UNPARSED_ARGUMENTS
   	# setup functions
 
-
-
-
   	if(NOT _SUCCESSORS)		
 		function(gs_successors result node)
 			#ref_isvalid(${node} isref)
@@ -25,14 +22,14 @@ function(map_graphsearch)
 			set(${result} "${res}" PARENT_SCOPE)
 		endfunction()
 	else()
-		import_function("${_SUCCESSORS}" as gs_successors)
+		import_function("${_SUCCESSORS}" as gs_successors REDEFINE)
 	endif()
 	
 	if(NOT _VISIT)
 		function(gs_visit cancel value)
 		endfunction()
 	else()
-		import_function("${_VISIT}" as gs_visit)
+		import_function("${_VISIT}" as gs_visit REDEFINE)
 	endif()
 
 	if(NOT _POP)
@@ -47,7 +44,7 @@ function(map_graphsearch)
 			set(${result} "${node}" PARENT_SCOPE)
 		endfunction()
 	else()
-		import_function("${_POP}" as gs_pop)
+		import_function("${_POP}" as gs_pop REDEFINE)
 	endif()
 
 	if(NOT _PUSH)
@@ -55,7 +52,7 @@ function(map_graphsearch)
 			push_back(__gs ${node})
 		endfunction()
 	else()
-		import_function("${_PUSH}" as gs_push)
+		import_function("${_PUSH}" as gs_push REDEFINE)
 	endif()
 
 	# start of algorithm
