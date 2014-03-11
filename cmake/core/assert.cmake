@@ -20,7 +20,7 @@
 function(assert)
 	# parse arguments
 	set(options EQUALS ACCU SILENT)
-  	set(oneValueArgs MESSAGE RESULT MESSAGE_TYPE)
+  	set(oneValueArgs MESSAGE RESULT MESSAGE_TYPE CONTAINS)
   	set(multiValueArgs)
   	set(prefix)
   	cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -34,6 +34,9 @@ function(assert)
 		set(_MESSAGE_TYPE FATAL_ERROR)
 	endif()
 
+
+
+
 	# if continue is set set the mesype to statussage t
 	if(_RESULT AND _MESSAGE_TYPE STREQUAL FATAL_ERROR)
 		set(_MESSAGE_TYPE STATUS)
@@ -45,6 +48,16 @@ function(assert)
 		set(_MESSAGE "assertion failed: lists not equal")
 		endif()
 		list_equal(result ${_UNPARSED_ARGUMENTS})
+	elseif(_CONTAINS)
+		if(NOT _MESSAGE)
+		set(_MESSAGE "assertion failed: list does not contain ${_CONTAINS}")
+		endif()
+		list(FIND _UNPARSED_ARGUMENTS "${_CONTAINS}" idx)
+		if(${idx} LESS 0)
+			set(result false)
+		else()
+			set(result true)
+		endif()
 	else()
 		# if nothing else is specified use _UNPARSED_ARGUMENTS as a truth expresion
 		eval_truth(result (${_UNPARSED_ARGUMENTS}))
