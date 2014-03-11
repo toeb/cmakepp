@@ -1,9 +1,8 @@
-
 # orders a list by a comparator function
 function(list_order result lst comparator)
 	
 	lambda(comparator "${comparator}")
-	message("${comparator}")
+	#message("${comparator}")
 	import_function("${comparator}" as comparator_function)
 
 

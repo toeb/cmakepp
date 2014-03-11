@@ -1,26 +1,53 @@
-# query a a list of maps with linq like syntax
-# ie  from package in packages where package.id STREQUAL package1 AND package.version VERSION_GREATER 1.3
-# packages is a list of maps and package is the name for a single pakcage used in the where clause
-# 
-function(map_where result query)
-	set(regex "from (.*) in (.*) where (.*)")
-	string(REGEX REPLACE "${regex}" "\\1" ref "${query}")
-	string(REGEX REPLACE "${regex}" "\\2" source "${query}")
-	string(REGEX REPLACE "${regex}" "\\3" where "${query}")
+function(map_query result query)
+	# get definitions
+	string(STRIP "${query}" query)
+	set(regex "(from .* in .*(,.* in .*)*)((where).*)")
+	string(REGEX REPLACE "${regex}" "\\1" sources "${query}")
+
+	# get query
+	string(LENGTH "${sources}" len)
+	string(SUBSTRING "${query}" ${len} -1 query)
+	string(STRIP "${query}" query)
+
+
+	# get query predicate and selection term
+	string(REGEX REPLACE "where(.*)select(.*)" "\\1" where "${query}")
+	string(REGEX REPLACE "where(.*)select(.*)" "\\2" select "${query}")
+	string(STRIP "${where}" where)
+	string(STRIP "${select}" select)
 	string_split(where_parts "${where}" " ")
 
-	set(res)
-	foreach(${ref} ${${source}})
-		string(REGEX MATCHALL "${ref}[^ ]*" references "${where}")
-		set(current_where ${where_parts})
-		foreach(reference ${references})
-			map_navigate(val "${reference}")
-			string(REPLACE ";${reference};" ";${val};" current_where ";${current_where}")
-		endforeach()
-		if(${current_where})
-			set(res ${res} ${${ref}})
-		endif()
-	endforeach()	 
+	#remove "from " from sources
+	string(SUBSTRING "${sources}" 5 -1 sources)
 
-	set(${result} ${res} PARENT_SCOPE)
+
+
+	# callback function for map_foreach
+	function(map_query_foreach_action)
+		set(current_where ";${where_parts};")
+		foreach(source ${keys})
+				string(REGEX MATCHALL "${source}[^ ]*" references "${where}")
+				foreach(reference ${references})
+					map_navigate(val "${reference}")
+					string(REPLACE ";${reference};" ";${val};" current_where "${current_where}")
+				endforeach()
+		endforeach()
+		# return value
+		if(${current_where})
+			map_select(selection "${select}")
+			ref_append(${map_query_result} "${selection}")
+		endif()
+
+	endfunction()
+
+	# create a ref where the result is stored
+	ref_new(map_query_result)
+	map_foreach(map_query_foreach_action "${sources}")
+	
+	# get the result
+	ref_get(${map_query_result} res)
+	ref_delete(${map_query_result})
+
+	set(${result} "${res}" PARENT_SCOPE)
+	
 endfunction()
