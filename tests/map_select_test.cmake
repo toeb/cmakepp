@@ -1,28 +1,21 @@
 function(test)
+	element(LIST)
+		element(MAP)
+			value(KEY k1 v11)
+			value(KEY k2 v12)
+		element(END)
+		element(MAP)
+			value(KEY k1 v21)
+			value(KEY k2 v22)
+		element(END)
+		element(MAP)
+			value(KEY k1 v31)
+			value(KEY k2 v32)
+		element(END)
+	element(END lst)
 
-element(MAP)
-
-	value(KEY k1 v1)
-	value(KEY k2 v2)
-	value(KEY k3 v3)
-	element(k4 LIST)
-		value(1)
-		value(2)
-		value(3)
-	element(END)
-	element(k5 MAP)
-		value(KEY k1 va)
-		value(KEY k2 vb)
-		value(KEY k3 vc)
-	element(END)
-element(END uut)
-
-
-
-map_select(res "new { \"a\" : \"{uut.k3}\", \"b\" :  { \"a\" : \"{uut.k5.k1}\"}, \"c\": \"{uut.k5.k2}\"}")
-
-map_format(res "{${res}.a}-{${res}.b.a}-{${res}.c}")
-
-assert("${res}" STREQUAL "v3-va-vb")
-
+	ref_get(${lst} lst)
+	map_select(res "from a in lst select {a.k1}{a.k2}")
+	assert(EQUALS ${res} v11v12 v21v22 v31v32)
+	
 endfunction()

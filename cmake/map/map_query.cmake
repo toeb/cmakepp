@@ -24,17 +24,12 @@ function(map_query result query)
 
 	# callback function for map_foreach
 	function(map_query_foreach_action)
-		set(current_where ";${where_parts};")
-		foreach(source ${keys})
-				string(REGEX MATCHALL "${source}[^ ]*" references "${where}")
-				foreach(reference ${references})
-					map_navigate(val "${reference}")
-					string(REPLACE ";${reference};" ";${val};" current_where "${current_where}")
-				endforeach()
-		endforeach()
+		#print_locals()
+		#message("${where_parts} ${installed_pkg} ${dependency_pkg}")
+		map_format(current_where "${where_parts}")
 		# return value
 		if(${current_where})
-			map_select(selection "${select}")
+			map_transform(selection "${select}")
 			ref_append(${map_query_result} "${selection}")
 		endif()
 

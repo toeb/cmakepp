@@ -1,0 +1,11 @@
+# removes every element from minuend thats in subtrahend
+function(list_except difference minuend subtrahend)
+	set(res)
+	foreach(current ${minuend})
+		list(FIND subtrahend "${current}" idx)
+		if(${idx} LESS 0)
+			list(APPEND res ${current})
+		endif()
+	endforeach()
+	set(${difference} ${res} PARENT_SCOPE)
+endfunction()
