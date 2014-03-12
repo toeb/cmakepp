@@ -1,83 +1,38 @@
 function(test)
 
-	function(map_navigate_set path)
-		# path is empty => ""
-		if(navigation_expression STREQUAL "")
-			return_value("")
-		endif()
 
-		# if navigation expression is a simple var just set return it
-		if("${navigation_expression}")
-			set(${navigation_expression} "${ARGN}")
-			return()
-		endif()
+	obj_new(config Configuration)
 
-		# split off reference from navigation expression
-		unset(ref)
-		string(REGEX MATCH "^[^\\[|\\.]*" ref "${navigation_expression}")
-		string(LENGTH "${ref}" len )
-		string(SUBSTRING "${navigation_expression}" ${len} -1 navigation_expression )
+	obj_callmember(${config} AddConfigurationFile global "${test_dir}/conf1.json")
+	obj_callmember(${config} AddConfigurationFile user "${test_dir}/conf2.json")
+	obj_callmember(${config} AddConfigurationFile local "${test_dir}/conf3.json")
 
-		# if ref is a ref to a ref dereference it :D 
-		if(DEFINED ${ref})
-			set(ref ${${ref}})
-		endif()
+	obj_callmember(${config} Set "val1.val2" "1" SCOPE global)
+	obj_callmember(${config} Set "val1.val2" "2" SCOPE user)
+	obj_callmember(${config} Set "val1.val2" "3" SCOPE local)
 
-		# check if ref is valid
-		ref_isvalid( ${ref} is_ref)
-		if(NOT is_ref)
-			message(FATAL_ERROR "map_navigate: expected a reference")
-		endif()
+	obj_callmember(${config} Set "val1.val3" "3" SCOPE global)
+	obj_callmember(${config} Set "val1.val4" "3" SCOPE user)
+	obj_callmember(${config} Set "val1.val5" "3" SCOPE local)
+	
+	obj_callmember(${config} Get res1 "val1.val2")
+	obj_callmember(${config} Get res2 "val1.val3")
+	obj_callmember(${config} Get res3 "val1.val4")
+	obj_callmember(${config} Get res4 "val1.val5")
+	set(res5 asd)
+	obj_callmember(${config} Get res5 "nonexisting.value")
+	obj_callmember(${config} Get res6 "val1.val2" SCOPE global)
+	obj_callmember(${config} Get res7 "val1.val2" SCOPE user)
+	obj_callmember(${config} Get res8 "val1.val2" SCOPE local)
 
-		# match all navigation expression parts
-		string(REGEX MATCHALL  "(\\[([0-9][0-9]*)\\])|(\\.[a-zA-Z0-9_\\-][a-zA-Z0-9_\\-]*)" parts "${navigation_expression}")
-		
-		# loop through parts and try to navigate 
-		# if any part of the path is invalid return ""
-		set(current "${ref}")
-		foreach(part ${parts})
-			string(REGEX MATCH "[a-zA-Z0-9_\\-][a-zA-Z0-9_\\-]*" index "${part}")
-			string(SUBSTRING "${part}" 0 1 index_type)	
-			if(index_type STREQUAL ".")
-				# get by key
-				map_tryget(${current} current "${index}")
-			elseif(index_type STREQUAL "[")
-				# get by index
-				ref_get( ${current} lst)
-				list(GET lst ${index} keyOrValue)
-				map_tryget(${current} current ${keyOrValue})
-				if(NOT current)
-					set(current "${keyOrValue}")
-				endif()
-			endif()
-			if(NOT current)
-				return_value("")
-			endif()
-		endforeach()
-
-		# current  contains the navigated value
-		set(${result} "${current}" PARENT_SCOPE)
-	endfunction()
-	function(map_navigate_append path)
-
-	endfunction()
-	function(Configuration)
-		proto_declarefunction(Write)
-		function(${Write})
-
-		endfunction()
-
-		proto_declarefunction(Load)
-		function(${Load})
-
-		endfunction()
-
-	endfunction()
-
-
- 	function(config_write)
-
- 	endfunction()
+	assert(${res1} STREQUAL 3)
+	assert(${res2} STREQUAL 3)
+	assert(${res3} STREQUAL 3)
+	assert(${res4} STREQUAL 3)
+	assert(NOT res5)
+	assert(${res6} STREQUAL 1)
+	assert(${res7} STREQUAL 2)
+	assert(${res8} STREQUAL 3)
 
 
 endfunction()
