@@ -19,8 +19,8 @@
 # assert(EQUALS C<list> <list> COMPARATOR <comparator> )... todo
 function(assert)
 	# parse arguments
-	set(options EQUALS ACCU SILENT)
-  	set(oneValueArgs MESSAGE RESULT MESSAGE_TYPE CONTAINS)
+	set(options EQUALS ACCU SILENT DEREF)
+  	set(oneValueArgs MESSAGE RESULT MESSAGE_TYPE CONTAINS )
   	set(multiValueArgs)
   	set(prefix)
   	cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -42,6 +42,10 @@ function(assert)
 		set(_MESSAGE_TYPE STATUS)
 	endif()
 
+	if(_DEREF)
+		map_format(_UNPARSED_ARGUMENTS "${_UNPARSED_ARGUMENTS}")
+	endif()
+
 	# 
 	if(_EQUALS)
 		if(NOT _MESSAGE)
@@ -58,6 +62,7 @@ function(assert)
 		else()
 			set(result true)
 		endif()
+
 	else()
 		# if nothing else is specified use _UNPARSED_ARGUMENTS as a truth expresion
 		eval_truth(result (${_UNPARSED_ARGUMENTS}))

@@ -29,7 +29,6 @@ function(map_foreach _action _query)
 	math(EXPR keys_length "${keys_length} -1")
 	set(_def_values)
 	map_values(${_defs} _def_values ${_def_keys})
-	message("dasdasd ${_def_values} - ${_def_keys}")
 	# iterate through all combinations of values
 	while(true)
 		# set values

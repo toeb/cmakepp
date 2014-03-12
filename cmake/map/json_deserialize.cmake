@@ -26,6 +26,7 @@ function(json_deserialize result json)
 		value(${ARGN} "${last_value}")
 		set(last_value PARENT_SCOPE)
 	endfunction()
+
 	set(tokens ${toks})
 	set(last_value)
 	set(res)
