@@ -20,11 +20,8 @@
 # you can access the map structur with map_* operators 
 # expecially in map_navigate is useful with nested structures
 function(element)
-	set(options END MAP LIST)
-  	set(oneValueArgs)
-  	set(multiValueArgs)
-  	set(prefix)
-  	cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+	set(options )
+  	cmake_parse_arguments("" "END;MAP;LIST" "" "" ${ARGN})
   	# get name
   	set(name)
   	if(_UNPARSED_ARGUMENTS)

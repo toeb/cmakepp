@@ -1,7 +1,5 @@
-
 function(map_print_format)
-	foreach(statement ${ARGN})
-		map_format(res "${statement}")
-		message("${res}")
-	endforeach()
+	map_format(res "${ARGN}")
+	message(${res})
+
 endfunction()

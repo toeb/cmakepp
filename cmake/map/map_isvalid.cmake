@@ -1,10 +1,10 @@
 # returns true if ref is a valid reference and its type is 'map'
 function(map_isvalid  ref result)
-	ref_isvalid( ${ref} isref)
+	ref_isvalid("${ref}" isref)
 	if(NOT isref)
 		return_value(false)
 	endif()
-	ref_gettype( ${ref} type)
+	ref_gettype("${ref}" type)
 	if(NOT "${type}" STREQUAL "map")
 		return_value(false)
 	endif()

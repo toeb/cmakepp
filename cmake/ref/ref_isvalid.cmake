@@ -1,4 +1,7 @@
 function(ref_isvalid ref result)
+	if(NOT ref)
+		return_value(false)
+	endif()
 	string(REGEX MATCH "^ref:" res "${ref}" )
 	if(res)
 		return_value(true)
