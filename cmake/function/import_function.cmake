@@ -11,7 +11,7 @@ function(import_function)
   cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
   #_UNPARSED_ARGUMENTS
   if(NOT _UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "missing function to import")
+    message(FATAL_ERROR "import_function: missing function to import")
   endif()
 
   list(LENGTH _UNPARSED_ARGUMENTS arg_count)

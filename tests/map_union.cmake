@@ -36,4 +36,21 @@ function(test)
 
 	map_tryget(${res} val k3)
 	assert(${val} STREQUAL 2)
+
+	# check if deep elements are merged
+	element(MAP)
+		element(MAP elem1)
+			value(KEY k1 v1)
+		element(END)
+	element(END m1)
+	element(MAP)
+		element(MAP elem1)
+			value(KEY k2 v2)
+		element(END)
+	element(END m2)
+
+	set(res)
+	map_merge(res ${m1} ${m2})
+	assert(DEREF "{res.elem1.k1}" STREQUAL "v1")
+	assert(DEREF "{res.elem1.k2}" STREQUAL "v2")
 endfunction()
