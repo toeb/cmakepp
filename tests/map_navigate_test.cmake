@@ -51,6 +51,9 @@ function(test)
 	map_navigate(res "uut.[2].k2[2]")
 	assert(${res} STREQUAL "III")
 
+
+	map_navigate(res "*uut.k3.k2")
+	assert(EQUALS ${res} I II III)
 	
 	# check special symbols
 	map_create(res)

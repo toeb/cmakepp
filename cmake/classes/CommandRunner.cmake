@@ -56,6 +56,7 @@ function(CommandRunner)
 		# try to get a handler for the command if none is found return error message
 		map_tryget(${commands} handler ${cmd})
 		if(NOT handler)
+		
 			message("${name}> could not find a command called '${cmd}' (try 'help')")
 			return()
 		endif()

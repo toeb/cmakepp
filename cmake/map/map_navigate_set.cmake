@@ -43,10 +43,7 @@ function(map_navigate_set navigation_expression)
 		if(NOT isref)
 			map_create(current)
 			set(${ref} ${current} PARENT_SCOPE)
-		endif()
-
-
-		
+		endif()		
 		
 		# end of navigation string reached, set value
 		if(NOT parts)

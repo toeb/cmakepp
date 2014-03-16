@@ -10,4 +10,12 @@ function(test)
  	map_foreach(test_map_foreach "a in lstA, b in lstB, c in lstC" )
  	ref_get(${myref} values)
  	assert(EQUALS ${values} 0 0 0 1 0 0 0 1 0 1 1 0 0 0 1 1 0 1 0 1 1 1 1 1)
+
+
+ 	set(lstA)
+ 	ref_set(${myref} "")
+ 	map_foreach(test_map_foreach "a in lstA, b in lstB, c in lstC" )
+ 	ref_get(${myref} values)
+  	assert(NOT values)
+
 endfunction()

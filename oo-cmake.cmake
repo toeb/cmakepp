@@ -51,5 +51,4 @@ function(load_oocmake)
 	endforeach()
 
 endfunction()
-
 load_oocmake()

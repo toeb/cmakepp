@@ -12,13 +12,20 @@ function(map_navigate result navigation_expression)
 		return_value(${${navigation_expression}})
 	endif()
 
+	# check for dereference operator
+	set(deref false)
+	if("${navigation_expression}" MATCHES "^\\*")
+		set(deref true)
+		string(SUBSTRING "${navigation_expression}" 1 -1 navigation_expression)
+	endif()
+
 	# split off reference from navigation expression
 	unset(ref)
 	string(REGEX MATCH "^[^\\[|\\.]*" ref "${navigation_expression}")
 	string(LENGTH "${ref}" len )
 	string(SUBSTRING "${navigation_expression}" ${len} -1 navigation_expression )
 
-
+	
 
 	# if ref is a ref to a ref dereference it :D 
 	if(DEFINED ${ref})
@@ -28,7 +35,7 @@ function(map_navigate result navigation_expression)
 	# check if ref is valid
 	ref_isvalid( ${ref} is_ref)
 	if(NOT is_ref)
-		message(FATAL_ERROR "map_navigate: expected a reference")
+		message(FATAL_ERROR "map_navigate: expected a reference but got '${ref}'")
 	endif()
 
 	# match all navigation expression parts
@@ -56,7 +63,12 @@ function(map_navigate result navigation_expression)
 			return_value("")
 		endif()
 	endforeach()
-
+	if(deref)
+		ref_isvalid("${current}" is_ref )
+		if(is_ref)
+			ref_get("${current}" current)
+		endif()
+	endif()
 	# current  contains the navigated value
 	set(${result} "${current}" PARENT_SCOPE)
 endfunction()

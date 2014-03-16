@@ -192,14 +192,60 @@ function(Configuration)
 		endforeach()
 	endfunction()
 
-	obj_bind(bound_function ${this} ${GetCommand})
-	obj_callmember(${this} AddCommandHandler get ${bound_function})
+	proto_declarefunction(SaveScope)
+	function(${SaveScope} scope)
+		map_tryget(${scope} file "file")
+		map_tryget(${scope} cfg config)
+		json_serialize(res ${cfg})
+		file(WRITE "${file}" "${res}")
+	endfunction()
 
-	obj_bind(bound_function ${this} ${SetCommand})
-	obj_callmember(${this} AddCommandHandler set ${bound_function})
 
-	obj_bind(bound_function ${this} ${PrintScopes})
-	obj_callmember(${this} AddCommandHandler scopes ${bound_function})
+
+	proto_declarefunction(__call__)
+	function(${__call__})
+		cmake_parse_arguments("" "" "--scope" "" ${ARGN})
+		set(scope)
+		if( _--scope)
+			set(scope SCOPE ${_--scope})
+		endif()
+
+		obj_callmember(${this} GetScope __scope ${scope})
+		map_tryget(${__scope} cfg config)
+		if(NOT cfg)
+			map_create(cfg)
+			map_set(${__scope} config ${cfg})
+		endif()
+
+		if(NOT _UNPARSED_ARGUMENTS)
+
+			set(cfg ${configuration})	
+		else()
+			list(LENGTH _UNPARSED_ARGUMENTS len)
+			if(len EQUAL 1)
+				set(cfg ${configuration})
+			endif()
+		endif()
+
+		set(_UNPARSED_ARGUMENTS "cfg.${_UNPARSED_ARGUMENTS}")
+
+		map_edit(${_UNPARSED_ARGUMENTS} --print)
+		obj_callmember(${this} SaveScope ${__scope})
+	endfunction()
+
+
+
+#	obj_bind(bound_function ${this} ${Edit})
+#	obj_callmember(${this} AddCommandHandler edit ${bound_function})
+
+#	obj_bind(bound_function ${this} ${GetCommand})
+#	obj_callmember(${this} AddCommandHandler get ${bound_function})
+
+#	obj_bind(bound_function ${this} ${SetCommand})
+#	obj_callmember(${this} AddCommandHandler set ${bound_function})
+
+#	obj_bind(bound_function ${this} ${PrintScopes})
+#	obj_callmember(${this} AddCommandHandler scopes ${bound_function})
 
 
 endfunction()

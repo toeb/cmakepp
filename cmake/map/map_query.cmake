@@ -25,7 +25,7 @@ function(map_query result query)
 	# callback function for map_foreach
 	function(map_query_foreach_action)
 		#print_locals()
-		#message("${where_parts} ${installed_pkg} ${dependency_pkg}")
+		#message("${where_parts} = ${installed_pkg} + ${dependency_pkg}")
 		map_format(current_where "${where_parts}")
 		# return value
 		if(${current_where})

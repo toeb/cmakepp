@@ -24,6 +24,11 @@ function(map_foreach _action _query)
 		list(LENGTH ${current_list} _len)
 		list(APPEND _bounds ${_len})
 		list(APPEND _indices 0)
+
+		# if any of the bounds is 0 then the loop is over
+		if(${_len} LESS 1)
+			return()
+		endif()
 	endforeach()
 
 	math(EXPR keys_length "${keys_length} -1")
