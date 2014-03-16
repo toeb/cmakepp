@@ -1,11 +1,16 @@
 function(compress target dir)
+	cmake_parse_arguments("" "RELATIVE;GLOB" "" "" ${ARGN})
+	set(globs ${ARGN})
+	if(_RELATIVE)
+		set(globs)
+		foreach(glob ${_UNPARSED_ARGUMENTS})
+			set(globs ${globs} "${dir}/${glob}")
+		endforeach()
 
-	set(globs)
-	foreach(glob ${ARGN})
-		set(globs ${globs} "${dir}/${glob}")
-	endforeach()
-
-	file(GLOB globs RELATIVE "${dir}" ${globs})
+	endif()
+	if(_GLOB)
+		file(GLOB globs RELATIVE "${dir}" ${globs})
+	endif()
 
 	
 	file(WRITE "${target}" "")
