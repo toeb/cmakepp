@@ -36,7 +36,7 @@ function(ParseHttpResponse result http_response)
 		string(STRIP "${header_value}" header_value)
 		value(KEY "${header_name}" "${header_value}")
 		if("${header_name}" STREQUAL "Content-Length")
-			set(contentStarted true)
+		set(contentStarted true)
 			set(contentLength ${header_value})
 		endif()
 
