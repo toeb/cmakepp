@@ -1,0 +1,66 @@
+function(message)
+	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;PUSH;POP" "LEVEL" "" ${ARGN})
+	
+
+	global_get(__message_indent_level)
+	if(NOT __message_indent_level)
+		set(__message_indent_level 0)
+	endif()
+	if(_PUSH)
+		math(EXPR __message_indent_level "${__message_indent_level} + 1")	
+		global_set(__message_indent_level ${__message_indent_level})
+	endif()
+	if(_POP)
+		math(EXPR __message_indent_level "${__message_indent_level} - 1")	
+		global_set(__message_indent_level ${__message_indent_level})	
+	endif()
+	set(indent)
+	foreach(i RANGE ${__message_indent_level})
+		set(indent "${indent}  ")
+	endforeach()
+	string(SUBSTRING "${indent}" 2 -1 indent)
+	if(NOT _UNPARSED_ARGUMENTS)
+		return()
+	endif()
+
+
+
+	if(_DEBUG)
+		set(_LEVEL 3)
+		set(_UNPARSED_ARGUMENTS STATUS ${_UNPARSED_ARGUMENTS})
+	endif()
+	if(_INFO)
+		set(_LEVEL 2)
+		set(_UNPARSED_ARGUMENTS STATUS ${_UNPARSED_ARGUMENTS})
+	endif()
+	if(NOT _LEVEL)
+		set(_LEVEL 0)
+	endif()
+
+	if(NOT MESSAGE_LEVEL)
+		set(MESSAGE_LEVEL 3)
+	endif()
+
+	list(GET _UNPARSED_ARGUMENTS 0 modifier)
+	if(${modifier} MATCHES "FATAL_ERROR|STATUS|AUTHOR_WARNING|WARNING|SEND_ERROR")
+		list(REMOVE_AT _UNPARSED_ARGUMENTS 0)
+	else()
+		set(modifier)
+	endif()
+
+
+	if(_LEVEL GREATER MESSAGE_LEVEL)
+		return()
+	endif()
+	set(msg "${_UNPARSED_ARGUMENTS}")
+	if(_FORMAT)
+		map_format(msg "${msg}")
+	endif()
+
+
+
+	if(MESSAGE_QUIET)
+		return()
+	endif()
+	_message(${modifier} "${indent}" ${msg})
+endfunction()
