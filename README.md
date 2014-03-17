@@ -1,6 +1,6 @@
 oo-cmake
 ========
-
+[![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=master)](https://travis-ci.org/toeb/oo-cmake)
 objects, methods, functions, maps, inheritance, oo-cmake goodness
 
 # Installing
