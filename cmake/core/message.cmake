@@ -61,10 +61,18 @@ function(message)
 		map_format(msg "${msg}")
 	endif()
 
-
+	if(NOT MESSAGE_DEPTH )
+		set(MESSAGE_DEPTH -1)
+	endif()
 
 	if(MESSAGE_QUIET)
 		return()
+	endif()
+	# check if deep message are to be ignored
+	if(NOT MESSAGE_DEPTH LESS 0)
+		if(${__message_indent_level} GREATER ${MESSAGE_DEPTH})
+			return()
+		endif()
 	endif()
 	_message(${modifier} "${indent}" ${msg})
 endfunction()
