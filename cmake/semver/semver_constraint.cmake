@@ -1,0 +1,98 @@
+
+function(semver_constraint result constraint version)
+  string(STRIP "${constraint}" constraint)
+  set(constraint_operator_regexp "^(\\>=|\\<=|\\<|\\>|\\~|=|!)")
+  set(constraint_regexp "${constraint_operator_regexp}?(.+)$")
+  string(REGEX MATCH "${constraint_regexp}" match "${constraint}")
+  if(NOT match )
+    return_value(false)
+  endif()
+  set(operator)
+  set(argument)
+
+  string(REGEX MATCH "${constraint_operator_regexp}" has_operator "${constraint}")
+  if(has_operator)
+    string(REGEX REPLACE "${constraint_regexp}" "\\1" operator "${constraint}")
+    string(REGEX REPLACE "${constraint_regexp}" "\\2" argument "${constraint}")      
+  else()
+    set(operator "=")
+    set(argument "${constraint}")
+  endif()
+
+  # check for equality
+  if(${operator} STREQUAL "=")
+    semver_normalize(argument "${argument}")
+    semver_compare(cmp "${version}" "${argument}")
+    if("${cmp}" EQUAL "0")
+      return_value(true)
+    endif()
+    return_value(false)
+  endif()
+
+  # check if version is greater than constraint
+  if(${operator} STREQUAL ">")
+    semver_normalize(argument "${argument}")
+    semver_compare(cmp "${version}" "${argument}")
+    if("${cmp}" LESS 0)
+      return_value(true)
+    endif()
+    return_value(false)
+  endif()
+
+  # cheick  if version is less than constraint
+  if(${operator} STREQUAL "<")
+    semver_normalize(argument "${argument}")
+    semver_compare(cmp "${version}" "${argument}")
+    if("${cmp}" GREATER 0)
+      return_value(true)
+    endif()
+    return_value(false)
+  endif()
+
+  # check if version greater or equal constraint
+  if(${operator} STREQUAL ">=")
+    semver_normalize(argument "${argument}")
+    semver_compare(cmp "${version}" "${argument}")
+    if("${cmp}" LESS 0 OR "${cmp}" EQUAL 0)
+      return_value(true)
+    endif()
+    return_value(false)
+  endif()
+  
+  # check if version less or equal constraint
+  if(${operator} STREQUAL "<=")
+    semver_normalize(argument "${argument}")
+    semver_compare(cmp "${version}" "${argument}")
+    if("${cmp}" GREATER 0 OR "${cmp}" EQUAL 0})
+      return_value(true)
+    endif()
+    return_value(false)
+  endif()
+  
+  if(${operator} STREQUAL "!")
+    semver_normalize(argument "${argument}")
+    semver_compare(cmp "${version}" "${argument}")
+    if("${cmp}" EQUAL "0")
+      return_value(false)
+    endif()
+    return_value(true)
+
+  endif()
+
+  #check if version about equal to constraint
+  if(${operator} STREQUAL "~")
+    string(REGEX REPLACE "(.*)([0-9]+)" "\\2" upper "${argument}")
+    math(EXPR upper "${upper} + 1" )
+    string(REGEX REPLACE "(.*)([0-9]+)" "\\1${upper}" upper "${argument}")
+    string(REGEX REPLACE "(.*)([0-9]+)" "\\1\\2" lower "${argument}")
+   
+    semver_constraint(lower_ok ">=${lower}" "${version}")
+    semver_constraint(upper_ok "<${upper}" "${version}")
+
+    if(lower_ok AND upper_ok)
+      return_value(true)
+    endif()
+    return_value(false)
+  endif()
+  return_value(false)
+endfunction()

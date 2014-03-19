@@ -45,6 +45,7 @@ package_property(cmake_exports
 	cmake/classes/*.cmake
 	cmake/ref/*.cmake
 	cmake/web/*.cmake
+	cmake/semver/*.cmake
 
 )
 package_property(install_script)

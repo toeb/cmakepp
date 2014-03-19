@@ -1,4 +1,14 @@
 function(map_navigate_set navigation_expression)
+	cmake_parse_arguments("" "FORMAT" "" "" ${ARGN})
+	set(args)
+	if(_FORMAT)
+		foreach(arg ${_UNPARSED_ARGUMENTS})
+			map_format(formatted_arg "${arg}")
+			list(APPEND args "${formatted_arg}")
+		endforeach()
+	else()
+		set(args ${_UNPARSED_ARGUMENTS})
+	endif()
 	# path is empty => ""
 	if(navigation_expression STREQUAL "")
 		return_value("")
@@ -12,7 +22,8 @@ function(map_navigate_set navigation_expression)
 
 	# rest of navigation expression is empty, first is a var
 	if(NOT navigation_expression)
-		set(${ref} "${ARGN}" PARENT_SCOPE)
+
+		set(${ref} "${args}" PARENT_SCOPE)
 		return()
 	endif()
 	
@@ -47,7 +58,7 @@ function(map_navigate_set navigation_expression)
 		
 		# end of navigation string reached, set value
 		if(NOT parts)
-			map_set(${current} ${index} "${ARGN}")
+			map_set(${current} ${index} "${args}")
 			return()
 		endif()
 

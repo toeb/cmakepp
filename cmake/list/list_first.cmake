@@ -1,0 +1,8 @@
+function(list_first result)
+  if(NOT ARGN)
+    return_value()
+  endif()
+  set(args ${ARGN})
+  list(GET args 0 res)
+  set(${result} ${res} PARENT_SCOPE)
+ endfunction()
