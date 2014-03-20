@@ -1,6 +1,22 @@
 function(message)
-	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;PUSH;POP" "LEVEL" "" ${ARGN})
-	
+	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;PUSH;POP" "LEVEL;ADD_LISTENER;REMOVE_LISTENER" "" ${ARGN})
+
+
+	global_get(__message_listeners)
+	if(_ADD_LISTENER)	
+		ref_isvalid(${_ADD_LISTENER} isref)
+		if(NOT isref)
+			list_new(ref)
+			set(${_ADD_LISTENER} ${ref} PARENT_SCOPE)
+			set(_ADD_LISTENER ${ref})
+		endif()
+
+		global_append(__message_listeners ${_ADD_LISTENER})
+	endif()
+	if(_REMOVE_LISTENER)
+		list(REMOVE_ITEM __message_listeners ${_REMOVE_LISTENER})
+		global_set(__message_listeners ${__message_listeners})
+	endif()
 
 	global_get(__message_indent_level)
 	if(NOT __message_indent_level)
@@ -64,6 +80,15 @@ function(message)
 	if(NOT MESSAGE_DEPTH )
 		set(MESSAGE_DEPTH -1)
 	endif()
+
+	if(NOT msg)
+		return()
+	endif()
+
+	foreach(listener ${__message_listeners})
+		ref_append(${listener} ${modifier} "${msg}")
+
+	endforeach()
 
 	if(MESSAGE_QUIET)
 		return()

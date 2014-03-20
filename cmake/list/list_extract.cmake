@@ -1,0 +1,13 @@
+function(list_extract lst)
+  set(thelist ${${lst}})
+  set(args ${ARGN})
+  while(true)
+    list_pop_front(current_value thelist)
+    list_pop_front(current_arg args)
+    if(NOT current_arg)
+      return()
+    endif()
+    set(${current_arg} ${current_value} PARENT_SCOPE)
+  endwhile()
+
+endfunction()

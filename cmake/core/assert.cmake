@@ -54,7 +54,7 @@ function(assert)
 		list_equal(result ${_UNPARSED_ARGUMENTS})
 	elseif(_CONTAINS OR _MISSING)
 		if(NOT _MESSAGE)
-		set(_MESSAGE "assertion failed: list does not contain ${_CONTAINS}")
+		set(_MESSAGE "assertion failed: list does not contain '${_CONTAINS}' list:(${_UNPARSED_ARGUMENTS})")
 		endif()
 		list(FIND _UNPARSED_ARGUMENTS "${_CONTAINS}" idx)
 		
