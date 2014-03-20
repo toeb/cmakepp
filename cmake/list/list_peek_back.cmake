@@ -1,0 +1,10 @@
+
+function(list_peek_back result lst)
+  if(NOT ${lst})
+    return_value()
+  endif()
+  list(LENGTH ${lst} len)
+  math(EXPR len "${len} - 1")
+  list(GET ${lst} "${len}" res)
+  set(${result} ${res} PARENT_SCOPE)
+endfunction()

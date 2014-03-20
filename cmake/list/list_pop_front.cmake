@@ -1,0 +1,10 @@
+
+function(list_pop_front result lst)
+  list_peek_front(res "${lst}")
+  if(NOT res)
+    return_value()
+  endif()
+  list(REMOVE_AT "${lst}" 0)
+  set(${result} ${res} PARENT_SCOPE)
+  set(${lst} ${${lst}} PARENT_SCOPE)
+endfunction()

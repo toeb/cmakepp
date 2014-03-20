@@ -1,5 +1,8 @@
 
 function(semver_normalize result version)
+  if(NOT version)
+    return_value("0.0.0")
+  endif()
   foreach(i RANGE 3)
     semver_parse("${version}" IS_VALID isvalid)
     if(isvalid)
