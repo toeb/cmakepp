@@ -68,9 +68,6 @@ function(message)
 	endif()
 
 
-	if(_LEVEL GREATER MESSAGE_LEVEL)
-		return()
-	endif()
 	set(msg "${_UNPARSED_ARGUMENTS}")
 	if(_FORMAT)
 		map_format(msg "${msg}")
@@ -89,6 +86,9 @@ function(message)
 
 	endforeach()
 
+	if(_LEVEL GREATER MESSAGE_LEVEL)
+		return()
+	endif()
 	if(MESSAGE_QUIET)
 		return()
 	endif()
