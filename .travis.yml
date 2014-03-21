@@ -7,6 +7,8 @@ before_install:
   - sudo add-apt-repository ppa:ubuntu-sdk-team/ppa -y
   - sudo apt-get update
   - sudo apt-get install cmake
+  - git config --global user.email "travis-ci@example.com"
+  - git config --global user.name "Build Server"
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 script: "cmake -P oo-cmake-tests.cmake"
