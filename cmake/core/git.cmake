@@ -19,7 +19,7 @@ function(git)
     message(FATAL_ERROR "missing git")
   endif()
 
- # message(INFO LEVEL 3 "executing git in directory  with args: ${args}")
+  message(INFO LEVEL 4 "executing git in directory  with args: ${args}")
    execute_process(
     COMMAND "${GIT_EXECUTABLE}" ${args} 
     WORKING_DIRECTORY "${_--cwd}"
@@ -37,8 +37,8 @@ function(git)
     set(${_STDERR} ${stderr} PARENT_SCOPE)
    endif()
 
-   message(INFO LEVEL 8 "${stdout}")
-   message(INFO LEVEL 4 "${stderr}")
+   message(INFO LEVEL 8 "stdout:\n${stdout}")
+   message(INFO LEVEL 4 "errorout:\n${stderr}")
   # message("stdout ${stdout}")
  # message(" ${stderr}")
    message(INFO LEVEL 4 "git returned ${error_code}")
