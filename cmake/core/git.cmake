@@ -36,9 +36,12 @@ function(git)
    if(_STDERR)
     set(${_STDERR} ${stderr} PARENT_SCOPE)
    endif()
+
+   message(INFO LEVEL 8 "${stdout}")
+   message(INFO LEVEL 4 "${stderr}")
   # message("stdout ${stdout}")
  # message(" ${stderr}")
-   #message(INFO "git returned ${error_code}")
+   message(INFO LEVEL 4 "git returned ${error_code}")
    # if a result output is set then error code is retruned as result
    if(_RESULT)
     if(${error_code} EQUAL 0)
