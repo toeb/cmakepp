@@ -1,5 +1,5 @@
 function(message)
-	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;PUSH;POP" "LEVEL;ADD_LISTENER;REMOVE_LISTENER" "" ${ARGN})
+	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;PUSH;POP;POP_LEVEL" "PUSH_LEVEL;LEVEL;ADD_LISTENER;REMOVE_LISTENER" "" ${ARGN})
 
 
 	global_get(__message_listeners)
@@ -38,7 +38,6 @@ function(message)
 	if(NOT _UNPARSED_ARGUMENTS)
 		return()
 	endif()
-
 
 
 	if(_DEBUG)

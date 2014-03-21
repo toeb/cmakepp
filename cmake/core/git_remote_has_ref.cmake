@@ -1,0 +1,21 @@
+
+# checks the remote uri if a ref exists ref_type can be * to match any
+# else it can be tags heads or HEAD
+function(git_remote_has_ref result uri ref_name ref_type)
+  git_remote_refs(refs ${uri})
+  foreach(current_ref ${refs})
+    map_navigate(name "current_ref.name")
+    if("${name}" STREQUAL "${ref_name}")
+      if(ref_type STREQUAL "*")
+        return_value(true)
+      else()
+        map_navigate(type "current_ref.type")
+        if(${type} STREQUAL "${ref_type}")
+          return_value(true)
+        endif()
+        return_value(false)
+      endif()
+    endif()
+  endforeach()
+  return_value(false)
+endfunction()

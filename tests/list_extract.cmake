@@ -10,4 +10,10 @@ function(test)
  assert(${val4} STREQUAL d)
  assert(NOT val5)
 
+
+ set(thelist 1)
+ list_extract(thelist val1 val2)
+ assert(${val1} STREQUAL 1)
+ assert(NOT val2)
+ 
 endfunction()
