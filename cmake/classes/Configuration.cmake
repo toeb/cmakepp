@@ -1,9 +1,35 @@
 function(Configuration)
 	this_inherit(CommandRunner)
 
+	proto_declarefunction(AddConfigurationFilesRecurse )
+
+
+
 	# create a field containing all configurations
 	map_create(configurations)
 	this_set(configurations ${configurations})
+
+
+	# recursively adds configuration files to the configuration object
+	# starts with the given <path> and adds all coniguration files in <path> and its
+	# paretn directories up to 
+	function(${AddConfigurationFilesRecurse} path)
+		# recursively add configuration files
+		set(current_dir "${path}")
+		while(true)
+			get_filename_component(new_current_dir "${current_dir}" PATH)	
+			# current dir is equal to new_current_dir when current_dir is root (recursion anchor)
+			if("${new_current_dir}" STREQUAL "${current_dir}")
+				break()
+			endif()
+			set(current_dir ${new_current_dir})
+			# if cutil.config exists add it to configuration
+			if(EXISTS "${current_dir}/cutil.config")
+				string_normalize_string(name "${current_dir}/cutil.config")
+				obj_callmember(${this} AddConfigurationFile "${name}" "${current_dir}/cutil.config")
+			endif()
+		endwhile()
+	endfunction()
 
 	#  add a named configuration file to the configuration object
 	# configuration files are searched in reverse order for 
@@ -12,6 +38,7 @@ function(Configuration)
 	proto_declarefunction(AddConfigurationFile)
 	function(${AddConfigurationFile} name config_file)
 		set(config)
+		message(DEBUG LEVEL 6 "Adding Configuration '${name}' @ ${config_file} ")
 		map_navigate_set("configurations.${name}.file" "${config_file}")
 		map_navigate_set("configurations.${name}.name" "${name}")
 		obj_callmember(${this} Load)
