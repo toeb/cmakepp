@@ -8,11 +8,12 @@ function(import_function)
   set(oneValueArgs as)
   set(multiValueArgs)
   set(prefix)
-  cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+  cmake_parse_arguments("" "REDEFINE;ONCE" "as" "" ${ARGN})
   #_UNPARSED_ARGUMENTS
   if(NOT _UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "import_function: missing function to import")
   endif()
+
 
   list(LENGTH _UNPARSED_ARGUMENTS arg_count)
 
@@ -21,10 +22,14 @@ function(import_function)
   endif()
 
   list(GET _UNPARSED_ARGUMENTS 0 _import_function_func)
-  #message("${_UNPARSED_ARGUMENTS}")
   set(function_name ${_as})
 
 
+  if(function_name AND "_${function_name}" STREQUAL "${_import_function_func}"  )
+    # cmake function already exists.
+    message(DEBUG LEVEL 6 "function '${function_name}' should be imported as '${_as}' ... returning without operation")
+    return()
+  endif()
   # get function implementation this fails if _import_function_func is not a function
 
   get_function_string(function_string "${_import_function_func}")
@@ -41,7 +46,7 @@ function(import_function)
   endif()
 
 
- debug_message("importing function '${func_name}' as '${function_name}'")
+ message(DEBUG LEVEL 7 "importing function '${func_name}' as '${function_name}'")
 #print_locals()
   #message(FATAL_ERROR "name ${func_name}")
 
@@ -61,7 +66,7 @@ function(import_function)
 
   #code which is run once when a function is defined
   set(before_function 
-    "#debug_message(\"imported ${function_name}  \")"
+   # "#debug_message(\"imported ${function_name}  \")"
   )
 
   if(COMMAND "${function_name}" AND NOT _REDEFINE)
