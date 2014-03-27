@@ -29,6 +29,7 @@ function(import_function)
 
   get_function_string(function_string "${_import_function_func}")
   string(MD5 hash "${function_string}")
+  # ohoh the redefine is not checked
   if(EXISTS "${cutil_cache_dir}/${hash}.cmake" AND NOT ${_REDEFINE})
     include ("${cutil_cache_dir}/${hash}.cmake")
    # message("cached found ${_import_function_func} at ${cutil_cache_dir}/${hash}:0")
@@ -48,7 +49,7 @@ function(import_function)
   #message("function is ${func_type} named ${func_name} with args: ${func_args}")
 
   # code which is run everytime a function is called
-  if(inject_debug_info)
+  if(inject_debug_info OR true)
     set(on_call 
     "set(imported_caller_function_name ${imported_function_name})
     set(imported_function_name ${function_name})")
