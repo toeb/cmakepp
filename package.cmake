@@ -46,6 +46,7 @@ package_property(cmake_exports
 	cmake/ref/*.cmake
 	cmake/web/*.cmake
 	cmake/semver/*.cmake
+	cmake/targets/*.cmake
 
 )
 package_property(install_script)
