@@ -1,0 +1,11 @@
+
+function(semver_constraint_compiled_evaluate result compiled_constraint constraint_elements version )
+  foreach(element ${constraint_elements})
+    semver_constraint_evaluate_element(res "${element}" "${version}")
+    string(REPLACE "${element}" "${res}" compiled_constraint "${compiled_constraint}")
+  endforeach()
+  if(${compiled_constraint})
+    return_value(true)
+  endif()
+  return_value(false)
+endfunction()

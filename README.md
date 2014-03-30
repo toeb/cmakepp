@@ -1,5 +1,5 @@
 oo-cmake
-========
+======== 
 [![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=master)](https://travis-ci.org/toeb/oo-cmake)
 objects, methods, functions, maps, inheritance, oo-cmake goodness
 
@@ -20,9 +20,52 @@ To test the code (alot is tested but not all) run the following in the root dir 
 cmake -P oo-cmake-tests.cmake 
 ```
 
+# Returning values
+
+**Related Functions**
+
+* `return(...)` overwritten CMake function accepting arguments which are returned
+* `ans(<var>)` a shorthand for getting the result of a function call and storing it in var
+* `clr([PARENT_SCOPE])` clears the `__ans` variable in current scope or in PARENT_SCOPE if flag is set.  
+
+A CMake function can return values by accessing it's parent scope.  Normally one one do the following to return a value
+```
+	function(myfunc result)
+		set(${result} "return value" PARENT_SCOPE)
+	endfunction()
+	myfunc(res)
+	assert(${res} STREQUAL "return value")
+```
+This type of programming causes problems when nesting functions as one has to return every return value that a nested function returns. This would cause alot of overhead as the whole scope would have to be parsed to see which values are new after a  function call.
+
+A cleaner alternative known from most other programming languages is using a return value. I propose and have implemented the following pattern to work around the missing function return values of cmake. 
+
+```
+	function(myfunc)
+		return("return_value")
+	endfunction()
+	myfunc()
+	ans(res)
+	# the __ans var is used as a register
+	assert(${__ans} STREQUAL "return value")
+	assert(${res} STREQUAL "return value")
+```
+
+This is possible by overwriting CMakes default return() function with a macro. It accepts variables and  will call `set(__ans ${ARGN} PARENT_SCOPE)` so after the call to `myfunc()` the scope will contain the variable `__ans`. using the `ans(<var>)` function is a shorthand for `set(<var> ${__ans})`.  
+
+### Caveats
+
+* The returnvalue should immediately be consumed after the call to `myfunc` because it might be reused again somewhere else.
+* functions which do  not call return will not set  `__ans` in their parent scope.  If it is unclear weather a function really sets `__ans` you may want to clear it before the function call using `clr()` 
+
+
+### Alternatives
+* a stack machine would also be a possiblity as this would allow returning multiple values. I have decided using the simpler single return value appoach as it is possible to return a structured list or a map if multiple return values are needed.
+ 
+
 # Functions
 
-To correctly work with object oriented programming in cmake dynamic functions are a must
+To correctly work with object oriented programming in cmake dynamic functions are a must.
 I have written some methods for handling, parsing, injecting, importing, saving, loading functions
 Try the following example to get an overview of what is possible
 

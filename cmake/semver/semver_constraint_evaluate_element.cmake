@@ -1,5 +1,5 @@
 
-function(semver_constraint result constraint version)
+function(semver_constraint_evaluate_element result constraint version)
   string(STRIP "${constraint}" constraint)
   set(constraint_operator_regexp "^(\\>=|\\<=|\\<|\\>|\\~|=|!)")
   set(constraint_regexp "${constraint_operator_regexp}?(.+)$")
@@ -86,8 +86,8 @@ function(semver_constraint result constraint version)
     string(REGEX REPLACE "(.*)([0-9]+)" "\\1${upper}" upper "${argument}")
     string(REGEX REPLACE "(.*)([0-9]+)" "\\1\\2" lower "${argument}")
    
-    semver_constraint(lower_ok ">=${lower}" "${version}")
-    semver_constraint(upper_ok "<${upper}" "${version}")
+    semver_constraint_evaluate_element(lower_ok ">=${lower}" "${version}")
+    semver_constraint_evaluate_element(upper_ok "<${upper}" "${version}")
 
     if(lower_ok AND upper_ok)
       return_value(true)

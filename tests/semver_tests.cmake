@@ -1,5 +1,25 @@
 function(test)
-  
+
+  #semver_constraint_evaluate(res "0.0.1 0.0.2" "")
+
+  semver_constraint_evaluate(res  "=0.0.1" "0.0.1") 
+  assert(res)
+  semver_constraint_evaluate(res  "=0.0.1" "0.0.2") 
+  assert(NOT res)
+  semver_constraint_evaluate(res  "!0.0.1" "0.0.1") 
+  assert(NOT res)
+  semver_constraint_evaluate(res  "!0.0.1" "0.0.2") 
+  assert(res)
+  semver_constraint_evaluate(res  ">0.0.1" "0.0.2") 
+  assert(res)
+  semver_constraint_evaluate(res  ">0.0.1" "0.0.1") 
+  assert(NOT res)
+  semver_constraint_evaluate(res  "<0.0.1" "0.0.0") 
+  assert(res)
+  semver_constraint_evaluate(res  "<0.0.1" "0.0.1") 
+  assert(NOT res)
+
+
   semver_normalize(res "1")
   assert("${res}" STREQUAL "1.0.0")
 
@@ -9,76 +29,76 @@ function(test)
   semver_normalize(res "1.0")
   assert("${res}" STREQUAL "1.0.0")
     
-  semver_constraint(res "=2.0.0" "2.0.0")
+  semver_constraint_evaluate_element(res "=2.0.0" "2.0.0")
   assert(res)
-  semver_constraint(res "=2" "2.0.0")
+  semver_constraint_evaluate_element(res "=2" "2.0.0")
   assert(res)
-  semver_constraint(res "=2.0" "2.0.0")
+  semver_constraint_evaluate_element(res "=2.0" "2.0.0")
   assert(res)
-  semver_constraint(res "2" "2.0.0")
+  semver_constraint_evaluate_element(res "2" "2.0.0")
   assert(res)
-  semver_constraint(res "2" "2.0.1")
+  semver_constraint_evaluate_element(res "2" "2.0.1")
   assert(NOT res)
 
 
-  semver_constraint(res "!2.0" "2.0.0")
+  semver_constraint_evaluate_element(res "!2.0" "2.0.0")
   assert(NOT res)
-  semver_constraint(res "!2.0" "2.0.0-alpha")
+  semver_constraint_evaluate_element(res "!2.0" "2.0.0-alpha")
   assert( res)
 
-  semver_constraint(res ">2" "2.0.1")
+  semver_constraint_evaluate_element(res ">2" "2.0.1")
   assert(res)
-  semver_constraint(res ">2" "2.0.0")
+  semver_constraint_evaluate_element(res ">2" "2.0.0")
   assert(NOT res)
 
-  semver_constraint(res ">=2" "2.0.1")
+  semver_constraint_evaluate_element(res ">=2" "2.0.1")
   assert(res)
-  semver_constraint(res ">=2" "2.0.0")
+  semver_constraint_evaluate_element(res ">=2" "2.0.0")
   assert(res)
-  semver_constraint(res ">=2" "1.0.0")
-  assert(NOT res)
-
-
-  semver_constraint(res "<2" "1.9.9")
-  assert(res)
-  semver_constraint(res "<2" "2.0.0")
+  semver_constraint_evaluate_element(res ">=2" "1.0.0")
   assert(NOT res)
 
 
-  semver_constraint(res "<=2" "1.9.9")
+  semver_constraint_evaluate_element(res "<2" "1.9.9")
   assert(res)
-  semver_constraint(res "<=2" "2.0.0")
+  semver_constraint_evaluate_element(res "<2" "2.0.0")
+  assert(NOT res)
+
+
+  semver_constraint_evaluate_element(res "<=2" "1.9.9")
+  assert(res)
+  semver_constraint_evaluate_element(res "<=2" "2.0.0")
   assert( res)
-  semver_constraint(res "<=2" "2.0.1")
+  semver_constraint_evaluate_element(res "<=2" "2.0.1")
   assert(NOT res)
 
-  semver_constraint(res "~2.3.4" "2.0.1")
+  semver_constraint_evaluate_element(res "~2.3.4" "2.0.1")
   assert(NOT res)
 
-  semver_constraint(res "~2.3.4" "2.3.4")
+  semver_constraint_evaluate_element(res "~2.3.4" "2.3.4")
   assert(res)
 
-  semver_constraint(res "~2.3" "2.3.4")
+  semver_constraint_evaluate_element(res "~2.3" "2.3.4")
   assert(res)
 
-  semver_constraint(res "~2.3" "2.4.4")
-  assert(NOT res)
-
-
-  semver_constraint(res "~2" "2.3.4")
-  assert(res)
-  semver_constraint(res "~2" "3.0.0")
-  assert(NOT res)
-  semver_constraint(res "~2" "2.0.0")
-  assert(res)
-  semver_constraint(res "~2" "1.9.9")
+  semver_constraint_evaluate_element(res "~2.3" "2.4.4")
   assert(NOT res)
 
 
-
-  semver_constraints(res "<=3,>2" "3.0.0")
+  semver_constraint_evaluate_element(res "~2" "2.3.4")
   assert(res)
-  semver_constraints(res "<=3,>=2" "2.0.0")
+  semver_constraint_evaluate_element(res "~2" "3.0.0")
+  assert(NOT res)
+  semver_constraint_evaluate_element(res "~2" "2.0.0")
+  assert(res)
+  semver_constraint_evaluate_element(res "~2" "1.9.9")
+  assert(NOT res)
+
+
+
+  semver_constraint_evaluate(res "<=3,>2" "3.0.0")
+  assert(res)
+  semver_constraint_evaluate(res "<=3,>=2" "2.0.0")
   assert(res)
 
 
