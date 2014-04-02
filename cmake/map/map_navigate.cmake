@@ -28,13 +28,21 @@ function(map_navigate result navigation_expression)
 	
 
 	# if ref is a ref to a ref dereference it :D 
+	set(not_defined true)
 	if(DEFINED ${ref})
 		set(ref ${${ref}})
+		set(not_defined false)
 	endif()
 
 	# check if ref is valid
 	ref_isvalid( ${ref} is_ref)
 	if(NOT is_ref)
+		if(not_defined)
+			return_value()
+		endif()
+		set(${result} "${ref}" PARENT_SCOPE)
+
+		return()
 		message(FATAL_ERROR "map_navigate: expected a reference but got '${ref}'")
 	endif()
 
@@ -60,7 +68,7 @@ function(map_navigate result navigation_expression)
 			endif()
 		endif()
 		if(NOT current)
-			return_value("")
+			return_value("${current}")
 		endif()
 	endforeach()
 	if(deref)

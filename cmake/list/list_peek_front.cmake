@@ -1,6 +1,6 @@
 
 function(list_peek_front result lst)
-  if(NOT "${lst}")
+  if(NOT DEFINED "${lst}")
     return_value()
   endif()
   list(GET "${lst}" 0 res)

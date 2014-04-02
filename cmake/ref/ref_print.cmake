@@ -1,4 +1,8 @@
 function(ref_print ref)
+  if(NOT ref)
+    message("undefined ref")
+    return()
+  endif()
 	json_serialize(res "${ref}" INDENTED)
 
 	message("${res}")

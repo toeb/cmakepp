@@ -50,7 +50,8 @@ function(map_navigate_set navigation_expression)
 
 		#message("current ${current}, parts: ${parts}, current_part: ${part}, current_index ${index} current_type : ${index_type}")
 		# first one could not be ref so create ref and set output
-		ref_isvalid("${current}" isref) 
+		ref_isvalid("${current}" isref)
+		
 		if(NOT isref)
 			map_create(current)
 			set(${ref} ${current} PARENT_SCOPE)

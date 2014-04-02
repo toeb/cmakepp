@@ -13,11 +13,22 @@ function(test)
 	element(END uut)
 
 
+	# a missing variable
+	set(tmp_var)
+	map_navigate(res "tmp_var")
+	assert(NOT res)
 
 	# empty path
 	map_navigate(res "")
 	assert("_${res}" STREQUAL "_")
-	
+
+
+	# a normal variable
+	set(tmp_var "hello")
+	map_navigate(res "tmp_var")
+	assert(res)
+	assert(${res} STREQUAL "hello")
+
 
 	# unevaluated ref
 	map_navigate(res "uut")

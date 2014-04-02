@@ -1,6 +1,6 @@
 
 function(list_peek_back result lst)
-  if(NOT ${lst})
+  if(NOT DEFINED ${lst})
     return_value()
   endif()
   list(LENGTH ${lst} len)

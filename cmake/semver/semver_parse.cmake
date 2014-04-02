@@ -1,5 +1,20 @@
 
 function(semver_parse version_string)
+  semver_parse_lazy("${version_string}")
+  ans(version)
+  if(NOT version)
+    return()
+  endif()
+
+
+  semver_isvalid("${version}")
+  ans(isvalid)
+  if(isvalid)
+    return(${version})
+  endif()
+  return()
+
+  return()
 map_isvalid("${version_string}" ismap)
 if(ismap)
   semver_format(version_string ${version_string})
@@ -15,7 +30,7 @@ endif()
  set(semver_version_regex "(${semver_major_regex})\\.(${semver_minor_regex})\\.(${semver_patch_regex})")
  set(semver_regex "(${semver_version_regex})(-${semver_prerelease_regex})?(\\+${semver_metadata_regex})?")
 
-  cmake_parse_arguments("" "" "MAJOR;MINOR;PATCH;VERSION;VERSION_NUMBERS;PRERELEASE;METADATA;RESULT;IS_VALID" "" ${ARGN})
+  cmake_parse_arguments("" "LAZY" "MAJOR;MINOR;PATCH;VERSION;VERSION_NUMBERS;PRERELEASE;METADATA;RESULT;IS_VALID" "" ${ARGN})
 
   map_create(version)
 
