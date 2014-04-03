@@ -1,0 +1,10 @@
+
+   function(semver_higher a b)
+    semver_gt("${a}" "${b}")
+    ans(res)
+    if(res)
+      return(${a})
+    else()
+      return(${b})
+    endif()
+   endfunction()

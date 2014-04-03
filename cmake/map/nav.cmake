@@ -19,7 +19,7 @@ function(nav navigation_expression)
     map_format(args "${args}")  
   endif()
 
-  if("_${first}" STREQUAL _ASSIGN)
+  if("_${first}" STREQUAL _ASSIGN OR "_${first}" STREQUAL _= OR "_${first}" STREQUAL _*)
     list_pop_front(trash args)
   #  message("asd ${args} ")
     map_navigate(args "${args}")

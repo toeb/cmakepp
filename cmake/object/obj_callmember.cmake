@@ -1,7 +1,7 @@
 macro(obj_callmember this key)
 
 	result_clear()
-	debug_message("calling ${key} on ${this} with ${ARGN}")
+	message(DEBUG LEVEL 10 "calling ${key} on ${this} with ${ARGN}")
 	obj_nullcheck(${this})
 
 	# cannot pass func directly because it would be destroy inner
@@ -17,6 +17,4 @@ macro(obj_callmember this key)
 	import_function("${__func}" as bound_function REDEFINE)
 	bound_function(${ARGN})
 	obj_popcontext()
-
-
 endmacro()

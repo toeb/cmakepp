@@ -1,5 +1,5 @@
 function(message)
-	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;PUSH;POP;POP_LEVEL" "PUSH_LEVEL;LEVEL;ADD_LISTENER;REMOVE_LISTENER" "" ${ARGN})
+	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;JSON;PUSH;POP;POP_LEVEL" "PUSH_LEVEL;LEVEL;ADD_LISTENER;REMOVE_LISTENER" "" ${ARGN})
 
 
 	global_get(__message_listeners)
@@ -71,6 +71,11 @@ function(message)
 	set(msg "${_UNPARSED_ARGUMENTS}")
 	if(_FORMAT)
 		map_format(msg "${msg}")
+	endif()
+
+	if(_JSON)
+		json_serialize(res "${msg}" INDENTED)
+		set(msg ${res})
 	endif()
 
 	if(NOT MESSAGE_DEPTH )

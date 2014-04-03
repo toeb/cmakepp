@@ -4,11 +4,7 @@
 # todo \r\n\t in signature
 # todo function name starting with function fail
 function(import_function)
-  set(options REDEFINE ONCE)
-  set(oneValueArgs as)
-  set(multiValueArgs)
-  set(prefix)
-  cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+  cmake_parse_arguments("" "REDEFINE;ONCE" "as" "" ${ARGN})
   #_UNPARSED_ARGUMENTS
   if(NOT _UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "import_function: missing function to import")
@@ -24,6 +20,8 @@ function(import_function)
   #message("${_UNPARSED_ARGUMENTS}")
   set(function_name ${_as})
 
+ # function_parse("${_import_function_func}")
+ # ans(descriptor)
 
   # get function implementation this fails if _import_function_func is not a function
 
@@ -42,11 +40,8 @@ function(import_function)
   endif()
 
 
- debug_message("importing function '${func_name}' as '${function_name}'")
-#print_locals()
-  #message(FATAL_ERROR "name ${func_name}")
+ message(DEBUG LEVEL 6 "importing function '${func_name}' as '${function_name}'")
 
-  #message("function is ${func_type} named ${func_name} with args: ${func_args}")
 
   # code which is run everytime a function is called
   if(inject_debug_info OR true)
@@ -67,7 +62,7 @@ function(import_function)
 
   if(COMMAND "${function_name}" AND NOT _REDEFINE)
     if(_ONCE)
-      debug_message("returning because '${function_name}' was already imported")
+      message(DEBUG LEVEL 6 "returning because '${function_name}' was already imported")
       return()
     endif()
     message(FATAL_ERROR "cannot import ${function_name} because it already exists")
