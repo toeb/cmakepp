@@ -6,7 +6,8 @@ function(value_descriptor_parse id)
   if(${ARGC} EQUAL 1)
 
     # it might be a map
-    map_isvalid(${ARGV1} ismap)
+    list_first(first ${ARGN})
+    map_isvalid("${first}" ismap)
 
     if(ismap)
       message(ismap)
