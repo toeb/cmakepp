@@ -19,25 +19,27 @@ function(nav navigation_expression)
     map_format(args "${args}")  
   endif()
 
+
+  if("_${first}" STREQUAL _ASSIGN OR "_${first}" STREQUAL _= OR "_${first}" STREQUAL _*)
+    list_pop_front(trash args)
+    map_navigate(args "${args}")
+  endif()
+
+
   if("_${first}" STREQUAL _CLONE_DEEP)
     list_pop_front(trash args)
+    map_navigate(args "${args}")
     map_clone_deep("${args}")
     ans(args)
   endif()
 
   if("_${first}" STREQUAL _CLONE_SHALLOW)
     list_pop_front(trash args)
+    map_navigate(args "${args}")
     map_clone_shallow("${args}")
     ans(args)
-
   endif()
 
-  if("_${first}" STREQUAL _ASSIGN OR "_${first}" STREQUAL _= OR "_${first}" STREQUAL _*)
-    list_pop_front(trash args)
-  #  message("asd ${args} ")
-    map_navigate(args "${args}")
-  #  message("asd ${args} ")
-  endif()
   # this is a bit hacky . if a new var is created by map_navigate_set
   # it is propagated to the PARENT_SCOPE
   string(REGEX REPLACE "^([^.]*)\\..*" "\\1" res "${navigation_expression}")

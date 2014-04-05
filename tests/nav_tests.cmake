@@ -63,8 +63,11 @@ return()
 
   # clone
   nav(a.v.x = "hello")
-  nav("a.v.x" CLONE_DEEP "a")
+  nav("a.v.x" = CLONE_DEEP "a")
   ans(res)
   assert(DEREF "{a.v.x.v.x}" STREQUAL "hello" )
+
+
+
 
 endfunction()
