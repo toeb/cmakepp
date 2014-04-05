@@ -46,7 +46,7 @@ return()
 
   # set value by another navigation expression
   nav("a.b.c" "h1")
-  nav("a.v.x" ASSIGN "a.b.c")
+  nav("a.v.x" = "a.b.c")
   ans(res)
   assert("${res}" STREQUAL "h1")
   nav("a.v.x")
@@ -60,4 +60,11 @@ return()
   nav("a.v.x" FORMAT "{a.v.x}-{a.b.c}")
   ans(res)
   assert("${res}" STREQUAL "h1-h1")
+
+  # clone
+  nav(a.v.x = "hello")
+  nav("a.v.x" CLONE_DEEP "a")
+  ans(res)
+  assert(DEREF "{a.v.x.v.x}" STREQUAL "hello" )
+
 endfunction()

@@ -1,5 +1,5 @@
 function(message)
-	cmake_parse_arguments("" "DEBUG;INFO;FORMAT;JSON;PUSH;POP;POP_LEVEL" "PUSH_LEVEL;LEVEL;ADD_LISTENER;REMOVE_LISTENER" "" ${ARGN})
+	cmake_parse_arguments("" "POP_AFTER;DEBUG;INFO;FORMAT;JSON;PUSH;POP;POP_LEVEL" "PUSH_LEVEL;LEVEL;ADD_LISTENER;REMOVE_LISTENER" "" ${ARGN})
 
 
 	global_get(__message_listeners)
@@ -30,10 +30,16 @@ function(message)
 		math(EXPR __message_indent_level "${__message_indent_level} - 1")	
 		global_set(__message_indent_level ${__message_indent_level})	
 	endif()
+
+
 	set(indent)
 	foreach(i RANGE ${__message_indent_level})
 		set(indent "${indent}  ")
 	endforeach()
+	if(_POP_AFTER)
+		math(EXPR __message_indent_level "${__message_indent_level} - 1")	
+		global_set(__message_indent_level ${__message_indent_level})	
+	endif()
 	string(SUBSTRING "${indent}" 2 -1 indent)
 	if(NOT _UNPARSED_ARGUMENTS)
 		return()
@@ -104,4 +110,8 @@ function(message)
 		endif()
 	endif()
 	_message(${modifier} "${indent}" "${msg}")
+
+
+	
+
 endfunction()
