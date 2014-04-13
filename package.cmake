@@ -39,6 +39,7 @@ package_property(cmake_exports
 	cmake/map/*.cmake
 	cmake/scope/*.cmake
 	cmake/debugging/*.cmake
+	cmake/expr/*.cmake
 	cmake/object/this/*.cmake
 	cmake/object/filebased/*.cmake
 	cmake/object/*.cmake

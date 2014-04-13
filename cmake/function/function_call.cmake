@@ -1,0 +1,57 @@
+
+  # no output except through return values or referneces
+  function(function_call)
+    return_reset()
+    # I used garbled variable names to keep from hiding parent scope varaibles
+   # message("wooooaoaat? ${ARGN}")
+    set(__function_call_args ${ARGN})
+
+    list_pop_front(__function_call_func __function_call_args)
+    list_pop_front(__function_call_paren_open __function_call_args)
+    list_pop_back(__function_call_paren_close __function_call_args)
+    
+    if(NOT "_${__function_call_paren_open}" STREQUAL "_(")
+      message(WARNING "expected opening parentheses")
+    endif()
+    if(NOT "_${__function_call_paren_close}" STREQUAL "_)")
+      message(WARNING "expected closing parentheses")
+    endif()
+
+    if(COMMAND "${__function_call_func}")
+   #   message("function")
+      eval("${__function_call_func}(${__function_call_args})")
+      return_ans()
+    endif()
+
+    if(DEFINED "${__function_call_func}")
+   #  message("defined")
+      function_call("${${__function_call_func}}"(${__function_call_args}))
+      return_ans()
+    endif()
+
+    lambda_isvalid("${__function_call_func}")      
+    ans(is_lambda)
+    if(is_lambda)
+    #  message("lambda ${__function_call_func} args ${__function_call_args}")
+      lambda_import("${__function_call_func}" __function_call_import)
+      __function_call_import(${__function_call_args})
+      return_ans()
+    endif()
+
+    is_function(is_func "${__function_call_func}")
+    if(is_func)
+   #   message("importing ${__function_call_func}(${__function_call_args})")
+      import_function("${__function_call_func}" as __function_call_import REDEFINE)
+      __function_call_import(${__function_call_args})
+      return_ans()
+    endif()
+
+    nav(__function_call_import = "${__function_call_func}")
+    if(__function_call_import)
+    #  message("nav")
+      function_call("${__function_call_import}"(${__function_call_args}))
+      return_ans()
+    endif()
+   # message("nothin")
+   message(FATAL ERROR "tried to call a non-function: ${__function_call_func}")
+  endfunction()

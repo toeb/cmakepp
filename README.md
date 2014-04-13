@@ -20,6 +20,39 @@ To test the code (alot is tested but not all) run the following in the root dir 
 cmake -P oo-cmake-tests.cmake 
 ```
 
+# Expressions
+
+```
+<expr>
+<function call>::= <function>(<expr>)
+<string value> ::= '<cdata>'|"<cdata>"
+<list> ::= <value>|<value>,<list>
+<dereferenced value> ::= *<ref> 
+<value> ::= <string>|<string>;<value>|<empty>
+<empty> ::= <string> # length 0
+<rvalue> ::= <empty>|<function call>|<string>|*<ref>|$<cmake var name>
+<lvalue> ::= $<cmake var name>|*<ref>
+<assignment> ::= <lvalue> = <rvalue>
+<navigation> ::= <ref>.<key>|<ref>[<index>]|<var>[index]|<ref>[<key>]
+<ref> ::= <cmake var name> # ${<cmake varname>} evaluates to a string: |ref:<type>:<id>
+<cmake var name> ::= # a variable which evaluates to a value when ${<cmake var name>}
+<indexer> ::= <expr>[<expr>]
+<expr> ::= <string>|<expr><expr>|{single expr}|<var>
+<single expr> ::= 	<var> = <expr> |
+					<function>(<expr>) | 
+					* <ref>
+					<ref>.
+<var> ::= <cmake var name>|<ref>|<ref path>
+<ref> ::=  
+<function> ::= <function cmake>|<function string>|<function string>|<function lambda>
+
+<function cmake> := # name of function defined by cmake's function(<name>)...endfunction()
+<function string> ::=  # a cmake function definition
+<function file> ::= # a valid cmake file containing a <function string>
+<function lambda> ::= (<args>)-><command>;<command>;... #  call return or let the last ans() be returned
+```
+
+
 # Returning values
 
 **Related Functions**
