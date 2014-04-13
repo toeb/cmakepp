@@ -2,6 +2,7 @@ function(test)
 
   lambda_parse("(test)->return('{test.lol} {test.lol2}')")
   ans(res)
+  message("${res}")
   import_function("${res}" as mylambda REDEFINE)
   nav(test.lol abc)
   nav(test.lol2 def)

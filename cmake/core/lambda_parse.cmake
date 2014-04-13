@@ -19,8 +19,9 @@ function(lambda_parse code)
       string(RANDOM  tmp_var_name)
       set(tmp_var_name "__tmp_var_${tmp_var_name}")
       
-
-      set(eval_string "expr(\"${expression}\")\nans(${tmp_var_name})\n")
+      string_slice("${expression}" 1 -2)
+      ans(eval_this)
+      set(eval_string "expr(\"${eval_this}\")\nans(${tmp_var_name})\n")
       string_regex_escape("${expression}")
       ans(expression)
       string_regex_escape("${eval_string}")
