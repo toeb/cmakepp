@@ -1,0 +1,10 @@
+
+  function(stream_take_regex stream regex)
+    ref_get(${stream} data)
+    string(REGEX MATCH "^${regex}" match "${data}")
+    if(NOT match)
+      return()
+    endif()
+    stream_take_string(${stream} "${match}")
+    return_ans()
+  endfunction()

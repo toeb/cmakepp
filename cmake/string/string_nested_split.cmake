@@ -36,7 +36,11 @@
     endforeach()
     string_slice("${code}" "${last_index}" -1)
     ans(last_part)
-    list(APPEND result "${last_part}")
+    string_isempty(trash "${last_part}")
+    ans(isempty)
+    if(NOT isempty)
+      list(APPEND result "${last_part}")
+    endif()
     #message("asd ${result}")
     return_ref(result)
 

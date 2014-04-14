@@ -9,7 +9,7 @@
       set(last_part "${part}")
      # message("${part}")
     endforeach()
-    list_get(parts -3)
+    list_get(parts -2)
     ans(caller)
  #   message("caller ${caller}")
     string_slice("${caller}" 1 -2)

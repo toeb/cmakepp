@@ -48,7 +48,8 @@ package_property(cmake_exports
 	cmake/web/*.cmake
 	cmake/semver/*.cmake
 	cmake/targets/*.cmake
-
+	cmake/ast/*.cmake
+	cmake/stream/*.cmake
 )
 package_property(install_script)
 package_property(cutil_main_script)

@@ -1,0 +1,16 @@
+
+
+  function(ast_eval ast scope)
+    map_get(${ast} types types)
+    while(true)
+      list_pop_front(type types)
+      if(NOT DEFINED type)
+        break()
+      endif()
+      if(COMMAND "ast_eval_${type}")
+        eval("ast_eval_${type}(\"${ast}\" \"${scope}\")")
+        ans(res)
+        return_ans()
+      endif()
+    endwhile()
+  endfunction()

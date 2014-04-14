@@ -1,0 +1,11 @@
+function(expr_assignment_isvalid str)
+    set(regex_single_quote_string "'[^']*'")
+    set(regex_double_quote_string "\"[^\"]*\"")
+    set(regex_string "((${regex_single_quote_string})|(${regex_double_quote_string}))")
+    
+    string(REGEX REPLACE "${regex_string}|[^=]" "" res "${str}")
+    if(res)
+      return(true)
+    endif()
+    return(false)
+  endfunction()

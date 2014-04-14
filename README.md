@@ -23,6 +23,7 @@ cmake -P oo-cmake-tests.cmake
 # Expressions
 
 ```
+<expr> ::= <literal>|
 <expr>
 <function call>::= <function>(<expr>)
 <string value> ::= '<cdata>'|"<cdata>"

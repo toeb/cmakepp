@@ -1,0 +1,7 @@
+function(stream_new data)
+    ref_new(stream stream)
+    string_semicolon_encode("${data}")
+    ans(data)
+    ref_set(${stream} "${data}")
+    return_ref(stream)
+  endfunction()

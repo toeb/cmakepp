@@ -1,11 +1,9 @@
 # appends a value to the end of a map entry
-function(map_append map key value)
-	map_tryget(${map} existing_value ${key})
-	if(NOT existing_value)
-		map_set(${map} ${key} "${value}")
+function(map_append map key)
+  get_property(isset GLOBAL PROPERTY "${map}_${key}" SET)
+	if(NOT isset)
+		map_set(${map} ${key} ${ARGN})
 		return()
 	endif()
-
-	map_set(${map} ${key} "${existing_value};${value}")
-
+  set_property(GLOBAL APPEND PROPERTY "${map}_${key}" ${ARGN})
 endfunction()

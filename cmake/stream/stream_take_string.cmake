@@ -1,0 +1,12 @@
+
+  function(stream_take_string stream str)
+    string(LENGTH "${str}" len)
+    stream_push(${stream})
+    stream_take(${stream} ${len})
+    ans(taken)
+    if(NOT "_${str}" STREQUAL "_${taken}")
+      stream_pop(${stream})
+      return()
+    endif()
+    return_ans()
+  endfunction()
