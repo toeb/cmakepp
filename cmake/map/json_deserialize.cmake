@@ -19,10 +19,15 @@ function(json_deserialize result json)
 		math(EXPR len "${len} -2")
 		string(SUBSTRING "${last_value}" 1 ${len} last_value)
 		string(REGEX REPLACE "\\\\;" "\;" last_value "${last_value}")
+		
+		string(REPLACE "†" "[" last_value "${last_value}")
+		string(REPLACE "‡" "]" last_value "${last_value}")
 	endmacro()
 
 	function(set_last_value)		
 		unquote_last_value()	
+
+		#message("set last value '${last_value}'")
 		value(${ARGN} "${last_value}")
 		set(last_value PARENT_SCOPE)
 	endfunction()
@@ -32,7 +37,7 @@ function(json_deserialize result json)
 	set(res)
 	element()
 	foreach(token ${tokens})
-
+	#message("token ${token}")
 		#message("${token}")
 
 		if(${token} STREQUAL ",")

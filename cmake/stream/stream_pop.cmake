@@ -1,6 +1,6 @@
-
-
-  function(stream_pop stream)
-    pop_front("stream_stack_${stream}" data)
-    ref_set(${stream} "${data}")  
-  endfunction()
+function(stream_pop stream)
+  stack_pop("${stream}:stack" )
+  ans(data)
+  #messagE("popping data :${data}")
+  ref_set(${stream} "${data}") 
+endfunction()

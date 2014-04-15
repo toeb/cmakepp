@@ -7,6 +7,7 @@ function(ast_parse_sequence definition stream create_node)
   ref_get(${sequence} sequence)
   
   # save current stream
+  #message("push")
   stream_push(${stream})
 
   # empty var for sequence
@@ -17,15 +18,19 @@ function(ast_parse_sequence definition stream create_node)
   foreach(def ${sequence})
     ast_parse(${stream} "${def}")
     ans(res)
-    if(NOT res)
+    if(res) 
+      map_isvalid(${res} ismap)
+      if(ismap)
+        list(APPEND ast_sequence ${res})
+      endif()
+    else()
+     # message("pop")
       stream_pop(${stream})
       return(false)
     endif()
-    map_isvalid(${res} ismap)
-    if(ismap)
-      list(APPEND ast_sequence ${res})
-    endif()
+   
   endforeach()
+  stream_commit(${stream})
   # return result
   if(NOT create_node)
     return(true)

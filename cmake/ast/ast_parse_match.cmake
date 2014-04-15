@@ -8,6 +8,8 @@
 
     # take string specified in match from stream (if stream does)
     # not start with "${match}" nothing is returned
+   # message("matching match ${match}")
+#    stream_print(${stream})
     stream_take_string(${stream} "${match}")
     ans(res)
     # could not parse if stream did not match "${match}"

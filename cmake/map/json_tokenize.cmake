@@ -12,7 +12,8 @@ function(json_tokenize result json)
 	string(REPLACE  ";[;" ";<;" matches "${matches}")
 	string(REPLACE ";];" ";>;" matches "${matches}")
 
-
+	string(REPLACE "[" "†" matches "${matches}")
+	string(REPLACE "]" "‡" matches "${matches}")
 
 	set(tokens)
 	foreach(match ${matches})
