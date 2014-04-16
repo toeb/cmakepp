@@ -1,5 +1,5 @@
 
-  function(ast_parse_token definition stream create_node)
+  function(ast_parse_token )#definition stream create_node definition_id
    # message(FORMAT "trying to parse {definition.name}")
    # ref_print("${definition}")
    # ref_print(${definition})
@@ -16,14 +16,16 @@
       return(true)
     endif()
 
-    map_get(${token} data data)
     map_tryget(${definition} replace replace)
     if(replace)
+      map_get(${token} data data)
       map_get(${definition} regex regex)
       string(REGEX REPLACE "${regex}" "\\${replace}" data "${data}")
+      #message("data after replace ${data}")
+      map_set_hidden(${token} data "${data}")
     endif()
-
-    map_set(${token} data "${data}")
+    #map_tryget(${definition} def name)
+    map_set_hidden(${token} types ${definition_id})
     return(${token})
 
   endfunction()

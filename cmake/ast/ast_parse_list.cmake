@@ -1,6 +1,6 @@
 
 
- function(ast_parse_list definition stream create_node)
+ function(ast_parse_list )#definition stream create_node
  
    # message("parsing list")
     token_stream_push(${stream})
@@ -50,8 +50,9 @@
       return(true)
     endif()
 
-
+    map_tryget(${definition} def name)
     map_create(node)
+    map_set(${node} types ${def})
     map_set(${node} children "${child_list}")
     return(${node})
   endfunction()

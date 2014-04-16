@@ -1,4 +1,4 @@
-function(ast_parse_sequence definition stream create_node)
+function(ast_parse_sequence )#definition stream create_node definition_id
   map_tryget("${definition}" sequence sequence)
   if(NOT sequence)
     return(false)
@@ -36,6 +36,7 @@ function(ast_parse_sequence definition stream create_node)
     return(true)
   endif()
   map_create(node)
+  map_set(${node} types ${definition_id})
   list_new(lst)
   ref_set(${lst} ${ast_sequence})
   map_set(${node} children ${lst})
