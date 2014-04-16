@@ -19,7 +19,11 @@ function(json_deserialize result json)
 		math(EXPR len "${len} -2")
 		string(SUBSTRING "${last_value}" 1 ${len} last_value)
 		string(REGEX REPLACE "\\\\;" "\;" last_value "${last_value}")
-		
+		#string(REGEX REPLACE "\\\\([rnt])" "\\\\1" last_value "${last_value}")
+	
+string(REPLACE "\\r" "\r" last_value "${last_value}")
+string(REPLACE "\\n" "\n" last_value "${last_value}")
+string(REPLACE "\\t" "\t" last_value "${last_value}")
 		string(REPLACE "†" "[" last_value "${last_value}")
 		string(REPLACE "‡" "]" last_value "${last_value}")
 	endmacro()

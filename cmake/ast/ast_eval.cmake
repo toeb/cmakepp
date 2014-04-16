@@ -1,5 +1,4 @@
 
-
   function(ast_eval ast scope)
     if(ARGN)
       set(args ${ARGN})

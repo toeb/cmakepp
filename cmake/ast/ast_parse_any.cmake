@@ -8,7 +8,9 @@ function(ast_parse_any definition stream create_node)
   
   # try to parse any of the definitions contained in "any" property
   foreach(def ${any})
+    
     ast_parse(${stream} "${def}")
+
     ans(node)
     if(node)
       # first definition to parse stream wins

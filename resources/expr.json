@@ -1,25 +1,28 @@
 {
   "name":"oo-cmake",
-  "parsers":[
+  "parsers":{
     "ast_parse_match",
     "ast_parse_regex",
     "ast_parse_any",
     "ast_parse_sequence"
-  ],
+  },
   "evaluators":"ast_eval_",
   "root_definition":"expr",
   "definitions":{
     "expr":{
+      "type":"any",
       "any":[
         "expr_list",
         "single_expr"
       ]
     },
     "identifier":{
+      "type":"token",      
       "node":"true",
       "regex":"([a-zA-Z0-9_\\-])+"
     },
     "non_literal":{
+      "type":"any",
       "any":[
         "identifier",
         "invoke",
@@ -27,6 +30,7 @@
       ]
     },
     "invokation":{
+      "type":"sequence",
       "node":"true",
       "sequence":[
         "rvalue",
@@ -36,11 +40,13 @@
       ]
     },
     "lvalue":{
+      "type":"any",
       "any":[
         "identifier"
       ]
     },
     "rvalue":{
+      "type":"any",
       "any":[
         "literal",
         "lvalue",
@@ -49,6 +55,7 @@
       ]
     },
     "bind":{
+      "type":"sequence",
       "node":"true",
       "sequence":[
         "rvalue",
@@ -57,9 +64,11 @@
       ]
     },
     "dot":{
+      "type":"token",
       "match":"."
     },
     "dereference_operator":{
+      "type":"any",
       "match":"*"
     },
     "assignment_operator":{
@@ -184,7 +193,7 @@
     },
     "double_quote_string":{
       "node":"true",
-      "regex":"\"(([^\"]|\\\")*)\"",
+      "regex":"",
       "replace":"1"   
     }
   }

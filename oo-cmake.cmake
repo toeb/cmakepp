@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.7)
 cmake_policy(SET CMP0007 NEW)
 cmake_policy(SET CMP0012 NEW)
 
+set_property(GLOBAL PROPERTY __global_ref_count 0)
+
 #todo put this somewhere else...
 function(function_called name caller)
 	get_property(count GLOBAL PROPERTY "call_count_${name}")

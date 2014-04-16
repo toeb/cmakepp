@@ -49,6 +49,8 @@ package_property(cmake_exports
 	cmake/semver/*.cmake
 	cmake/targets/*.cmake
 	cmake/ast/*.cmake
+	cmake/ast/json/*.cmake
+	cmake/ast/expr/*.cmake
 	cmake/stream/*.cmake
 )
 package_property(install_script)

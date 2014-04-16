@@ -1,0 +1,15 @@
+
+  function(token_stream_new language str)
+    token_definitions(${language})
+    ans(token_definitions)
+    tokens_parse("${token_definitions}" "${str}")
+    ans(tokens)
+
+    map_create(stream)
+    map_set(${stream} current ${tokens})
+    stack_new()
+    ans(stack)
+    map_set(${stream} stack ${stack})
+    map_set(${stream} first ${tokens})
+    return_ref(stream)
+  endfunction()

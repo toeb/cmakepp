@@ -62,11 +62,6 @@ function(test)
 	assert(EQUALS "a;b;c" ${res} )
 	
 
-	ref_gettype("ref:global:type:123asd123" res)
-	assert(${res} STREQUAL type)
-	ref_gettype("ref:global:map:123asd123" res)
-	assert(${res} STREQUAL map)
-
 	map_create(map)
 	ref_gettype(${map} res)
 	assert(${res} STREQUAL map)

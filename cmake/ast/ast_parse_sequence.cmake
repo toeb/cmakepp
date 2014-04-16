@@ -8,7 +8,7 @@ function(ast_parse_sequence definition stream create_node)
   
   # save current stream
   #message("push")
-  stream_push(${stream})
+  token_stream_push(${stream})
 
   # empty var for sequence
   set(ast_sequence)
@@ -25,12 +25,12 @@ function(ast_parse_sequence definition stream create_node)
       endif()
     else()
      # message("pop")
-      stream_pop(${stream})
+      token_stream_pop(${stream})
       return(false)
     endif()
    
   endforeach()
-  stream_commit(${stream})
+  token_stream_commit(${stream})
   # return result
   if(NOT create_node)
     return(true)

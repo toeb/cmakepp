@@ -10,7 +10,7 @@
     endif()
   #  message("expr ${expr}")
     ast("${str}" ${language} "${expr}")
-    return("gna")
+    #return("gna")
     ans(ast) 
    # ref_print(${ast})
     ast_eval(${ast} ${scope} ${language})
