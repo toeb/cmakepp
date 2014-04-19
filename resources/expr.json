@@ -20,13 +20,8 @@
     "list":"expr_compile_list",
     "new_object":"expr_compile_new_object",
     "assignment":"expr_compile_assignment",
-    "parentheses":"expr_compile_parentheses"
-  },
-  "evaluators2":{
-    "string":"expr_eval_string",
-    "cmake_identifier":"expr_eval_cmake_identifier",
-    "call":"expr_eval_call",
-    "expression":"expr_eval_expression"
+    "parentheses":"expr_compile_parentheses",
+    "null_coalescing":"expr_compile_coalescing"
   },
   "root_definition":"expression",
   "definitions":{
@@ -40,8 +35,9 @@
     "value":{
       "parser":"any",
       "any":[
-        "literal",
         "assignment",
+        "parentheses",
+        "literal",
         "lvalue",
         "list",
         "new_object"
@@ -58,12 +54,27 @@
     "operation":{
       "parser":"any",
       "any":[
+        "assignment",
         "identifier",
         "call",
         "bind",
-        "indexation"
+        "indexation",
+        "null_coalescing"
       ]
     },
+    "null_coalescing":{
+      "node":"true",
+      "parser":"sequence",
+      "sequence":[
+        "query",
+        "query",
+        "expression"
+      ]
+    },
+    "query":{
+      "parser":"token",
+      "regex":"[?]"
+    },  
     "parentheses":{
       "node":"true",
       "parser":"sequence",

@@ -1,5 +1,5 @@
 
-function(expr str)
+function(oocmake str)
   expr_compile("${str}")
   ans(symbol)
   #message("${symbol}")
