@@ -53,5 +53,5 @@
       return_ans()
     endif()
    # message("nothin")
-   message(FATAL ERROR "tried to call a non-function: ${__function_call_func}")
+   message(FATAL_ERROR "tried to call a non-function: ${__function_call_func}")
   endfunction()

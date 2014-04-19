@@ -1,0 +1,18 @@
+function(expr_import str function_name)
+  expr_compile("${str}")
+  ans(symbol)
+  eval("
+function(${function_name})
+  map_isvalid(\"${global}\" ismap)
+  if(NOT ismap)
+    map_create(global)
+  endif()
+  ${symbol}
+  ans(res)
+  if(NOT ismap)
+    map_promote(${global})
+  endif()
+  return_ref(res)
+endfunction()")
+  return_ans()
+endfunction()

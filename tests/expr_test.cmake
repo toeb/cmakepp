@@ -1,36 +1,226 @@
 function(test)
 
-  file(READ "${package_dir}/resources/json-language.json" string_data)
-  json_deserialize(json-language "${string_data}")
+  #language("${package_dir}/resources/json-language.json")
+  language("${package_dir}/resources/expr.json")
 
-  file(READ "${package_dir}/resources/expr.json" string_data)
-  #json_deserialize(oo-cmake-expr "${string_data}")
+  # parentheses
+  # expr($res = ($b = {}).a = 'ad'
 
-  file(READ "${package_dir}/resources/test.json" string_data)
+  # or
+  # expr("$someMap = $someMap || {})
 
-  function(function_import_map map function_name)
-    map_keys(${map} keys)
-    set("ifs" "if(false)\n")
-    foreach(key ${keys})
-      map_get(${ast_parsers} command_name ${key})
-      set(ifs "${ifs}elseif(\"${key}\" STREQUAL \"\${switch}\" )\n${command_name}(\"\${ARGN}\")\nreturn_ans()\n")
-    endforeach()
-    set(ifs "${ifs}endif()\n")
-    set("evl" "function(${function_name} switch)\n${ifs}\nreturn()\nendfunction()")
-      #message(${evl})
-      eval("${evl}")
-  endfunction()
 
-# set(string_data "{\"asd\":123, \"bsd\":[1 ,2, 3], \"ksd\":{ \"asd\":424} }")
-#set(string_data "123.3")
-#set(string_data "\"asdasda\"")
-#set(string_data "{}")
-#set(string_data "[]")
-#set(string_data "[1,2,3]")
-#set(string_data "{\"asd\":1, \"bsd\":2}")
-#set(string_data "{\"k1\":{\"k2\":23},\"k2\":{\"k2\":24}}")
+  # assign bound value
+  #map_create(someMap)
+  #expr("$someMap.value1 = 123")
+  #ans(res)
+  #assert(${res} STREQUAL "123")
+  #assert(DEREF "{someMap.value1}" STREQUAL 123) 
+  #return()
+  
+  # chain multiple assign
+  map_create(this)
+  expr("asd = bsd = csd = 3")
+  ans(res)
+  assert("${ref}" STREQUAL 3)
+  assert(DEREF "{this.asd}" STREQUAL "3")
+  assert(DEREF "{this.bsd}" STREQUAL "3")
+  assert(DEREF "{this.csd}" STREQUAL "3")
+  # assignment of cmake var
+  set(ast)
+  expr("$asd='ad'")
+  ans(res)
+  assert("${res}" STREQUAL "ad")
+  assert(asd)
+  assert("${asd}" STREQUAL "ad")
+
+  # assignment of scope variable
+  map_create(this)
+  expr("bsd = 'hula'")
+  ans(res)
+  assert(${res} STREQUAL "hula")
+  assert(DEREF "{this.bsd}" STREQUAL "hula")
+
+
+  # complicated sample
+  expr("{a:{b:{c:'()->return($this)',d:'hello'}}}.a.b.c().d")
+  ans(res)
+  assert("${res}" STREQUAL "hello")
+
+  # object
+  expr("{}")
+  ans(res)
+  map_isvalid(${res} ismap)
+  assert(ismap)
+
+
+  # object with value
+  expr("{asd:312}")
+  ans(res)
+  map_isvalid(${res} ismap)
+  assert(ismap)
+  assert(DEREF "{res.asd}" STREQUAL "312")
+
+  #object with multiple values
+  expr("{asd:'asd', bsd:'bsd', csd:{a:1,b:2}}")
+  
+  ans(res)
+  assert(DEREF "{res.asd}" STREQUAL "asd")
+  assert(DEREF "{res.bsd}" STREQUAL "bsd")
+  assert(DEREF "{res.csd.a}" STREQUAL "1")
+  assert(DEREF "{res.csd.b}" STREQUAL "2")
+
+  # list
+  expr("[1,2,'abc']")
+  ans(res)
+  assert(EQUALS ${res} 1 2 "abc")
+
+  # string
+  expr("'312'")
+  ans(res)
+  assert("${res}" STREQUAL "312")
+
+  # number
+  expr("41414")
+  ans(res)
+  assert("${res}" EQUAL 41414)
+
+  # cmake identifier
+  set(cmake_var abcd)
+  expr("$cmake_var")
+  ans(res)
+  assert("${res}" STREQUAL "abcd")
+
+  # scope identifier
+  map_create(this)
+  map_set(${this} identifier "1234")
+  expr("identifier")
+  ans(res)
+  assert("${res}" STREQUAL "1234")
+
+  # bind 
+  map_create(this)
+  map_create(next)
+  map_set(${this} a ${next})
+  map_set(${next} b "9876")
+  expr("a.b")
+  ans(res)
+  assert("${res}" STREQUAL "9876")
+
+  # call
+  set(callable "(a b)->return('$a$b')")
+  expr("$callable(1,2)")
+  ans(res)
+  assert("${res}" STREQUAL "12")
+
+  # indexation
+  map_create(a)
+  map_set(${a} a 1234)
+  expr("$a['a']")
+  ans(res)
+  assert("${res}" STREQUAL "1234")
+
+
+
+
+return()
+
+
+
+
+function(a_func)
+  #message("a_func ${ARGN}")
+# message(PUSH "expression symbol_1")
+  set(left)
+  
+  set(__ans "${asdf}")
+  ans(left)
+  set(this "${left}")
+  map_get("${this}" trash "func")
+  ans(left)
+    
+    
+  set(__ans "ab")
+  ans(symbol_3_arg0)
+    
+  set(__ans"cd")
+  ans(symbol_3_arg1)
+  function_call("${left}"("${symbol_3_arg0}" "${symbol_3_arg1}" ))
+  ans(left)
+  set(this "${left}")
+  map_get("${this}" trash "val")
+  ans(left)
+  #message(POP)
+  return_ref(left)
+  
+endfunction()
+
+function(a_func2)
+ # message(a_func2)
+  return("a_func")
+endfunction()
+message("parsing func")
 #return()
-message(a)
+#expr("$a_func()")
+#foreach(i RANGE 100)
+#expr("$a_func 2()('1','2')")
+map_create(asdf)
+map_set(${asdf} val 3223)
+map_set(${asdf} link ${asdf})
+set(lmbd "(a b)->return('val')")
+map_set(${asdf} func "${lmbd}")
+message("= ${asdf}")
+set(this ${asdf})
+expr_import("val" myexpr)
+#ans(res)
+foreach(i RANGE 100)
+  myexpr()
+endforeach()
+ans(res)
+message("res: ${res}")
+
+
+
+
+#assert(${res} STREQUAL "hello from a_func")
+return()
+
+
+
+
+
+# evaluate string
+expr("'hello world'")
+ans(res)
+assert("${res}" STREQUAL "hello world")
+
+# evaluate a cmake variable
+set("thevar" lol)
+expr("$thevar" )
+ans(res)
+assert(${res} STREQUAL "lol") 
+#return()
+
+# evaluate a function
+function(a_func)
+  return("hello from a_func")
+endfunction()
+expr("$a_func")
+ans(res)
+assert(${res} STREQUAL "a_func")
+message("parsing func")
+#expr("$a_func()")
+expr("'asd'()")
+ans(res)
+assert(${res} STREQUAL "hello from a_func")
+
+return()
+evaluate("[1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]" json "")
+ans(res)
+message(${res})
+
+
+return()
   token_stream_new(${json-language} "${string_data}")
 
 message(b)
@@ -44,14 +234,15 @@ ans(stream)
 
   ast_parse(${stream} "json" ${json-language})
   ans(ast)
-return()
-ref_print(${ast})
+#return()
+#ref_print(${ast})
   message(c)
 #return()
   map_create(scope)
   ast_eval(${ast} ${scope} ${json-language})
   ans(res)
   message(d)
+
   ref_print("${res}")
 return()
 

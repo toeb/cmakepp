@@ -9,4 +9,5 @@ function(map_get this result key )
   get_property(property_val GLOBAL PROPERTY "${property_ref}")
 
 	set(${result} "${property_val}" PARENT_SCOPE)
+  return_ref(property_val)
 endfunction()

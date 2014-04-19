@@ -1,5 +1,5 @@
 
-  function(ast_json_eval_array ast scope)
+  function(ast_json_eval_array )#ast scope
     map_get(${ast} values children)
     set(res)
     foreach(value ${values})

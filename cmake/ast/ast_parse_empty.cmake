@@ -1,5 +1,5 @@
 
-  function(ast_parse_empty definition stream create_node)
+  function(ast_parse_empty )#definition stream create_node
     map_tryget(${definition} is_empty empty)
     if(NOT is_empty)
       return(false)

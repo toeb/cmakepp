@@ -1,5 +1,28 @@
 function(ref_new result)
+	
+
 	ref_get(__global_ref_count index)
+	if(NOT index)
+	
+		function(ref_new result)
+			ref_get(__global_ref_count index)
+			math(EXPR index "${index} + 1")
+			ref_set(__global_ref_count "${index}")
+			if(ARGN)
+				set(type "${ARGV1}")
+				ref_set("ref:${index}.__type__" "${type}")
+			endif()
+			return_value("ref:${index}")
+		endfunction()
+		if(ARGN)
+			set(type "${ARGV1}")
+			ref_set("ref:1.__type__" "${type}")
+		endif()
+		ref_set(__global_ref_count 1)
+		return_value("ref:1")
+	endif()
+	message(FATAL_ERROR ref_new)
+
 	math(EXPR index "${index} + 1")
 	ref_set(__global_ref_count ${index})
 	set(ref "ref:${index}")

@@ -5,9 +5,12 @@
     if(NOT current)
       return()
     endif()
-    #message(FORMAT "current token is {current.data} it is a {current.definition.name}")
+#    message(FORMAT "current token '{current.data}'  is a {current.definition.name}, expected {definition.name}")
+    
     map_tryget(${current} definition definition)
+    
     if(${definition} STREQUAL ${token_definition})
+   
       map_tryget(${current} next next)
       map_set_hidden(${stream} current ${next})
       return(${current})
