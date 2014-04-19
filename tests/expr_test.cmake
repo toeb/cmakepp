@@ -2,6 +2,9 @@ function(test)
 
   #language("${package_dir}/resources/json-language.json")
   language("${package_dir}/resources/expr.json")
+  ans("lang '${package_dir}/resources/expr.json'")
+  
+  ref_print(${lang})
 
 
   # or
