@@ -1,5 +1,5 @@
 {
-  "name":"oo-cmake",
+  "name":"oocmake",
   "parsers":{
     "token":"ast_parse_token",
     "any":"ast_parse_any",
