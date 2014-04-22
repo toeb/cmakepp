@@ -7,7 +7,7 @@ package_property(version "1.0")
 package_property(license "MIT")
 package_property(single_version true)
 package_property(cmake_exports 
-	cmake/debugging/debug_message.cmake
+
 	cmake/core/*.cmake
 	cmake/ref/ref_isvalid.cmake
 	cmake/ref/ref_get.cmake

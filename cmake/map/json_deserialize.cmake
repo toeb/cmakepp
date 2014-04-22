@@ -18,7 +18,7 @@ function(json_deserialize result json)
 		string(LENGTH "${last_value}" len)
 		math(EXPR len "${len} -2")
 		string(SUBSTRING "${last_value}" 1 ${len} last_value)
-		string(REGEX REPLACE "\\\\;" "\;" last_value "${last_value}")
+		string(REGEX REPLACE "\\\\;" ";" last_value "${last_value}")
 		#string(REGEX REPLACE "\\\\([rnt])" "\\\\1" last_value "${last_value}")
 	
 string(REPLACE "\\r" "\r" last_value "${last_value}")

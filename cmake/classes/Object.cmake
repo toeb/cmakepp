@@ -4,7 +4,7 @@ function(Object)
 
 	function(${to_string} result)
 		set(res)
-		debug_message("to_string object ${this}")
+#		debug_message("to_string object ${this}")
 		obj_getkeys(${this} keys)
 
 		foreach(key ${keys})
@@ -50,7 +50,7 @@ function(Object)
 	# prints the current object to the console
 	obj_declarefunction(${__proto__} print)
 	function(${print})
-		debug_message("printing object ${this}")
+		#debug_message("printing object ${this}")
 		obj_callmember(${this} "to_string" str )
 		message("${str}")
 	endfunction()

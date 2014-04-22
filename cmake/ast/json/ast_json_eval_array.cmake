@@ -3,7 +3,7 @@
     map_get(${ast} values children)
     set(res)
     foreach(value ${values})
-      ast_eval(${value} ${scope})
+      ast_eval(${value} ${context})
       ans(evaluated_value)
       list(APPEND res "${evaluated_value}")
     endforeach()

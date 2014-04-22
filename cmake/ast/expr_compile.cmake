@@ -7,10 +7,10 @@ function(expr_compile str)
     map_tryget(${expression_cache} symbol "${str}")
     if(NOT symbol)
       # get ast
-      language("oo-cmake")
+      language("oocmake")
       ans(language)
       #message("compiling ast for \"${str}\"")
-      ast("${str}" oo-cmake "")
+      ast("${str}" oocmake "")
       ans(ast)
       #message("ast created")
       # compile to cmake
