@@ -2,9 +2,11 @@
 # sets all values in current scope
 macro(scope_pop)
 	pop_front(scopes scope)
-	map_keys(${scope} keys)
+	map_keys(${scope} )
+	ans(keys)
 	foreach(key ${keys})
-		map_get(${scope} val ${key})
+		map_get(${scope}  ${key})
+		ans(val)
 		set(${key} ${val})
 	endforeach()
 	map_delete(${scope})

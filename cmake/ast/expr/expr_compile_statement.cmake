@@ -1,5 +1,6 @@
 function(expr_compile_statement) # context, ast
-  map_tryget(${ast} statement_ast children)
+  map_tryget(${ast}  children)
+  ans(statement_ast)
   ast_eval(${statement_ast} ${context})
   ans(statement)
   set(res "

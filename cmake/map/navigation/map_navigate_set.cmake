@@ -66,8 +66,8 @@ function(map_navigate_set navigation_expression)
 		endif()
 
 		
-		map_tryget(${current} next "${index}")
-		
+		map_tryget(${current}  "${index}")
+		ans(next)
 		# create next element in change
 		if(NOT next)
 			map_new()

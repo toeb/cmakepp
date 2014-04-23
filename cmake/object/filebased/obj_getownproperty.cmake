@@ -1,4 +1,5 @@
 function(obj_getownproperty this result key)
-	map_tryget("${this}" res "${key}")
+	map_tryget("${this}"  "${key}")
+  ans(res)
 	set("${result}" "${res}" PARENT_SCOPE)
 endfunction()

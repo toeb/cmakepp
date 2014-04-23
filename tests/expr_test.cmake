@@ -23,7 +23,8 @@ function(test)
   ans(res1)
   oocmake("$someMap = $someMap ?? {a:234}")
   ans(res2)
-  map_isvalid(${res1} ismap)
+  map_isvalid(${res1} )
+  ans(ismap)
   assert(ismap)
   assert("${res1}" STREQUAL "${res2}")
   assert(DEREF "{res2.a}" STREQUAL "123")
@@ -85,14 +86,16 @@ function(test)
   # object
   oocmake("{}")
   ans(res)
-  map_isvalid(${res} ismap)
+  map_isvalid(${res} )
+  ans(ismap)
   assert(ismap)
 
 
   # object with value
   oocmake("{asd:312}")
   ans(res)
-  map_isvalid(${res} ismap)
+  map_isvalid(${res} )
+  ans(ismap)
   assert(ismap)
   assert(DEREF "{res.asd}" STREQUAL "312")
 

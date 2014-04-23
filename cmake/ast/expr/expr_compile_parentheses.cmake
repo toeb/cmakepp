@@ -1,7 +1,7 @@
 function(expr_compile_parentheses)
 
-  map_tryget(${ast} expression_ast children)
-  
+  map_tryget(${ast}  children)
+  ans(expression_ast)
   ast_eval(${expression_ast} ${context})
   ans(expression)
 

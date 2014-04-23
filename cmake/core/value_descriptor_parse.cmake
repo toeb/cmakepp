@@ -7,7 +7,8 @@ function(value_descriptor_parse id)
 
     # it might be a map
     list_first(first ${ARGN})
-    map_isvalid("${first}" ismap)
+    map_isvalid("${first}" )
+    ans(ismap)
 
     if(ismap)
       message(ismap)

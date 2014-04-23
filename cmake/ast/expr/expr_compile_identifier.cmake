@@ -2,8 +2,8 @@ function(expr_compile_identifier)# ast context
   
 #message("ast: ${ast}")
 
-  map_tryget(${ast} data data)
-
+  map_tryget(${ast}  data)
+  ans(data)
   set(res "
   # expr_compile_identifier
   obj_get(\"\${this}\" trash \"${data}\")

@@ -1,6 +1,7 @@
 function(expr_compile_string) # scope, ast
 
-  map_tryget(${ast} data data)
+  map_tryget(${ast}  data)
+  ans(data)
   make_symbol()
   ans(symbol)
   

@@ -1,5 +1,6 @@
 function(expr_compile_statements) # scope, ast
-  map_tryget(${ast} statement_asts children)
+  map_tryget(${ast}  children)
+  ans(statement_asts)
   set(statements)
   #message("children: ${statement_asts}")
   foreach(statement_ast ${statement_asts})
@@ -8,7 +9,8 @@ function(expr_compile_statements) # scope, ast
     set(statements "${statements}
   ${statement}")
   endforeach()
-  map_tryget(${ast} data data)
+  map_tryget(${ast}  data)
+  ans(data)
   make_symbol()
   ans(symbol)
   

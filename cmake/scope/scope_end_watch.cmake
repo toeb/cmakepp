@@ -22,7 +22,8 @@
 
 		foreach(var ${scope_end_watch_now})
 
-			map_tryget(${scope_end_watch_before} beforeVal ${var})
+			map_tryget(${scope_end_watch_before}  ${var})
+			ans(beforeVal)
 			set( nowVal ${${var}})
 			if(NOT "${beforeVal}" STREQUAL "${nowVal}")
 				map_set(${scope_end_watch_res} ${var} "${nowVal}")

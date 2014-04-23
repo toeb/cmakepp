@@ -3,7 +3,8 @@
     if(ARGN)
       set(args ${ARGN})
       list_pop_front(ast_language args)
-      map_tryget(${ast_language} ast_evaluators evaluators)
+      map_tryget(${ast_language}  evaluators)
+      ans(ast_evaluators)
       function_import_table(${ast_evaluators} ast_evaluator_table)
 
     endif()
@@ -14,10 +15,12 @@
     #message("evaluator prefix ${ast_evaluators}... ${ARGN}")
     map_get(${ast}  types)
     ans(types)
-    map_isvalid("${ast_evaluators}" ismap)
+    map_isvalid("${ast_evaluators}" )
+    ans(ismap)
     while(true)
       list_pop_front(type types)     
-      map_tryget(${ast_evaluators} eval_command "${type}")
+      map_tryget(${ast_evaluators}  "${type}")
+      ans(eval_command)
      # message("eval command ist ${eval_command}")
       # avaible vars
       # ast context ast_language ast_evaluators

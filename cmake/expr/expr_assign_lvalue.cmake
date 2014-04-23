@@ -69,7 +69,7 @@
       ans(is_done)
 
       
-      map_isvalid(${current_scope} trash)
+      map_isvalid(${current_scope})
       ans(is_map)
 
       ref_isvalid(${current_scope})
@@ -90,7 +90,8 @@
       
       if(is_map)
         if(is_int_index)
-          map_keys(${current_scope} keys)
+          map_keys(${current_scope} )
+          ans(keys)
           list_get(keys "${current_index}")
           ans(current_index)
         endif()
@@ -107,7 +108,8 @@
           # finished setting value
         endif()
         # navigate
-        map_tryget(${current_scope} next_scope "${current_index}")
+        map_tryget(${current_scope}  "${current_index}")
+        ans(next_scope)
         if(NOT next_scope)
           map_new()
           ans(next_scope)
@@ -137,7 +139,8 @@
           if(NOT is_int_index)
               message(FATAL_ERROR "cannot set string index for a cmake list")
           endif()
-          map_get(${last_scope} last_value ${last_index})
+          map_get(${last_scope}  ${last_index})
+          ans(last_value)
           list_set(last_value ${current_index} "${rvalue}")
           ans(success)
           if(NOT success)

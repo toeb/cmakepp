@@ -15,26 +15,33 @@ function(test)
 	#merge by overwriting map2 with map1
 	 map_union(res ${uut2} ${uut1})
 	 assert(res)
-	 map_keys(${res} keys)
-	map_tryget(${res} val k1)
+	 map_keys(${res} )
+	 ans(keys)
+	map_tryget(${res}  k1)
+	ans(val)
 	assert(${val} STREQUAL 1)
 
-	map_tryget(${res} val k2)
+	map_tryget(${res}  k2)
+	ans(val)
 	assert(${val} STREQUAL 1)
 
-	map_tryget(${res} val k3)
+	map_tryget(${res}  k3)
+	ans(val)
 	assert(${val} STREQUAL 2)
 
 	# merge in oposite direction
 	 map_union(res ${uut1} ${uut2})
 	 assert(res)
-	map_tryget(${res} val k1)
+	map_tryget(${res}  k1)
+	ans(val)
 	assert(${val} STREQUAL 1)
 
-	map_tryget(${res} val k2)
+	map_tryget(${res}  k2)
+	ans(val)
 	assert(${val} STREQUAL 2)
 
-	map_tryget(${res} val k3)
+	map_tryget(${res}  k3)
+	ans(val)
 	assert(${val} STREQUAL 2)
 
 	# check if deep elements are merged

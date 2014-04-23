@@ -1,6 +1,7 @@
 
 function(map_makelist map key)
-	map_tryget(${map} lst "${key}")
+	map_tryget(${map}  "${key}")
+	ans(lst)
 	if(NOT lst)
 		return()
 	endif()

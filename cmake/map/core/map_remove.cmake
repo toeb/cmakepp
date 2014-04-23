@@ -1,7 +1,8 @@
 #removes a item from the map identified by 'key'
 function(map_remove this key)
 	#map_check(${this})
-	map_keys(${this} keys)
+	map_keys(${this} )
+	ans(keys)
 	if(NOT keys)
 		return()
 	endif()

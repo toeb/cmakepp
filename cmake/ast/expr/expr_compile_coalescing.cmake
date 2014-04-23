@@ -1,5 +1,6 @@
 function(expr_compile_coalescing)
-  map_tryget(${ast} expr_ast children)
+  map_tryget(${ast}  children)
+  ans(expr_ast)
   ast_eval(${expr_ast} ${context})
   ans(expr)
   set(res "

@@ -5,7 +5,8 @@ function(test)
 
   ans(res)
   assert(res)
-  map_isvalid(${res} ismap)
+  map_isvalid(${res} )
+  ans(ismap)
   assert(ismap)
   
   # single value

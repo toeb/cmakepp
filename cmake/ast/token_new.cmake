@@ -1,5 +1,6 @@
   function(token_new definition data)
-    map_tryget(${definition} ignore_token ignore_token)
+    map_tryget(${definition}  ignore_token)
+    ans(ignore_token)
     if(ignore_token)
       return()
     endif()

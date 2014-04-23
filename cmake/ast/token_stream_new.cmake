@@ -1,6 +1,7 @@
 
   function(token_stream_new language str)
-    map_get(${language} token_definitions token_definitions)
+    map_get(${language}  token_definitions)
+    ans(token_definitions)
    # messagE("new token strean ${token_definitions}")
 
     #ref_print(${language})

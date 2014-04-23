@@ -1,4 +1,4 @@
-function(map_get this result key )
+function(map_get this key)
 	set(property_ref "${this}.${key}")
 	
   get_property(property_exists GLOBAL PROPERTY "${property_ref}" SET)
@@ -7,8 +7,6 @@ function(map_get this result key )
   endif()
 
   get_property(property_val GLOBAL PROPERTY "${property_ref}")
-
-	set(${result} "${property_val}" PARENT_SCOPE)
   return_ref(property_val)
 
   

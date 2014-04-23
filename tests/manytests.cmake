@@ -128,7 +128,8 @@ assert(EQUALS "${val}"  "\${ARGN} \${name} \"\" ; \;")
 obj_create(res)
 obj_setfunction(${res} "function(myfunc result) \n return_value(\${ARGN}) \n endfunction()") 
 obj_get(${res} fu1 myfunc)
-map_get(${res} fu myfunc)
+map_get(${res}  myfunc)
+ans(fu)
 assert("${fu}" STREQUAL "function(myfunc result) \n return_value(\${ARGN}) \n endfunction()")
 
 

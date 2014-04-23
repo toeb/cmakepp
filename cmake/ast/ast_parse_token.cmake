@@ -16,15 +16,18 @@
       return(true)
     endif()
 
-    map_tryget(${definition} replace replace)
+    map_tryget(${definition}  replace)
+    ans(replace)
     if(replace)
-      map_get(${token} data data)
-      map_get(${definition} regex regex)
+      map_get(${token}  data)
+      ans(data)
+      map_get(${definition}  regex)
+      ans(regex)
       string(REGEX REPLACE "${regex}" "\\${replace}" data "${data}")
       #message("data after replace ${data}")
       map_set_hidden(${token} data "${data}")
     endif()
-    #map_tryget(${definition} def name)
+    
     map_set_hidden(${token} types ${definition_id})
     return(${token})
 

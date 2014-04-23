@@ -1,5 +1,6 @@
 function(expr_compile_call)
-  map_tryget(${ast} argument_asts children) 
+  map_tryget(${ast}  children) 
+  ans(argument_asts)
   set(arguments)
   set(evaluation)
   set(i 0)

@@ -10,7 +10,8 @@
       ans(ismap)
 
       if(ismap)
-        map_tryget(${node} id "$id")
+        map_tryget(${node}  "$id")
+        ans(id)
         if(id)
           map_set(${ref_ids} "${id}" ${node})
         endif()

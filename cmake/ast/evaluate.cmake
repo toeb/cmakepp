@@ -4,7 +4,8 @@
     ans(language)
 
     set(scope ${ARGN})
-    map_isvalid("${scope}" ismap)
+    map_isvalid("${scope}" )
+    ans(ismap)
     if(NOT ismap)
       map_new()
       ans(scope)

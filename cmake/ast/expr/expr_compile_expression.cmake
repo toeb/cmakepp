@@ -1,6 +1,7 @@
 function(expr_compile_expression)
   #message("compiling expression")
-  map_get(${ast} children children)
+  map_get(${ast}  children)
+  ans(children)
   set(result "")
   
   list(LENGTH children len)

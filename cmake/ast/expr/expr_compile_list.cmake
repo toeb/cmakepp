@@ -1,5 +1,6 @@
 function(expr_compile_list)
-  map_tryget(${ast} element_asts children) 
+  map_tryget(${ast}  children) 
+  ans(element_asts)
   set(arguments)
   set(evaluation)
   set(i 0)

@@ -1,12 +1,14 @@
 
   function(list_structure_print_help structure)
-    map_keys(${structure} keys)
+    map_keys(${structure} )
+    ans(keys)
 
     set(descriptors)
     set(structure_help)
     foreach(key ${keys})
 
-      map_get(${structure} descriptor ${key})
+      map_get(${structure}  ${key})
+      ans(descriptor)
       value_descriptor_parse(${key} ${descriptor})
       ans(descriptor)
       list(APPEND descriptors ${descriptor})

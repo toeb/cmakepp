@@ -1,7 +1,8 @@
 
   function(ast_parse_match definition stream create_node)
     # check if definition can be parsed by ast_parse_match
-    map_tryget("${definition}" match match)
+    map_tryget("${definition}"  match)
+    ans(match)
     if(NOT match)
       return(false)
     endif()

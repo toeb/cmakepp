@@ -12,10 +12,12 @@
     ans(val)
     message("assigning value ${val} to")
 
-    map_get(${lvalue} types types)
+    map_get(${lvalue} types)
+    ans(types)
     message("types for lvalue ${types}")
 
-    map_get(${lvalue} identifier data)
+    map_get(${lvalue} identifier)
+    ans(identifier)
     map_set(${scope} "${identifier}" ${val})
 
   endfunction()
