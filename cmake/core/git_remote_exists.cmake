@@ -1,4 +1,4 @@
-function(git_remote_exists result uri)
+function(git_remote_exists uri)
   git(ls-remote "${uri}" RESULT success)
-  return_value(${success})
+  return(${success})
 endfunction()

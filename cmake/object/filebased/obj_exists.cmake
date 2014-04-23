@@ -1,6 +1,8 @@
 #returns true if object exists
 function(obj_exists this result)
-	#eval_truth(res EXISTS ${this})
-	ref_isvalid( ${this} res)
+	#eval_truth(EXISTS ${this})
+	#ans(res)
+  ref_isvalid( ${this} )
+  ans(res)
 	return_value(${res})
 endfunction()

@@ -21,9 +21,11 @@ function(test)
   
   file(WRITE "${test_dir}/p1.cmake" "${res}")
 
-  ref_new(ref)
+  ref_new()
+  ans(ref)
   include("${test_dir}/p1.cmake")
-  ref_get(${ref} data)
+  ref_get(${ref} )
+  ans(data)
   assert(EQUALS ${data} 1 2 )
 
 
@@ -32,9 +34,11 @@ function(test)
   compile("file3" "${test_dir}/test1/dir1")
   ans(res)
   file(WRITE "${test_dir}/p2.cmake" "${res}")
-  ref_new(ref)
+  ref_new()
+  ans(ref)
   include("${test_dir}/p2.cmake")
-  ref_get(${ref} data)
+  ref_get(${ref} )
+  ans(data)
  
   assert(EQUALS ${data} 1 2 3)
 endfunction()

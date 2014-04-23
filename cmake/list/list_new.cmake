@@ -1,5 +1,6 @@
 function(list_new result)
-	ref_new(res list ${ARGN})
+	ref_new(list ${ARGN})
+  ans(res)
 	set(${result} ${res} PARENT_SCOPE)
 	#return_result(${res})
 endfunction()

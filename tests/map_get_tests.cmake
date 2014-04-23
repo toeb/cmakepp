@@ -1,5 +1,6 @@
 function(Test)
-  map_create(a)
+  map_new()
+    ans(a)
   map_set("${a}" "x" 0)
   map_get("${a}" res "x")
   assert("${res}" STREQUAL 0)

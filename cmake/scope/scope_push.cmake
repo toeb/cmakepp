@@ -1,5 +1,6 @@
 macro(scope_push)
-	map_create(scope)
+	map_new()
+  ans(scope)
 	push_front(scopes ${scope})
 	get_cmake_property(vars VARIABLES)
 	foreach(var ${vars})

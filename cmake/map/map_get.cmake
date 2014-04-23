@@ -10,4 +10,6 @@ function(map_get this result key )
 
 	set(${result} "${property_val}" PARENT_SCOPE)
   return_ref(property_val)
+
+  
 endfunction()

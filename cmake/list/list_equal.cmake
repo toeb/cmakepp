@@ -63,9 +63,9 @@ function(list_equal result)
 
 	# depending on the comparator
 	if(${_COMPARATOR} STREQUAL "STREQUAL")
-		set(lambda "(a b) eval_truth(res \"\${a}\" STREQUAL \"\${b}\") \n return_value(\${res})")
+		set(lambda "(a b) eval_truth(\"\${a}\" STREQUAL \"\${b}\") \n ans(res) \n return_value(\${res})")
 	elseif(${_COMPARATOR} STREQUAL "EQUAL")
-		set(lambda "(a b) eval_truth(res \"\${a}\" EQUAL \"\${b}\") \n return_value(\${res})")
+		set(lambda "(a b) eval_truth( \"\${a}\" EQUAL \"\${b}\") \n ans(res) \n return_value(\${res})")
 	else()
 		set(lambda "${_COMPARATOR}")
 	endif()

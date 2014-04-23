@@ -21,7 +21,8 @@ function(expr_compile_new_object)
 
   set(res "
   #expr_compile_new_object
-  map_create(${symbol})
+  map_new()
+  ans(${symbol})
   ${evaluation}
   set_ans_ref(${symbol})
   #end of expr_compile_new_object

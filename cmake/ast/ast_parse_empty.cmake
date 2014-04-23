@@ -9,6 +9,7 @@
       return(true)
     endif()
 
-    map_create(node)
+    map_new()
+    ans(node)
     return(${node})
   endfunction()

@@ -56,7 +56,7 @@
     if("${first_char}" STREQUAL "*")
       string_slice("${expr}" 1 -1)
       ans(ref)
-      deref(${ref})
+      ref_get(${ref})
       ans(val)
       return_ans()
     endif()

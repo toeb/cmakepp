@@ -41,11 +41,11 @@ function(expr_indexer path)
       map_get(${data} res ${key})
       return_ref(res)
     endif()
-    ref_isvalid("${data}" trash)
+    ref_isvalid("${data}")
     ans(isref)
     if(isref)
       #deref ref
-      deref(${data})
+      ref_get(${data})
       ans(data)
     endif()
     # data is list

@@ -1,7 +1,7 @@
 
   function(stack_pop stack)
-    ref_get(${stack} lst)
-
+    ref_get(${stack} )
+    ans(lst)
     #message("whole stack ${lst}")
     list_pop_back( decoded lst)
    # message("new stack ${lst}")

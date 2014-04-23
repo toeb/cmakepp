@@ -3,7 +3,8 @@ function(semver_parse_lazy version_string)
     return()
   endif()
 
-  map_create(version)
+  map_new()
+  ans(version)
   nav("version.string" "${version_string}")
 
   set(version_number_regex "[0-9]+")

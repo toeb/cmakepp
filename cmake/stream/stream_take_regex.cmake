@@ -1,7 +1,7 @@
 
   function(stream_take_regex stream regex)
-    ref_get(${stream} data)
-
+    ref_get(${stream} )
+    ans(data)
     string(REPLACE "\\[" "«" regex "${regex}")
     string(REPLACE "\\]" "»" regex "${regex}")
     string(REPLACE ";" "…" regex "${regex}")

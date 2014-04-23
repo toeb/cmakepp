@@ -1,6 +1,7 @@
 
   function(queue_peek queue)
-    ref_get(${queue} lst)
+    ref_get(${queue} )
+    ans(lst)
     list_peek_front(lst res)
     string_decode_list("${res}")
     ans(decoded)

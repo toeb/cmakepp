@@ -25,7 +25,8 @@ function(map_edit)
 	set(result_list)
 	if(islist)
 		set(result_list "${value}")
-		ref_get(${value} value)
+		ref_get(${value} )
+		ans(value)
 	endif()
 
 

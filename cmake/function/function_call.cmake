@@ -16,7 +16,7 @@
     if(NOT "_${__function_call_paren_close}" STREQUAL "_)")
       message(WARNING "expected closing parentheses")
     endif()
-
+    #message("---${ARGN}===${__function_call_func}")
     if(COMMAND "${__function_call_func}")
    #   message("function")
       eval("${__function_call_func}(${__function_call_args})")

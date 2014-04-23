@@ -1,7 +1,6 @@
 macro(obj_callmember this key)
-
 	result_clear()
-	message(DEBUG LEVEL 10 "calling ${key} on ${this} with ${ARGN}")
+	#message(DEBUG LEVEL 10 "calling ${key} on ${this} with ${ARGN}")
 	obj_nullcheck(${this})
 
 	# cannot pass func directly because it would be destroy inner

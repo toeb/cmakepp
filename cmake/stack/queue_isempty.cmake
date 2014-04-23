@@ -1,7 +1,8 @@
 
 
   function(queue_isempty stack)
-    ref_get(${stack} lst)
+    ref_get(${stack} )
+    ans(lst)
     list(LENGTH lst len)
     if(${len} EQUAL 0)
       return(true)

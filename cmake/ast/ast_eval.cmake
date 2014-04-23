@@ -5,14 +5,15 @@
       list_pop_front(ast_language args)
       map_tryget(${ast_language} ast_evaluators evaluators)
       function_import_table(${ast_evaluators} ast_evaluator_table)
-     #ref_get(${ast_evaluators} ast_evaluators)
+
     endif()
     if(NOT ast_evaluators)
       message(FATAL_ERROR "no ast_evaluators given")
     endif()
   
     #message("evaluator prefix ${ast_evaluators}... ${ARGN}")
-    map_get(${ast} types types)
+    map_get(${ast}  types)
+    ans(types)
     map_isvalid("${ast_evaluators}" ismap)
     while(true)
       list_pop_front(type types)     

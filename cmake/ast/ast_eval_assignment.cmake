@@ -1,8 +1,10 @@
 
   function(ast_eval_assignment ast scope)
     message("eval assignment")
-    map_get(${ast} children children)
-    ref_get(${children} rvalue)
+    map_get(${ast} children)
+    ans(children)
+    ref_get(${children})
+    ans(rvalue)
     list_pop_front(lvalue rvalue)
     ref_print("${lvalue}")
     ref_print("${rvalue}")

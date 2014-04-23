@@ -1,5 +1,6 @@
 function(stream_new data)
-    map_create(stream)
+    map_new()
+    ans(stream)
     map_set(${stream} index 0)
     string_encode_list("${data}")
     ans(data)

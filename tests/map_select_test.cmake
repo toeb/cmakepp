@@ -14,7 +14,8 @@ function(test)
 		element(END)
 	element(END lst)
 
-	ref_get(${lst} lst)
+	ref_get(${lst} )
+	ans(lst)
 	map_select(res "from a in lst select {a.k1}{a.k2}")
 	assert(EQUALS ${res} v11v12 v21v22 v31v32)
 	

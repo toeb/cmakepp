@@ -71,8 +71,8 @@ function(assert)
 		if(NOT _MESSAGE)
 			set(_MESSAGE "assertion failed: expected '${_COUNT}' elements got '${len}'")
 		endif()
-			eval_truth(result "${len}" EQUAL "${_COUNT}")
-	
+		eval_truth( "${len}" EQUAL "${_COUNT}")
+		ans(result)
 	elseif(_CONTAINS OR _MISSING)
 		if(NOT _MESSAGE)
 		set(_MESSAGE "assertion failed: list does not contain '${_CONTAINS}' list:(${_UNPARSED_ARGUMENTS})")
@@ -95,7 +95,8 @@ function(assert)
 
 	else()
 		# if nothing else is specified use _UNPARSED_ARGUMENTS as a truth expresion
-		eval_truth(result (${_UNPARSED_ARGUMENTS}))
+		eval_truth( (${_UNPARSED_ARGUMENTS}))
+		ans(result)
 	endif()
 
 	# if message is not set add default message

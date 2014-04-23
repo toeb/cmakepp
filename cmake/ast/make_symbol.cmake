@@ -1,9 +1,11 @@
 
 function(make_symbol)
-  ref_get(symbol_count i)
+  ref_get(symbol_count)
+  ans(i)
   if(NOT i)
     function(make_symbol)
-      ref_get(symbol_count i)
+      ref_get(symbol_count )
+      ans(i)
       math(EXPR i "${i} + 1")
       ref_set(symbol_count "${i}")
       return("symbol_${i}")

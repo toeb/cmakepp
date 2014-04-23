@@ -1,28 +1,33 @@
 function(test)
 
-ref_new(ref)
+ref_new()
+ans(ref)
 ref_set(${ref} "function(fuuu result) \n return_value(\${ARGN}) \n endfunction()")
-ref_get(${ref} res)
+ref_get(${ref} )
+ans(res)
 assert( "${res}" STREQUAL "function(fuuu result) \n return_value(\${ARGN}) \n endfunction()")
 
-ref_new(ref)
+ref_new()
+ans(ref)
 ref_set(${ref} "function(fuuu result) \n return_value(\${ARGN}) \n endfunction()")
 is_function_ref(res ${ref})
 assert(res)
 
 
-ref_new(ref)
+ref_new()
+ans(ref)
 ref_set(${ref} "function(fuuu result) \n return_value(\${ARGN}) \n endfunction()")
 is_function(res ${ref})
 assert(res)
 
-ref_new(ref)
+ref_new()
+ans(ref)
 ref_set(${ref} "function(fuuu result) \n return_value(\${ARGN}) \n endfunction()")
 get_function_string(res ${ref})
 assert("${res}" STREQUAL "function(fuuu result) \n return_value(\${ARGN}) \n endfunction()")
 
-
-ref_new(ref)
+ref_new()
+ans(ref)
 ref_set(${ref} "function(fuuu result) \n return_value(\${ARGN}) \n endfunction()")
 call_function("${ref}" res a b c d)
 assert(EQUALS a b c d ${res})
@@ -133,7 +138,8 @@ obj_callmember(${res} "myfunc" res a b c 1 2 3)
 assert(EQUALS a b c 1 2 3 ${res})
 
 obj_create(res)
-ref_new(ref)
+ref_new()
+ans(ref)
 ref_set(${ref} "function(myfunc result) \n return_value(\${ARGN}) \n endfunction()")
 obj_pushcontext(${res})
 import_function(${ref} as bound_function)
@@ -143,7 +149,8 @@ assert(EQUALS ${val} a b c)
 
 
 set(func "function(myfunc result) \n return_value(\${ARGN}) \n endfunction()")
-ref_setnew(funcref "${func}")
+ref_setnew( "${func}")
+ans(funcref)
 file(WRITE "${cutil_temp_dir}/tmp.cmake" "${func}")
 
 is_function(res ${funcref})

@@ -7,7 +7,8 @@
 
     tokens_parse("${token_definitions}" "${str}")
     ans(tokens)
-    map_create(stream)
+    map_new()
+    ans(stream)
     map_set(${stream} current ${tokens})
     stack_new()
     ans(stack)

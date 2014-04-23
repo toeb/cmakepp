@@ -1,4 +1,3 @@
-
 function(map_exists this result)
 	get_property(keys GLOBAL PROPERTY "${this}")
 	if(keys)

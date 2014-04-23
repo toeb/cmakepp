@@ -1,6 +1,7 @@
 
   function(stream_isempty)
-    ref_get(${stream} data)
+    ref_get(${stream} )
+    ans(data)
     string(LENGTH "${data}" len)
     if(NOT len)
       return(true)

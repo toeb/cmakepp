@@ -21,10 +21,32 @@
     "new_object":"expr_compile_new_object",
     "assignment":"expr_compile_assignment",
     "parentheses":"expr_compile_parentheses",
-    "null_coalescing":"expr_compile_coalescing"
+    "null_coalescing":"expr_compile_coalescing",
+    "statements":"expr_compile_statements",
+    "statement":"expr_compile_statement"
   },
-  "root_definition":"expression",
+  "root_definition":"statements",
   "definitions":{
+    "statements":{
+      "node":"true",
+      "parser":"list",
+      "element":"statement",
+    },
+    "statement":{
+      "parser":"sequence",
+      "node":"true",
+      "sequence":[
+        "expression",
+        "end_of_statement"
+      ]
+    },
+    "end_of_statement":{
+      "parser":"any",
+      "any":[
+        "semicolon",
+        "end_of_stream"
+      ]
+    }
     "expression":{
       "node":"true",
       "parser":"list",

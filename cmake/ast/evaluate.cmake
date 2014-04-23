@@ -6,14 +6,16 @@
     set(scope ${ARGN})
     map_isvalid("${scope}" ismap)
     if(NOT ismap)
-      map_create(scope)
+      map_new()
+      ans(scope)
       foreach(arg ${ARGN})
         map_set(${scope} "${arg}" ${${arg}})
       endforeach()
     endif()
 
 
-    map_create(context)
+    map_new()
+    ans(context)
     map_set(${context} scope ${scope})
 
   #  message("expr ${expr}")

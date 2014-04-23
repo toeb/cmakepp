@@ -16,7 +16,8 @@ function(value_descriptor_parse id)
   endif()
 
   if(NOT descriptor)
-    map_create(descriptor)
+    map_new()
+    ans(descriptor)
   endif()
   
   # set default values

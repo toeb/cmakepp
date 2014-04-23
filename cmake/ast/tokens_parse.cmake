@@ -1,7 +1,8 @@
 # parses str into a linked list of tokens 
 # using token_definitions
 function(tokens_parse token_definitions str)
-  map_create(first_token)
+  map_new()
+  ans(first_token)
   set(last_token ${first_token})
   while(true) 
     # recursion anker

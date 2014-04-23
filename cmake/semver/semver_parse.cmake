@@ -32,7 +32,8 @@ endif()
 
   cmake_parse_arguments("" "LAZY" "MAJOR;MINOR;PATCH;VERSION;VERSION_NUMBERS;PRERELEASE;METADATA;RESULT;IS_VALID" "" ${ARGN})
 
-  map_create(version)
+  map_new()
+  ans(version)
 
   # set result to version (this will contain partial or all of the version information)
   if(_RESULT)

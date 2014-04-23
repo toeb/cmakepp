@@ -36,11 +36,13 @@ function(map_query result query)
 	endfunction()
 
 	# create a ref where the result is stored
-	ref_new(map_query_result)
+	ref_new()
+	ans(map_query_result)
 	map_foreach(map_query_foreach_action "${sources}")
 	
 	# get the result
-	ref_get(${map_query_result} res)
+	ref_get(${map_query_result} )
+	ans(res)
 	ref_delete(${map_query_result})
 
 	set(${result} "${res}" PARENT_SCOPE)

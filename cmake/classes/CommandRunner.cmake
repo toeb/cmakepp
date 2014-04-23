@@ -1,6 +1,7 @@
 function(CommandRunner)
 	# field containing all command name => handler mappings
-	map_create(commands)
+	map_new()
+  ans(commands)
 	this_set(commands ${commands})
 
 	# name for this command runner

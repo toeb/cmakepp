@@ -52,11 +52,13 @@ function(element)
 
   	# else a new element is started . a element is always a ref
     if(_MAP)
-      map_create(res)
+      map_new()
+      ans(res)
   	elseif(_LIST)
       list_new(res)
     else()
-       map_create(res)
+      map_new()
+      ans(res)
     endif()
     
   	# if element is a child element then set current_element in parent scope

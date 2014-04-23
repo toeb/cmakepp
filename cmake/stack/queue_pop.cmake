@@ -1,6 +1,7 @@
 
   function(queue_pop queue)
-    ref_get(${queue} lst)
+    ref_get(${queue} )
+    ans(lst)
     list_pop_front(res lst)
     ref_set(${queue} "${lst}")
     string_decode_list("${res}")

@@ -88,7 +88,7 @@ string(REPLACE "\\t" "\t" last_value "${last_value}")
 	endif()
 
 	element(END root)
-	ref_get( ${root} res)
-
+	ref_get( ${root} )
+	ans(res)
 	return_value(${res})
 endfunction()

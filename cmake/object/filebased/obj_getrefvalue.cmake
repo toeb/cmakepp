@@ -1,6 +1,4 @@
 function(obj_getrefvalue this result)
-	#ref_gettype(type ${this})
-
 	map_navigate(res ${this})
 	set(${result} "${res}" PARENT_SCOPE)
 	

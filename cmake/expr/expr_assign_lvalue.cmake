@@ -12,7 +12,7 @@
    #     message(FATAL_ERROR "${ref_expr} does not evaluate to a ref")
    #   endif()
    #  # message("ref is ${ref}")
-   #   ref_isvalid(${ref} trash)
+   #   ref_isvalid(${ref})
    #   ans(isref)
    #   if(isref)
    #   #message("assigning ref ${rvalue}")
@@ -72,7 +72,7 @@
       map_isvalid(${current_scope} trash)
       ans(is_map)
 
-      ref_isvalid(${current_scope} trash)
+      ref_isvalid(${current_scope})
       ans(is_ref)
       
 
@@ -109,7 +109,8 @@
         # navigate
         map_tryget(${current_scope} next_scope "${current_index}")
         if(NOT next_scope)
-          map_create(next_scope)
+          map_new()
+          ans(next_scope)
           map_set(${current_scope} "${current_index}" ${next_scope})
         endif()
 

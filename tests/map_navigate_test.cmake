@@ -67,7 +67,8 @@ function(test)
 	assert(EQUALS ${res} I II III)
 	
 	# check special symbols
-	map_create(res)
+	map_new()
+    ans(res)
 	map_set(${res} "k1" "\${ARGN} \; ;")
 	map_navigate(val "res.k1")
 	assert(EQUALS "${val}"  "\${ARGN} \; ;")

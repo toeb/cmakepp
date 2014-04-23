@@ -48,7 +48,8 @@ function(test)
 
 	#return()
 
-	ref_isvalid("a;b;c;d" isref)
+	ref_isvalid("a;b;c;d" )
+	ans(isref)
 	assert(NOT isref)
 
 	# map with cmake list value
@@ -62,8 +63,10 @@ function(test)
 	assert(EQUALS "a;b;c" ${res} )
 	
 
-	map_create(map)
-	ref_gettype(${map} res)
+	map_new()
+    ans(map)
+	ref_gettype(${map})
+	ans(res)
 	assert(${res} STREQUAL map)
 
 
@@ -198,13 +201,15 @@ function(test)
 	# deserialize a empty object
 	json_deserialize(res "{}")
 	assert(res)
-	ref_isvalid( ${res}  is_ref)
+	ref_isvalid( ${res}  )
+	ans(is_ref)
 	assert(is_ref MESSAGE "expected res to be a ref")
 
 	# desirialize a empty array
 	json_deserialize(res "[]")
 	assert(res)
-	ref_isvalid( ${res} is_ref)
+	ref_isvalid( ${res} )
+	ans(is_ref)
 	assert(is_ref MESSAGE "expected res to be a ref")
 
 

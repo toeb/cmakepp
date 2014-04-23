@@ -8,7 +8,8 @@ function(list_parse label_prefix option_labels single_value_labels multi_values_
   endforeach()
   cmake_parse_arguments(_ "${option_labels}" "${single_value_labels}" "${multi_values_labels}" ${ARGN})
 
-  map_create(result)
+  map_new()
+  ans(result)
   # loop through args
   foreach(arg ${ARGN})
 

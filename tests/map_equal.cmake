@@ -1,5 +1,6 @@
 function(test)
-	map_create(uut)
+	map_new()
+  ans(uut)
 	map_append(${uut} k1 a)
 	map_append(${uut} k1 b)
 	map_append(${uut} k1 c)
@@ -9,7 +10,8 @@ function(test)
 
 	map_append(${uut} k3 "asd asda asd")
 	
-	map_create(uut2)
+	map_new()
+  ans(uut2)
 	map_append(${uut2} k2 c)
 	map_append(${uut2} k2 c)
 	map_append(${uut2} k1 a)

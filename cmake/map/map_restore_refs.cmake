@@ -1,11 +1,12 @@
  # todo: complete
  function(map_restore_refs ref)
-    map_create(ref_ids)
+    map_new()
+    ans(ref_ids)
 
     function(map_restore_find_refs cancel node)
-      ref_isvalid(${node} trash)
+      ref_isvalid(${node})
       ans(isref)
-      map_isvalid(${node} trash)
+      map_isvalid(${node})
       ans(ismap)
 
       if(ismap)

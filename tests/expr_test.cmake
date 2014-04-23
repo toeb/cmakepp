@@ -7,7 +7,17 @@ function(test)
   ref_print(${lang})
 
 
-  # or
+  # statements
+  oocmake("$test1 = 'asd'; $test2='bsd'")
+
+  ans(res)
+  assert("${res}" STREQUAL "bsd")
+  assert(test1)
+  assert("${test1}" STREQUAL "asd")
+  assert(test2)
+  assert("${test2}" STREQUAL "bsd")
+
+  # null coalescing
   set(someMap)
   oocmake("$someMap = $someMap ?? {a:123}")
   ans(res1)
@@ -24,7 +34,8 @@ function(test)
   assert(DEREF "{b.a}" STREQUAL "ad")
 
   # assign bound value
-  map_create(someMap)
+  map_new()
+    ans(someMap)
   oocmake("$someMap.value1 = 123")
   ans(res)
   assert(${res} STREQUAL "123")
@@ -33,14 +44,16 @@ function(test)
 
 
   # assign indexer
-  map_create(this)
+  map_new()
+    ans(this)
   oocmake("['testvalue'] = 33")
   ans(res)
   assert("${res}" STREQUAL "33")
   assert(DEREF "{this.testvalue}" STREQUAL 33)
 
   # chain multiple assign
-  map_create(this)
+  map_new()
+    ans(this)
   oocmake("asd = bsd = csd = 3")
   ans(res)
   assert("${res}" STREQUAL 3)
@@ -56,7 +69,8 @@ function(test)
   assert("${asd}" STREQUAL "ad")
 
   # assignment of scope variable
-  map_create(this)
+  map_new()
+  ans(this)
   oocmake("bsd = 'hula'")
   ans(res)
   assert(${res} STREQUAL "hula")
@@ -113,15 +127,18 @@ function(test)
   assert("${res}" STREQUAL "abcd")
 
   # scope identifier
-  map_create(this)
+  map_new()
+  ans(this)
   map_set(${this} identifier "1234")
   oocmake("identifier")
   ans(res)
   assert("${res}" STREQUAL "1234")
 
   # bind 
-  map_create(this)
-  map_create(next)
+  map_new()
+  ans(this)
+  map_new()
+  ans(next)
   map_set(${this} a ${next})
   map_set(${next} b "9876")
   oocmake("a.b")
@@ -135,7 +152,8 @@ function(test)
   assert("${res}" STREQUAL "12")
 
   # indexation
-  map_create(a)
+  map_new()
+  ans(a)
   map_set(${a} a 1234)
   oocmake("$a['a']")
   ans(res)

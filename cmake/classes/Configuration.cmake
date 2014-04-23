@@ -6,7 +6,8 @@ function(Configuration)
 
 
 	# create a field containing all configurations
-	map_create(configurations)
+	map_new()
+  ans(configurations)
 	this_set(configurations ${configurations})
 
 
@@ -240,7 +241,8 @@ function(Configuration)
 		obj_callmember(${this} GetScope __scope ${scope})
 		map_tryget(${__scope} cfg config)
 		if(NOT cfg)
-			map_create(cfg)
+			map_new()
+    	ans(cfg)
 			map_set(${__scope} config ${cfg})
 		endif()
 

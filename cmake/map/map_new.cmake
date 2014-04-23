@@ -1,4 +1,4 @@
  function(map_new)
-    map_create(map)
-    return_ref(map)
-  endfunction()
+  ref_new(map)
+  return_ans()
+endfunction()

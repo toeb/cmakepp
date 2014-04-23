@@ -106,6 +106,17 @@ I wrapped the get_property and set_property commands in these shorter and simple
 ref_new() 	# returns a unique refernce (you can also choose any string)
 ref_set(ref [args ...]) # sets the reference to the list of arguments
 ref_get(ref) # returns the data stored in <ref> 
+
+# some more specialized functions
+# which might be faster in special cases
+ref_setnew([args ...]) 		# creates, returns a <ref> which is set to <args>
+ref_print(<ref>)			# prints the ref
+ref_isvalid(<ref>)			# returns true iff the ref is valid
+ref_istype(<ref> <type>)	# returns true iff ref is type
+ref_gettype(<ref>)			# returns the (if any) of the ref				
+ref_delete(<ref>)			# later: frees the specified ref
+ref_append(<ref> [args ...])# appends the specified args to the <ref>'s value
+ref_append_string(<ref> <string>) # appends <string> to <ref>'s value
 ```
 
 *Example*:
@@ -145,6 +156,73 @@ map_sethidden(map key)	 	# sets a field in the map without adding the key to the
 ```
  
 Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
+
+## Quick Map Syntax
+To quickly define a map in cmake I introduce the quick map syntax which revolves around these 4 functions and is quite intuitive to understand:
+```
+map([key]) # creates, returns a new map (and parent map at <key> to the new map) 
+key(<key>)	# sets the current key
+val([arg ...])	# sets the value at current map[current key] to <args>
+end() # finishes the current map and returns it
+```
+
+*Example* 
+Here is an example how to use this syntax
+```
+# define the map
+map()
+ key(firstname)
+ value(Tobias)
+ key(lastname)
+ value(Becker)
+ value(projects)
+ 	map()
+ 		key(name)
+ 		value(oo-cmake)
+ 		key(url)
+ 		value(https://github.org/toeb/oo-cmake)
+ 	end()
+ 	map()
+ 		key(name)
+ 		value(cutil)
+ 		key(url)
+ 		value(https://github.org/toeb/cutil)
+ 	end()
+ end()
+ map(address)
+ 	key(street)
+ 	value(Musterstrasse)
+ 	key(number)
+ 	value(99)
+ end()
+end()
+# get the result
+ans(themap)
+# print the result
+ref_print(${themap})
+```
+
+*Output* 
+```
+{
+	"firstname":"Tobias",
+	"lastname":"Becker",
+	"projects":[
+		{
+			"name":"oo-cmake",
+			"url":"https://github.org/toeb/oo-cmake"
+		},
+		{
+			"name":"cutil",
+			"url":"https://github.org/toeb/cutil"
+		}
+	]
+	"address":{
+		"street":"Musterstrasse",
+		"number":"99"
+	}
+}
+```
 
 # Functions
 Functions in cmake are not variables - they have a separate global only scope in which they are defined.  

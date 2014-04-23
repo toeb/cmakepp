@@ -3,7 +3,8 @@
 		get_cmake_property(scope_end_watch_now VARIABLES)
 		scope_peek(scope_end_watch_before)
 		
-		map_create(scope_end_watch_res)
+		map_new()
+    ans(scope_end_watch_res)
 		
 		# remove uninteresting values
 		list(REMOVE_ITEM 

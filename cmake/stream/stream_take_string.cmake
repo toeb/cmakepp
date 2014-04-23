@@ -1,7 +1,8 @@
 
   function(stream_take_string stream str)
     string(LENGTH "${str}" len)
-    ref_get(${stream} data)
+    ref_get(${stream})
+    ans(data)
     string_encode_list("${str}")
     ans(str)
     string_starts_with("${data}" "${str}")

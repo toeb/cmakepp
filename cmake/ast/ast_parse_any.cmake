@@ -1,7 +1,8 @@
 function(ast_parse_any )#definition stream create_node definition_id
   # check if definition contains "any" property
   map_tryget(${definition} any any)
-  ref_get(${any} any)
+  ref_get(${any})
+  ans(any)
   
   # try to parse any of the definitions contained in "any" property
   set(node false)
@@ -14,7 +15,8 @@ function(ast_parse_any )#definition stream create_node definition_id
   endforeach()
 
   # append definition to current node if a node was returned
-  ref_isvalid("${node}" is_map)
+  ref_isvalid("${node}")
+  ans(is_map)
   if(is_map)
     #map_tryget(${definition} definition_id name)
     map_append(${node} types ${definition_id})

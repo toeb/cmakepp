@@ -1,7 +1,8 @@
 # parses a structured list given the structure map
 # returning a map which contains all the parsed values
 function(structured_list_parse structure_map)
-  map_create(result)
+  map_new()
+  ans(result)
   set(args ${ARGN})
   map_keys(${structure_map} keys)
   set(cutoffs)
