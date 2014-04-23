@@ -9,7 +9,7 @@ Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or othe
 be sure to use an up to date version of cmake.  `oo-cmake.cmake` adds this:
 
 ```
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.7)
 cmake_policy(SET CMP0007 NEW)
 cmake_policy(SET CMP0012 NEW)
 ```
@@ -28,7 +28,7 @@ cmake -P oo-cmake-tests.cmake
 * `ans(<var>)` a shorthand for getting the result of a function call and storing it in var
 * `clr([PARENT_SCOPE])` clears the `__ans` variable in current scope or in PARENT_SCOPE if flag is set.  
 
-A CMake function can return values by accessing it's parent scope.  Normally one one do the following to return a value
+A CMake function can return values by accessing it's parent scope.  Normally one does the following to return a value
 ```
 	function(myfunc result)
 		set(${result} "return value" PARENT_SCOPE)
@@ -36,9 +36,9 @@ A CMake function can return values by accessing it's parent scope.  Normally one
 	myfunc(res)
 	assert(${res} STREQUAL "return value")
 ```
-This type of programming causes problems when nesting functions as one has to return every return value that a nested function returns. This would cause alot of overhead as the whole scope would have to be parsed to see which values are new after a  function call.
+This type of programming causes problems when nesting functions as one has to return every return value that a nested function returns. Doing this automatically would cause alot of overhead as the whole scope would have to be parsed to see which values are new after a  function call.
 
-A cleaner alternative known from most other programming languages is using a return value. I propose and have implemented the following pattern to work around the missing function return values of cmake. 
+A cleaner alternative known from many programming languages is using a return value. I propose and have implemented the following pattern to work around the missing function return values of cmake. 
 
 ```
 	function(myfunc)
@@ -57,11 +57,134 @@ This is possible by overwriting CMakes default return() function with a macro. I
 
 * The returnvalue should immediately be consumed after the call to `myfunc` because it might be reused again somewhere else.
 * functions which do  not call return will not set  `__ans` in their parent scope.  If it is unclear weather a function really sets `__ans` you may want to clear it before the function call using `clr()` 
-
+* the overwrite for `return` has to be a macro, else accessing the `PARAENT_SCOPE` would be unfeasible. However macros caus the passed arguments to be re-evaluated which destroys some string - string containing escaped variables or  other escaped characters.  This is often a problem - therfore I have als added the `return_ref` function which accepts a variable name that is then returned. 
 
 ### Alternatives
 * a stack machine would also be a possiblity as this would allow returning multiple values. I have decided using the simpler single return value appoach as it is possible to return a structured list or a map if multiple return values are needed.
  
+# Refs
+
+CMake has a couple of scopes every file has its own scope, every function has its own scope and you can only have write access to your `PARENT_SCOPE`.  So I searched for  simpler way to pass data throughout all scopes.  My solution is to use CMake's `get_property` and `set_property` functions.  They allow me to store and retrieve data in the `GLOBAL` scope - which is unique per execution of CMake. It is my RAM for cmake - It is cleared after the programm shuts down.
+
+I wrapped the get_property and set_property commands in these shorter and simple functions:
+
+```
+ref_new() 	# returns a unique refernce (you can also choose any string)
+ref_set(ref [args ...]) # sets the reference to the list of arguments
+ref_get(ref) # returns the data stored in <ref> 
+```
+
+*Example*:
+```
+ # create a ref
+ ref_new()
+ ans(ref)
+ assert(ref)
+ 
+ # set the value of a ref
+ ref_set(${ref} "hello world")
+
+# retrieve a value by dereferencing
+ref_get(${ref})
+ans(val)
+assert(${val} STREQUAL "hello world")
+
+# without generating the ref:  
+ref_set("my_ref_name" "hello world")
+ref_get("my_ref_name")
+ans(val)
+assert(${val} STREQUAL "hello world")
+```
+
+
+# Maps
+
+Using refs it easy to implement a map datastructure:
+```
+map_new()					# returns a unique reference to a map
+map_get(map key)			# returns the value of map[key], fails hard if key does not exist
+map_has(map key)			# returns true iff map[key] was set
+map_set(map key [arg ...])	# sets map[key]
+map_keys(map)				# returns all keys which were set
+map_tryget(map key)			# returns the stored value or nothing: ""
+map_sethidden(map key)	 	# sets a field in the map without adding the key to the keys collection
+```
+ 
+Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
+
+# Functions
+Functions in cmake are not variables - they have a separate global only scope in which they are defined.  
+*A Note on Macros* You SHOULD NOT use macros... They will more likely than not have unintended side effects because of the way the are evaluated.
+
+I have written a couple of usefull (if not essential) functions with which managing functions becomes a lot easier
+```
+eval(string)			# executes the given cmake code
+function_new()			# returns a unqiue name for a function
+function_import(function_ish as function_name) # imports a function under the specified name
+function_call(function_ish([args ...])) # calls a function
+function_info(function_ish)	# returns info on name, arguments, type of function
+function_inject(function_ish)	# imports a function, injecting before call, after call data
+```
+
+## Function Patterns
+
+### Initializer function
+
+If you want to execute code only once for a function (e.g. create  a datastructure before executing the function) you can use the Initializer Patter.:
+```
+function(initalizing_function)
+	# initialization code
+	function(initializing_function)
+		# actual function code
+	endfunction()
+	initializing_function(${ARGN})
+	return_ans() # forwards the returned value
+endfunction()
+```
+
+*Example*
+```
+function(global_counter)
+	ref_set(global_counter_ref 0)
+	function(global_counter)
+		ref_get(global_counter_ref)
+		ans(count)
+		math(EXPR count "${count} + 1")
+		ref_set(global_counter_ref ${count})
+		return(${count})
+	endfunction()
+endfunction()
+```
+
+# Objects 
+
+Objects are an extension of the maps.  These are the functions which are available:
+```
+obj_new(obj [Constructor])
+obj_get(obj)
+obj_set(obj)
+obj_has(obj)
+obj_owns(obj)
+obj_keys(obj)
+obj_ownedkeys(obj)
+obj_call(obj)
+obj_callmember(obj key [args])
+obj_delete(obj)
+```
+
+## Special hidden Fields
+```
+__type__		# contains the name of the constructor function
+__proto__		# contains the prototype for this object
+__getter__ 		# contains a function (obj, key)-> value 
+__setter__		# contains a function (obj, key,value) 
+__call__		# contains a function (obj [arg ...])
+__callmember__	# contains a function (obj key [arg ..])
+__not_found__ 	# gets called by the default __getter__ when a field is not found
+__to_string__	# contains a function which returns a string representation for the object
+__destruct__	# a function that is called when the object is destroyed
+```
+
 
 # Functions
 
