@@ -101,7 +101,7 @@ function(assert)
 	# if message is not set add default message
 	if(NOT DEFINED _MESSAGE)
 		list_to_string(msg _UNPARSED_ARGUMENTS " ")
-		set(_MESSAGE "assertion failed: '${_UNPARSED_ARGUMENTS}'")
+		set(_MESSAGE "assertion failed1: '${_UNPARSED_ARGUMENTS}'")
 	endif()
 
 	# print message if assertion failed, SILENT is not specified or message type is FATAL_ERROR

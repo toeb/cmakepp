@@ -7,7 +7,7 @@ package_property(version "1.0")
 package_property(license "MIT")
 package_property(single_version true)
 package_property(cmake_exports 
-	cmake/debugging/debug_message.cmake
+
 	cmake/core/*.cmake
 	cmake/ref/ref_isvalid.cmake
 	cmake/ref/ref_get.cmake
@@ -39,6 +39,7 @@ package_property(cmake_exports
 	cmake/map/*.cmake
 	cmake/scope/*.cmake
 	cmake/debugging/*.cmake
+	cmake/expr/*.cmake
 	cmake/object/this/*.cmake
 	cmake/object/filebased/*.cmake
 	cmake/object/*.cmake
@@ -47,7 +48,10 @@ package_property(cmake_exports
 	cmake/web/*.cmake
 	cmake/semver/*.cmake
 	cmake/targets/*.cmake
-
+	cmake/ast/*.cmake
+	cmake/ast/json/*.cmake
+	cmake/ast/expr/*.cmake
+	cmake/stream/*.cmake
 )
 package_property(install_script)
 package_property(cutil_main_script)

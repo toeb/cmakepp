@@ -1,0 +1,8 @@
+function(expr_navigate_isvalid path)
+  set(regex_identifier "[a-zA-Z0-9-_]+")
+  set(regex_navigation_expr ".*\\.${regex_identifier}")
+  if("${path}" MATCHES "^${regex_navigation_expr}$")
+    return(true)
+  endif()  
+  return(false)   
+endfunction()

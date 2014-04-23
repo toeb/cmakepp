@@ -15,6 +15,6 @@ function(test)
   string_split_at_first(partA partB "splitatend@" "@")
   assert("${partA}" STREQUAL "splitatend")
   assert(NOT partB)
-
+ 
 
 endfunction()

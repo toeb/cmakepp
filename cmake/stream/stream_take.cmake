@@ -1,0 +1,17 @@
+
+  function(stream_take stream length)
+    stream_encoded_get(${stream})
+    ans(data)
+    message("flag2")
+
+    string(SUBSTRING "${data}" 0 "${length}" result)
+    string(SUBSTRING "${data}" "${length}" -1 data)
+    message("flag2")
+    map_get(${stream} index index)
+    math(EXPR index "${index} + ${length}" )
+    map_set(${stream} index "${index}")
+    message("flag23")
+    string_decode_list("${result}")
+    message("flag4")
+    return_ans()
+  endfunction()

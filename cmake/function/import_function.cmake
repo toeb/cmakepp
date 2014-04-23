@@ -49,10 +49,7 @@ function(import_function)
     "set(imported_caller_function_name ${imported_function_name})
     set(imported_function_name ${function_name})")
   endif()
-  # add profiling code if performance counts is on
-  if(performance_counts)
-    set(on_call "${on_call} \n function_called(\"${function_name}\" \"\${imported_caller_function_name}\")") 
-  endif()
+  
 
 
   #code which is run once when a function is defined

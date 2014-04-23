@@ -1,0 +1,5 @@
+function(stream_push stream)
+  ref_get("${stream}" data)
+#  message("pushing ${data}")
+  stack_push("${stream}:stack" "${data}")
+endfunction()

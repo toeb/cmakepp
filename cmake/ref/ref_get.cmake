@@ -1,7 +1,7 @@
 function(ref_get ref result )
-	#local ref
 	set(ref_value)
 	get_property(ref_value GLOBAL PROPERTY "${ref}")
+ # message("getting ${ref} = ${ref_value}")
 	set(${result} "${ref_value}" PARENT_SCOPE)
-	#message("getting Ref  '${result}'' '${${result}}'' ${res}")
+  return_ref(ref_value)
 endfunction()

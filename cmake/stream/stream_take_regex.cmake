@@ -1,0 +1,16 @@
+
+  function(stream_take_regex stream regex)
+    ref_get(${stream} data)
+
+    string(REPLACE "\\[" "«" regex "${regex}")
+    string(REPLACE "\\]" "»" regex "${regex}")
+    string(REPLACE ";" "…" regex "${regex}")
+    string(REGEX MATCH "^${regex}" match "${data}")
+    if(NOT match)
+      return()
+    endif()
+    string_decode_list("${match}")
+    ans(match)
+    stream_take_string(${stream} "${match}")
+    return_ans()
+  endfunction()
