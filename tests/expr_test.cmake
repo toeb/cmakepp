@@ -16,7 +16,7 @@ function(test)
   assert("${test1}" STREQUAL "asd")
   assert(test2)
   assert("${test2}" STREQUAL "bsd")
-
+  
   # null coalescing
   set(someMap)
   oocmake("$someMap = $someMap ?? {a:123}")
