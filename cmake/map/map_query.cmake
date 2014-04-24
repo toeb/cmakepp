@@ -1,4 +1,4 @@
-function(map_query result query)
+function(map_query query)
 	# get definitions
 	string(STRIP "${query}" query)
 	set(regex "(from .* in .*(,.* in .*)*)((where).*)")
@@ -26,10 +26,12 @@ function(map_query result query)
 	function(map_query_foreach_action)
 		#print_locals()
 		#message("${where_parts} = ${installed_pkg} + ${dependency_pkg}")
-		map_format(current_where "${where_parts}")
+		map_format( "${where_parts}")
+		ans(current_where)
 		# return value
 		if(${current_where})
-			map_transform(selection "${select}")
+			map_transform( "${select}")
+			ans(selection)
 			ref_append(${map_query_result} "${selection}")
 		endif()
 
@@ -45,6 +47,6 @@ function(map_query result query)
 	ans(res)
 	ref_delete(${map_query_result})
 
-	set(${result} "${res}" PARENT_SCOPE)
+	return_ref(res)
 	
 endfunction()

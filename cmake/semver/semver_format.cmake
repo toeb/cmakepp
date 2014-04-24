@@ -1,8 +1,8 @@
  function(semver_format version)
   semver_normalize(${version})
   ans(version)
-  map_format(res "{version.major}.{version.minor}.{version.patch}")
-
+  map_format( "{version.major}.{version.minor}.{version.patch}")
+  ans(res)
   nav("{version.prerelease}")
   ans(prerelease)
   if(DEFINED prerelease)

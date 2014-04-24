@@ -63,7 +63,8 @@ function(expr_indexer path)
   endif()
 
   #return nothing if map does not have key
-  map_has(${data} haskey "${index}")
+  map_has(${data}  "${index}")
+  ans(haskey)
   if(NOT haskey)
     return()
   endif()

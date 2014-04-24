@@ -59,7 +59,7 @@
         ans(isref)
         if(isref)
          # ref_print(${visited_nodes})
-          map_has(${visited_nodes} trash "${potential_successor}")
+          map_has(${visited_nodes} "${potential_successor}")
           ans(was_visited)
           if(NOT was_visited)
             list(APPEND successors ${potential_successor})

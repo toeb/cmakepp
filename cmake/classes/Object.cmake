@@ -2,7 +2,7 @@ function(Object)
 	#formats the current object 
 	obj_declarefunction(${__proto__} to_string)
 
-	function(${to_string} result)
+	function(${to_string} )
 		set(res)
 #		debug_message("to_string object ${this}")
 		obj_getkeys(${this} keys)
@@ -44,7 +44,7 @@ function(Object)
 		endforeach()
 
 		set(res "{\n${res}\n}")
-		return_value(${res})
+		return_ref(res)
 	endfunction()
 
 	# prints the current object to the console

@@ -1,4 +1,4 @@
-function(map_select result query)
+function(map_select  query)
 # select something from a list 
 # using syntax 'from a in lstA, b in lstB select {a.k1}{b.k1}'
 # see map_transform and map_foreach
@@ -7,11 +7,13 @@ function(map_select result query)
 
 	list_new(_result_list)
 	function(_map_select_foreach_action)
-		map_transform(res "${_select_args}")
+		map_transform( "${_select_args}")
+		ans(res)
 		ref_append(${_result_list} "${res}")
 	endfunction()
 	map_foreach( _map_select_foreach_action "${_foreach_args}")
 	ref_get( ${_result_list} )
 	ans(_result_list)
-	set(${result} ${_result_list} PARENT_SCOPE)
+	return_ref(_result_list)
+
 endfunction()

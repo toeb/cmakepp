@@ -1,5 +1,6 @@
 function(map_delete this)
-	map_exists(${this} res)
+	map_exists(${this} )
+	ans(res)
 	if(NOT res)
 		return()
 	endif()

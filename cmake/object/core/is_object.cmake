@@ -7,11 +7,7 @@ function(is_object result ref)
 	ref_gettype(${ref})
 	ans(res)
 	return_value(${res})
-	#if(IS_DIRECTORY "${ref}")
-#		return_value(true)
-#	else()
-	#	return_value(false)
-	#endif()
+	
 	
 endfunction()
 

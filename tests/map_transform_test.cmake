@@ -19,10 +19,10 @@ element(END uut)
 
 
 
-map_transform(res "new { \"a\" : \"{uut.k3}\", \"b\" :  { \"a\" : \"{uut.k5.k1}\"}, \"c\": \"{uut.k5.k2}\"}")
-
-map_format(res "{${res}.a}-{${res}.b.a}-{${res}.c}")
-
+map_transform( "new { \"a\" : \"{uut.k3}\", \"b\" :  { \"a\" : \"{uut.k5.k1}\"}, \"c\": \"{uut.k5.k2}\"}")
+ans(res)
+map_format( "{${res}.a}-{${res}.b.a}-{${res}.c}")
+ans(res)
 assert("${res}" STREQUAL "v3-va-vb")
 
 endfunction()

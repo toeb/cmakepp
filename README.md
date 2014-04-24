@@ -153,6 +153,12 @@ map_set(map key [arg ...])	# sets map[key]
 map_keys(map)				# returns all keys which were set
 map_tryget(map key)			# returns the stored value or nothing: ""
 map_sethidden(map key)	 	# sets a field in the map without adding the key to the keys collection
+map_remove()
+
+# specialized functions
+map_append()
+map_append_string()
+
 ```
  
 Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 

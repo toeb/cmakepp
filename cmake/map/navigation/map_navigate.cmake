@@ -35,7 +35,7 @@ function(map_navigate result navigation_expression)
 	endif()
 
 	# check if ref is valid
-	ref_isvalid(${ref})
+	ref_isvalid("${ref}")
 	ans(is_ref)
 	if(NOT is_ref)
 		if(not_defined)

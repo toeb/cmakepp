@@ -16,7 +16,8 @@ function(nav navigation_expression)
   
   if("_${first}" STREQUAL _FORMAT)
     list_pop_front(trash args)
-    map_format(args "${args}")  
+    map_format( "${args}")  
+    ans(args)
   endif()
 
 

@@ -81,7 +81,8 @@ function(message)
 
 	set(msg "${_UNPARSED_ARGUMENTS}")
 	if(_FORMAT)
-		map_format(msg "${msg}")
+		map_format( "${msg}")
+		ans(msg)
 	endif()
 
 	if(_JSON)

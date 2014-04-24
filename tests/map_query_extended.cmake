@@ -5,13 +5,15 @@ set(listB 1 3 5 3 )
 set(listC 1 4 4 3 )
 set(listD 1 5 5 5 3)
 
-map_query(res "from a in listA, b in listB,c in listC, d in listD where {a} STREQUAL {b} AND {b} STREQUAL {c} AND {d} STREQUAL {c} select new { \"lol\":\"{a}\"}")
+map_query( "from a in listA, b in listB,c in listC, d in listD where {a} STREQUAL {b} AND {b} STREQUAL {c} AND {d} STREQUAL {c} select new { \"lol\":\"{a}\"}")
+ans(res)
 foreach(r ${res})
 	ref_print(${r})
 endforeach()
 return()
 
-map_transform(res "1")
+map_transform( "1")
+ans(res)
 assert("1" STREQUAL "${res}")
 
 element(MAP)

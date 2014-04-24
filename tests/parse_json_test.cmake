@@ -8,7 +8,8 @@ function(test)
 	element(END original)
 
 	json_serialize(json "${original}")	
-	json_deserialize(copy "${json}")
+	json_deserialize( "${json}")
+	ans(copy)
 
 	map_equal(res ${original} ${copy})
 	assert(res)
@@ -42,7 +43,8 @@ function(test)
 # cehck list handling
 	set(lst a b c)
 	json_serialize(res "${lst}")
-	json_deserialize(res "${res}")
+	json_deserialize( "${res}")
+	ans(res)
 	assert(EQUALS ${lst} a b c)
 
 
@@ -59,7 +61,8 @@ function(test)
 	json_serialize(res ${uut})
 	
 
-	json_deserialize(res "\"a;b;c\"")
+	json_deserialize( "\"a;b;c\"")
+	ans(res)
 	assert(EQUALS "a;b;c" ${res} )
 	
 
@@ -194,19 +197,22 @@ function(test)
 
 
 	# deserialize a empty value
-	json_deserialize(res "")
+	json_deserialize( "")
+	ans(res)
 	assert(NOT res)
 
 
 	# deserialize a empty object
-	json_deserialize(res "{}")
-	assert(res)
+	json_deserialize( "{}")
+ans(res)
+		assert(res)
 	ref_isvalid( ${res}  )
 	ans(is_ref)
 	assert(is_ref MESSAGE "expected res to be a ref")
 
 	# desirialize a empty array
-	json_deserialize(res "[]")
+	json_deserialize( "[]")
+	ans(res)
 	assert(res)
 	ref_isvalid( ${res} )
 	ans(is_ref)
@@ -214,31 +220,36 @@ function(test)
 
 
 	# deserialize a simple value
-	json_deserialize(res "\"teststring\"")
+	json_deserialize( "\"teststring\"")
+	ans(res)
 	assert(${res} STREQUAL "teststring")
 
 if(false)
 # these tests currently do not work because of utf8 issue
 	# deserialize a array with one value
-	json_deserialize(res "[\"1\"]")
+	json_deserialize( "[\"1\"]")
+	ans(res)
 	map_navigate(val "res[0]")
 	assert(${val} STREQUAL "1")
 
 
 	#deserialize a array with multiple values
-	json_deserialize(res "[\"1\", \"2\"]")
+	json_deserialize( "[\"1\", \"2\"]")
+	ans(res)
 	map_navigate(val "res[0]")
 	assert(${val} STREQUAL "1")
 	map_navigate(val "res[1]")
 	assert(${val} STREQUAL "2")
 endif()
 	# deserialize a simple object with one value
-	json_deserialize(res "{ \"key\" : \"value\"}")
+	json_deserialize( "{ \"key\" : \"value\"}")
+	ans(res)
 	map_navigate(val "res.key")
 	assert(${val} STREQUAL "value")
 
 	# deserialize a simple object with multiple values
-	json_deserialize(res "{ \"key\" : \"value\", \"key2\" : \"val2\"}")
+	json_deserialize( "{ \"key\" : \"value\", \"key2\" : \"val2\"}")
+	ans(res)
 	map_navigate(val "res.key")
 	assert(${val} STREQUAL "value")
 	map_navigate(val "res.key2")
@@ -246,14 +257,16 @@ endif()
 
 
 	# deserialize a simple nested structure
-	json_deserialize(res "{ \"key\" : {\"key3\":\"myvalue\" }, \"key2\" : \"val2\"}")
+	json_deserialize( "{ \"key\" : {\"key3\":\"myvalue\" }, \"key2\" : \"val2\"}")
+	ans(res)
 	map_navigate(val "res.key2")
 	assert(${val} STREQUAL "val2")
 	map_navigate(val "res.key.key3")
 	assert(${val} STREQUAL "myvalue")
 
 	# deserialize a nested structure containing both arrays and objects
-	json_deserialize(res "{ \"key\" : [\"1\", \"2\"], \"key2\" : \"val2\"}")
+	json_deserialize( "{ \"key\" : [\"1\", \"2\"], \"key2\" : \"val2\"}")
+	ans(res)
 	map_navigate(val "res.key2")
 	assert(${val} STREQUAL "val2")
 	map_navigate(val "res.key[0]")
@@ -262,7 +275,8 @@ endif()
 	assert(${val} STREQUAL "2")
 
 	# deserialize a 'deeply' nested structure and get a value
-	json_deserialize(res "{ \"key\" : [{\"k1\":\"v1\"}, \"2\"], \"key2\" : \"val2\"}")
+	json_deserialize( "{ \"key\" : [{\"k1\":\"v1\"}, \"2\"], \"key2\" : \"val2\"}")
+	ans(res)
 	map_navigate(val "res.key[0].k1")
 	assert(${val} STREQUAL "v1")
 

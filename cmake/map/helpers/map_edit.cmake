@@ -19,7 +19,8 @@ function(map_edit)
 	set(arg ${_UNPARSED_ARGUMENTS})
 
 
-	map_transform(arg "${arg}")
+	map_transform( "${arg}")
+	ans(arg)
 	map_navigate(value "${navigation_expression}")
 	list_isvalid("${value}" islist)
 	set(result_list)
