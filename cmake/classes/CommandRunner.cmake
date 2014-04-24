@@ -71,7 +71,7 @@ function(CommandRunner)
 			obj_callobject(${handler} ${args})
 			return()
 		endif()
-		function_call(${handler}(${args}))
+		function_call(${handler} (${args}))
 	endfunction()
 
 	## the default help function.

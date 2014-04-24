@@ -29,6 +29,24 @@
       return_ans()
     endif()
 
+    ref_isvalid("${__function_call_func}")
+    ans(isref)
+    if(isref)
+      obj_call("${__function_call_func}" ${__function_call_args})
+      return_ans()
+    endif()
+
+    propref_isvalid("${__function_call_func}")
+    ans(ispropref)
+    if(ispropref)
+      propref_get_key("${__function_call_func}")
+      ans(key)
+      propref_get_ref("${__function_call_func}")
+      ans(ref)
+      obj_callmember("${ref}" "${key}" ${__function_call_func})
+    endif()
+
+
     lambda_isvalid("${__function_call_func}")      
     ans(is_lambda)
     if(is_lambda)

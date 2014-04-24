@@ -1,4 +1,14 @@
-
+# creates a value descriptor
+# available options are
+# REQUIRED
+# available Single Value args
+# DISPLAY_NAME
+# DESCRIPTION
+# MIN
+# MAX
+# Multi value args
+# LABELS
+# DEFAULT 
 
 function(value_descriptor_parse id)
   set(ismap)

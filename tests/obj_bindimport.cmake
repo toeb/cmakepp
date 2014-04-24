@@ -26,7 +26,8 @@ function(test)
 	assert(${result2} STREQUAL "hello")
 	assert(${result3} STREQUAL "${obj}")
 
-	obj_get(${obj} res val2)
+	obj_get(${obj}  val2)
+	ans(res)
 	assert(res)
 	assert(${res} STREQUAL "byebye")
 

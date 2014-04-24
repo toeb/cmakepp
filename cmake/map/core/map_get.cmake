@@ -9,6 +9,9 @@ function(map_get this key)
   get_property(property_val GLOBAL PROPERTY "${property_ref}")
   return_ref(property_val)  
 endfunction()
+
+# faster way of accessing map.  however fails if key contains escape sequences, escaped vars or @..@ substitutions
+# if thats the case comment out this macro
 macro(map_get this key)
   set(__map_get_property_ref "${this}.${key}")
   get_property(__ans GLOBAL PROPERTY "${__map_get_property_ref}")

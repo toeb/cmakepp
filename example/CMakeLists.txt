@@ -14,7 +14,7 @@ obj_create(animal)
 # existing functions can also be appliead via obj_bindcall(${ref} func arg1 arg2 arg3)
 obj_setfunction(
 	${animal}  	#reference to animal object
-	" function( eat ) \n obj_get(\${this} food food) \n message(\"I am eating \${food}\") \n	 endfunction()"
+	" function( eat ) \n obj_get(\${this}  food) \n ans(food) \n message(\"I am eating \${food}\") \n	 endfunction()"
 )
 
 

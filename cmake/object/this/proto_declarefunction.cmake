@@ -1,5 +1,6 @@
 function(proto_declarefunction result)
-	obj_get(${this} proto __proto__)
+	obj_get(${this}  __proto__)
+  ans(proto)
 	if(NOT proto)
 		message(FATAL_ERROR "proto_declarefunction: expected prototype to be present")
 	endif()

@@ -37,7 +37,8 @@ function(test)
 	obj_set(${myobject} key1 "val1")
 	#call obj_get passing the object refernce the result variable and
 	# the key which is to be gotten
-	obj_get(${myobject} theValue key1)
+	obj_get(${myobject}  key1)
+	ans(theValue)
 	assert(theValue)
 	assert(${theValue} STREQUAL "val1")
 
@@ -121,7 +122,8 @@ function(test)
 	obj_callmember(${obj} myMethod res)
 	assert(res)
 	assert(${res} STREQUAL "myMethod: othervalue")
-	obj_get(${obj} res myNewProperty)
+	obj_get(${obj}  myNewProperty)
+	ans(res)
 	assert(res)
 	assert(${res} STREQUAL "this is a text othervalue")
 

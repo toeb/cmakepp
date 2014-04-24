@@ -6,7 +6,7 @@ function(expr_compile_identifier)# ast context
   ans(data)
   set(res "
   # expr_compile_identifier
-  obj_get(\"\${this}\" trash \"${data}\")
+  obj_get(\"\${this}\"  \"${data}\")
   # end of expr_compile_identifier")
   return_ref(res)
 endfunction()

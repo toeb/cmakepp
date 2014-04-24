@@ -7,7 +7,7 @@ function(simpleInheritanceScenario)
 
 	obj_setfunction(
 		${animal} 
-		"function(eat result)\n  obj_get(\${this} food food) \n  \n return_value(\"I eat \${food}\") \n endfunction() "
+		"function(eat result)\n  obj_get(\${this}  food) \n ans(food)  \n return_value(\"I eat \${food}\") \n endfunction() "
 	)
 
 	obj_setprototype(${bird} ${animal})

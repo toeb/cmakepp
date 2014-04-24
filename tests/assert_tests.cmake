@@ -1,10 +1,5 @@
 function(test)
 
-
-
-
-
-
 # assert boolean value and continue 
 assert(false MESSAGE "should be true"  RESULT res)
 assert(NOT res)

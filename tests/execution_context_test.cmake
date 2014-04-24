@@ -65,17 +65,22 @@ function(execution_context_test)
 
 
 	# check if all properties are correct
-	obj_get(${obj} res test)
+	obj_get(${obj}  test)
+	ans(res)
 	assert(${res} STREQUAL "hello")
 
 
-	obj_get(${obj} res newobj)
-	obj_get(${newobj} res try1)
+	obj_get(${obj}  newobj)
+	ans(res)
+	obj_get(${newobj}  try1)
+	ans(res)
 	assert(${res} STREQUAL "you too?")
-	obj_get(${obj} res try1)
+	obj_get(${obj}  try1)
+	ans(res)
 	assert(${res} STREQUAL "hello")
 
-	obj_get(${obj} res try2)
+	obj_get(${obj}  try2)
+	ans(res)
 
 	assert(${res} STREQUAL "hello2 hello")
 

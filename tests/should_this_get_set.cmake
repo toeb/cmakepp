@@ -7,6 +7,7 @@ function(should_thisgetset)
 
 	obj_popcontext()
 	
-	obj_get(${obj} res "val2")
+	obj_get(${obj}  "val2")
+  ans(res)
 	assert(100 EQUAL ${res})
 endfunction()
