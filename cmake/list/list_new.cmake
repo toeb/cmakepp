@@ -1,5 +1,0 @@
-function(list_new result)
-	ref_new(list ${ARGN})
-  ans(res)
-	set(${result} ${res} PARENT_SCOPE)
-endfunction()

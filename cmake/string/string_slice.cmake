@@ -1,4 +1,4 @@
-
+# extracts a portion of the string negative indices translatte to count fromt back
 function(string_slice str start_index end_index)
   # indices equal => select nothing
 

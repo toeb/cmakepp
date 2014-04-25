@@ -11,6 +11,9 @@ function(test)
 
   ref_get(${listener} )
   ans(msgs)
+  map_tryget(global message_listeners)
+  ans(message_listeners)
+
   assert(EQUALS ${msgs} "hello")
 
   message(REMOVE_LISTENER ${listener})

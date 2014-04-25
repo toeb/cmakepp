@@ -33,8 +33,8 @@
     message("Details: ")
     foreach(descriptor ${descriptors})
       map_import(${descriptor})
-      list_to_string(res labels ", ")
-      
+      list_to_string( labels ", ")
+      ans(res)
       message("${displayName}: ${res}")
       if(description)
         message(PUSH)

@@ -1,4 +1,8 @@
-function(semver_compare result left right)
+# compares the semver on the left and right
+# returns -1 if left is more up to date
+# returns 1 if right is more up to date
+# returns 0 if they are the same
+function(semver_compare  left right)
  semver_parse(${left} )
  ans(left)
  semver_parse(${right})
@@ -7,23 +11,26 @@ function(semver_compare result left right)
 map_import(${left} left)
 map_import(${right} right)
 
- semver_component_compare(cmp ${left_major} ${right_major})
+ semver_component_compare( ${left_major} ${right_major})
+ ans(cmp)
  if(NOT ${cmp} STREQUAL 0)
-  return_value(${cmp})
+  return(${cmp})
 endif()
- semver_component_compare(cmp ${left_minor} ${right_minor})
+ semver_component_compare( ${left_minor} ${right_minor})
+ ans(cmp)
  if(NOT ${cmp} STREQUAL 0)
-  return_value(${cmp})
+  return(${cmp})
 endif()
  
- semver_component_compare(cmp ${left_patch} ${right_patch})
+ semver_component_compare( ${left_patch} ${right_patch})
+ ans(cmp)
  if(NOT ${cmp} STREQUAL 0)
-  return_value(${cmp})
+  return(${cmp})
 endif()
 
 
  if(right_prerelease AND NOT left_prerelease)
-  return_value(-1)
+  return(-1)
  endif()
 
  if(left_prerelease AND NOT right_prerelease)
@@ -31,28 +38,29 @@ endif()
  endif()
  # iterate through all identifiers of prerelease
  while(true)
-    list_first(left_current ${left_tags})
-    list_rest(left_tags ${left_tags})
+    list_pop_front(left_tags)
+    ans(left_current)
 
-    list_first(right_current ${right_tags})
-    list_rest(right_tags ${right_tags})
+    list_pop_front(right_tags)
+    ans(right_current)
 
     # check for larger set
     if(right_current AND NOT left_current)
-      return_value(1)
+      return(1)
     elseif(left_current AND NOT right_current)
-      return_value(-1)
+      return(-1)
     elseif(NOT left_current AND NOT right_current)
       # equal
-      return_value(0)
+      return(0)
     endif()
 
       # compare component
-   semver_component_compare(cmp ${left_current} ${right_current})
+   semver_component_compare( ${left_current} ${right_current})
+ans(cmp)
 
    #   message("asd '${left_current}'  '${right_current}' -> ${cmp}")
    if(NOT ${cmp} STREQUAL 0)
-    return_value(${cmp})
+    return(${cmp})
    endif()
 
 
@@ -60,6 +68,6 @@ endif()
     
  endwhile()
  
- return_value(0)
+ return(0)
 
 endfunction()

@@ -1,7 +1,6 @@
- function(string_isnumeric result str)
+ function(string_isnumeric str)
     if("_${str}" MATCHES "^_[0-9]+$")
-      return_value(true)
+      return(true)
     endif()
-      return_value(false)
-
+      return(false)
  endfunction()

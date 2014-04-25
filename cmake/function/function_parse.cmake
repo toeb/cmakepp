@@ -1,22 +1,5 @@
 
 function(function_parse function_ish)
-
-  global_get(__function_cache)
-  set(cache)
-  if(NOT __function_cache)
-      map_new()
-      ans(cache)
-      global_set(__function_cache ${cache})
-
-  endif()
-
-  if(NOT function_ish)
-    return()
-  endif()
-
-
-  string(MD5 hash "${function_ish}")
-
   is_function(function_type "${function_ish}")
   if(NOT function_type)
     return()
@@ -26,33 +9,34 @@ function(function_parse function_ish)
     return()
   endif()
 
-  parse_function(func "${function_string}")
+  function_signature_regex(regex)
+  get_function_signature(signature "${function_string}")
 
-  string(MD5 signature_hash "${func_name};${func_type};${func_args}")
-  string(MD5 code_hash "${function_string}")
-  string(MD5 source_hash "${function_ish};${function_type}")
+  string(REGEX REPLACE ${regex} "\\1" func_type "${signature}" )
+  string(REGEX REPLACE ${regex} "\\2" func_name "${signature}" )
+  string(REGEX REPLACE ${regex} "\\3" func_args "${signature}" )
 
+  string(STRIP "${func_name}" func_name)
 
-  nav("cache.${code_hash}")
-  ans(cached)
-  if(cached)
-    return(${cached})
+  # get args
+  string(FIND "${func_args}" ")" endOfArgsIndex)
+  string(SUBSTRING "${func_args}" "0" "${endOfArgsIndex}" func_args)
+
+  if(func_args)
+    string(REGEX MATCHALL "[A-Za-z0-9_\\\\-]+" all_args ${func_args})
   endif()
 
-  map_new()
-  ans(descriptor)
-  nav("cache.${code_hash}" ${descriptor})
-    
-  nav("descriptor.code" "${function_string}")
-  nav("descriptor.source_hash" "${source_hash}")
-  nav("descriptor.source_type" "${function_type}")
-  nav("descriptor.code_hash" "${code_hash}")
-  nav("descriptor.signature_hash" "${signature_hash}")
-  nav("descriptor.name" "${func_name}")
-  nav("descriptor.args" "${func_args}")
-  nav("descriptor.type" "${func_type}")
-  nav("descriptor.source" "${function_ish}")
+  string(SUBSTRING "${func_args}" 0 ${endOfArgsIndex} func_args)
+  string(TOLOWER "${func_type}" func_type)
 
-  return(${descriptor})
+
+  map_new()
+  ans(res)
+  map_set(${res} type "${func_type}")
+  map_set(${res} name "${func_name}")
+  map_set(${res} args "${all_args}")
+  map_set(${res} code "${function_string}")
+
+  return(${res})
 endfunction()
 

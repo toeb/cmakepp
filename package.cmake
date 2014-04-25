@@ -27,7 +27,6 @@ package_property(cmake_exports
 	cmake/function/save_function.cmake
 	cmake/function/rename_function.cmake
 	cmake/function/import_function_string.cmake
-	cmake/function/parse_function.cmake
 	cmake/function/inject_function.cmake
 	cmake/function/import_function.cmake
 	cmake/*.cmake

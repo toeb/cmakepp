@@ -1,4 +1,4 @@
-
+# normalizes the index of str (negativ indices are transformed into positive onces)
 function(string_normalize_index str index)
 
   set(idx ${index})

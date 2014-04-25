@@ -1,4 +1,4 @@
-
+# decodes an encoded list
   function(string_decode_list str)
     string_semicolon_decode("${str}")
     ans(str)

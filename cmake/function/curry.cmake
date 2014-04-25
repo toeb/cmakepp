@@ -5,7 +5,8 @@
   function(curry func)
     cmake_parse_arguments("" "" "as" "" ${ARGN})
     if(NOT _as)
-      new_function(_as)
+      function_new()
+      ans(_as)
     endif()
 
     set(args ${_UNPARSED_ARGUMENTS})
@@ -47,7 +48,8 @@
 
     # if func is not a command import it
     if(NOT COMMAND "${func}")
-      new_function(original_func)
+      function_new()
+      ans(original_func)
       import_function("${func}" as ${original_func} REDEFINE)
     else()
       set(original_func "${func}")

@@ -46,7 +46,8 @@ function(json_format_tokens result tokens)
 				set(indented "${indented};")
 			endif()
 
-			json_escape(token "${token}")
+			json_escape( "${token}")
+			ans(token)
 			set(indented "${indented}${token}")
 		endif()
 

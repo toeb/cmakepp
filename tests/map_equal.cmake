@@ -22,18 +22,22 @@ function(test)
 	map_append(${uut2} k3 "asd asda asd")
 	
 
-	map_equal(res ${uut} ${uut2})
+	map_equal(${uut} ${uut2})
+	ans(res)
 	assert(res)
 
-	map_equal(res ${uut2} ${uut})
+	map_equal(${uut2} ${uut})
+	ans(res)
 	assert(res)
 
 	map_set(${uut} k1 "ello")
 
-	map_equal(res ${uut} ${uut2})
+	map_equal(${uut} ${uut2})
+	ans(res)
 	assert(NOT res)
 
 
-	map_equal(res ${uut2} ${uut})
+	map_equal(${uut2} ${uut})
+	ans(res)
 	assert(NOT res)
 endfunction()

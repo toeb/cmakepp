@@ -20,23 +20,28 @@ function(import_function)
   #message("${_UNPARSED_ARGUMENTS}")
   set(function_name ${_as})
 
- # function_parse("${_import_function_func}")
- # ans(descriptor)
 
   # get function implementation this fails if _import_function_func is not a function
 
   get_function_string(function_string "${_import_function_func}")
   string(MD5 hash "${function_string}")
+
   # ohoh the redefine is not checked
   if(EXISTS "${cutil_cache_dir}/${hash}.cmake" AND NOT ${_REDEFINE})
     include ("${cutil_cache_dir}/${hash}.cmake")
    # message("cached found ${_import_function_func} at ${cutil_cache_dir}/${hash}:0")
     return()
   endif()
-  parse_function(_import_function_func "${function_string}")
+  function_parse(_import_function_func "${function_string}")
+  ans(func_info)
+
+
+  map_tryget("${func_info}" name)
+  ans(func_name)
 
   if(NOT function_name)
-    set(function_name "${func_name}")
+    map_tryget("${func_info}" name)
+    ans(function_name)
   endif()
 
 

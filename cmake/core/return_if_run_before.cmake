@@ -1,6 +1,7 @@
 macro( return_if_run_before id)
 	#string(MAKE_C_IDENTIFIER ${id} guard)
-	string_normalize_string(guard "{id}")
+	string_normalize( "{id}")
+  ans(guard)
 	get_property(was_run GLOBAL PROPERTY ${guard})
 	if(was_run)
 		return()

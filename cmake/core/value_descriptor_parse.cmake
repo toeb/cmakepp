@@ -14,9 +14,10 @@ function(value_descriptor_parse id)
   set(ismap)
   set(descriptor)
   if(${ARGC} EQUAL 1)
-
+    set(args ${ARGN})
     # it might be a map
-    list_first(first ${ARGN})
+    list_peek_front(args)
+    ans(first)
     map_isvalid("${first}" )
     ans(ismap)
 

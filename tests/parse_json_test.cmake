@@ -7,11 +7,13 @@ function(test)
 
 	element(END original)
 
-	json_serialize(json "${original}")	
+	json_serialize( "${original}")	
+	ans(json)
 	json_deserialize( "${json}")
 	ans(copy)
 
-	map_equal(res ${original} ${copy})
+	map_equal( ${original} ${copy})
+	ans(res)
 	assert(res)
 	
 
@@ -34,15 +36,18 @@ function(test)
 		value(a)
 		value(b)
 	element(END)
-	json_serialize(res ${uut} INDENTED)
+	json_serialize( ${uut} INDENTED)
+	ans(res)
 
 # check escape characters
-	json_serialize(res "\"\"\\\n\r\t")
+	json_serialize( "\"\"\\\n\r\t")
+	ans(res)
 	assert("${res}" STREQUAL "\"\\\"\\\"\\\\\\n\\r\\t\"")
 
 # cehck list handling
 	set(lst a b c)
-	json_serialize(res "${lst}")
+	json_serialize( "${lst}")
+	ans(res)
 	json_deserialize( "${res}")
 	ans(res)
 	assert(EQUALS ${lst} a b c)
@@ -58,7 +63,8 @@ function(test)
 	element(uut MAP)
 	value(KEY k1 a b c d)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	
 
 	json_deserialize( "\"a;b;c\"")
@@ -90,7 +96,8 @@ function(test)
 		value(a)
 		value(b)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("[{\"k1\":\"1\",\"k2\":\"2\",\"k3\":\"3\"},[\"1\",\"2\"],\"a\",\"b\"]" STREQUAL ${res})
 
 
@@ -122,44 +129,51 @@ function(test)
 	assert(EQUALS ${tokens} "{" "\"key\"" ":" "\"val\"" "}")
 
 	# serialize empty value
-	json_serialize(res "")
+	json_serialize( "")
+	ans(res)
 	assert(NOT res)
 
 
 	# serialze simple value
-	json_serialize(res "hello!")
+	json_serialize( "hello!")
+	ans(res)
 	assert(res)
 	assert("\"hello!\"" STREQUAL ${res})
 
 	# serialize a cmake list value
-	json_serialize(res "a;b;c")
+	json_serialize( "a;b;c")
+	ans(res)
 	assert(res)
 	assert(EQUALS "\"a\\\\;b\\\\;c\"" ${res})
 
 	#empty object
 	element(uut MAP)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("{}" STREQUAL ${res})
 
 
 	# empty list
 	element(uut LIST)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("[]" STREQUAL ${res})
 
 	# ref
 	ref_new(uut)
 	ref_set(${uut} "a b c")
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("\"a b c\"" STREQUAL ${res})
 
 	# list with one element
 	element(uut LIST)
 	value(1)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("[\"1\"]" STREQUAL ${res})
 
 	# list with multiple elements element
@@ -167,14 +181,16 @@ function(test)
 	value(1)
 	value(2)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("[\"1\",\"2\"]" STREQUAL ${res})
 
 	# object with single value
 	element(uut MAP)
 	value(KEY k1 val1)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("{\"k1\":\"val1\"}" STREQUAL ${res})
 
 	# object with multiple value
@@ -182,7 +198,8 @@ function(test)
 	value(KEY k1 val1)
 	value(KEY k2 val2)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("{\"k1\":\"val1\",\"k2\":\"val2\"}" STREQUAL ${res})
 
 
@@ -192,7 +209,8 @@ function(test)
 	value(KEY k1 1)
 	element(END)
 	element(END)
-	json_serialize(res ${uut})
+	json_serialize( ${uut})
+	ans(res)
 	assert("[{\"k1\":\"1\"}]" STREQUAL ${res})
 
 

@@ -31,6 +31,6 @@ function(test)
   stack_isempty(res)
   ans(res)
   assert(res)
-
+  
 
 endfunction()

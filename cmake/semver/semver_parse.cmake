@@ -50,15 +50,17 @@ function(semver_parse version_string)
   set(${_IS_VALID} true PARENT_SCOPE)
 
   # get version metadata and comparable part
-  string_split(parts "${version_string}" "\\+")
-  list_first(version_version ${parts})
-  list_rest(version_metadata ${parts})
+  string_split( "${version_string}" "\\+")
+  ans(parts)
+  list_pop_front(parts)
+  ans(version_version)
 
   # get version number part and prerelease part
-  string_split(parts "${version_version}" "-")
-  list_first(version_number ${parts})
-  list_rest(version_prerelease ${parts})
-
+  string_split( "${version_version}" "-")
+  ans(parts)
+  list_pop_front(parts)
+  ans(version_prerelease)
+  
   # get version numbers
   string(REGEX REPLACE "^${semver_version_regex}$" "\\1" version_major "${version_number}")
   string(REGEX REPLACE "^${semver_version_regex}$" "\\2" version_minor "${version_number}")

@@ -47,8 +47,7 @@ function(ast_parse_sequence )#definition stream create_node definition_id
   map_new()
   ans(node)
   map_set(${node} types ${definition_id})
-  #list_new(lst)
-  #ref_set(${lst} ${ast_sequence})
+  
   map_set(${node} children ${ast_sequence})
   return(${node})
 endfunction()

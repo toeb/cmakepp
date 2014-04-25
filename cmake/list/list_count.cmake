@@ -1,5 +1,5 @@
 
-function(list_count result lst predicate)
+function(list_count lst predicate)
 	lambda(predicate "${predicate}")
 	import_function("${predicate}" as predicate_function)
 	set(ct 0)
@@ -9,6 +9,6 @@ function(list_count result lst predicate)
 			math(EXPR ct "${ct} + 1")	
 		endif()
 	endforeach()
-	return_value("${ct}")
+	return("${ct}")
 endfunction()
 

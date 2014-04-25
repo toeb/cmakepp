@@ -1,11 +1,10 @@
 
 
   function(stack_isempty stack)
-    ref_get(${stack} )
-    ans(lst)
-    list(LENGTH lst len)
-    if(${len} EQUAL 0)
-      return(true)
+    map_tryget("${stack}" back)
+    ans(count)
+    if(count)
+      return(false)
     endif()
-    return(false)
+    return(true)
   endfunction()

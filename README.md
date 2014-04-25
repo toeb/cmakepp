@@ -343,7 +343,7 @@ assert(${result} STREQUAL "sample2")
 
 ## declaring, defining and calling a unique dynamic function
 ## =========================================================
-new_function(my_unique_function)
+function_new(my_unique_function)
 assert(COMMAND ${my_unique_function})
 message("${my_unique_function}")
 # my_unique_function now contains a unique string e.g. func_nTGSmkIGHL

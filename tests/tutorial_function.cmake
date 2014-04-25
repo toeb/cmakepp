@@ -37,7 +37,8 @@ assert("${result}" STREQUAL "sample2")
 
 ## declaring, defining and calling a unique dynamic function
 ## =========================================================
-new_function(my_unique_function)
+function_new()
+ans(my_unique_function)
 assert(COMMAND ${my_unique_function})
 # my_unique_function now contains a unique string e.g. func_nTGSmkIGHL
 # it is only declared. uncommenting the following line results in a FATAL_ERROR

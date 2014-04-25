@@ -1,4 +1,4 @@
-
+# removes the first value of the list and returns it
 function(list_pop_front  __list_pop_front_lst)
   set(res)
 

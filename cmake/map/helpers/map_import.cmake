@@ -9,7 +9,7 @@ function(map_import map)
 	ans(keys)
 
 	foreach(key ${keys})
-		map_get(${map}  ${key})
+		map_tryget(${map}  ${key})
 		ans(value)
 		set("${prefix}${key}" ${value} PARENT_SCOPE)
 	endforeach()

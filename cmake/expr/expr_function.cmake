@@ -6,7 +6,7 @@
 
     is_function(isfunc "${str}")
     if(isfunc)
-      new_function(trash)
+      function_new(trash)
       ans(func)
       import_function("${str}" as "${func}")
       return_ref(func)
@@ -15,7 +15,7 @@
     lambda_isvalid("${str}")
     ans(is_lambda)
     if(is_lambda)
-      new_function(trash)
+      function_new(trash)
       ans(func)
       lambda_import("${str}" "${func}")
       return_ref(func)

@@ -1,6 +1,7 @@
 function(file_tempdir result)
 	#string(MAKE_C_IDENTIFIER id "${ARGN}")
-	string_normalize_string(id "${ARGN}")
+	string_normalize( "${ARGN}")
+	ans(id)
 	set(tempdir "${cutil_temp_dir}/file_tempdir/${id}")
 	set(i 0)
 	while(true)

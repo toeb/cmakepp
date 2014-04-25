@@ -1,25 +1,22 @@
 function(json_tokenize result json)
-
 	#file(READ "${cutil_package_dir}/core/regex.txt" regex)
 	set(regex "(\\{|\\}|:|,|\\[|\\]|\"(\\\\.|[^\"])*\")")
 	string(REGEX MATCHALL "${regex}" matches "${json}")
-
-	
-	
 
 	# replace brackets with angular brackets because
 	# normal brackes are not handled properly by cmake
 	string(REPLACE  ";[;" ";<;" matches "${matches}")
 	string(REPLACE ";];" ";>;" matches "${matches}")
-
 	string(REPLACE "[" "†" matches "${matches}")
 	string(REPLACE "]" "‡" matches "${matches}")
 
 	set(tokens)
 	foreach(match ${matches})
-		string_char_at(char 0 "${match}")
+		string_char_at( 0 "${match}")
+		ans(char)
 		if("${char}" STREQUAL "[")
-			string_char_at(char -2 "${match}")
+			string_char_at( -2 "${match}")
+			ans(char)
 			if(NOT "${char}" STREQUAL "]")
 				message(FATAL_ERROR "json syntax error: no closing ']' instead: '${char}' ")
 			endif()

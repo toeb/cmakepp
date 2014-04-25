@@ -52,7 +52,8 @@
       return_ref(expr)
     endif()
 
-    string_char_at(first_char 0 "${expr}" )
+    string_char_at( 0 "${expr}" )
+    ans(first_char)
     if("${first_char}" STREQUAL "*")
       string_slice("${expr}" 1 -1)
       ans(ref)

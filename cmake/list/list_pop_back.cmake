@@ -1,4 +1,4 @@
-
+# removes the last element from list and returns it
 function(list_pop_back __list_pop_back_lst)
 
   if(NOT DEFINED ${__list_pop_back_lst})

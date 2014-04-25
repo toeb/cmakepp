@@ -39,8 +39,10 @@ function(element)
 
   	# element ends remove element from stack and retruns
   	if(_END)
-  		pop_back(element_stack res)
-  		peek_back(element_stack new_current)
+  		stack_pop(element_stack )
+  		ans(res)
+      stack_peek(element_stack )
+      ans(new_current)
   		set(current_element ${new_current} PARENT_SCOPE)
   		# if element(END var) set var to current element
   		if(name)
@@ -55,7 +57,8 @@ function(element)
       map_new()
       ans(res)
   	elseif(_LIST)
-      list_new(res)
+      list_new()
+      ans(res)
     else()
       map_new()
       ans(res)
@@ -83,6 +86,6 @@ function(element)
 
   	# set curretn_element and pushback element_stack
 	set(current_element ${res} PARENT_SCOPE)
-  	push_back(element_stack ${res})
+  	stack_push(element_stack ${res})
 endfunction()
 

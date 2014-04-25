@@ -15,7 +15,8 @@ function(map_query query)
 	string(REGEX REPLACE "where(.*)select(.*)" "\\2" select "${query}")
 	string(STRIP "${where}" where)
 	string(STRIP "${select}" select)
-	string_split(where_parts "${where}" " ")
+	string_split( "${where}" " ")
+	ans(where_parts)
 
 	#remove "from " from sources
 	string(SUBSTRING "${sources}" 5 -1 sources)

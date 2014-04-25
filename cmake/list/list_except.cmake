@@ -1,5 +1,5 @@
 # removes every element from minuend thats in subtrahend
-function(list_except difference minuend subtrahend)
+function(list_except minuend subtrahend)
 	set(res)
 	foreach(current ${minuend})
 		list(FIND subtrahend "${current}" idx)
@@ -7,5 +7,5 @@ function(list_except difference minuend subtrahend)
 			list(APPEND res ${current})
 		endif()
 	endforeach()
-	set(${difference} ${res} PARENT_SCOPE)
+  return_ref(res)
 endfunction()

@@ -1,8 +1,8 @@
 
- function(string_isempty result str)
+ function(string_isempty  str)
     
     if( "_" STREQUAL "_${str}" )
-      return_value(true)
+      return(true)
     endif()
-    return_value(false)
+    return(false)
  endfunction()

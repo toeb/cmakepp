@@ -1,4 +1,5 @@
-
+# splits a string into parts with nested structures
+# ie ( () () (( ) ())) ()  ( ())  is split into its main groups '( () () (( ) ()))','()','( ())'
   function(string_nested_split code open close)
     string(LENGTH "${code}" len)
     math(EXPR len "${len} -1")
@@ -6,7 +7,8 @@
     set(last_index 0)
     set(result)
     foreach(i RANGE 0 ${len})
-      string_char_at(c "${i}" "${code}")
+      string_char_at( "${i}" "${code}")
+      ans(c)
       #message("char ${i}: ${c}")
       if("${c}_" STREQUAL "${open}_")
         if("${openings}" EQUAL 0)
@@ -36,7 +38,7 @@
     endforeach()
     string_slice("${code}" "${last_index}" -1)
     ans(last_part)
-    string_isempty(trash "${last_part}")
+    string_isempty("${last_part}")
     ans(isempty)
     if(NOT isempty)
       list(APPEND result "${last_part}")

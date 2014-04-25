@@ -14,10 +14,10 @@
     ans(__function_call_paren_close)
     
     if(NOT "_${__function_call_paren_open}" STREQUAL "_(")
-      message(WARNING "expected opening parentheses")
+      message(WARNING "expected opening parentheses for function '${ARGN}'")
     endif()
     if(NOT "_${__function_call_paren_close}" STREQUAL "_)")
-      message(WARNING "expected closing parentheses")
+      message(WARNING "expected closing parentheses '${ARGN}'")
     endif()
     #message("---${ARGN}===${__function_call_func}")
     if(COMMAND "${__function_call_func}")

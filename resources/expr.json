@@ -1,14 +1,53 @@
 {
   "name":"oocmake",
+  "phases":[
+    {
+      "name":"tokenize",
+      "function":"token_stream_new(/1 /2)",
+      "input":[
+        "global",
+        "str"
+      ],
+      "output":[
+        "tokens"
+      ]
+    },
+    {
+      "name":"parse",
+      "function":"ast_parse(/1 /2 /3 /4 /5)",
+      "input":[
+        "tokens",
+        "root_definition",
+        "global",
+        "parsers",
+        "definitions"
+      ],
+      "output":[
+        "ast"
+      ]
+    },
+    {
+      "name":"compile",
+      "function":"ast_eval(/1 /2 /3 /4)",
+      "input":[
+        "ast",
+        "context",
+        "global",
+        "evaluators"
+      ],
+      "output":["symbol"]
+    }
+  ],
+
   "parsers":{
-    "token":"ast_parse_token",
+    "token":"ast_parse_token", 
     "any":"ast_parse_any",
     "sequence":"ast_parse_sequence",
     "list":"ast_parse_list",
     "empty":"ast_parse_empty",
     "end_of_stream":"ast_parse_end_of_stream"
   },
-  "evaluators":{
+  "evaluators":{ 
     "string":"expr_compile_string",
     "number":"expr_compile_number",
     "cmake_identifier":"expr_compile_cmake_identifier",
@@ -23,7 +62,12 @@
     "parentheses":"expr_compile_parentheses",
     "null_coalescing":"expr_compile_coalescing",
     "statements":"expr_compile_statements",
-    "statement":"expr_compile_statement"
+    "expression_statement":"expr_compile_expression_statement",
+    "function":"expr_compile_function",
+    "if":"expr_compile_if",
+    "while":"expr_compile_while",
+    "for":"expr_compile_for",
+    "foreach":"expr_compile_foreach"
   },
   "root_definition":"statements",
   "definitions":{
@@ -32,7 +76,90 @@
       "parser":"list",
       "element":"statement",
     },
-    "statement":{
+    "if":{
+      "node":"true",
+      "parser":"any",
+      "any":[
+        "if_else",
+        "if_only"
+      ]
+    },
+    "while_keyword":{
+      "parser":"token",
+      "regex":"while"
+    },
+    "for_keyword":{
+      "parser":"token",
+      "regex":"for"
+    },
+    "while_keyword":{
+      "parser":"token",
+      "regex":"while"
+    },
+    "for":{
+      "node":"true",
+      "parser":"sequence",
+      "sequence":[
+        "for_keyword",
+        "paren_open",
+        "expression",
+        "expression",
+        "expression",
+        "paren_close",
+        "statement"
+      ]
+    },
+    "while":{
+      "node":"true",
+      "parser":"sequence",
+      "sequence":[
+        "while_keyword",
+        "paren_open",
+        "expression",
+        "paren_close",
+        "statement"
+      ]
+    },
+    "foreach":{
+      "node":"true",
+      "parser":"sequence",
+      "sequence":[
+        "while_keyword",
+        "paren_open",
+        "expression",
+        "paren_close",
+        "statement"
+      ]
+    },
+    "if_only":{
+      "node":"true",
+      "parser":"sequence",
+      "sequence":[
+        "if_keyword",
+        "paren_open",
+        "expression",
+        "paren_close",
+        "statement"
+      ]
+    },
+    "if_else":{
+      "node":"true",
+      "parser":"sequence",
+      "sequence":[
+        "if_only",
+        "else_keyword",
+        "statement"
+      ]
+    },
+    "if_keyword":{
+      "parser":"token",
+      "regex":"if"
+    },
+    "else_keyword":{
+      "parser":"token",
+      "regex":"else"
+    },
+    "expression_statement":{
       "parser":"sequence",
       "node":"true",
       "sequence":[
@@ -40,13 +167,19 @@
         "end_of_statement"
       ]
     },
+    "statement":{
+      "parser":"any",
+      "any":[
+        "expression_statement"
+      ]
+    }
     "end_of_statement":{
       "parser":"any",
       "any":[
         "semicolon",
         "end_of_stream"
       ]
-    }
+    },
     "expression":{
       "node":"true",
       "parser":"list",
@@ -54,10 +187,57 @@
       "element":"operation",
       "end":"end_of_expression"
     },
+    "function":{
+      "node":"true",
+      "parser":"sequence",
+      "sequence":[
+        "function_signature",
+        "hyphen",
+        "angular_bracket_close",
+        "function_body"
+      ]
+    },
+    "hyphen":{
+      "parser":"token",
+      "regex":"[-]"
+    },
+    "angular_bracket_open":{
+      "parser":"token",
+      "regex":"[<]"  
+    },
+    "angular_bracket_close":{
+      "parser":"token",
+      "regex":"[>]"
+    }, 
+    "function_signature":{
+      "node":"true",
+      "parser":"list",
+      "element":"identifier",
+      "begin":"paren_open",
+      "end":"paren_close",
+      "separator":"comma"
+    },
+    "function_body":{
+      "parser":"any",
+      "any":[
+        "closure",
+        "expression"
+      ]
+    },
+    "closure":{
+      "parser":"sequence",
+      "node":"true",
+      "sequence":[
+        "brace_open",
+        "statements",
+        "brace_close"
+      ]
+    },
     "value":{
       "parser":"any",
       "any":[
         "assignment",
+        "function",
         "parentheses",
         "literal",
         "lvalue",

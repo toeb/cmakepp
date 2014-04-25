@@ -18,7 +18,8 @@ function(ParseHttpResponse result http_response)
 	string(SUBSTRING "${response}" ${beginOfContent} -1 content)
 
 	string(REGEX REPLACE "\;" "," header "${response}")
-	string_split(lines "${response}" "\n")
+	string_split( "${response}" "\n")
+	ans(lines)
 	set(contentStarted false)
 	set(content)
 
