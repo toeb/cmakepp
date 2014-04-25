@@ -9,14 +9,17 @@ function(test)
 	function(innerCommand arg)
 		return("innercommandresult ${arg}")
 	endfunction()
-	obj_callmember(${outer} AddCommandHandler test1 ${inner})
+	curry(obj_call("${inner}"))
+	ans(inner_func)
+	obj_callmember(${outer} AddCommandHandler test1 ${inner_func})
+
 	obj_callmember(${inner} AddCommandHandler test2 innerCommand)
 
 	obj_callmember(${outer} Run test1 test2 juha)
 
-	result(result)
-	assert(result)
-	assert(${result} STREQUAL "innercommandresult juha")
+	ans(res)
+	assert(res)
+	assert(${res} STREQUAL "innercommandresult juha")
 	
 
 	

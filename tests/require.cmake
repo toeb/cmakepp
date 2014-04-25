@@ -1,6 +1,6 @@
 function(test)
-  
- 
+    # currently unavailabe
+  return() 
   file(WRITE "${test_dir}/f1.txt" "asd")
   
   file_find("${test_dir}/f1.txt" "" "")

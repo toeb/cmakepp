@@ -1,7 +1,7 @@
 message("${CMAKE_CURRENT_LIST_DIR}/oo-cmake.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/oo-cmake.cmake")
 file(GLOB tests  "${CMAKE_CURRENT_LIST_DIR}/tests/*")
-
+set(package_dir "${CMAKE_CURRENT_LIST_DIR}")
 message("configuratiation")
 print_locals()
 foreach(test ${tests})

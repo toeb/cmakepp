@@ -5,14 +5,14 @@ function(test)
 ans(uut)
 
 	function(myCommand)
-		return_result(muha)
+		return(muha)
 	endfunction()
 	obj_callmember(${uut} AddCommandHandler test myCommand)
 
 	obj_callmember(${uut} Run test)
-	result(result)
-	assert(result)
-	assert(${result} STREQUAL "muha")
+	ans(res)
+	assert(res)
+	assert(${res} STREQUAL "muha")
 
 
 
