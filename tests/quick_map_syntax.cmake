@@ -42,6 +42,7 @@ function(test)
       end()
     end()
   end()
+  ans(res)
 
 
 endfunction()

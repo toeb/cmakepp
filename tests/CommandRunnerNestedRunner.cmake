@@ -1,11 +1,13 @@
 function(test)
 	message(STATUS "fails on linux when cutil test all is called")
 
-	obj_new(outer CommandRunner)
-	obj_new(inner CommandRunner)
+	obj_new( CommandRunner)
+	ans(outer)
+	obj_new( CommandRunner)
+	ans(inner)
 
 	function(innerCommand arg)
-		return_result("innercommandresult ${arg}")
+		return("innercommandresult ${arg}")
 	endfunction()
 	obj_callmember(${outer} AddCommandHandler test1 ${inner})
 	obj_callmember(${inner} AddCommandHandler test2 innerCommand)

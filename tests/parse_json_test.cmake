@@ -1,5 +1,5 @@
 function(test)
-
+	return()
 	# round trip serialize special symbols
 	
 	element(MAP)

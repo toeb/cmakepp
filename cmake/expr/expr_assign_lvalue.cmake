@@ -64,7 +64,8 @@
     while(true)
       set(next_scope)
       set(last_index ${current_index})
-      list_pop_front(current_index path )  
+      list_pop_front( path )  
+      ans(current_index)
       list_empty(path)
       ans(is_done)
 

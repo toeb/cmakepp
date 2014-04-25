@@ -1,7 +1,0 @@
-function(this_importmember name)
-	set(import ${ARGN})
-	if(NOT import)
-		set(import as "${name}" REDEFINE)
-	endif()
-	import_function("${${name}}" ${import})
-endfunction()

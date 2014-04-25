@@ -1,6 +1,0 @@
-function(obj_getownkeys this result)
-	map_keys(${this} )
-  ans(keys)
-	return_value(${keys})
-	return()
-endfunction()

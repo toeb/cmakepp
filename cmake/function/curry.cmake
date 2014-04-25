@@ -10,8 +10,10 @@
 
     set(args ${_UNPARSED_ARGUMENTS})
     # remove parentheses
-    list_pop_front(paren_open args)
-    list_pop_back(paren_close args)
+    list_pop_front( args)
+    ans(paren_open)
+    list_pop_back( args)
+    ans(paren_close)
 
     set(arguments_string)
     set(call_string)

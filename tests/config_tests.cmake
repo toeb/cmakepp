@@ -1,8 +1,8 @@
 function(test)
 
 
-	obj_new(config Configuration)
-
+	obj_new( Configuration)
+ans(config)
 	obj_callmember(${config} AddConfigurationFile global "${test_dir}/conf1.json")
 	obj_callmember(${config} AddConfigurationFile user "${test_dir}/conf2.json")
 	obj_callmember(${config} AddConfigurationFile local "${test_dir}/conf3.json")

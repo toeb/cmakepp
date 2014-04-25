@@ -1,5 +1,5 @@
 
-macro(this_callmember)
-	this_check()
-	obj_callmember(${this} ${ARGN})
-endmacro()
+function(this_callmember function)
+	obj_callmember("${this}" "${function}" ${ARGN})
+  return_ans()
+endfunction()

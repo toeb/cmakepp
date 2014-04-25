@@ -278,7 +278,7 @@ endfunction()
 
 Objects are an extension of the maps.  These are the functions which are available:
 ```
-obj_new(obj [Constructor])
+obj_new([Constructor]) returns a ref to a object
 obj_get(obj)
 obj_set(obj)
 obj_has(obj)
@@ -416,7 +416,8 @@ assert(${result} STREQUAL "a a b b")
 
 	## creating a object
 	## =================
-	obj_new(myobject)
+	obj_new()
+	ans(myobject)
 	# ${myobject} now is a reference to an object
 	obj_exists(${myobject} _exists)
 	assert(_exists)
@@ -426,7 +427,8 @@ assert(${result} STREQUAL "a a b b")
 	# oo-cmake does not contains automatic memory management
 	# you can however remove all objects by calling obj_cleanup 
 	# (a very crude way of garbage collection) I would suggest calling it at the end of cmake.
-	obj_new(object_to_delete)
+	obj_new()
+	ans(object_to_delete)
 	obj_delete(${object_to_delete})
 	# object_to_delete still contains the same reference
 	# but the object does not exists anymore and the following returns false
@@ -436,7 +438,8 @@ assert(${result} STREQUAL "a a b b")
 
 	## setting and setting property
 	## ==================
-	obj_new(myobject)
+	obj_new()
+	ans(myobject)
 	# call obj_set passing the object reference
 	# the propertyname 'key1' and the value 'val1'
 	# everything beyond 'key1' is saved (as a list)
@@ -485,7 +488,8 @@ assert(${result} STREQUAL "a a b b")
 	# obj_new creates a object which automatically inherits Object
 	# Object contains some functions e.g. to_string, print, ...
 	# 
-	obj_new(obj)
+	obj_new()
+	ans(obj)
 	obj_callmember(${obj} print)
 
 	# this prints all members
@@ -514,7 +518,8 @@ assert(${result} STREQUAL "a a b b")
 		this_set(myValue "hello")
 	endfunction()
 
-	obj_new(obj MyObject)
+	obj_new( MyObject)
+	ans(obj)
 	# type of object will now be MyObject
 	obj_gettype(${obj} type)
 	assert(type)
@@ -543,7 +548,8 @@ assert(${result} STREQUAL "a a b b")
 	function(anyfunction)
 		this_callmember(print)
 	endfunction()
-	obj_new(obj)
+	obj_new()
+	ans(obj)
 	obj_bindcall(${obj} anyfunction)
 	## print the object
 	# alternatively you can bind the function to the object

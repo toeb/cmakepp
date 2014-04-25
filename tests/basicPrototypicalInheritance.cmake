@@ -1,6 +1,8 @@
 function(basicPrototypicalInheritance)
-  obj_create(base)
-  obj_create(derived)
+  obj_new()
+  ans(base)
+  obj_new(derived)
+  ans(derived)
 
 
   obj_setprototype(${derived} ${base})
@@ -34,5 +36,4 @@ function(basicPrototypicalInheritance)
   assert("base prop2" STREQUAL "${val2}")
   assert("derived prop2" STREQUAL "${val3}")
   assert("derived prop3" STREQUAL "${val4}")
-
 endfunction()

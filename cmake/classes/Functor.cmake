@@ -1,5 +1,5 @@
 function(Functor)
-	obj_declarefunction(${__proto__} call)
+	proto_declarefunction(call)
 	function(${call})
 		
 	endfunction()

@@ -12,30 +12,31 @@ function(nav navigation_expression)
 
 
   set(args ${ARGN})
-  list_peek_front(first args)
+  list_peek_front( args)
+  ans(first)
   
   if("_${first}" STREQUAL _FORMAT)
-    list_pop_front(trash args)
+    list_pop_front( args)
     map_format( "${args}")  
     ans(args)
   endif()
 
 
   if("_${first}" STREQUAL _ASSIGN OR "_${first}" STREQUAL _= OR "_${first}" STREQUAL _*)
-    list_pop_front(trash args)
+    list_pop_front( args)
     map_navigate(args "${args}")
   endif()
 
 
   if("_${first}" STREQUAL _CLONE_DEEP)
-    list_pop_front(trash args)
+    list_pop_front( args)
     map_navigate(args "${args}")
     map_clone_deep("${args}")
     ans(args)
   endif()
 
   if("_${first}" STREQUAL _CLONE_SHALLOW)
-    list_pop_front(trash args)
+    list_pop_front( args)
     map_navigate(args "${args}")
     map_clone_shallow("${args}")
     ans(args)

@@ -1,7 +1,8 @@
 function(test)
 	
 	message(STATUS "fails on linux when cutil test all is called")
-	obj_new(uut CommandRunner)
+	obj_new( CommandRunner)
+ans(uut)
 
 	function(myCommand)
 		return_result(muha)

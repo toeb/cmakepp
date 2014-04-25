@@ -1,10 +1,10 @@
 
-function(list_peek_back result __list_peek_back_lst)
+function(list_peek_back  __list_peek_back_lst)
   if(NOT DEFINED ${__list_peek_back_lst})
-    return_value()
+    return()
   endif()
   list(LENGTH ${__list_peek_back_lst} len)
   math(EXPR len "${len} - 1")
   list(GET ${__list_peek_back_lst} "${len}" res)
-  set(${result} ${res} PARENT_SCOPE)
+  return_ref(res)
 endfunction()

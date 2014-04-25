@@ -1,0 +1,11 @@
+function(this_declarecalloperation out_function_name)
+  new_function(callfunc)
+  map_set_special("${this}" call "${callfunc}")
+  set(${out_function_name} ${callfunc} PARENT_SCOPE)
+endfunction()
+
+function(obj_declarecalloperation obj out_function_name)
+  new_function(callfunc)
+  map_set_special("${obj}" call "${callfunc}")
+  set("${out_function_name}" "${callfunc}" PARENT_SCOPE)  
+endfunction()  

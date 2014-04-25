@@ -15,8 +15,8 @@ function(list_parse_descriptor descriptor)
   set(cut_off ${max})
 
   # remove first arg as its the flag used to start this value
-  list_pop_front(used_label value_args)
-
+  list_pop_front( value_args)
+ans(used_label)
   # list length
   list(LENGTH value_args len)
 

@@ -6,9 +6,12 @@
    # message("wooooaoaat? ${ARGN}")
     set(__function_call_args ${ARGN})
 
-    list_pop_front(__function_call_func __function_call_args)
-    list_pop_front(__function_call_paren_open __function_call_args)
-    list_pop_back(__function_call_paren_close __function_call_args)
+    list_pop_front( __function_call_args)
+    ans(__function_call_func)
+    list_pop_front( __function_call_args)
+    ans(__function_call_paren_open)
+    list_pop_back( __function_call_args)
+    ans(__function_call_paren_close)
     
     if(NOT "_${__function_call_paren_open}" STREQUAL "_(")
       message(WARNING "expected opening parentheses")
@@ -19,7 +22,11 @@
     #message("---${ARGN}===${__function_call_func}")
     if(COMMAND "${__function_call_func}")
    #   message("function")
-      eval("${__function_call_func}(${__function_call_args})")
+      set(__function_call_args2)
+      foreach(__function_call_args_arg ${__function_call_args})
+        set(__function_call_args2 "${__function_call_args2} \"${__function_call_args_arg}\"")
+      endforeach()
+      eval("${__function_call_func}(${__function_call_args2})")
       return_ans()
     endif()
 

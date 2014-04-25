@@ -3,34 +3,37 @@ function(test)
 
 	#print_locals()
 	function(ClassAB)
-		#message("protoA ${__proto__}")
-		obj_declarefunction(${__proto__} methodA)
+
+		proto_declarefunction(methodA)
 	endfunction()
 	function(ClassBB)
 		#message("protoB ${__proto__}")
-		obj_declarefunction(${__proto__} methodB)
+		proto_declarefunction(methodB)
 	endfunction()
 
 
 
-	obj_new(objA ClassAB)
+	obj_new( ClassAB)
+	ans(objA)
 
-	obj_new(objB ClassBB)
+	obj_new( ClassBB)
+	ans(objB)
 
 	ref_print(${objA})
 	ref_print(${objB})
 
 
 
-	obj_has(${objA} AhasmethodA methodA)
-	obj_has(${objA} AhasmethodB methodB)
+	obj_has(${objA}  methodA)
+	ans(AhasmethodA)
+	obj_has(${objA}  methodB)
+	ans(AhasmethodB)
+	obj_has(${objB}  methodA)
+	ans(BhasmethodA)
+	obj_has(${objB}  methodB)
+	ans(BhasmethodB)
 
-	obj_has(${objB} BhasmethodA methodA)
-	obj_has(${objB} BhasmethodB methodB)
-
-	#obj_callmember(${objA} print)
-	#obj_callmember(${objB} print)
-
+	
 	assert( AhasmethodA)
 	assert(NOT AhasmethodB)
 	assert(NOT BhasmethodA)

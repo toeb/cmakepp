@@ -9,7 +9,7 @@ function(obj_default_callmember this key)
     message(FATAL_ERROR "member does not exists '${this}.${key}'")
   endif()
   # this elevates all values of obj into the execution scope
-  obj_import("${this}")  
+  #obj_import("${this}")  
   function_call("${member_function}" (${ARGN}))
   return_ans()
 endfunction()

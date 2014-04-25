@@ -10,7 +10,8 @@ function(test)
   endfunction()
 
 
-  obj_new(uut TheTestClass)
+  obj_new( TheTestClass)
+  ans(uut)
   obj_callmember(${uut} method)
   ans(res)
 

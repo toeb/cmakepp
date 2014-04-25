@@ -1,11 +1,11 @@
 function(Object)
 	#formats the current object 
-	obj_declarefunction(${__proto__} to_string)
+	proto_declarefunction(to_string)
 
 	function(${to_string} )
 		set(res)
 #		debug_message("to_string object ${this}")
-		obj_getkeys(${this} keys)
+		obj_keys(${this} keys)
 
 		foreach(key ${keys})
 			obj_get(${this}  ${key})				
@@ -21,7 +21,8 @@ function(Object)
 				set(value "[function]")
 			elseif(object_found)
 				get_filename_component(fn ${value} NAME_WE)
-				obj_gettype(${value} type)
+				obj_gettype(${value} )
+				ans(type)
 				if(NOT type)
 					set(type "")
 				endif()
@@ -49,7 +50,7 @@ function(Object)
 	endfunction()
 
 	# prints the current object to the console
-	obj_declarefunction(${__proto__} print)
+	proto_declarefunction(print)
 	function(${print})
 		#debug_message("printing object ${this}")
 		obj_callmember(${this} "to_string" str )
