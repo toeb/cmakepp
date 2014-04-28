@@ -1,6 +1,7 @@
   function(string_split_parts str length)
     ref_new()
     ans(first_node)
+    
     set(current_node ${first_node})
     while(true)      
       string(LENGTH "${str}" len)       

@@ -1,5 +1,6 @@
 # 
 function(obj_callmember obj key)
+  #message("obj ${obj} key ${key} argn ${ARGN}")
   map_get_special("${obj}" "call_member")
   ans(call_member)
   if(NOT call_member)
