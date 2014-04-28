@@ -1,5 +1,6 @@
 
   function(lang target context)    
+    #message("target ${target}")
     obj_get(${context} phases)
     ans(phases)
 
@@ -8,7 +9,8 @@
     # get target value from
     obj_get(${context} "${target}")
     ans(current_target)
-    if(NOT current_target)
+    list(LENGTH current_target len)
+    if(NOT ${len} GREATER 0)
       message(FATAL_ERROR "missing target '${target}'")
     endif()
 
@@ -32,14 +34,17 @@
     obj_get("${current_target}" "input")
     ans(required_inputs)
 
-
-
     # setup required imports
     map_new()
     ans(inputs)
     foreach(input ${required_inputs})
+        #message(PUSH)
+        #message("getting ${input} ${required_inputs}")
+
         lang("${input}" ${context})
         ans(res)
+        #message("got ${res} for ${input}")
+        #message(POP)
         map_set(${inputs} "${input}" "${res}")
     endforeach()
 
@@ -58,11 +63,13 @@
     foreach(key ${keys})
       map_tryget(${inputs} "${key}")
       ans(val)
+      string(REPLACE "\\" "\\\\"  val "${val}")
+      string(REPLACE "\"" "\\\"" val "${val}")
       set(arguments_string "${arguments_string} \"${val}\"")
     endforeach()
-
     # call curried function - note that context is available to be modified
     set(func_call "${func}(${arguments_string})")
+    ##message("lang: func call ${func_call}")
     eval("${func_call}")
     ans(res)
     obj_set(${context} "${target}" "${res}")

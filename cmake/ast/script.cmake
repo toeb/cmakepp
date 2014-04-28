@@ -43,7 +43,7 @@ function(script str)
       string(REPLACE "$" "\\$" escaped "${escaped}")
       map_tryget(${context} code)
       ans(code)
-      message("caching_result in ${obj_file}")
+      message("compiled expression to ${obj_file}")
       file(WRITE "${obj_file}" "${code}\nset(__ans \"${escaped}\")")
       if(code)
         eval("${code}")
@@ -60,7 +60,9 @@ function(script str)
 
     eval("${symbol}")
     ans(res)
+
     if(NOT ismap)
+
       map_promote(${global})
     endif()
     return_ref(res)

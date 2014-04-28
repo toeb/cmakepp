@@ -60,7 +60,7 @@
   ${original_func}(${call_string} \${ARGN})
   return_ans()
 endfunction()")
-  # message("${evaluate}")
+   #message("curry: ${evaluate}")
     eval("${evaluate}")
     return_ref(_as)
   endfunction()
