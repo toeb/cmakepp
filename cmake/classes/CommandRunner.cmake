@@ -61,7 +61,7 @@ function(CommandRunner)
 			return()
 		endif()
 
-		function_call("${handler}" (${args}))
+		call("${handler}" (${args}))
 		return_ans()
 	endfunction()
 

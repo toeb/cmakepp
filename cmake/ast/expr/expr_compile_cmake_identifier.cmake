@@ -8,7 +8,11 @@ function(expr_compile_cmake_identifier)
   
   set(res "
   #expr_compile_cmake_identifier
-  set_ans_ref(${identifier})
+  if(COMMAND \"${identifier}\")
+    set_ans(\"${identifier}\")
+  else() 
+    set_ans_ref(\"${identifier}\") 
+  endif()
   # end of expr_compile_cmake_identifier")
   return_ref(res)
 endfunction()

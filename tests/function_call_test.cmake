@@ -4,7 +4,7 @@ function(test)
   return()
   endfunction()
 
-  function_call(fu())
+  call(fu())
   ans(res)
   assert(NOT res)
 
@@ -14,7 +14,7 @@ function(test)
     return("myvalue")
   endfunction()
 
-  function_call(fu1())
+  call(fu1())
   ans(res)
   assert("${res}" STREQUAL "myvalue")
 
@@ -23,7 +23,7 @@ function(test)
     return("${arg}${arg}")
   endfunction()
 
-  function_call(fu2(1))
+  call(fu2(1))
   ans(res)
   assert("${res}" STREQUAL "11")
 
@@ -32,7 +32,7 @@ function(test)
   return("${arg2}${arg1}")
   endfunction()
 
-  function_call(fu3(12 34))
+  call(fu3(12 34))
   ans(res)
   assert("${res}" STREQUAL "3412")
 
@@ -42,27 +42,27 @@ function(test)
   endfunction()
   set(var myfu)
 
-  function_call(${var}(12 34))
+  call(${var}(12 34))
   ans(res)
   assert("${res}" STREQUAL "3412")
 
 
   # imported function
-  function_call("function(fruhu arg)\nreturn(\${arg}\${arg})\nendfunction()"(ab))
+  call("function(fruhu arg)\nreturn(\${arg}\${arg})\nendfunction()"(ab))
   ans(res)
   assert("${res}" STREQUAL "abab")
 
   # lambda function
-  function_call("()->message(hello)"())
+  call("()->message(hello)"())
 
   # 
-  function_call("()->return(muuu)"())
+  call("()->return(muuu)"())
   ans(res)
   assert("${res}" STREQUAL "muuu")
 
   # 
   set(myfuncyvar "()->return(mewto)")
-  function_call(myfuncyvar())
+  call(myfuncyvar())
   ans(res)
   assert("${res}" STREQUAL "mewto")
 
@@ -71,7 +71,7 @@ function(test)
     return("mewthree")
   endfunction()
   set(myfuncyvar fu5)
-  function_call(myfuncyvar())
+  call(myfuncyvar())
   ans(res)
   assert("${res}" STREQUAL "mewthree")
 
@@ -79,10 +79,45 @@ function(test)
 
 
   nav(my.test.object "()->return(mewfour)")
-  function_call(my.test.object())
+  call(my.test.object())
   ans(res)
   assert("${res}" STREQUAL "mewfour")
 
+
+
+function(f6)
+  return("f6")
+endfunction()
+set(f6b f6)
+call(f6b())
+ans(res)
+assert("${res}" STREQUAL f6b)
+
+
+function(TestClass44)
+this_set(muha asd)
+  this_declarecalloperation(op)
+  function(${op})
+    return("callop ${ARGN}")
+  endfunction()
+  proto_declarefunction(func)
+  function(${func})
+    this_get(muha)
+    return("func ${muha} ${ARGN}")
+  endfunction()
+endfunction()
+
+obj_new(TestClass44)
+ans(obj)
+
+call(obj(1))
+ans(res)
+assert("${res}" STREQUAL "callop 1")
+
+
+call(obj.func(1))
+ans(res)
+assert("${res}" STREQUAL "func asd 1")
 
 
 endfunction()

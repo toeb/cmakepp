@@ -25,26 +25,22 @@ function(expr_compile_function) # context, ast
 
   list_contains(body_types closure)
   ans(is_closure)
-  #list_contains(body_types expression)
-  #ans(is_expression)
+  
   if(is_closure)
-   # message("is_closure")
-    map_tryget(${body_ast} children)
+   map_tryget(${body_ast} children)
     ans(body_ast)
-#  elseif(is_expression)
-   # message("is_expression")
+
   endif()
 
+  make_symbol()
+  ans(symbol)
  # message("body_types ${body_types}")
 
   ast_eval(${body_ast} ${context})
   ans(body)
 
-set(res "
-#expr_compile_function
-function_new()
-ans(left)
-function(\"\${left}\"${signature_vars})
+map_append_string(${context} code "#expr_compile_function
+function(\"${symbol}\"${signature_vars})
   map_new()
   ans(local)  
   map_capture(\"\${local}\" this global${signature_vars})
@@ -53,5 +49,8 @@ function(\"\${left}\"${signature_vars})
 endfunction()
 #end of expr_compile_function")
   
+
+  set(res "set_ans(\"${symbol}\")")
+
   return_ref(res)  
 endfunction()

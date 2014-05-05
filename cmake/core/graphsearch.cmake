@@ -1,5 +1,10 @@
   function(graphsearch)
     cmake_parse_arguments("" "" "EXPAND;PUSH;POP" "" ${ARGN})
+
+    if(NOT _EXPAND)
+      message(FATAL_ERROR "graphsearch: no expand function set")
+    endif()
+
     import_function("${_EXPAND}" as gs_expand REDEFINE)
     import_function("${_PUSH}" as gs_push REDEFINE)
     import_function("${_POP}" as gs_pop REDEFINE)
@@ -24,5 +29,6 @@
       foreach(successor ${successors})
         gs_push(${successor})
       endforeach()
+      
     endwhile()
   endfunction()

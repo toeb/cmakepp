@@ -6,5 +6,8 @@
     ans(language)
     obj_setprototype("${ctx}" "${language}")
     lang("${target}" "${ctx}")
-    return_ans()
+    ans(res)
+
+    
+    return_ref(res)
   endfunction()

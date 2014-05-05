@@ -8,9 +8,9 @@ function(ref_new)
 		ref_set(__global_ref_count "${index}")
 		if(ARGN)
 			set(type "${ARGV0}")
-			ref_set("ref:${index}.__type__" "${type}")
+			ref_set(":${index}.__type__" "${type}")
 		endif()
-		return("ref:${index}")
+		return(":${index}")
 	endfunction()
 
 	ref_new(${ARGN})

@@ -1,4 +1,3 @@
-
   function(parse_any rstring)
     # get defintiions for any
     map_get(${definition} any)

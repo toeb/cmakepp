@@ -1,6 +1,6 @@
 # 
 function(obj_callmember obj key)
-  #message("obj ${obj} key ${key} argn ${ARGN}")
+  #message("obj_callmember ${obj}.${key}(${ARGN})")
   map_get_special("${obj}" "call_member")
   ans(call_member)
   if(NOT call_member)
@@ -8,7 +8,7 @@ function(obj_callmember obj key)
     return_ans()
     #set(call_member obj_default_callmember)
   endif()
-  function_call("${call_member}" ("${obj}" "${key}" ${ARGN}))
+  call("${call_member}" ("${obj}" "${key}" ${ARGN}))
   return_ans()
 endfunction()
 

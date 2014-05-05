@@ -1,6 +1,6 @@
 
   # no output except through return values or referneces
-  function(function_call)
+  function(call)
     return_reset()
     # I used garbled variable names to keep from hiding parent scope varaibles
    # message("wooooaoaat? ${ARGN}")
@@ -32,7 +32,7 @@
 
     if(DEFINED "${__function_call_func}")
    #  message("defined")
-      function_call("${${__function_call_func}}"(${__function_call_args}))
+      call("${${__function_call_func}}"(${__function_call_args}))
       return_ans()
     endif()
 
@@ -50,8 +50,11 @@
       ans(key)
       propref_get_ref("${__function_call_func}")
       ans(ref)
+
       obj_callmember("${ref}" "${key}" ${__function_call_func})
+
     endif()
+
 
 
     lambda_isvalid("${__function_call_func}")      
@@ -63,6 +66,13 @@
       return_ans()
     endif()
 
+
+    if(DEFINED "${__function_call_func}")
+      call("${__function_call_func}"(${__function_call_args}))
+      return_ans()
+    endif()
+
+
     is_function(is_func "${__function_call_func}")
     if(is_func)
    #   message("importing ${__function_call_func}(${__function_call_args})")
@@ -71,12 +81,29 @@
       return_ans()
     endif()
 
+    if("${__function_call_func}" MATCHES "^[a-z0-9A-Z_-]+\\.[a-z0-9A-Z_-]+$")
+      string_split_at_first(__left __right "${__function_call_func}" ".")
+      ref_isvalid("${__left}")
+      ans(__left_isref)
+      if(__left_isref)
+        obj_callmember("${__left}" "${__right}" ${__function_call_args})  
+        return_ans()
+      endif()
+      ref_isvalid("${${__left}}")
+      ans(__left_isrefref)
+      if(__left_isrefref)
+        obj_callmember("${${__left}}" "${__right}" ${__function_call_args})
+        return_ans()
+      endif()
+    endif()
+
     nav(__function_call_import = "${__function_call_func}")
     if(__function_call_import)
     #  message("nav")
-      function_call("${__function_call_import}"(${__function_call_args}))
+      call("${__function_call_import}"(${__function_call_args}))
       return_ans()
     endif()
+
    # message("nothin")
    message(FATAL_ERROR "tried to call a non-function: ${__function_call_func}")
   endfunction()

@@ -239,7 +239,7 @@ I have written a couple of usefull (if not essential) functions with which manag
 eval(string)			# executes the given cmake code
 function_new()			# returns a unqiue name for a function
 function_import(function_ish as function_name) # imports a function under the specified name
-function_call(function_ish([args ...])) # calls a function
+call(function_ish([args ...])) # calls a function
 function_info(function_ish)	# returns info on name, arguments, type of function
 function_inject(function_ish)	# imports a function, injecting before call, after call data
 ```

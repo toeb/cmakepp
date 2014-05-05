@@ -1,14 +1,33 @@
 function(test)
+  
 
-  #language("${package_dir}/resources/json-language.json")
+  function(TestClassX)
+    message("instance x")
+    this_set(x 3)
+    this_set(y ${ARGV0})
+    this_set(z ${ARGV1})
+  endfunction()
+  script("new TestClassX('asd','bsd')")
+  ans(res)
+  assert(DEREF "{res.x}" STREQUAL 3)
+  assert(DEREF "{res.y}" STREQUAL asd)
+  assert(DEREF "{res.z}" STREQUAL bsd)
+
+   #language("${package_dir}/resources/json-language.json")
   language("${package_dir}/resources/expr.json")
   ans("lang")
   message("${lang}:'${package_dir}/resources/expr.json'")
   
+  function(testfu)
+    message("argn ${ARGN}")
+  endfunction()
 
-  script("(asd_asd, bsd_bsd)->{[bsd_bsd,asd_asd];}")
+  script(" $testfu(()->'muhkuh', ()->'nuhkuh')")
+  
+
+  script("(asd_asd, bsd_bsd)->{[bsd_bsd,asd_asd]; }")
   ans(res)
-  function_call("${res}"(a 1))
+  call("${res}"(a 1))
   ans(res)
   assert(EQUALS ${res} 1 a)
 

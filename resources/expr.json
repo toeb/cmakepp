@@ -58,17 +58,18 @@
     "identifier":"expr_compile_identifier",
     "list":"expr_compile_list",
     "new_object":"expr_compile_new_object",
-    "assignment":"expr_compile_assignment",
+    "assignment":"expr_compile_assignment", 
     "parentheses":"expr_compile_parentheses",
-    "null_coalescing":"expr_compile_coalescing",
+    "null_coalescing":"expr_compile_coalescing", 
     "statements":"expr_compile_statements",
     "expression_statement":"expr_compile_expression_statement",
     "function":"expr_compile_function",
     "if":"expr_compile_if",
     "while":"expr_compile_while",
     "for":"expr_compile_for",
-    "foreach":"expr_compile_foreach"
-  },
+    "foreach":"expr_compile_foreach",
+    "new":"expr_compile_new"
+  }, 
   "root_definition":"statements",
   "definitions":{
     "statements":{
@@ -84,17 +85,22 @@
         "if_only"
       ]
     },
-    "while_keyword":{
-      "parser":"token",
-      "regex":"while"
-    },
-    "for_keyword":{
+    "for_keyword":{ 
       "parser":"token",
       "regex":"for"
     },
     "while_keyword":{
       "parser":"token",
       "regex":"while"
+    },
+    "new":{
+      "parser":"sequence",
+      "node":"true",
+      "sequence":[
+        "new_keyword",
+        "identifier",
+        "call"
+      ]
     },
     "for":{
       "node":"true",
@@ -242,7 +248,8 @@
         "literal",
         "lvalue",
         "list",
-        "new_object"
+        "new_object",
+        "new",
       ]
     },
     "lvalue":{
@@ -378,7 +385,8 @@
     "identifier":{
       "parser":"token",
       "node":"true",
-      "regex":"([a-zA-Z_-][a-zA-Z0-9_\\-]*)"
+      "regex":"([a-zA-Z_-][a-zA-Z0-9_\\-]*)",
+      "except":"(new|for|while)"
     },
     "cmake_identifier":{
       "parser":"sequence",

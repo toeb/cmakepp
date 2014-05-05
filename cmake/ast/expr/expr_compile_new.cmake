@@ -1,10 +1,22 @@
-function(expr_compile_call)
-  map_tryget(${ast}  children) 
+function(expr_compile_new)
+#json_print(${ast})
+  map_tryget(${ast} children)
+  ans(children)
+
+  list_extract(children className_ast call_ast)
+
+  map_tryget(${className_ast} data)
+  ans(className)
+
+  map_tryget(${call_ast} children)
   ans(argument_asts)
+
+
+ # message("class name is ${className} ")
+
   set(arguments)
   set(evaluation)
   set(i 0)
-
 
   make_symbol()
   ans(symbol)
@@ -21,10 +33,12 @@ function(expr_compile_call)
   endforeach()
 
   set(res "
-  # expr_compile_call 
-  ${evaluation}
-  call(\"\${left}\"(${arguments}))
-  # end of expr_compile_call")
+#expr_compile_new
+${evaluation}
+obj_new(\"${className}\" ${arguments})
+#end of expr_compile_new
+  ")
 
-  return_ref(res)
+
+return_ref(res)
 endfunction()

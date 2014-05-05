@@ -27,7 +27,7 @@ function(my_function arg)
   return("${arg}")
 endfunction()
 set(function_name my_function)
-function_call(${function_name} (sample2))
+call(${function_name} (sample2))
 ans(result)
 assert("${result}" STREQUAL "sample2")
 
@@ -48,7 +48,7 @@ function(${my_unique_function} arg1 arg2)
 	return("${arg2} ${arg1}" )
 endfunction()
 # call function
-function_call(${my_unique_function} (world hello))
+call(${my_unique_function} (world hello))
 ans(res)
 assert(${res} STREQUAL "hello world")
 
@@ -60,7 +60,7 @@ assert(${res} STREQUAL "hello world")
 # be sure to escape the string correctly
 # WARNING using ; and ${ARGN} or carriage returns may lead to unexpected results 
 # incorrectly escaping variables will be cause of many a bug
-function_call("function(fu arg1 arg2)\n return(\"\${arg1} \${arg1} \${arg2} \${arg2}\") \n endfunction()" (a b))
+call("function(fu arg1 arg2)\n return(\"\${arg1} \${arg1} \${arg2} \${arg2}\") \n endfunction()" (a b))
 ans(res)
 assert("${res}" STREQUAL "a a b b")
 

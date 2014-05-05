@@ -1,11 +1,12 @@
 
 function(target_register target_name)
-  message("registering target ${target_name}")
   set(args ${ARGN})
-  element(MAP)
-    value(KEY name ${target_name})
-    value(KEY sources ${ARGN})
-  element(END target)
+  map()
+    kv(name ${target_name})
+    kv(sources ${ARGN})
+  end()
+  ans(target)
+
   map_append(global targets ${target})
-  ref_print(${target})
+
 endfunction()

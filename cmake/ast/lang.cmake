@@ -7,18 +7,21 @@
    
 
     # get target value from
+    obj_has(${context} "${target}")
+    ans(has_target)
+    if(NOT has_target)
+      message(FATAL_ERROR "missing target '${target}'")        
+    endif()
     obj_get(${context} "${target}")
     ans(current_target)
-    list(LENGTH current_target len)
-    if(NOT ${len} GREATER 0)
-      message(FATAL_ERROR "missing target '${target}'")
-    endif()
 
+    if(NOT DEFINED current_target)
+        return()
+    endif()
 
     # check if phase
     list_contains(phases "${current_target}")
-    ans(isphase)
-
+    ans(isphase)    
     # if not a phase just return value
     if(NOT isphase)
       return_ref("current_target")

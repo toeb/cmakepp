@@ -41,7 +41,6 @@ function(test)
   ans(res)
   assert("${res}_" STREQUAL "_")
 
-  return()
   string(ASCII 28 file_separator)
   string(ASCII 29 group_separator)
   string(ASCII 30 record_separator)

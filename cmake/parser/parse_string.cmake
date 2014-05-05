@@ -16,7 +16,7 @@
     ans(parser_id)
     
     #
-    #message(FORMAT "${parser_id} parser parsing ${definition_id}..")
+   # message(FORMAT "${parser_id} parser parsing ${definition_id}..")
     #message(PUSH)
     __call_string_parser("${parser_id}" "${rstring}")
     ans(res)

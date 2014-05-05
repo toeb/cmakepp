@@ -2,11 +2,11 @@ function(map)
   set(key ${ARGN})
 
   # get current map
-  stack_peek(ref:quick_map_map_stack)
+  stack_peek(:quick_map_map_stack)
   ans(current_map)
 
   # get current key
-  stack_peek(ref:quick_map_key_stack)
+  stack_peek(:quick_map_key_stack)
   ans(current_key)
 
   if(ARGN)
@@ -26,8 +26,8 @@ function(map)
 
 
   # push new map and new current key on stacks
-  stack_push(ref:quick_map_map_stack ${new_map})
-  stack_push(ref:quick_map_key_stack "")
+  stack_push(:quick_map_map_stack ${new_map})
+  stack_push(:quick_map_key_stack "")
 
   return_ref(new_map)
 endfunction()
