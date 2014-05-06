@@ -5,6 +5,7 @@ function(ast str language)
   # set default root definition to expr
   set(root_definition ${ARGN})
   if(NOT root_definition)
+  
     map_get("${language}"  root_definition)
     ans(root_definition)
   endif()

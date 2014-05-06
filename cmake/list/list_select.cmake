@@ -1,7 +1,7 @@
 
 function(list_select lst selector)
 	lambda(selector "${selector}")
-	import_function("${selector}" as selector_function REDEFINE)
+	function_import("${selector}" as selector_function REDEFINE)
 	foreach(item ${lst})
 		selector_function(res ${item})
 		list(APPEND result_list ${res})

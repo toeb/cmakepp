@@ -3,7 +3,7 @@ function(list_order __list_order_lst comparator)
 	
 	lambda(comparator "${comparator}")
 	#message("${comparator}")
-	import_function("${comparator}" as comparator_function)
+	function_import("${comparator}" as comparator_function)
 
 
 	

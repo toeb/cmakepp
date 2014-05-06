@@ -5,7 +5,7 @@ function(test)
 
 	assert(NOT COMMAND thistestfunction)
 	assert(NOT COMMAND myfu123unique)
-	import_function(${funcfile} as thistestfunction)
+	function_import(${funcfile} as thistestfunction)
 	assert(COMMAND thistestfunction)
 	assert(NOT COMMAND myfu123unique)
 	

@@ -385,13 +385,13 @@ assert(${result} STREQUAL "b a ")
 # the REDEFINE flag allows afunction to be overwritten (not setting it would cause an error if a function fuu already exists (2. and 3. call))
 # a usefull application iterating a list of files containing unit test functions and calling each with the same name
 # also when working with packages this allows functions to be defined in a specified namespace
-import_function(my_function as fuu REDEFINE)
+function_import(my_function as fuu REDEFINE)
 fuu(sample4)
 assert(${result} STREQUAL "sample4")
-import_function(${file_name} as fuu REDEFINE)
+function_import(${file_name} as fuu REDEFINE)
 fuu(a b) 
 assert(${result} STREQUAL "a b")
-import_function("function(fu arg1 arg2) \n message(nuna) \nset(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" as fuu REDEFINE)
+function_import("function(fu arg1 arg2) \n message(nuna) \nset(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" as fuu REDEFINE)
 fuu(a b)
 assert(${result} STREQUAL "a a b b")
 

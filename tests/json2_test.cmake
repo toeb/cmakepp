@@ -1,14 +1,5 @@
 function(test)
-
   
-  language("${package_dir}/resources/json.json")
-
-
-
-  function(json2 input) 
-    lang2(output json2 input "${input}" def "json")
-    return_ans()
-  endfunction()
   
   json2("\"hello world\"")
   ans(res)

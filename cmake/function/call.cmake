@@ -76,7 +76,7 @@
     is_function(is_func "${__function_call_func}")
     if(is_func)
    #   message("importing ${__function_call_func}(${__function_call_args})")
-      import_function("${__function_call_func}" as __function_call_import REDEFINE)
+      function_import("${__function_call_func}" as __function_call_import REDEFINE)
       __function_call_import(${__function_call_args})
       return_ans()
     endif()

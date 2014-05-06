@@ -1,7 +1,7 @@
 
 function(list_where __list_where_lst predicate)
 	lambda(predicate "${predicate}")
-	import_function("${predicate}" as predicate_function)
+	function_import("${predicate}" as predicate_function)
 	foreach(item ${${__list_where_lst}})
 		predicate_function(res2 "${item}")
 		if(res2)

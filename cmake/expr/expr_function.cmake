@@ -8,7 +8,7 @@
     if(isfunc)
       function_new(trash)
       ans(func)
-      import_function("${str}" as "${func}")
+      function_import("${str}" as "${func}")
       return_ref(func)
     endif()
 

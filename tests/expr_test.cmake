@@ -1,4 +1,5 @@
 function(test)
+
   
 
   function(TestClassX)
@@ -14,8 +15,7 @@ function(test)
   assert(DEREF "{res.z}" STREQUAL bsd)
 
    #language("${package_dir}/resources/json-language.json")
-  language("${package_dir}/resources/expr.json")
-  ans("lang")
+
   message("${lang}:'${package_dir}/resources/expr.json'")
   
   function(testfu)

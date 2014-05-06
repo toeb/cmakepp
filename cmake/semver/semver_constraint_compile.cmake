@@ -1,7 +1,12 @@
 function(semver_constraint_compile constraint)
   set(ops "\\(\\)\\|,!=~><")
+    
+  if("${constraint}" STREQUAL "*")
+    set(constraint ">=0.0.0")
+  endif()
   string(REGEX REPLACE ">=([^${ops}]+)" "(>\\1|=\\1)" constraint "${constraint}")
   string(REGEX REPLACE "<=([^${ops}]+)" "(<\\1|=\\1)" constraint "${constraint}")
+
 
   string(REPLACE "!" ";NOT;" constraint "${constraint}")
   string(REPLACE "," ";AND;" constraint "${constraint}")

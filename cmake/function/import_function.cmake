@@ -3,17 +3,17 @@
 # todo function(thefunction result) \n fails
 # todo \r\n\t in signature
 # todo function name starting with function fail
-function(import_function)
+function(function_import)
   cmake_parse_arguments("" "REDEFINE;ONCE" "as" "" ${ARGN})
   #_UNPARSED_ARGUMENTS
   if(NOT _UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "import_function: missing function to import")
+    message(FATAL_ERROR "function_import: missing function to import")
   endif()
 
   list(LENGTH _UNPARSED_ARGUMENTS arg_count)
 
   if(${arg_count} LESS 1)  
-    message(FATAL_ERROR "invalid usage of import_function")
+    message(FATAL_ERROR "invalid usage of function_import")
   endif()
 
   list(GET _UNPARSED_ARGUMENTS 0 _import_function_func)
@@ -75,7 +75,7 @@ function(import_function)
   inject_function(function_string  "${function_string}" ON_CALL "${on_call}" BEFORE_FUNCTION "${before_function}" RENAME "${function_name}")
 
   file(WRITE "${cutil_cache_dir}/${hash}.cmake" "${function_string}")
- # message("import_function ${function_string}" )
+  
   import_function_string("${function_string}")
  
   

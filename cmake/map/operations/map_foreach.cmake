@@ -1,6 +1,6 @@
 function(map_foreach _action _query)
 	# import action function
-	import_function("${_action}" as _map_foreach_action REDEFINE)
+	function_import("${_action}" as _map_foreach_action REDEFINE)
 
 	# create a map that maps element name to container
 	string_split( "${_query}" ",")

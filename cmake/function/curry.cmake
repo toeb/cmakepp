@@ -50,7 +50,7 @@
     if(NOT COMMAND "${func}")
       function_new()
       ans(original_func)
-      import_function("${func}" as ${original_func} REDEFINE)
+      function_import("${func}" as ${original_func} REDEFINE)
     else()
       set(original_func "${func}")
     endif()

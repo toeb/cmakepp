@@ -5,9 +5,9 @@
       message(FATAL_ERROR "graphsearch: no expand function set")
     endif()
 
-    import_function("${_EXPAND}" as gs_expand REDEFINE)
-    import_function("${_PUSH}" as gs_push REDEFINE)
-    import_function("${_POP}" as gs_pop REDEFINE)
+    function_import("${_EXPAND}" as gs_expand REDEFINE)
+    function_import("${_PUSH}" as gs_push REDEFINE)
+    function_import("${_POP}" as gs_pop REDEFINE)
 
     # add all arguments to stack
     foreach(node ${_UNPARSED_ARGUMENTS})

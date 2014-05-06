@@ -1,7 +1,7 @@
 
 function(list_count lst predicate)
 	lambda(predicate "${predicate}")
-	import_function("${predicate}" as predicate_function)
+	function_import("${predicate}" as predicate_function)
 	set(ct 0)
 	foreach(item ${lst})
 		predicate_function(res "${item}")
