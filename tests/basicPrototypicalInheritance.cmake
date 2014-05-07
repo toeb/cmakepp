@@ -1,7 +1,7 @@
 function(basicPrototypicalInheritance)
   obj_new()
   ans(base)
-  obj_new(derived)
+  obj_new()
   ans(derived)
 
 
