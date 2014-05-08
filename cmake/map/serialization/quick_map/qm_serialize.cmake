@@ -25,16 +25,17 @@ function(qm_serialize)
     map_append_string(${context} qm "${indentation}key(\"${map_element_key}\")\n")
   endfunction()
 
-
-
-
   function(qm_literal_indented)
     map_tryget(${context} indentation)
     ans(indentation)
-    map_append_string(${context} qm "${indentation}val(\"${node}\")\n")
+    
+    cmake_string_escape("${node}")
+    ans(node)
+    map_append_string(${context} qm "${indentation} val(\"${node}\")\n")
     
     return()
   endfunction()
+
 
    map()
     kv(value              qm_literal_indented)
@@ -55,9 +56,5 @@ function(qm_serialize)
   endfunction()
   #delegate
   qm_serialize(${ARGN})
-  return_ans()
-endfunction()
-function(qm_deserialize quick_map_string)
-  eval("${quick_map_string}")
   return_ans()
 endfunction()

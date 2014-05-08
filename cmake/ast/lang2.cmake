@@ -4,6 +4,7 @@
     ans(ctx)
     language("${language}")
     ans(language)
+    
     obj_setprototype("${ctx}" "${language}")
     lang("${target}" "${ctx}")
     ans(res)

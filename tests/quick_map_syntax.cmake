@@ -1,4 +1,9 @@
 function(test)
+
+  val("asd")
+
+
+
   # empty map
   map()
   end()

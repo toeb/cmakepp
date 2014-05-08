@@ -1,6 +1,16 @@
 function(test)
-  
-  
+
+  file(READ "${package_dir}/resources/json.json" txt)
+  json2("${txt}")
+
+  return()
+
+
+  json2("true")
+  ans(res)
+  assert("${res}" STREQUAL "true")
+
+
   json2("\"hello world\"")
   ans(res)
   assert("${res}" STREQUAL "hello world")
@@ -9,9 +19,6 @@ function(test)
   ans(res)
   assert("${res}" STREQUAL "3123")
 
-  json2("true")
-  ans(res)
-  assert("${res}" STREQUAL "true")
 
   json2("false")
   ans(res)
@@ -34,6 +41,7 @@ function(test)
   assert(DEREF "{res.a}" STREQUAL "a")
   assert(DEREF "{res.b}" STREQUAL "b")
 
+return()
   json2("[1,2]")
   ans(res)
   assert(EQUALS 1 2 ${res})

@@ -24,7 +24,7 @@
         map_set(${definition} "parser" "sequence")
         map_set(${definition} "sequence" "${expression}")
         
-        json_print(${definition})
+#        json_print(${definition})
         parse_sequence("${rstring}")
         ans(res)
 

@@ -4,6 +4,7 @@
     string(REPLACE ")"  ";);" str "${str}")
     string(REPLACE "("  ";(;" str "${str}")
     #string(REPLACE "\"" "\\\"" str "${str}")
+    
     #message("curry2... '${str}'")
     #string(REPLACE "" "" str "${str}")
 

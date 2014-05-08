@@ -7,9 +7,8 @@
     map_get(${definition} regex)
     ans(regex)
 
-    #message("parsing '${parser_id}' parser (regex: '${regex}') for '${str}'")
+ #   message("parsing '${parser_id}' parser (regex: '${regex}') for '${str}'")
     # try to take regex from string
-#    message("str is ${str} and regex is '${regex}'")
     
     map_tryget(${definition} ignore_regex)
     ans(ignore_regex)
@@ -17,9 +16,9 @@
     list(LENGTH ignore_regex len)
     if(len)
    # message("ignoring ${ignore_regex}")
-        string_take_regex(str "${ignore_regex}")
+    string_take_regex(str "${ignore_regex}")
     endif()
-
+#   message("str is '${str}'")
     string_take_regex(str "${regex}")
     ans(match)
 
@@ -29,7 +28,7 @@
     if(NOT len)
       return()
     endif()
-
+ #   message("matched '${match}'")
 
     map_tryget(${definition} replace)
     ans(replace)
