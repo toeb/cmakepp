@@ -1,12 +1,12 @@
 # iterates a the graph with root nodes in ${ARGN}
-# in depth first order
+# in breadth first order
 # expand must consider cycles
-function(dfs expand)
-  stack_new()
-  ans(stack)
-  curry(stack_push("${stack}" /1))
+function(bfs expand)
+  queue_new()
+  ans(queue)
+  curry(queue_push("${queue}" /1))
   ans(push)
-  curry(stack_pop("${stack}" ))
+  curry(queue_pop("${queue}"))
   ans(pop)
   graphsearch(EXPAND "${expand}" PUSH "${push}" POP "${pop}" ${ARGN})
 endfunction()

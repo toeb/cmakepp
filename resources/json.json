@@ -1,5 +1,5 @@
 {
-  "name":"json2",
+   "name":"json2",
   "phases":[
     {
       "name":"parse",
@@ -64,7 +64,7 @@
 
     "string":{
       "parser":"regex",
-      "regex":"\"(([^\"]|\\|\\\")*)\"",
+      "regex":"\"(([^\"]|\\\\|(\\([\"tnr])))*)\"",
       "replace":"\\1",
       "ignore_regex":"[ \n\r\t]+"
     },
@@ -75,9 +75,9 @@
     },
     "boolean":{
       "parser":"regex",
-      "regex":"true|false",
+      "regex":"true|false", 
       "ignore_regex":"[ \n\r\t]+"
-    },
+    }, 
     "whitespace":{
       "parser":"regex",
       "regex":"[ \n\r\t]+"

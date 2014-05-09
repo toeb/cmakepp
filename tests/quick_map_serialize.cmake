@@ -20,4 +20,16 @@ qm_deserialize(${res})
 ans(res)
 
 message("${res}")
+
+
+map()
+kv("val1" "[^\n\t\r   ()()(123]")
+end()
+ans(in)
+qm_serialize("${in}")
+ans(res)
+message("${res}")
+qm_deserialize("${res}")
+ans(res)
+json_print(${res})
 endfunction()

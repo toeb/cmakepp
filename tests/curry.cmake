@@ -1,10 +1,18 @@
 function(test)
 
- 
+
+
 
   function(funcA a b c)
     return("${a}${b}${c}")
   endfunction()
+
+
+  curry(funcA(/1 "]" "["))
+  ans(res)
+  call(${res}(1))
+  ans(res)
+  assert("${res}" STREQUAL "1][")
 
   curry(funcA(/2 nana /1) as funcB)
   funcB("1" "2")
@@ -31,6 +39,9 @@ function(test)
     funcB(1 2)
 ans(res)
 assert("${res}" STREQUAL "1234")
+
+
+  
 
 
 endfunction()

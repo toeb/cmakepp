@@ -26,9 +26,7 @@ function(CommandRunner)
 			#ref_print(${commands})
 			message(FATAL_ERROR "${name}> AddCommandHandler: command '${command_name}' was already added")
 		endif()
-		if(NOT COMMAND "${command_handler}")
-			message(FATAL_ERROR "${name}> AddCommandHandler: commmand handler must be a valid cmake function")
-		endif()
+		
 
 		map_set(${commands} ${command_name} "${command_handler}")
 	endfunction()

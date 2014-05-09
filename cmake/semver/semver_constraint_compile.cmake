@@ -18,7 +18,6 @@ function(semver_constraint_compile constraint)
     list(REMOVE_DUPLICATES elements)
     list(REMOVE_ITEM elements "AND" "OR" "NOT" "(" ")" )
   endif()
-
   foreach(element ${elements})
     semver_constraint_element_isvalid(${element})
     ans(isvalid)

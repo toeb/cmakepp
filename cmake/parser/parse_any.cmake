@@ -3,9 +3,12 @@
     map_get(${definition} any)
     ans(any)
 
-    ref_get(${any})
-    ans(any)
-
+    ref_isvalid("${any}")
+    ans(isref)
+    if(isref)
+      ref_get(${any})
+      ans(any)
+    endif()
     # loop through defintions and take the first one that works
     foreach(def_id ${any})
       parse_string("${rstring}" "${def_id}")

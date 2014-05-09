@@ -60,19 +60,24 @@
     ans(func)
 
     # compile argument string
+
     map_keys(${inputs})
     ans(keys)
     set(arguments_string)
     foreach(key ${keys})
       map_tryget(${inputs} "${key}")
       ans(val)
-      string(REPLACE "\\" "\\\\"  val "${val}")
-      string(REPLACE "\"" "\\\"" val "${val}")
-      set(arguments_string "${arguments_string} \"${val}\"")
+      cmake_string_escape("${val}")
+      ans(val)
+      #message("key ${key} val ${val}")
+      #string(REPLACE "\\" "\\\\"  val "${val}")
+      #string(REPLACE "\"" "\\\"" val "${val}")
+      set(arguments_string "${arguments_string} ${val}")
     endforeach()
     # call curried function - note that context is available to be modified
     set(func_call "${func}(${arguments_string})")
-    ##message("lang: func call ${func_call}")
+ 
+   # message("lang: target '${target}'  func call ${func_call}")
     eval("${func_call}")
     ans(res)
     obj_set(${context} "${target}" "${res}")

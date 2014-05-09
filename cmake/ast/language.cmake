@@ -1,7 +1,7 @@
 
 
 function(language name)
-  map_isvalid(${name} )
+  map_isvalid(${name})
   ans(ismp)
   if(ismp)
     map_tryget(${name}  initialized)
@@ -9,7 +9,7 @@ function(language name)
     if(NOT initialized)
       language_initialize(${name})
     endif()
-    return_ref(language)
+    return_ref(name)
   endif()
 
   ref_get(language_map )

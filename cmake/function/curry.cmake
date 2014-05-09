@@ -18,19 +18,29 @@
 
     set(arguments_string)
     set(call_string)
-    
+
     set(bound_args)
     list(LENGTH args len)
 
-    
+
+    string_encode_bracket("${args}")
+    ans(args)
+
     set(indices)
     foreach(arg ${args})
+    
       if("${arg}" MATCHES "^/[0-9]+$")
+        # reorder argument
         string(SUBSTRING "${arg}" 1 -1 arg)
         list(APPEND indices "${arg}")
         set(arg_name "__arg_${arg}")
         set(call_string "${call_string} \"\${__arg_${arg}}\"")  
       else()
+        # curry single argument
+        cmake_string_escape("${arg}")
+        ans(arg)
+        string_decode_bracket("${arg}")
+        ans(arg)
         set(call_string "${call_string} \"${arg}\"")  
       endif()
 
@@ -57,9 +67,12 @@
 
     set(evaluate
 "function(${_as} ${arguments_string})${bound_args}
-  ${original_func}(${call_string} \${ARGN})
+  ${original_func}(${call_string})
   return_ans()
 endfunction()")
+
+
+   
    #message("curry: ${evaluate}")
     eval("${evaluate}")
     return_ref(_as)
