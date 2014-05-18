@@ -72,7 +72,7 @@
       #message("key ${key} val ${val}")
       #string(REPLACE "\\" "\\\\"  val "${val}")
       #string(REPLACE "\"" "\\\"" val "${val}")
-      set(arguments_string "${arguments_string} ${val}")
+      set(arguments_string "${arguments_string} \"${val}\"")
     endforeach()
     # call curried function - note that context is available to be modified
     set(func_call "${func}(${arguments_string})")

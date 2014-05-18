@@ -1,6 +1,5 @@
 function(test)
 
-  
 
   function(TestClassX)
     message("instance x")

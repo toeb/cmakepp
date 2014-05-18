@@ -1,9 +1,5 @@
 function(test)
 
-  file(READ "${package_dir}/resources/json.json" txt)
-  json2("${txt}")
-
-  return()
 
 
   json2("true")

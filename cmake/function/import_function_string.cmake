@@ -1,11 +1,5 @@
 
 function(import_function_string function_string)
-
-	random_file(file_name "${cutil_temp_dir}/_{{id}}.cmake")
-	save_function("${file_name}" "${function_string}")
-
-	include("${file_name}")
-	if(NOT cutil_keep_export)
-		file(REMOVE "${file_name}")
-	endif()
+  eval("${function_string}")
+  return()
 endfunction()

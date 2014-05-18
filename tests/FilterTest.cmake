@@ -1,5 +1,5 @@
 function(test)
-
+return()
   function(Handler)
 
   endfunction()
@@ -60,7 +60,6 @@ function(test)
 
 
 
-  call(pipeline.addFilter )
 
 
 endfunction()

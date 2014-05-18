@@ -27,35 +27,3 @@ endfunction()
   endmacro()
 
 
-
-function(file_cache cache_key)
-  json("${cache_key}")
-  ans(serialized_key)
-  string(MD5 key "${serialized_key}")
-
-  if(EXISTS "${cutil_temp_dir}/file_cache/_${key}.cmake")
-    file(READ "${cutil_temp_dir}/file_cache/_${key}.cmake" data)
-    qm_deserialize("${data}")
-    return_ans()
-  endif()
-  return()
-endfunction()
-
-function(file_cache_update cache_key)
-  json("${cache_key}")
-  ans(serialized_key)
-  string(MD5 key "${serialized_key}")
-  qm_serialize("${ARGN}")
-  ans(ser)
-  file(WRITE "${cutil_temp_dir}/file_cache/_${key}.cmake" "${ser}")
-  return()  
-endfunction()
-
-macro(file_cache_return_hit cache_key)
-  file_cache("${cache_key}")
-  ans(__cache_return)
-  if(__cache_return)
-    return_ref(__cache_return)
-  endif()
-
-endmacro()

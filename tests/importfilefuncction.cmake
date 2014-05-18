@@ -1,6 +1,6 @@
 function(test)
-	set(funcfile "${cutil_temp_dir}/tests/importfiletest.cmake")
-	file(REMOVE "${cutil_temp_dir}/tests")
+	set(funcfile "${test_dir}/importfiletest.cmake")
+	file(REMOVE "${test_dir}/tests")
 	file(WRITE ${funcfile} "function(myfu123unique) \n endfunction()")
 
 	assert(NOT COMMAND thistestfunction)

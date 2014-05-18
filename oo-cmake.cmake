@@ -2,67 +2,81 @@ cmake_minimum_required(VERSION 2.8.7)
 
 cmake_policy(SET CMP0007 NEW)
 cmake_policy(SET CMP0012 NEW)
-
-set_property(GLOBAL PROPERTY __global_ref_count 0)
-
-#todo put this somewhere else...
-function(function_called name caller)
-	get_property(count GLOBAL PROPERTY "call_count_${name}")
-	if(NOT count)
-		set_property(GLOBAL  APPEND PROPERTY "function_calls" "${name}")
-		set(count "0")
-	endif()
-	math(EXPR count "${count} + 1")
-	set_property(GLOBAL PROPERTY "call_count_${name}" "${count}")	
-	set_property(GLOBAL APPEND PROPERTY  "call_count_${name}_caller" "${caller}")
-endfunction()
-
-
+# needed in some functions
 include(CMakeParseArguments)
-if(NOT cutil_cache_dir)
-set(cutil_cache_dir "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/cache")
-endif()
-if(NOT cutil_temp_dir)
-set(cutil_temp_dir "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/tmp")
-endif()
-function(load_oocmake)
-	function(package_property name)
-		set("${name}" "${ARGN}" PARENT_SCOPE)
-	endfunction()
-	include("${CMAKE_CURRENT_LIST_DIR}/package.cmake")
-	
-	function (function_import function_path)
-		include("${function_path}")
-	endfunction()
-	set(all_functions)
-	foreach(export_expr ${cmake_exports})	
-		file(GLOB exported_functions "${CMAKE_CURRENT_LIST_DIR}/${export_expr}")
-		foreach(exported_function "${exported_functions}")
-			set(all_functions ${all_functions} ${exported_function})
-		endforeach()
-	endforeach()
-	
-	
-	list(REMOVE_DUPLICATES all_functions)
-	
-	foreach(exported_function ${all_functions})
-		if(NOT IS_DIRECTORY "${exported_function}")
-			#message(STATUS "importing ${exported_function}")
- 			function_import("${exported_function}" REDEFINE )
-		endif()
-	endforeach()
 
-endfunction()
-#load_oocmake()
-
+# setup some functions temporarily for pre run (these are just simplified versions of their originals and are soon replace)
 function(require file)
-	file(GLOB_RECURSE res "${CMAKE_CURRENT_LIST_DIR}/cmake/${file}.cmake")
+	file(GLOB_RECURSE res "${file}")
 	if(NOT res)
 		message(FATAL_ERROR "could not find required file for '${file}'")
 	endif()
-	#message("including ${res}")
 	foreach(file ${res})
 		include("${file}")
 	endforeach()
 endfunction()
-require(*)
+
+set(oocmake_tmp_dir "$ENV{TMP}")
+if(NOT oocmake_tmp_dir)
+
+	set(oocmake_tmp_dir "${CUTIL_CURRENT_BINARY_DIR}")
+endif()
+file(TO_CMAKE_PATH "${oocmake_tmp_dir}" oocmake_tmp_dir)
+
+function(oocmake_config key)
+	return("${oocmake_tmp_dir}")
+endfunction()
+
+
+
+## includes all cmake files of oocmake 
+require("${CMAKE_CURRENT_LIST_DIR}/cmake/*.cmake")
+
+## setup global variables
+map_set(global "command_line_args" ${ARGN})
+map_set(global "unused_command_line_args" ${ARGN})
+
+# setup oocmake config
+map()
+	kv(base_dir
+		LABELS --oocmake-base-dir
+		MIN 1 MAX 1
+		DISPLAY_NAME "oo-cmake installation dir"
+		DEFAULT "${CMAKE_CURRENT_LIST_DIR}"
+		)
+
+    kv(keep_temp 
+      LABELS --keep-tmp --keep-temp -kt 
+      MIN 0 MAX 0 
+      DESCRIPTION "does not delete temporary files after") 
+    kv(temp_dir
+    	LABELS --temp-dir
+    	MIN 1 MAX 1
+    	DESCRIPTION "the directory used for temporary files"
+    	DEFAULT "${oocmake_tmp_dir}/cutil/temp"
+    	)
+    kv(cache_dir
+    	LABELS --cache-dir
+    	MIN 1 MAX 1
+    	DESCRIPTION "the directory used for caching data"
+    	DEFAULT "${oocmake_tmp_dir}/cutil/cache"
+    	)
+    kv(log_level 
+      LABELS --log-level -ll 
+      MIN 1 MAX 1 
+      DESCRIPTION "sets the loglevel for messages" 
+      DEFAULT 3)
+    kv(debug_mode 
+      LABELS --debug -dbg -d 
+      MIN 0 MAX 0 
+      DESCRIPTION "enables debug mode")
+    kv(quiet_mode 
+      LABELS --quiet -q 
+      MIN 0 MAX 0 
+      DESCRIPTION "No output occurs")
+end()
+ans(oocmake_config_definition)
+
+# setup config_function for oocmake
+config_setup("oocmake_config" ${oocmake_config_definition})
+

@@ -73,7 +73,7 @@ function(list_equal)
 	lambda(lambda "${lambda}")
 
 	# import function string 
-	function_import("${lambda}" as comparator)
+	function_import("${lambda}" as comparator REDEFINE)
 		
 	set(res)
 	# compare list

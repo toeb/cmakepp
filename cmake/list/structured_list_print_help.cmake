@@ -18,7 +18,9 @@
       list(GET labels 0 first_label)
       set(current_help ${first_label})
 
-      if(${min} EQUAL 0)
+      if(NOT "${default}_" STREQUAL "_")
+        set(current_help "[${current_help} = ${default}]")
+      elseif(${min} EQUAL 0 )
         set(current_help "[${current_help}]")
       endif()
 

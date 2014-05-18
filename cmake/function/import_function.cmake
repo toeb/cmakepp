@@ -24,14 +24,8 @@ function(function_import)
   # get function implementation this fails if _import_function_func is not a function
 
   get_function_string(function_string "${_import_function_func}")
-  string(MD5 hash "${function_string}")
+ 
 
-  # ohoh the redefine is not checked
-  if(EXISTS "${cutil_cache_dir}/${hash}.cmake" AND NOT ${_REDEFINE})
-    include ("${cutil_cache_dir}/${hash}.cmake")
-   # message("cached found ${_import_function_func} at ${cutil_cache_dir}/${hash}:0")
-    return()
-  endif()
   function_parse(_import_function_func "${function_string}")
   ans(func_info)
 
@@ -57,11 +51,6 @@ function(function_import)
   
 
 
-  #code which is run once when a function is defined
-  set(before_function 
-    "#debug_message(\"imported ${function_name}  \")"
-  )
-
   if(COMMAND "${function_name}" AND NOT _REDEFINE)
     if(_ONCE)
       message(DEBUG LEVEL 6 "returning because '${function_name}' was already imported")
@@ -72,12 +61,6 @@ function(function_import)
 
 
 
-  inject_function(function_string  "${function_string}" ON_CALL "${on_call}" BEFORE_FUNCTION "${before_function}" RENAME "${function_name}")
-
-  file(WRITE "${cutil_cache_dir}/${hash}.cmake" "${function_string}")
-  
+  inject_function(function_string  "${function_string}" RENAME "${function_name}")
   import_function_string("${function_string}")
- 
-  
-
 endfunction()

@@ -1,5 +1,7 @@
 function(file_make_temporary result content)
-	random_file(rnd "${cutil_temp_dir}/file_make_temporary_{{id}}.tmp")
+  oocmake_config(temp_dir)
+  ans(temp_dir)
+	random_file(rnd "${temp_dir}/file_make_temporary_{{id}}.tmp")
 	file(WRITE ${rnd} "${content}")
  	return_value(${rnd})
 endfunction()

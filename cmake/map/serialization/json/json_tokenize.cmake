@@ -1,5 +1,4 @@
 function(json_tokenize result json)
-	#file(READ "${cutil_package_dir}/core/regex.txt" regex)
 	set(regex "(\\{|\\}|:|,|\\[|\\]|\"(\\\\.|[^\"])*\")")
 	string(REGEX MATCHALL "${regex}" matches "${json}")
 

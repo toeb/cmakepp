@@ -9,7 +9,7 @@ function(CommandRunner)
 
 	this_declarecalloperation(callfunc)
 	function(${callfunc})		
-		obj_callmember(${this} Run ${ARGN})
+		call(this.Run(${ARGN}))
 		return_ans()
 	endfunction()
 
@@ -41,9 +41,8 @@ function(CommandRunner)
 		set(cmd)
 		## check if any argument was specifed and set the cmd to the first one
 		if(args)
-			list(GET args 0 cmd)
-			#drop first argument
-			list(REMOVE_AT args 0)
+			list_pop_front(args)
+			ans(cmd)
 		endif()
 
 		# if no command is set return error message

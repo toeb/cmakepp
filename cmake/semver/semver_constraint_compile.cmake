@@ -29,6 +29,7 @@ function(semver_constraint_compile constraint)
  # message("elements ${elements}")
   nav(compiled_constraint.template "${constraint}")
   nav(compiled_constraint.elements "${elements}")
+  map_set_special(${compiled_constraint} "semver_constraint" true)
   return(${compiled_constraint})
 
 endfunction()

@@ -23,12 +23,14 @@ function(obj_new)
 
 	obj_setprototype(${instance} ${base})
 
-
 	set(__current_constructor ${constructor})
 	obj_callmember(${instance} __constructor__ ${args})
 	ans(res)
+
 	if(res)
 		set(instance "${res}")
 	endif()
+
+
 	return_ref(instance)
 endfunction()

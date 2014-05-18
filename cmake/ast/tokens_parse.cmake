@@ -43,7 +43,7 @@ function(tokens_parse token_definitions str)
     endforeach()
 
     if(NOT ok)
-      message("failed - not a token  @ ...${str}")
+#      message("failed - not a token  @ ...${str}")
       return()
     endif()
 
