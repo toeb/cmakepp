@@ -18,8 +18,7 @@ endfunction()
 
 set(oocmake_tmp_dir "$ENV{TMP}")
 if(NOT oocmake_tmp_dir)
-
-	set(oocmake_tmp_dir "${CUTIL_CURRENT_BINARY_DIR}")
+	set(oocmake_tmp_dir "${CMAKE_CURRENT_LIST_DIR}/tmp")
 endif()
 file(TO_CMAKE_PATH "${oocmake_tmp_dir}" oocmake_tmp_dir)
 
