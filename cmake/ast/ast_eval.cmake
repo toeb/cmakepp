@@ -30,7 +30,6 @@
       if(COMMAND "${eval_command}")
         ast_evaluator_table(${type})
         ans(res)
-      #  message("ans ${__ans}")
         return_ref(res)
       endif()
       #if(COMMAND "${eval_command}")
