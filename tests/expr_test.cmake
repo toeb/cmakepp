@@ -1,6 +1,5 @@
 function(test)
 
-
   function(TestClassX)
     message("instance x")
     this_set(x 3)
