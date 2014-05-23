@@ -1,14 +1,14 @@
-# creates a union from all all maps passed as ARGN and combines them in result
+# creates a union from all all maps passed as ARGN and combines them in the first
 # you can merge two maps by typing map_union(${map1} ${map1} ${map2})
 # maps are merged in order ( the last one takes precedence)
-function(map_union result)
+function(map_union)
 	set(lst ${ARGN})
-	
-	set(res ${${result}})
+	list_pop_front(lst)
+	ans(res)
 	if(NOT res)
-		map_new()
-    ans(res)
+		message(FATAL_ERROR "map_union: no maps passed")
 	endif()
+	# loop through the keys of every map	
 	foreach(map ${lst})
 		map_keys(${map} )
 		ans(keys)
@@ -18,6 +18,6 @@ function(map_union result)
 			map_set(${res} ${key} ${val})
 		endforeach()
 	endforeach()
-	return_value(${res})
+	return(${res})
 endfunction()
 

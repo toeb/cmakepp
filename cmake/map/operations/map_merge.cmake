@@ -1,7 +1,7 @@
 # creates a union from all all maps passed as ARGN and combines them in result
 # you can merge two maps by typing map_union(${map1} ${map1} ${map2})
 # maps are merged in order ( the last one takes precedence)
-function(map_merge result)
+function(map_merge )
 	set(lst ${ARGN})
 	
 	set(res ${${result}})
@@ -24,13 +24,14 @@ function(map_merge result)
 			ans(new_ismap)
 
 			if(new_ismap AND existing_ismap)
-				map_union(existing_val  ${val})
+				map_union(${existing_val}  ${val})
+				ans(existing_val)
 			else()
 				
 				map_set(${res} ${key} ${val})
 			endif()
 		endforeach()
 	endforeach()
-	return_value(${res})
+	return(${res})
 endfunction()
 

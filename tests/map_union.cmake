@@ -13,7 +13,10 @@ function(test)
 
 
 	#merge by overwriting map2 with map1
-	 map_union(res ${uut2} ${uut1})
+	map_new()
+	ans(res)
+	 map_union(${res} ${uut2} ${uut1})
+	 
 	 assert(res)
 	 map_keys(${res} )
 	 ans(keys)
@@ -30,7 +33,9 @@ function(test)
 	assert(${val} STREQUAL 2)
 
 	# merge in oposite direction
-	 map_union(res ${uut1} ${uut2})
+	map_new()
+	ans(res)
+	 map_union(${res} ${uut1} ${uut2})
 	 assert(res)
 	map_tryget(${res}  k1)
 	ans(val)
@@ -57,7 +62,8 @@ function(test)
 	element(END m2)
 
 	set(res)
-	map_merge(res ${m1} ${m2})
+	map_merge( ${m1} ${m2})
+	ans(res)
 	assert(DEREF "{res.elem1.k1}" STREQUAL "v1")
 	assert(DEREF "{res.elem1.k2}" STREQUAL "v2")
 endfunction()

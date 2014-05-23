@@ -25,6 +25,7 @@
     endif()
     set(result_list)
     while(true)
+
       # try to parse end of list if it was parsed stop iterating
       if(end)
         parse_string(${str} ${end})
@@ -66,6 +67,10 @@
     ref_get(${str})
     ans(str)
     ref_set(${rstring} "${str}")
-
+    
+    list(LENGTH return_list len)
+    if(NOT len)
+     # return("")
+    endif()
     return_ref(result_list)
   endfunction()

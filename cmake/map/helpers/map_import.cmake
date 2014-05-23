@@ -4,7 +4,7 @@ function(map_import map)
 		set(prefix "${ARGV1}_")	
 	endif()
 
-	map_check(${map})
+	map_check("${map}")
 	map_keys(${map} )
 	ans(keys)
 

@@ -9,7 +9,6 @@ function(map_get this key)
   get_property(property_val GLOBAL PROPERTY "${property_ref}")
   return_ref(property_val)  
 endfunction()
-
 # faster way of accessing map.  however fails if key contains escape sequences, escaped vars or @..@ substitutions
 # if thats the case comment out this macro
 macro(map_get __map_get_map __map_get_key)
@@ -18,7 +17,8 @@ macro(map_get __map_get_map __map_get_key)
   if(NOT __ans)
     get_property(__map_get_property_exists GLOBAL PROPERTY "${__map_get_property_ref}" SET)
     if(NOT __map_get_property_exists)
-      #json_print("${__map_get_map}")
+      json_print("${__map_get_map}")
+
       message(FATAL_ERROR "map '${__map_get_map}' does not have key '${__map_get_key}'")    
     endif()
   endif()  

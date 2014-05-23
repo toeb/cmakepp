@@ -1,8 +1,8 @@
-# returns true if value ${a} comes before value ${b} in list _lst
+# returns true if value ${a} comes before value ${b} in list __list_isinorder_lst
 # sets ${result} to true or false
-function(list_isinorder  _lst a b)
-	list(FIND _lst ${a} indexA)
-	list(FIND _lst ${b} indexB)
+function(list_isinorder  __list_isinorder_lst a b)
+	list(FIND ${__list_isinorder_lst} ${a} indexA)
+	list(FIND ${__list_isinorder_lst} ${b} indexB)
 	if(${indexA} LESS 0)
 		return(false)
 	endif()

@@ -1,5 +1,13 @@
 function(test)
+script("{valaa1:['asd']}")
+ans(res)
+assert(DEREF "{res.valaa1}" STREQUAL "asd")
 
+script("{ include:'hello', exclude:'asd'}")
+ans(res)
+assert(DEREF "{res.include}" STREQUAL "hello")
+assert(DEREF "{res.exclude}" STREQUAL "asd")
+  
   function(TestClassX)
     message("instance x")
     this_set(x 3)

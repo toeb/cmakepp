@@ -11,6 +11,8 @@ function(ast_parse stream definition_id )
       map_get(${ast_language}  definitions)
       ans(ast_definitions)
       function_import_table(${ast_parsers} __ast_call_parser)
+
+#      json_print(${ast_definitions})
   else()
       if(NOT ast_language)
           message(FATAL_ERROR "missing ast_language")

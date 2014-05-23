@@ -2,8 +2,8 @@ function(ast_parse_any )#definition stream create_node definition_id
   # check if definition contains "any" property
   map_tryget(${definition}  any)
   ans(any)
-  ref_get(${any})
-  ans(any)
+#  ref_get(${any})
+#  ans(any)
   
   # try to parse any of the definitions contained in "any" property
   set(node false)

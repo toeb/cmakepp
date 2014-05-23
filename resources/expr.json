@@ -75,7 +75,7 @@
     "statements":{
       "node":"true",
       "parser":"list",
-      "element":"statement",
+      "element":"statement"
     },
     "if":{
       "node":"true",
@@ -178,7 +178,7 @@
       "any":[
         "expression_statement"
       ]
-    }
+    },
     "end_of_statement":{
       "parser":"any",
       "any":[
@@ -249,7 +249,7 @@
         "lvalue",
         "list",
         "new_object",
-        "new",
+        "new"
       ]
     },
     "lvalue":{
@@ -372,6 +372,13 @@
       "sequence":[
         "key",
         "colon",
+        "key_value_value"
+      ]
+    },
+    "key_value_value":{
+      "parser":"any",
+      "any":[
+        "list",
         "expression"
       ]
     },
@@ -401,7 +408,7 @@
     }, 
     "nothing":{
       "parser":"empty",
-      "empty":"true"
+      "empty":"true" 
     },
     "colon":{
       "parser":"token",
@@ -461,7 +468,7 @@
     "string":{
       "parser":"token",
       "node":"true",
-      "regex":"'(([^']|\\')*)'",
+      "regex":"'(([^']|\\\\')*)'",
       "replace":"1"   
     },
     "number":{

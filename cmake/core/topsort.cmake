@@ -15,15 +15,13 @@ function(topsort get_hash expand)
     ans(mark)
     
     if("${mark}" STREQUAL "temp")
+      #cycle found
       return(true)
     endif()
     if(NOT mark)
-      #message("visited ${visited} hash ${hash}")
-      #json_print(${node})
       map_set("${visited}" "${hash}" temp)
       call("${expand}" ("${node}"))
       ans(successors)
-    #  message("successors: ${successors}")
       # visit successors
       foreach(successor ${successors})
         topsort_visit("${result}" "${visited}" "${successor}")

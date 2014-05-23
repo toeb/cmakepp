@@ -79,7 +79,8 @@
  
    # message("lang: target '${target}'  func call ${func_call}")
     eval("${func_call}")
-    ans(res)
+    ans(res)    
+   # message("res '${res}'")
     obj_set(${context} "${target}" "${res}")
 
     # set single output to return value

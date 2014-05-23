@@ -13,10 +13,12 @@
     foreach(def_id ${any})
       parse_string("${rstring}" "${def_id}")
       ans(res)
+
       list(LENGTH res len)
       if("${len}" GREATER 0)
         return_ref(res)
       endif()
+
     endforeach()
 
     # return nothing if nothing matched

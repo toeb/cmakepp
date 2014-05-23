@@ -17,15 +17,14 @@
     
     #
    # message(FORMAT "${parser_id} parser parsing ${definition_id}..")
-    #message(PUSH)
+   # message(PUSH)
     __call_string_parser("${parser_id}" "${rstring}")
     ans(res)
-    #message(POP)
-    #message(FORMAT "${parser_id} parser returned: ${res} rest is '{*rstring}'")
-    #list(LENGTH res len)
-    #if(len)
-    #  message("parsed '${res}' with ${parser_id} parser")
-   # endif()   
-
+   # message(POP)
+   # message(FORMAT "${parser_id} parser returned: ${res} rest is ")
+   #list(LENGTH res len)
+ #  if(len)
+   #  message("parsed '${res}' with ${parser_id} parser")
+   #endif()   
     return_ref(res)
   endfunction()

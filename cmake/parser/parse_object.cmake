@@ -80,7 +80,6 @@ function(parse_object rstring)
         set(has_result true)
       endif()
       
-
       map_set("${result_object}" "${object_key}" "${object_value}")
 
     endwhile()    

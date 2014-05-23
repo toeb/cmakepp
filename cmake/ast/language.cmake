@@ -1,5 +1,3 @@
-
-
 function(language name)
   map_isvalid(${name})
   ans(ismp)

@@ -11,8 +11,8 @@ function(ast_parse_sequence )#definition stream create_node definition_id
     message(FATAL_ERROR "expected a sequence or a rsequence")
   endif()
   # deref ref array
-  ref_get(${sequence} )
-  ans(sequence)
+#  ref_get(${sequence} )
+#  ans(sequence)
   
   # save current stream
   #message("push")

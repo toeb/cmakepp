@@ -21,3 +21,9 @@
     return_ref(str)
       
   endfunction()
+  # converts the json-string & to a cmake string
+  function(json_string_ref_to_cmake __json_string_ref_to_cmake_ref)
+    json_string_to_cmake("${${__json_string_ref_to_cmake_ref}}")
+    return_ans()
+      
+  endfunction()

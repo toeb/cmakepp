@@ -1,7 +1,5 @@
 function(test)
 
-
-
   json2("true")
   ans(res)
   assert("${res}" STREQUAL "true")
