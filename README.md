@@ -374,7 +374,8 @@ assert("${result}" STREQUAL "a a b b")
 # you can also call any file that contains a function (the first function will be called)
 # WARNING: there is still a bug that does not allow tabs before the signature and newlines in the signature (this will be fixed soon)
 # create a file containing a function
-file_make_temporary(file_name "function(fu arg1 arg2) \n message(nanu) \n set(result \"\${arg1} \${arg2}\" PARENT_SCOPE) \n endfunction()")
+file_make_temporary( "function(fu arg1 arg2) \n message(nanu) \n set(result \"\${arg1} \${arg2}\" PARENT_SCOPE) \n endfunction()")
+ans(file_name)
 call_function(${file_name} b a )
 assert(${result} STREQUAL "b a ")
 

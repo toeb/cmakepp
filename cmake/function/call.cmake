@@ -1,6 +1,7 @@
 
   # no output except through return values or referneces
   function(call)
+   # message("call ${ARGN}")
     return_reset()
     # I used garbled variable names to keep from hiding parent scope varaibles
    # message("wooooaoaat? ${ARGN}")
@@ -27,7 +28,9 @@
         set(__function_call_args2 "${__function_call_args2} \"${__function_call_args_arg}\"")
       endforeach()
       eval("${__function_call_func}(${__function_call_args2})")
-      return_ans()
+      return_ans(res)
+     # message("function returned '${res}'")
+      
     endif()
 
     if(DEFINED "${__function_call_func}")
@@ -99,8 +102,8 @@
 
     nav(__function_call_import = "${__function_call_func}")
     if(__function_call_import)
-    #  message("nav")
-      call("${__function_call_import}"(${__function_call_args}))
+     #message("nav ${__function_call_import} ${__function_call_func}")
+         call("${__function_call_import}"(${__function_call_args}))
       return_ans()
     endif()
 

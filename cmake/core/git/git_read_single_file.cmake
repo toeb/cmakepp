@@ -1,5 +1,6 @@
 function(git_read_single_file repository branch path )
-  file_tempdir(tmp_dir)
+  file_tempdir()
+  ans(tmp_dir)
   git(--cwd "${tmp_dir}")
   set(branch_arg)
   if(branch)

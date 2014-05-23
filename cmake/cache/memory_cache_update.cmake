@@ -1,10 +1,15 @@
 
 
   function(memory_cache_update cache_key value)
+    set(args ${ARGN})
+    list_extract_flag(args --const)
+    ans(isConst)
+    if(NOT isConst)
+        map_clone_deep("${value}")
+        ans(value)
+    endif()
 
-    map_clone_deep("${value}")
-    ans(value)
-    memory_cache_key("${cache_key}")
+    #memory_cache_key("${cache_key}")
     ans(key)
     #map_new()
     #ans(entry)

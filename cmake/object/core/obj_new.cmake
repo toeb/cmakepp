@@ -27,6 +27,7 @@ function(obj_new)
 	obj_callmember(${instance} __constructor__ ${args})
 	ans(res)
 
+
 	if(res)
 		set(instance "${res}")
 	endif()

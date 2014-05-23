@@ -7,7 +7,10 @@ function(eval code)
   oocmake_config(temp_dir)
   ans(temp_dir)
 
-  random_file(file_name "${temp_dir}/eval_{{id}}.cmake")
+  file_random( "${temp_dir}/eval_{{id}}.cmake")
+  ans(file_name)
+
+  set_ans("")
   file(WRITE ${file_name} "${code}")
   include(${file_name})
   ans(res)

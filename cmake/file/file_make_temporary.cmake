@@ -1,7 +1,9 @@
-function(file_make_temporary result content)
+# creates a temporary file
+function(file_make_temporary content)
   oocmake_config(temp_dir)
   ans(temp_dir)
-	random_file(rnd "${temp_dir}/file_make_temporary_{{id}}.tmp")
+	file_random( "${temp_dir}/file_make_temporary_{{id}}.tmp")
+  ans(rnd)
 	file(WRITE ${rnd} "${content}")
- 	return_value(${rnd})
+  return_ref(rnd)
 endfunction()
