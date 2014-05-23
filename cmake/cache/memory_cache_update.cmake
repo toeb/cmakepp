@@ -9,7 +9,7 @@
         ans(value)
     endif()
 
-    #memory_cache_key("${cache_key}")
+    memory_cache_key("${cache_key}")
     ans(key)
     #map_new()
     #ans(entry)
