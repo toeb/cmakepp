@@ -1,5 +1,10 @@
 function(test)
 
+  json2("{\"id\":\"pkg\",  \"version\":\"0.0.1\",   \"include\":null,\"authors\":[\"To bi\",\"Katti\"]}")
+  ans(res)
+  assert(DEREF "{res.authors}" EQUALS "To bi" "Katti")
+
+
   json2("true")
   ans(res)
   assert("${res}" STREQUAL "true")

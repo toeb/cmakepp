@@ -1,3 +1,7 @@
+function(type_exists type)
+
+endfunction()
+
 function(type_get type)
 	if(NOT COMMAND ${type})
 		message(FATAL_ERROR "obj_new: only cmake functions are allowed as types, '${type}' is not function")

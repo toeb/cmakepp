@@ -79,6 +79,10 @@ function(parse_object rstring)
       if(NOT has_result)
         set(has_result true)
       endif()
+
+      if("${object_value}_" STREQUAL "_")
+        set(object_value "")
+      endif()
       
       map_set("${result_object}" "${object_key}" "${object_value}")
 

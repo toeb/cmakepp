@@ -70,7 +70,7 @@
     
     list(LENGTH return_list len)
     if(NOT len)
-     # return("")
+      #return("")
     endif()
     return_ref(result_list)
   endfunction()

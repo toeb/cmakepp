@@ -14,3 +14,8 @@ function(proto_declarefunction result)
 	#obj_declarefunction(${proto} ${res})
 	set(${function_name} "${func}" PARENT_SCOPE)
 endfunction()
+
+# causes the following code inside a constructor to only run once
+macro(begin_methods)
+
+endmacro()
