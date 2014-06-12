@@ -1,0 +1,11 @@
+# changes the current directory 
+function(cd)
+  path("${ARGN}")
+  ans(path)
+ # message("cd ${path}")
+  if(NOT IS_DIRECTORY "${path}")
+    return()
+  endif()
+  ref_set(__global_cd_current_directory "${path}")
+  return_ref(path)
+endfunction()

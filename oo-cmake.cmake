@@ -81,6 +81,12 @@ map()
     MIN 0 MAX 0
     DESCRIPTION "Show Help for oocmake config options"
     )
+  kv(bin_dir
+    LABELS --bin-dir
+    MIN 1 MAX 1
+    DEFAULT "${CMAKE_CURRENT_LIST_DIR}/bin"
+    )
+
 end()
 ans(oocmake_config_definition)
 
