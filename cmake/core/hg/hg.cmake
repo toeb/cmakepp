@@ -13,7 +13,8 @@ function(hg)
     endif()
 
     set(args ${ARGN})
-
+    list_extract_flag(args --result)
+    ans(result_flag)
 
 
     execute("{
@@ -24,7 +25,7 @@ function(hg)
     }")
     ans(execution_result)
     
-    if(_--result)
+    if(result_flag)
       return(${execution_result})
     endif()
 
