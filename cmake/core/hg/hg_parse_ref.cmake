@@ -28,7 +28,7 @@ function(hg_get_refs)
   ans(tags)
 
 
-  list(refs)
+  set(refs)
   foreach(ref ${tags}  )
     hg_parse_ref("${ref}")
     ans(ref)
