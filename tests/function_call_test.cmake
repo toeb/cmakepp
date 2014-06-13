@@ -108,14 +108,19 @@ this_set(muha asd)
 endfunction()
 
 obj_new(TestClass44)
-ans(obj)
+ans(obj2)
 
-call(obj(1))
+
+
+call(${obj2}(1))
 ans(res)
 assert("${res}" STREQUAL "callop 1")
 
+call(obj2(1))
+ans(res)
+assert("${res}" STREQUAL "callop 1")
 
-call(obj.func(1))
+call(obj2.func(1))
 ans(res)
 assert("${res}" STREQUAL "func asd 1")
 

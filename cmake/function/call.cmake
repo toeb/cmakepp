@@ -1,7 +1,7 @@
 
   # no output except through return values or referneces
   function(call)
-   # message("call ${ARGN}")
+
     return_reset()
     # I used garbled variable names to keep from hiding parent scope varaibles
    # message("wooooaoaat? ${ARGN}")
@@ -34,7 +34,7 @@
     endif()
 
     if(DEFINED "${__function_call_func}")
-   #  message("defined")
+    # message("defined ${__function_call_func}")
       call("${${__function_call_func}}"(${__function_call_args}))
       return_ans()
     endif()
@@ -42,6 +42,7 @@
     ref_isvalid("${__function_call_func}")
     ans(isref)
     if(isref)
+  #    message("call for ${__function_call_func} ")
       obj_call("${__function_call_func}" ${__function_call_args})
       return_ans()
     endif()

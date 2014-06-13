@@ -6,12 +6,12 @@ function(test)
   obj_set(${obj} "test3" "val3")
 
 
-  obj_extract_map("${obj}" test1 test3)
+  obj_pick("${obj}" test1 test3)
   ans(res)
   assert(DEREF {res.test1} STREQUAL "val1")
   assert(DEREF {res.test3} STREQUAL "val3")
 
-  obj_extract_map("${obj}" test4)
+  obj_pick("${obj}" test4)
   ans(res)
   assert(res)
   assert(DEREF "_{res.test4}" STREQUAL "_")

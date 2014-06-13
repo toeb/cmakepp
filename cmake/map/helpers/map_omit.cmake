@@ -1,0 +1,8 @@
+# returns a copy of map without the specified keys (argn)
+function(map_omit map)
+  map_keys("${map}")
+  ans(keys)
+  list(REMOVE_ITEM keys ${ARGN})
+  map_pick("${map}" ${keys})
+  return_ans()
+endfunction()
