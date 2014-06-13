@@ -1,13 +1,17 @@
 message("${CMAKE_CURRENT_LIST_DIR}/oo-cmake.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/oo-cmake.cmake")
 file(GLOB tests  "${CMAKE_CURRENT_LIST_DIR}/tests/*")
-
+set(package_dir "${CMAKE_CURRENT_LIST_DIR}")
 message("configuratiation")
 print_locals()
+
+oocmake_config(temp_dir)
+ans(temp_dir)
+set(test_dir "${temp_dir}/test_dir")
+
 foreach(test ${tests})
-	set(test_dir "${cutil_temp_dir}/testdir")
-	file(REMOVE_RECURSE "${test_dir}")
-	import_function("${test}" as test_function REDEFINE)
+  file(REMOVE_RECURSE "${test_dir}")
+	function_import("${test}" as test_function REDEFINE)
 	message(STATUS "running test ${test}... ")
 	test_function()
 	message(STATUS "success!")

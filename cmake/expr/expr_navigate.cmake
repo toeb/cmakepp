@@ -1,0 +1,16 @@
+
+  function(expr_navigate path)
+    string_split_at_last(path nav "${path}" ".")
+   # message("expr_nav path: ${path}, nav ${nav}")
+    expr("${path}")
+    ans(res)
+    map_isvalid("${res}" )
+    ans(ismap)
+    if(NOT ismap)
+      return()
+    endif()
+
+    map_get(${res}  "${nav}")
+    ans(res)
+    return_ref(res)
+  endfunction()

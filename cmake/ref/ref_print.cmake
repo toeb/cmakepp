@@ -1,6 +1,10 @@
 function(ref_print ref)
-	json_serialize(res "${ref}" INDENTED)
-
+  if(NOT ref)
+    message("undefined ref")
+    return()
+  endif()
+  json_indented(${ref})
+  ans(res)
 	message("${res}")
 	foreach(arg ${ARGN})
 		ref_print("${arg}")

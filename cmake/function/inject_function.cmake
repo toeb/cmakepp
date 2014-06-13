@@ -21,17 +21,14 @@ function(inject_function result input_function)
 			if(_RENAME)	
 				#string(REGEX REPLACE "${regex}"  "\\2" function_name "${line}")
 				string(REGEX REPLACE "${regex}"  "\\1(${_RENAME} \\3)" new_line "${line}")
-				#message("inject ${tst}")
-				#message("newline ${line} ${new_line} ${_RENAME} ${function_name}" )
-				#replace_first(new_line "${function_name}" "${_RENAME}" "${line}")
 
 			else()
 				set(new_line "${line}")
 			endif()
 
 
-			replace_first(input_function "${line}" "#  BEFORE_FUNCTION injection \n ${_BEFORE_FUNCTION} \n # endof injection \n ${new_line} \n #ON_CALL injection \n ${_ON_CALL} \n #endof injection \n" "${input_function}")
-
+			string_replace_first( "${line}" "#  BEFORE_FUNCTION injection \n ${_BEFORE_FUNCTION} \n # endof injection \n ${new_line} \n #ON_CALL injection \n ${_ON_CALL} \n #endof injection \n" "${input_function}")
+			ans(input_function)
 			break()
 		endif()
 	endforeach()

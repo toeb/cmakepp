@@ -1,13 +1,13 @@
 # comapres two lists with each other
 # usage
-# list_equal(res 1 2 3 4 1 2 3 4)
-# list_equal(res listA listB)
-# list_equal(res ${listA} ${listB})
+# list_equal( 1 2 3 4 1 2 3 4)
+# list_equal( listA listB)
+# list_equal( ${listA} ${listB})
 # ...
 # COMPARATOR defaults to STREQUAL
 # COMPARATOR can also be a lambda expression
 # COMPARATOR can also be EQUAL
-function(list_equal result)
+function(list_equal)
 	set(options)
   	set(oneValueArgs COMPARATOR)
   	set(multiValueArgs)
@@ -28,9 +28,8 @@ function(list_equal result)
 		list(GET _UNPARSED_ARGUMENTS 1 ____listB)
 		if(DEFINED ${____listA} AND DEFINED ${____listB})
 			# recursive call and return
-			list_equal(res  ${${____listA}} ${${____listB}} COMPARATOR "${_COMPARATOR}")
-			return_value(${res})
-			return()
+			list_equal(  ${${____listA}} ${${____listB}} COMPARATOR "${_COMPARATOR}")
+			return_ans()
 		endif()
 
 	endif()
@@ -47,7 +46,7 @@ function(list_equal result)
 		#element count is not divisible by two so the lists cannot be equal
 		# because they do not have the same length
 
-		return_value(false)
+		return(false)
 
 	else()
 		# split input arguments into two
@@ -63,9 +62,9 @@ function(list_equal result)
 
 	# depending on the comparator
 	if(${_COMPARATOR} STREQUAL "STREQUAL")
-		set(lambda "(a b) eval_truth(res \"\${a}\" STREQUAL \"\${b}\") \n return_value(\${res})")
+		set(lambda "(a b) eval_truth(\"\${a}\" STREQUAL \"\${b}\") \n ans(res) \n return_value(\${res})")
 	elseif(${_COMPARATOR} STREQUAL "EQUAL")
-		set(lambda "(a b) eval_truth(res \"\${a}\" EQUAL \"\${b}\") \n return_value(\${res})")
+		set(lambda "(a b) eval_truth( \"\${a}\" EQUAL \"\${b}\") \n ans(res) \n return_value(\${res})")
 	else()
 		set(lambda "${_COMPARATOR}")
 	endif()
@@ -74,7 +73,7 @@ function(list_equal result)
 	lambda(lambda "${lambda}")
 
 	# import function string 
-	import_function("${lambda}" as comparator)
+	function_import("${lambda}" as comparator REDEFINE)
 		
 	set(res)
 	# compare list
@@ -85,9 +84,9 @@ function(list_equal result)
 		#message("comparing ${a} ${b}")
 		comparator(res ${a} ${b})
 		if(NOT res)
-			return_value(false)
+			return(false)
 		endif()
 	endforeach()
-	return_value(true)
+	return(true)
 
 endfunction()

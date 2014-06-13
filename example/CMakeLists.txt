@@ -7,33 +7,38 @@ include("../oo-cmake.cmake")
 message("creating a simple inheritance example")
 
 #create animal object
-obj_create(animal)
+obj_new()
+ans(animal)
 
 # set object method eat
 # this method prints out which food the animal is eating
 # existing functions can also be appliead via obj_bindcall(${ref} func arg1 arg2 arg3)
 obj_setfunction(
 	${animal}  	#reference to animal object
-	" function( eat ) \n obj_get(\${this} food food) \n message(\"I am eating \${food}\") \n	 endfunction()"
+	" function( eat ) \n obj_get(\${this}  food) \n ans(food) \n message(\"I am eating \${food}\") \n	 endfunction()"
 )
 
 
 # create mamal object
-obj_create(mamal)
+obj_new()
+ans(mamal)
 obj_setprototype(${mamal} ${animal})
 
 #create bird object
-obj_create(bird)					#create instance
+obj_create()					#create instance
+ans(bird)
 obj_setprototype(${bird} ${animal})	#set prototype animal
 obj_set(${bird} food Birdfood)		#set bird's food property to "Birdfood"
 
 #create dog object
-obj_create(dog)						#create instance
+obj_create()						#create instance
+ans(dog)
 obj_setprototype(${dog} ${mamal})	#set prototype mamal
 obj_set(${dog} food Dogfood)		#set dogs food property to "Dogfood"
 
 #create cat object
-obj_create(cat)						#create instance
+obj_create()						#create instance
+ans(cat)
 obj_setprototype(${cat} ${mamal})	#set prototype mamal
 obj_set(${cat} food Catfood)		#set cat's food property to "Catfood"
 

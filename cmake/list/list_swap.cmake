@@ -1,4 +1,4 @@
-
+# swaps the element of lst at i with element at index j
 macro(list_swap lst i j)
 	list(GET ${lst} ${i} a)
 	list(GET ${lst} ${j} b)

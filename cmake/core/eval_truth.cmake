@@ -1,11 +1,7 @@
-
-
 # evaluates a truth expression 'if' and returns true or false 
-function(eval_truth result)
+function(eval_truth)
   if(${ARGN})
-    return_value(true)
-  else()
-    return_value(false)
+    return(true)
   endif()
-
+  return(false)
 endfunction()

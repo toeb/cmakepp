@@ -1,13 +1,25 @@
-function(list_extract lst)
-  set(thelist ${${lst}})
+# extracts elements from the list
+# example
+# set(lst 1 2  )
+# list_extract(lst a b c)
+# a contains 1
+# b contains 2
+# c contains nothing
+# returns the rest of list
+function(list_extract __list_extract_lst)
+  set(thelist ${${__list_extract_lst}})
   set(args ${ARGN})
   while(true)
-    list_pop_front(current_value thelist)
-    list_pop_front(current_arg args)
+    list_pop_front( thelist)
+    ans(current_value)
+    list_pop_front( args)
+    ans(current_arg)
     if(NOT current_arg)
       return()
     endif()
     set(${current_arg} ${current_value} PARENT_SCOPE)
   endwhile()
-
+  return_ref(thelist)
 endfunction()
+
+

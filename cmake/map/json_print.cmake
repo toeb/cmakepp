@@ -1,0 +1,5 @@
+function(json_print)
+  json_indented(${ARGN})
+  ans(res)
+  message("${res}")
+endfunction()

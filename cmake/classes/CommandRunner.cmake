@@ -1,51 +1,48 @@
 function(CommandRunner)
 	# field containing all command name => handler mappings
-	map_create(commands)
+	map_new()
+  ans(commands)
 	this_set(commands ${commands})
 
 	# name for this command runner
 	this_set(name "CommandRunner")
 
-	## makes this object a functor
-	# so it can be easily added to CommandRunner (recursively)
-	obj_declarefunction(${__proto__} __call__)
-	function(${__call__})		
-		obj_callmember(${this} Run ${ARGN})
+	this_declarecalloperation(callfunc)
+	function(${callfunc})		
+		call(this.Run(${ARGN}))
+		return_ans()
 	endfunction()
 
 	## Adds a commandhandler to this CommandRunner
 	## this command_name must be unique
 	## command_handler must be either a function or a functor
-	obj_declarefunction(${__proto__} AddCommandHandler)
+	proto_declarefunction(AddCommandHandler)
 	function(${AddCommandHandler} command_name command_handler)
+		this_import(commands)
 		#message("adding ${command_name}")
-		map_has(${commands} has_command ${command_name})
+		map_has(${commands}  ${command_name})
+		ans(has_command)
 		if( has_command)
+			#ref_print(${commands})
 			message(FATAL_ERROR "${name}> AddCommandHandler: command '${command_name}' was already added")
 		endif()
-		assert(NOT has_command)
-		obj_isfunctor(is_functor "${command_handler}")
-		is_function(is_function "${command_handler}")
-		#message("AddCommandHandler ${command_handler}")
-		if(NOT(is_functor OR is_function))
-			message(FATAL_ERROR "${name}> AddCommandHandler: passed command_handler for '${command_name}' is not a function or functor: ${command_handler}")
-		endif()
-		assert(is_functor OR is_function)
+		
+
 		map_set(${commands} ${command_name} "${command_handler}")
-		#message(STATUS "AddCommandHandler: adding command ${command_name}")
 	endfunction()
 
 	## the run method uses the first argument cmd to lookup a command handler
 	## if the commandhandler is found it will be called
-	obj_declarefunction(${__proto__} Run)
+	proto_declarefunction(Run)
 	function(${Run})
+		this_import(commands)
+
 		set(args ${ARGN}) 
 		set(cmd)
 		## check if any argument was specifed and set the cmd to the first one
 		if(args)
-			list(GET args 0 cmd)
-			#drop first argument
-			list(REMOVE_AT args 0)
+			list_pop_front(args)
+			ans(cmd)
 		endif()
 
 		# if no command is set return error message
@@ -54,29 +51,24 @@ function(CommandRunner)
 			return()
 		endif()
 		# try to get a handler for the command if none is found return error message
-		map_tryget(${commands} handler ${cmd})
-		if(NOT handler)
-		
+		map_tryget("${commands}"  "${cmd}")
+		ans(handler)
+		if(NOT handler)		
 			message("${name}> could not find a command called '${cmd}' (try 'help')")
 			return()
 		endif()
-		# invoke handler (depending on wether it is  afunctor or not )
-		# todo:  only normal functions should be allowed
-		# 		 (others can be handled via obj_bind*...)
-		obj_isfunctor(is_functor ${handler})
-		if(is_functor)
-			obj_callobject(${handler} ${args})
-			return()
-		endif()
-		call_function(${handler} ${args})
+
+		call("${handler}" (${args}))
+		return_ans()
 	endfunction()
 
 	## the default help function.
 	## prints out all declared commands of this handler
-	obj_declarefunction(${__proto__} Help)
+	proto_declarefunction(Help)
 	function(${Help})
 		# go through all keys and print them...
-		map_keys(${commands} keys)
+		map_keys(${commands} )
+		ans(keys)
 		message(STATUS "${name}> available commands for ${name}: ")
 		foreach(key ${keys})
 			message(STATUS "  ${key}")

@@ -7,12 +7,12 @@ function(tutorial)
 ## =====================================================
 # defining a function:
 function(my_function arg)
-	set(result "${arg}" PARENT_SCOPE)
+	set(out_value "${arg}" PARENT_SCOPE)
 endfunction()
 # calling the function:
 my_function("sample1")
-assert(result)
-assert(${result} STREQUAL "sample1")
+assert(out_value)
+assert(${out_value} STREQUAL "sample1")
 
 
 # -> things to note about plain cmake functions:  
@@ -21,29 +21,36 @@ assert(${result} STREQUAL "sample1")
 # -> functions cannot be called dynamically (ala '${dynamic_name}(args)')
 # -> functions can be defined dynamically ( function(${dynamic_name} arg1 arg2) .... endfunction())
 
-## dynamically calling a function  'call_function'
+## dynamically calling a function  'function_call'
 ## ===============================================
+function(my_function arg)
+  return("${arg}")
+endfunction()
 set(function_name my_function)
-call_function(${function_name} sample2)
+call(${function_name} (sample2))
+ans(result)
+assert("${result}" STREQUAL "sample2")
 
-assert(result)
-assert(${result} STREQUAL "sample2")
+# -> things to not about dynamic function calls:
+# -> no out parameters, only return values
 
 
 ## declaring, defining and calling a unique dynamic function
 ## =========================================================
-new_function(my_unique_function)
+function_new()
+ans(my_unique_function)
 assert(COMMAND ${my_unique_function})
 # my_unique_function now contains a unique string e.g. func_nTGSmkIGHL
 # it is only declared. uncommenting the following line results in a FATAL_ERROR
 # call_function(${my_unique_function})
 #the function still has to be defined: 
 function(${my_unique_function} arg1 arg2)
-	set(result "${arg2} ${arg1}" PARENT_SCOPE)
+	return("${arg2} ${arg1}" )
 endfunction()
 # call function
-call_function(${my_unique_function} world hello)
-assert(${result} STREQUAL "hello world")
+call(${my_unique_function} (world hello))
+ans(res)
+assert(${res} STREQUAL "hello world")
 
 
 ## calling a function string
@@ -53,19 +60,12 @@ assert(${result} STREQUAL "hello world")
 # be sure to escape the string correctly
 # WARNING using ; and ${ARGN} or carriage returns may lead to unexpected results 
 # incorrectly escaping variables will be cause of many a bug
-call_function("function(fu arg1 arg2)\n set(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" a b)
-assert("${result}" STREQUAL "a a b b")
+call("function(fu arg1 arg2)\n return(\"\${arg1} \${arg1} \${arg2} \${arg2}\") \n endfunction()" (a b))
+ans(res)
+assert("${res}" STREQUAL "a a b b")
 
-
-## calling a function file
-## =======================
-# you can also call any file that contains a function (the first function will be called)
-# WARNING: there is still a bug that does not allow tabs before the signature and newlines in the signature (this will be fixed soon)
-# create a file containing a function
-file_make_temporary(file_name "function(fu arg1 arg2) \n set(result \"\${arg1} \${arg2}\" PARENT_SCOPE) \n endfunction()")
-call_function(${file_name} b a )
-assert(${result} STREQUAL "b a")
-
+return()
+# changes reflect up to here
 
 ## importing a function
 ## ====================
@@ -73,25 +73,17 @@ assert(${result} STREQUAL "b a")
 # the REDEFINE flag allows a function to be overwritten (not setting it would cause an error if a function fuu already exists (2. and 3. call))
 # a usefull application iterating a list of files containing unit test functions and calling each with the same name
 # also when working with packages this allows functions to be defined in a specified namespace
-import_function(my_function as fuu REDEFINE)
+function_import(my_function as fuu REDEFINE)
 fuu(sample4)
 assert(${result} STREQUAL "sample4")
-import_function(${file_name} as fuu REDEFINE)
+function_import(${file_name} as fuu REDEFINE)
 fuu(a b) 
 assert(${result} STREQUAL "a b")
-import_function("function(fu arg1 arg2) \n set(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" as fuu REDEFINE)
+function_import("function(fu arg1 arg2) \n set(result \"\${arg1} \${arg1} \${arg2} \${arg2}\" PARENT_SCOPE) \n endfunction()" as fuu REDEFINE)
 fuu(a b)
 assert(${result} STREQUAL "a a b b")
+return()
 
-
-
-
-## injecting
-## =========
-# when importing a function you can inject arbitrary code before declaration, after definition and on call
-
-## parsing
-## =======
 
 
 endfunction()

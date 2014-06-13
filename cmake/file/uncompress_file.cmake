@@ -1,4 +1,4 @@
-#uncompresses specific files from archive specified by varargs
+#uncompresses specific files from archive specified by varargs and stores them in target directory
 function(uncompress_file target archive)
 #tar -zxvf config.tar.gz etc/default/sysstat
 	if(NOT IS_DIRECTORY "${target}")

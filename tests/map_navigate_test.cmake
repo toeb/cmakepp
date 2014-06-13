@@ -13,11 +13,22 @@ function(test)
 	element(END uut)
 
 
+	# a missing variable
+	set(tmp_var)
+	map_navigate(res "tmp_var")
+	assert(NOT res)
 
 	# empty path
 	map_navigate(res "")
 	assert("_${res}" STREQUAL "_")
-	
+
+
+	# a normal variable
+	set(tmp_var "hello")
+	map_navigate(res "tmp_var")
+	assert(res)
+	assert(${res} STREQUAL "hello")
+
 
 	# unevaluated ref
 	map_navigate(res "uut")
@@ -56,7 +67,8 @@ function(test)
 	assert(EQUALS ${res} I II III)
 	
 	# check special symbols
-	map_create(res)
+	map_new()
+    ans(res)
 	map_set(${res} "k1" "\${ARGN} \; ;")
 	map_navigate(val "res.k1")
 	assert(EQUALS "${val}"  "\${ARGN} \; ;")

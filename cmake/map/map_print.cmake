@@ -1,8 +1,10 @@
 # prints all values of the map
 function(map_print this)
-	map_keys(${this} keys)
+	map_keys(${this} )
+  ans(keys)
 	foreach(key ${keys})
-		map_get(${this}  value ${key})
+		map_get(${this}   ${key})
+    ans(value)
 		message("${key}: ${value}")
 	endforeach()
 endfunction()

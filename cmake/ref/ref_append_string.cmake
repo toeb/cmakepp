@@ -1,0 +1,7 @@
+function(ref_append_string ref str)
+  ref_get(${ref} )
+  ans(res)
+  set(res "${res}${str}")
+  ref_set(${ref} "${res}")
+  return_ref(str)
+endfunction()

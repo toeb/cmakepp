@@ -1,0 +1,12 @@
+# returns an object from string, or reference
+# ie obj("{id:1, test:'asd'}") will return an object
+  function(obj object_ish)
+    map_isvalid("${object_ish}")
+    ans(isobj)
+    if(isobj)
+      return("${object_ish}")
+    endif()
+
+    script("${object_ish}")
+    return_ans()
+  endfunction()

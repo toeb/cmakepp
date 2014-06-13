@@ -5,8 +5,8 @@ function(test)
 		this_set(arg2 ${arg2})
 	endfunction()
 
-	obj_new(uut ConstructorWithArgsTest a b)
-
+	obj_new( ConstructorWithArgsTest a b)
+ans(uut)
 	map_navigate(res "uut.arg1")
 	assert("${res}" STREQUAL "a")
 	map_navigate(res "uut.arg2")

@@ -1,0 +1,6 @@
+function(fwrite path)
+  path("${path}")
+  ans(path)
+  file(WRITE "${path}" "${ARGN}")
+  return()
+endfunction()

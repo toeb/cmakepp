@@ -1,3 +1,4 @@
+# splits input at first occurence of separator into part a  and partb
 function(string_split_at_first parta partb input separator)
   string(FIND "${input}" "${separator}" idx )
   if(${idx} LESS 0)

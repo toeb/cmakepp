@@ -1,16 +1,14 @@
-
-function(list_any result lst predicate)
-
+function(list_any lst predicate)
 	lambda(predicate "${predicate}")
-	import_function("${predicate}" as predicate_function)
+	function_import("${predicate}" as predicate_function)
 	set(ct 0)
 	foreach(item ${lst})
 		predicate_function(res "${item}")
 		if(res)
-			return_value(true)
+			return(true)
 		endif()
 	endforeach()
-	return_value(false)
+	return(false)
 endfunction()
 
 

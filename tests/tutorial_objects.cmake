@@ -1,5 +1,5 @@
 function(test)
-	
+	return()
 	### using objects
 	### =============
 	# oo-cmake is very similar to javascript
@@ -10,7 +10,8 @@ function(test)
 
 	## creating a object
 	## =================
-	obj_new(myobject)
+	obj_new()
+	ans(myobject)
 	# ${myobject} now is a reference to an object
 	obj_exists(${myobject} _exists)
 	assert(myobject)
@@ -20,7 +21,8 @@ function(test)
 	# oo-cmake does not contains automatic memory management
 	# you can however remove all objects by calling obj_cleanup 
 	# (a very crude way of garbage collection) I would suggest calling it at the end of cmake.
-	obj_new(object_to_delete)
+	obj_new()
+	ans(object_to_delete)
 	obj_delete(${object_to_delete})
 	# object_to_delete still contains the same reference
 	# but the object does not exists anymore and the following returns false
@@ -30,21 +32,24 @@ function(test)
 
 	## setting and setting property
 	## ==================
-	obj_new(myobject)
+	obj_new()
+	ans(myobject)
 	# call obj_set passing the object reference
 	# the propertyname 'key1' and the value 'val1'
 	# everything beyond 'key1' is saved (as a list)
 	obj_set(${myobject} key1 "val1")
 	#call obj_get passing the object refernce the result variable and
 	# the key which is to be gotten
-	obj_get(${myobject} theValue key1)
+	obj_get(${myobject}  key1)
+	ans(theValue)
 	assert(theValue)
 	assert(${theValue} STREQUAL "val1")
 
 
 	## setting a function and calling it
 	## =================================
-	obj_new(obj)
+	obj_new()
+	ans(obj)
 	obj_set(${obj} last_name "Becker")
 	obj_set(${obj} first_name "Tobias")
 	#obj_setfunction accepts any function (cmake command, string function, file function, unique function (see function tutorial))
@@ -79,7 +84,8 @@ function(test)
 	# obj_new creates a object which automatically inherits Object
 	# Object contains some functions e.g. to_string, print, ...
 	# 
-	obj_new(obj)
+	obj_new()
+	ans(obj)
 	obj_callmember(${obj} print)
 
 	# this prints all members
@@ -108,9 +114,11 @@ function(test)
 		this_set(myValue "hello")
 	endfunction()
 
-	obj_new(obj MyObject)
+	obj_new( MyObject)
+	ans(obj)
 	# type of object will now be MyObject
-	obj_gettype(${obj} type)
+	obj_gettype(${obj} )
+	ans(type)
 	assert(type)
 	assert(${type} STREQUAL MyObject)
 	# call
@@ -121,7 +129,8 @@ function(test)
 	obj_callmember(${obj} myMethod res)
 	assert(res)
 	assert(${res} STREQUAL "myMethod: othervalue")
-	obj_get(${obj} res myNewProperty)
+	obj_get(${obj}  myNewProperty)
+	ans(res)
 	assert(res)
 	assert(${res} STREQUAL "this is a text othervalue")
 
@@ -137,7 +146,8 @@ function(test)
 	function(anyfunction)
 		this_callmember(print)
 	endfunction()
-	obj_new(obj)
+	obj_new()
+	ans(obj)
 	# bind function
 	obj_pushcontext(${obj})
 	anyfunction()

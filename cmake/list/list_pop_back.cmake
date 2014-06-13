@@ -1,13 +1,13 @@
+# removes the last element from list and returns it
+function(list_pop_back __list_pop_back_lst)
 
-function(list_pop_back result lst)
-
-  if(NOT ${lst})
-    return_value()
+  if(NOT DEFINED ${__list_pop_back_lst})
+    return()
   endif()
-  list(LENGTH ${lst} len)
+  list(LENGTH ${__list_pop_back_lst} len)
   math(EXPR len "${len} - 1")
-  list(GET ${lst} "${len}" res)
-  list(REMOVE_AT ${lst} ${len})
-  set(${result} ${res} PARENT_SCOPE)
-  set(${lst} ${${lst}} PARENT_SCOPE)
+  list(GET ${__list_pop_back_lst} "${len}" res)
+  list(REMOVE_AT ${__list_pop_back_lst} ${len})
+  set(${__list_pop_back_lst} ${${__list_pop_back_lst}} PARENT_SCOPE)
+  return_ref(res)
 endfunction()

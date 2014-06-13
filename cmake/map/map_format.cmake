@@ -1,5 +1,5 @@
 
-function(map_format result input)
+function(map_format input)
 	string(REGEX MATCHALL "{([^}{]*)}" matches "${input}")
 	foreach(match ${matches})
 		string(LENGTH ${match} len)
@@ -10,5 +10,5 @@ function(map_format result input)
 		string(REGEX REPLACE "(\\]|\\.|\\[|\\*)" "\\\\\\1" match "${match}")
 		string(REGEX REPLACE "${match}" "${res}" input "${input}")
 	endforeach()
-	return_value("${input}")
+	return_ref(input)
 endfunction()

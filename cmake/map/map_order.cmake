@@ -1,6 +1,6 @@
 # orders the specified lst by applying the comparator
 function(map_order _lst comparator)
-	import_function("${comparator}" as map_sort_comparator REDEFINE)
+	function_import("${comparator}" as map_sort_comparator REDEFINE)
 	set(_i 0)
 	set(_j 0)
 	list(LENGTH ${_lst} _len)

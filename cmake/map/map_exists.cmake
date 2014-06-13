@@ -1,9 +1,4 @@
-
-function(map_exists this result)
-	get_property(keys GLOBAL PROPERTY "${this}")
-	if(keys)
-		return_value(true)
-	else()
-		return_value(false)
-	endif()
+function(map_exists this )
+	get_property(map_exists GLOBAL PROPERTY "${this}" SET)
+  return(${map_exists})
 endfunction()

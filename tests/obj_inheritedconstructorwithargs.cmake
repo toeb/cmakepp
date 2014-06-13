@@ -9,8 +9,8 @@ function(test)
 	endfunction()
 
 
-	obj_new(uut ConstructorWithArgsTestDerived a b)
-
+	obj_new( ConstructorWithArgsTestDerived a b)
+ans(uut)
 	map_navigate(res "uut.arg1")
 	assert("${res}" STREQUAL "base_a")
 	map_navigate(res "uut.arg2")
