@@ -21,6 +21,13 @@ function(nav navigation_expression)
     ans(args)
   endif()
 
+  if("_${first}" STREQUAL _APPEND OR "_${first}" STREQUAL "_+=")
+    list_pop_front(args)
+    map_navigate(cur "${navigation_expression}")
+    map_navigate(args "${args}")
+    set(args ${cur} ${args})
+  endif()
+
 
   if("_${first}" STREQUAL _ASSIGN OR "_${first}" STREQUAL _= OR "_${first}" STREQUAL _*)
     list_pop_front( args)
