@@ -1,4 +1,9 @@
+# takes the passed list and returns only unqiue elements
+# see cmake's list(REMOVE_DUPLICATES)
 function(list_unique __list_unique_lst)
-	list(REMOVE_DUPLICATES ${__list_unique_lst})
-	set(${__list_unique_lst} ${${__list_unique_lst}} PARENT_SCOPE)
+  list(LENGTH ${__list_unique_lst} __len)
+  if(${__len} GREATER 1)
+	 list(REMOVE_DUPLICATES ${__list_unique_lst})
+  endif()
+	return_ref(${__list_unique_lst})
 endfunction()

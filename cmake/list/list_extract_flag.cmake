@@ -1,4 +1,3 @@
-
   #extracts a single flag from a list returning true if it was found
   # false otherwise. 
   # if flag exists multiple time online the first instance of the flag is removed

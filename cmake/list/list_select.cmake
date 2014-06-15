@@ -1,10 +1,17 @@
-
-function(list_select lst selector)
-	lambda(selector "${selector}")
-	function_import("${selector}" as selector_function REDEFINE)
-	foreach(item ${lst})
-		selector_function(res ${item})
-		list(APPEND result_list ${res})
+# uses the selector on each element of the list
+function(list_select __list_select_lst selector)
+  set(__list_select_result_list)
+  foreach(item ${${__list_select_lst}})
+		rcall(res = "${selector}"("${item}"))
+		list(APPEND __list_select_result_list ${res})
 	endforeach()
-	return_ref(result_list)
+	return_ref(__list_select_result_list)
 endfunction()
+
+# executes action on each of lists elements
+function(list_foreach lst action)
+  foreach(item ${${lst}})
+    call(action("${item}"))
+  endforeach()
+endfunction()
+

@@ -1,12 +1,13 @@
-
+# executes a predicate on every item of the list (passed by reference)
+# and returns those items for which the predicate holds
 function(list_where __list_where_lst predicate)
-	lambda(predicate "${predicate}")
-	function_import("${predicate}" as predicate_function)
 	foreach(item ${${__list_where_lst}})
-		predicate_function(res2 "${item}")
-		if(res2)
+    rcall(__matched = "${predicate}"("${item}"))
+		if(__matched)
 			list(APPEND result_list ${item})
 		endif()
 	endforeach()
 	return_ref(result_list)
 endfunction()
+
+
