@@ -2,7 +2,7 @@ oo-cmake
 ======== 
 [![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=devel)](https://travis-ci.org/toeb/oo-cmake)
 objects, methods, functions, maps, inheritance, oo-cmake goodness
-
+[![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
 # Installing
 
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
