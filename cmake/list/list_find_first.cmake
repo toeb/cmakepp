@@ -1,5 +1,4 @@
-
- function(list_find_first lst_name )
+function(list_find_first lst_name )
   foreach(arg ${ARGN})
     list(FIND ${lst_name} ${arg} idx)
     if(${idx} GREATER -1)

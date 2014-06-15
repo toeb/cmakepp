@@ -1,11 +1,23 @@
+# searchs for label in lst. if label is found 
+# the label and its following value is removed
+# and returned
+# if label is found but no value follows ${ARGN} is returned
+# if following value is enclosed in [] the brackets are removed
+# this allows mulitple values to be returned ie
+# list_extract_labelled_value(lstA --test1)
+# if lstA is a;b;c;--test1;[1;3;4];d
+# the function returns 1;3;4
 function(list_extract_labelled_value lst label)
-  list(LENGTH ${lst} len)
+  # return nothing if lst is empty
+  list_length(${lst})
+  ans(len)
   if(NOT len)
     return()
   endif()
-
-  list(FIND ${lst} "${label}" pos)
-  message("found label ${label} at ${pos} in ${${lst}}")
+  # find label in list
+  list_find(${lst} "${label}")
+  ans(pos)
+  
   if("${pos}" LESS 0)
     return()
   endif()
@@ -21,7 +33,6 @@ function(list_extract_labelled_value lst label)
 
   list_erase_slice(${lst} ${pos} ${end})
   ans(vals)
-  message("found flag ${label} val ${vals} rest: ${${lst}}")
   list_pop_front(vals)
   ans(flag)
     
@@ -29,6 +40,10 @@ function(list_extract_labelled_value lst label)
   if("_${vals}" MATCHES "^_\\[.*\\]$")
     string_slice("${vals}" 1 -2)
     ans(vals)
+  endif()
+
+  if(NOT vals)
+    set(vals ${ARGN})
   endif()
 
   

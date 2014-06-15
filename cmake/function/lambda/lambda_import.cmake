@@ -4,3 +4,4 @@ function(lambda_import lambda_expression function_name)
   function_import("${lambda_func}" as ${function_name} REDEFINE)
   return()
 endfunction() 
+
