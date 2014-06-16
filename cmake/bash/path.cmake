@@ -10,7 +10,7 @@
       #message("wpath ${path} -> ${realpath}")
       return_ref(realpath)
     endif()
-    if("_${path}" MATCHES "_^\\/")
+    if("_${path}" MATCHES "^_\\/")
       # unix absolute path
      # message("upath ${realpath}")
       

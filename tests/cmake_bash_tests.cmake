@@ -1,8 +1,7 @@
 function(test)
   
-
   path("${test_dir}")
-  ans(p)
+   ans(p)
   assert("${p}" STREQUAL "${test_dir}")
   if(NOT EXISTS "${test_dir}")
     file(MAKE_DIRECTORY "${test_dir}")
