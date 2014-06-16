@@ -3,6 +3,7 @@ compiler:
   - gcc
 before_install:
   - sudo apt-get install cmake
+  - sudo apt-get install mercurial
   - git config --global user.email "travis-ci@example.com"
   - git config --global user.name "Build Server"
 script: "cmake -P oo-cmake-tests.cmake"
