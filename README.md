@@ -1,5 +1,7 @@
-oo-cmake
-======== 
+![cps logo](/logo.png "cps logo")
+
+## pure cmake object oriented scripting
+
 [![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=devel)](https://travis-ci.org/toeb/oo-cmake)
 [![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
 objects, methods, functions, maps, inheritance, oo-cmake goodness
