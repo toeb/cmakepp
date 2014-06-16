@@ -8,13 +8,8 @@ objects, methods, functions, maps, inheritance, oo-cmake goodness
 # Installing
 
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
-be sure to use an up to date version of cmake.  `oo-cmake.cmake` adds this:
+be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7`
 
-```
-cmake_minimum_required(VERSION 2.8.7)
-cmake_policy(SET CMP0007 NEW)
-cmake_policy(SET CMP0012 NEW)
-```
 # Testing
 
 To test the code (alot is tested but not all) run the following in the root dir of oo-cmake 
@@ -666,15 +661,7 @@ obj_getownkeys(ref keys)				# returns all defined properties that ref owns
 
 #### Possible Extensions
 
-##### More special fields 
-
-Similar to javascript I might allow more special fields like `__getter__`, `__setter__`, `__call__`, `__construct__`, __destruct__`  etc. this would allow for computed properties, events, etc.
 
 ##### Resource Management
 
 currently the user is responsible for creating and deleting objects herself. Maybe it is possible to do some kind of memory management. (It could be a scheme based on object type (temporary, persistent, longtime persistent))  Reference counting would be cool, however I do not believe it is feasible in cmake.  
-
-##### Memory based oo-cmake
-It would be quite possible to have a memory based object oriented package which should prove to be alot faster.  However I have not thought of a way to combine the two.
-
-The idea would be to use get_cmake_property(VARIABLES) for a list of available cmake variables (getkeys) and store objects as underscore separated lists. '__object1__val1 = a;b;c'
