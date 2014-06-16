@@ -6,7 +6,7 @@ objects, methods, functions, maps, inheritance, oo-cmake goodness
 # Installing
 
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
-be sure to use an up to date version of cmake. `oo-cmake` requires at cmake version `>=2.8.7`
+be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7`
 
 # Testing
 
