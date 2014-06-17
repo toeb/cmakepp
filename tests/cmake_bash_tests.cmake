@@ -1,4 +1,4 @@
-function(test)
+dfunction(test)
   
   path("${test_dir}")
    ans(p)
