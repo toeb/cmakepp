@@ -5,6 +5,13 @@ function(structured_list_parse structure_map)
   map_new()
   ans(result)
   set(args ${ARGN})
+  obj("${structure_map}")
+  ans(structure_map)
+
+  if(NOT structure_map)
+    return_ref(result)
+  endif() 
+
   map_keys(${structure_map} )
   ans(keys)
   set(cutoffs)
