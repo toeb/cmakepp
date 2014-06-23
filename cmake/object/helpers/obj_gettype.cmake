@@ -7,6 +7,10 @@ function(obj_gettype obj)
   map_get_special(${proto} constructor)
   ans(res)
 	return_ref(res)
+endfunction()
 
-	
+
+function(typeof obj)
+  obj_gettype("${obj}")
+  return_ans()
 endfunction()

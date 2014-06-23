@@ -2,6 +2,8 @@
   # configures a map of files where the key is the configurable path and content
   # is either an existing file or  string cotnent for a file
   function(file_configure_write_map base_dir files)
+    obj("${files}")
+    ans(files)
     set(res)
     map_keys("${files}" )
     ans(file_names)

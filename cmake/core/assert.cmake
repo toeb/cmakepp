@@ -17,6 +17,9 @@
 # assert(EQUALS "1;3;4;6;7" "1;3;4;6;7") => nothing happens lists are equal
 # assert(EQUALS 1 2 3 4 1 2 3 4) =>nothing happes lists are equal (see list_equal)
 # assert(EQUALS C<list> <list> COMPARATOR <comparator> )... todo
+# todo: using the variable result as a boolean check fails because
+# the name is used inside assert
+
 function(assert)
 	# parse arguments
 	set(options EQUALS ACCU SILENT DEREF INCONCLUSIVE)
