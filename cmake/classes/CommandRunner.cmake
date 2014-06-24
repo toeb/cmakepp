@@ -24,7 +24,7 @@ function(CommandRunner)
 		ans(has_command)
 		if( has_command)
 			#ref_print(${commands})
-			message(FATAL_ERROR "${name}> AddCommandHandler: command '${command_name}' was already added")
+		#	message(FATAL_ERROR "${name}> AddCommandHandler: command '${command_name}' was already added")
 		endif()
 		
 
