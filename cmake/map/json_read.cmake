@@ -1,6 +1,8 @@
 
 
   function(json_read file)
+    path("${file}")
+    ans(file)
     if(NOT EXISTS "${file}")
       return()
     endif()
