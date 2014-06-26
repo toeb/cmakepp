@@ -1,5 +1,4 @@
 function(test)
-
   function(fdl input)
     language("${base_dir}/resources/function_definition_language.json")
     ans(lang)

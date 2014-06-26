@@ -1,4 +1,12 @@
-
+# dynamic function call method
+# can call the following
+# * a cmake macro or function
+# * a cmake file containing a single function
+# * a lambda expression (see lambda())
+# * a object with __call__ operation defined
+# * a property reference ie this.method()
+# CANNOT  call 
+# * a navigation path
   # no output except through return values or referneces
   function(call)
 
