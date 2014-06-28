@@ -9,7 +9,8 @@ function(path_relative base_dir path)
   ans(match)
 
   if(NOT match)
-    message(FATAL_ERROR "${path} is  not relative to ${base_dir}")
+    return_ref(path)
+    #message(FATAL_ERROR "${path} is  not relative to ${base_dir}")
   endif()
 
   if("${path}" MATCHES "^\\/")
