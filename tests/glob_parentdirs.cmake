@@ -1,5 +1,19 @@
 function(test)
 
+
+  path_relative("c:/test" "e:/test3")
+  ans(res)
+  assert("${res}" STREQUAL "e:/test3")
+
+  
+  path_relative("c:/test1/test3" "c:/test1/test2/test3" )
+  ans(res)
+  assert("${res}" STREQUAL "../test2/test3")
+ 
+
+  
+
+
   path_parent_dirs("c:/dir1/dir2/file.ext")
   ans(dirs)
   assert(EQUALS ${dirs} c:/dir1/dir2 c:/dir1 c:)
