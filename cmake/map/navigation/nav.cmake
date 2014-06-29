@@ -1,3 +1,11 @@
+# a convenience function for navigating maps
+# nav(a.b.c) -> returns memver c of member b of map a
+# nav(a.b.c 3) ->sets member c of member b of map a to 3 (creating any missing maps along the way)
+# nav(a.b.c = d.e.f) -> assignes the value of d.e.f to a.b.c
+# nav(a.b.c += d.e) adds the value of d.e to the value of a.b.c
+# nav(a.b.c -= d.e) removes the value of d.e from a.b.c
+# nav(a.b.c FORMAT "{d.e}@{d.f}") formats the string and assigns a.b.c to it
+# nav(a.b.c CLONE_DEEP d.e.f) clones the value of d.e.f depely and assigns it to a.b.c
 function(nav navigation_expression)
   set(args ${ARGN})
   if(NOT DEFINED args)
@@ -12,12 +20,17 @@ function(nav navigation_expression)
 
 
   set(args ${ARGN})
-  list_peek_front( args)
+  list_peek_front(args)
   ans(first)
-  
+
+  if("_${first}" STREQUAL _CALL)
+    call(${args})
+    ans(args)
+  endif()
+
   if("_${first}" STREQUAL _FORMAT)
     list_pop_front( args)
-    map_format( "${args}")  
+    map_format("${args}")  
     ans(args)
   endif()
 
@@ -41,8 +54,8 @@ function(nav navigation_expression)
   if("_${first}" STREQUAL _ASSIGN OR "_${first}" STREQUAL _= OR "_${first}" STREQUAL _*)
     list_pop_front( args)
     map_navigate(args "${args}")
+    
   endif()
-
 
   if("_${first}" STREQUAL _CLONE_DEEP)
     list_pop_front( args)

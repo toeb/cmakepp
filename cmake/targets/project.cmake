@@ -9,6 +9,10 @@ function(register_project name)
 
 endfunction()
 
+
+
 macro(project)
   _project(${ARGN})
+  event_emit("project" ${ARGN})
 endmacro()
+

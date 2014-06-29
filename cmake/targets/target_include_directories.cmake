@@ -1,4 +1,5 @@
 function(target_include_directories target)
+
 if(NOT COMMAND _target_include_directories)
   cmake_parse_arguments("" "SYSTEM;BEFORE;PUBLIC;INTERFACE;PRIVATE" "" "" ${ARGN} )
   message(DEBUG "using fallback version of target_include_directories, consider upgrading to cmake >= 2.8.10")
@@ -19,4 +20,6 @@ else()
   # default implementation
   _target_include_directories(${target} ${ARGN})
 endif()
+  event_emit(target_include_directories ${ARGN})
+  
 endfunction()
