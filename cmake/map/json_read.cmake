@@ -1,6 +1,9 @@
-
-
-  function(json_read file)
+# reads a json file from the specified location
+# the location may be relative (see explanantion of path() function)
+# returns a map or nothing if reading fails 
+function(json_read file)
+    path("${file}")
+    ans(file)
     if(NOT EXISTS "${file}")
       return()
     endif()
@@ -15,4 +18,4 @@
     file_cache_update("${cache_key}" "${data}")
 
     return_ref(data)
-  endfunction()
+endfunction()
