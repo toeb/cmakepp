@@ -16,7 +16,7 @@ function(path_to_map map path)
 
     if(NOT path_parts)
       if(NOT current_map)
-      map_set(${current} "${current_part}" true)
+      map_set(${current} "${current_part}" "${path}")
       endif()
       return()
     endif()

@@ -12,7 +12,9 @@ endfunction()
 
 
 macro(project)
+  set(parent_project_name "${PROJECT_NAME}")
   _project(${ARGN})
+  set(project_name "${PROJECT_NAME}") 
   event_emit("project" ${ARGN})
 endmacro()
 

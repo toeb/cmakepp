@@ -3,12 +3,10 @@
 # maps are merged in order ( the last one takes precedence)
 function(map_merge )
 	set(lst ${ARGN})
-	
-	set(res ${${result}})
-	if(NOT res)
-		map_new()
-    ans(res)
-	endif()
+
+	map_new()
+  ans(res)
+  
 	foreach(map ${lst})
 		map_keys(${map} )
 		ans(keys)
