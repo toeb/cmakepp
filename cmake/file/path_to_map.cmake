@@ -10,6 +10,8 @@ function(path_to_map map path)
   while(true)
     list_pop_front(path_parts)
     ans(current_part)
+
+
     
     map_tryget(${current} "${current_part}")
     ans(current_map)

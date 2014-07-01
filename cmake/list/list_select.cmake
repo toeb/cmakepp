@@ -7,11 +7,3 @@ function(list_select __list_select_lst selector)
 	endforeach()
 	return_ref(__list_select_result_list)
 endfunction()
-
-# executes action on each of lists elements
-function(list_foreach lst action)
-  foreach(item ${${lst}})
-    call(action("${item}"))
-  endforeach()
-endfunction()
-
