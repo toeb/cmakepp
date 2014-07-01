@@ -1,4 +1,16 @@
+
+
+# executes action on each of lists elements
+#function(list_foreach lst action)
+#  foreach(item ${${lst}})
+#    call(action("${item}"))
+#  endforeach()
+#endfunction()
+
+
+
 function(list_foreach _action _query)
+	#message(FATAL_ERROR "not supported currently")
 	# import action function
 	function_import("${_action}" as _map_foreach_action REDEFINE)
 

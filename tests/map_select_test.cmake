@@ -1,4 +1,7 @@
 function(test)
+	message("test inconclusive")
+	return()
+
 	element(LIST)
 		element(MAP)
 			value(KEY k1 v11)

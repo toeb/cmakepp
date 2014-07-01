@@ -1,5 +1,7 @@
 function(test)
 
+  message("test inconclusive")
+  return()
  	set(lstA 0 1)
  	set(lstB 0 1)
  	set(lstC 0 1)
