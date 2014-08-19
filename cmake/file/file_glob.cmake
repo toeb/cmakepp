@@ -5,11 +5,9 @@
 # specifiying the --relative flag will return paths relative to base_dir 
 function(file_glob base_dir)
   set(args ${ARGN})
-  list_contains(args --relative)
+  list_extract_flag(args --relative)
   ans(relative)
-  if(relative)
-    list(REMOVE_ITEM args --relative)
-  endif()
+  
   set(globs)
   set(globs_recurse)
   foreach(arg ${args})
