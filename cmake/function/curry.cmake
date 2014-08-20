@@ -67,7 +67,7 @@
 
     set(evaluate
 "function(${_as} ${arguments_string})${bound_args}
-  ${original_func}(${call_string})
+  ${original_func}(${call_string} \${ARGN})
   return_ans()
 endfunction()")
 
