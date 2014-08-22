@@ -1,8 +1,7 @@
 
 # returns true if value could be parsed
 function(list_parse_descriptor descriptor)  
-  cmake_parse_arguments("" "" "UNUSED_ARGS;ERROR" "" ${ARGN})
-
+  cmake_parse_arguments("" "" "UNUSED_ARGS;ERROR;CUTOFFS" "" ${ARGN})
   set(args ${_UNPARSED_ARGUMENTS})
   map_import(${descriptor})
   list_find_first(args ${labels})
@@ -12,11 +11,21 @@ function(list_parse_descriptor descriptor)
   ans(unused_args)
   list_slice(args ${starting_index} -1)
   ans(value_args)
-  set(cut_off ${max})
+
+  list_find_first(value_args ${${_CUTOFFS}})
+  ans(cut_off)
+  if(${cut_off} LESS 0)
+    set(cut_off ${max})
+  endif()
+  math_min(${max} ${cut_off})
+  ans(cut_off)
+
+  #message(FORMAT "value args for {descriptor.id} max:${cut_off} are ${value_args} args: ${args}")
 
   # remove first arg as its the flag used to start this value
   list_pop_front( value_args)
-ans(used_label)
+  ans(used_label)
+  
   # list length
   list(LENGTH value_args len)
 
@@ -39,16 +48,15 @@ ans(used_label)
   list_slice(value_args 0 "${cut_off}")
   ans(value_args)
 
-
   # option
   if(${min} STREQUAL 0 AND ${max} STREQUAL 0)
+    set(${_ERROR} false PARENT_SCOPE)
     if(starting_index LESS 0)
       return(false)
     else()
       return(true)
     endif()
   endif()
-
 
   # if less than min args are avaiable set error to true but
   # still return the found values however

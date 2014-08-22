@@ -8,7 +8,7 @@ function(alias_create name command_string)
 
   if(WIN32)
     message("creating windows alias")
-    file_write("${path}" "@echo off\r\n${command_string}")
+    file_write("${path}" "@echo off\r\n${command_string} %*")
   else()
     message("only implemented for windows")
   endif()
@@ -16,3 +16,4 @@ function(alias_create name command_string)
 
 
 endfunction()
+
