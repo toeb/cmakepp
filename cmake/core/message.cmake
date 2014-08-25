@@ -137,6 +137,8 @@ function(message)
 		endif()
 	endif()
 
+	tock()
+	
 	_message(${modifier} "${indent}" "${msg}")
 
 
