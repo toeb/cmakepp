@@ -7,7 +7,7 @@
 objects, methods, functions, maps, inheritance, parsers, lists, ...
 # Installing
 
-Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
+Download the repository and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
 be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7`
 
 # usage:
@@ -25,24 +25,24 @@ cmake -P oo-cmake-tests.cmake
 `oocmake` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
 
 * Features
-** eval - evaluates cmake code and is the basis of many advanced features
-** shell
-*** readline - allows user input from the keyboard
-*** directory and file functions (like bash)
-**** cd(), pushd(), popd(), mkdir() pwd(), touch(), ls(), fappend(), fwrite(),...
-**** path(possbilyRelativePath) -> gets the absolute path 
-** debugging
-*** some convinience functions
-*** breakpoint() - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
-** vcs
-*** hg()... hg(init), hg(clone <url>), ...
-*** git()... git(init), git(clone <url>),... shorthand for executing git in any directory
-** string 
-*** string_slice
-*** string_splice
-*** parsing and comparing semantic versions (semver)
-*** ...
-** lists -extension to cmake list() functionaly
+  - eval - evaluates cmake code and is the basis of many advanced features
+  - shell
+    + readline - allows user input from the keyboard
+    + directory and file functions (like bash)
+       * cd(), pushd(), popd(), mkdir() pwd(), touch(), ls(), fappend(), fwrite(),...
+       * path(possbilyRelativePath) -> gets the absolute path 
+  - debugging
+    + some convinience functions
+    + breakpoint() - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
+  - vcs
+    + hg()... hg(init), hg(clone <url>), ...
+    + git()... git(init), git(clone <url>),... shorthand for executing git in any directory
+  - string 
+    + string_slice
+    + string_splice
+    + parsing and comparing semantic versions (semver)
+    + ...
+  = lists -extension to cmake list() functionaly
 *** peeking, popping, sorting, map, fold, predicates(any,all,contains,...)
 ** maps - basic map functions and utility functions (nested data structures for cmake)
 *** get/set/append/remove operations
