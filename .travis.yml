@@ -1,6 +1,8 @@
 language: cpp
 compiler:
   - gcc
+notifications:
+  slack: fallto:MlnVOMNkx8YopsaSSxqh2Rcr
 before_install:
   - sudo apt-get install cmake
   - sudo apt-get install mercurial
