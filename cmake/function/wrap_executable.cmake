@@ -10,7 +10,7 @@
         pwd()
         ans(cwd)
         if(NOT IS_DIRECTORY \"\${cwd}\")
-          message(FATAL_ERROR \"${alias}: \${cwd} is not a directory, try setting it via cd()\")
+          message(FATAL_ERROR \"${alias}: '\${cwd}' is not a directory, try setting it via cd()\")
         endif()
         set(args \${ARGN})
         list_extract_flag(args --result)

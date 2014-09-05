@@ -11,7 +11,7 @@ function(test)
     return_ref(res)
   endfunction()
 
-
+  cd("${test_dir}")
   fork_cmake("message(hello)\ndbg(hello)")
   ans(res)
 
