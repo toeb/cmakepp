@@ -10,7 +10,7 @@ function(test)
     file(REMOVE "${tmp_file}")
     return_ref(res)
   endfunction()
-
+ mkdir("${test_dir}")
   cd("${test_dir}")
   fork_cmake("message(hello)\ndbg(hello)")
   ans(res)
