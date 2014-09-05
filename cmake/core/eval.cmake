@@ -7,9 +7,10 @@
 function(eval code)
   # variables which come before incldue() are obfuscated names so that
   # they do not clutter the scope
-  # retrieve current ans value
   
+  # retrieve current ans value  
   ans(__eval_current_ans)
+  
   oocmake_config(temp_dir)
   ans(__eval_temp_dir)
 

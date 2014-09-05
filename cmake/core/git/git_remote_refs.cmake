@@ -1,8 +1,13 @@
 # returns a list of ref maps containing the fields 
 # name type and revision
 function(git_remote_refs uri)
-  set(success)
-  git(ls-remote "${uri}" RESULT success STDOUT res)
+  git(ls-remote "${uri}" --result)
+  ans(result)
+
+  map_tryget(${result} result)
+  ans(success)
+  map_tryget(${result} output)
+  ans(res)
 
   if(NOT success)
     return_value()

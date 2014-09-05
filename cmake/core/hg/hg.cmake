@@ -11,6 +11,11 @@ function(hg)
     message(FATAL_ERROR "mercurial is not installed")
   endif()
 
+ wrap_executable(hg "${HG_EXECUTABLE}")
+ hg(${ARGN})
+ return_ans()
+
+# old implementation
   function(hg)
     pwd()
     ans(cwd) 

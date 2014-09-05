@@ -1,4 +1,5 @@
 function(test)
+
   find_package(Hg)
   if(NOT HG_FOUND)
     message("Test Inconclusive, missing mercurial")
@@ -19,6 +20,7 @@ function(test)
 
 
   hg(init)
+return()
   hg(add)
   hg(commit -m "some commit")
 
