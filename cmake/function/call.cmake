@@ -35,6 +35,7 @@
       foreach(__function_call_args_arg ${__function_call_args})
         set(__function_call_args2 "${__function_call_args2} \"${__function_call_args_arg}\"")
       endforeach()
+      set_ans("")
       eval("${__function_call_func}(${__function_call_args2})")
       return_ans(res)
      # message("function returned '${res}'")
@@ -117,5 +118,5 @@
     endif()
 
    # message("nothin")
-   message(FATAL_ERROR "tried to call a non-function: ${__function_call_func}")
+   message(FATAL_ERROR "tried to call a non-function:'${__function_call_func}'")
   endfunction()

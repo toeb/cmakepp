@@ -3,6 +3,7 @@
 # if you specify --result the function will return a the execution result object (see execute()) 
 # else only the application output will be returned
   function(wrap_executable alias executable)
+    set_ans("")
     eval("  
       function(${alias})
         pwd()
@@ -34,4 +35,5 @@
         return_ref(stdout)
       endfunction()
       ")
+    return()
   endfunction()

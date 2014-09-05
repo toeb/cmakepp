@@ -7,6 +7,7 @@
       obj_default_get_keys("${obj}")
       return_ans()
     endif()
+    set_ans("")
     eval("${get_keys}(\"\${obj}\")")
     return_ans()
   endfunction()

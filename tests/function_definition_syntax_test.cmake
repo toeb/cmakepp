@@ -82,6 +82,7 @@ function(test)
       endfunction()
 
       ")
+    set_ans("")
     eval("${str}")
     set(${name} ${inner} PARENT_SCOPE)
     return_ref(outer)

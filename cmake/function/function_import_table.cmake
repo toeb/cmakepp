@@ -10,5 +10,7 @@
     set(ifs "${ifs}endif()\n")
   set("evl" "function(${function_name} switch)\n${ifs}\nreturn()\nendfunction()")
      # message(${evl})
+    set_ans("")
+     
       eval("${evl}")
   endfunction()

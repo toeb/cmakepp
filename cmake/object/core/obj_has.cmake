@@ -6,6 +6,7 @@
       obj_default_has_member("${obj}" "${key}")
       return_ans()
     endif()
+    set_ans("")
     eval("${has}(\"\${obj}\" \"\${key}\")")
     return_ans()
   endfunction()

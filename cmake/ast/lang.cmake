@@ -78,6 +78,7 @@
     set(func_call "${func}(${arguments_string})")
  
    # message("lang: target '${target}'  func call ${func_call}")
+   set_ans("")
     eval("${func_call}")
     ans(res)    
    # message("res '${res}'")

@@ -32,6 +32,7 @@ ${bound_args}
 ${original_func}(\${ARGN})    
 return_ans()
 endfunction()")
+  set_ans("")
   eval("${evaluate}")
   return_ref(_as)
 endfunction()

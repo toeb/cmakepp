@@ -74,6 +74,7 @@ endfunction()")
 
    
    #message("curry: ${evaluate}")
+    set_ans("")
     eval("${evaluate}")
     return_ref(_as)
   endfunction()

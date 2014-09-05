@@ -50,6 +50,7 @@ function(script str)
       message("compiled expression to ${obj_file}")
       file(WRITE "${obj_file}" "${code}\nset(__ans \"${escaped}\")")
       if(code)
+        set_ans("")
         eval("${code}")
       endif()
 
@@ -61,7 +62,7 @@ function(script str)
       map_new()
       ans(global)
     endif()
-
+    set_ans("")
     eval("${symbol}")
     ans(res)
 
