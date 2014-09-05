@@ -8,6 +8,7 @@
       return_ans()
       #set(setter obj_default_setter)
     endif()
+    set_ans("")
     eval("${setter}(\"\${obj}\" \"\${key}\" \"${ARGN}\")")
     return_ans()
   endfunction()

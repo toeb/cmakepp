@@ -38,7 +38,7 @@
 
     set(call_statement "${evaluated_path}(${evaluated_arguments})")
    # message("${call_statement}")
-
+   set_ans("")
     eval("${call_statement}")
     return_ans()
   endfunction()

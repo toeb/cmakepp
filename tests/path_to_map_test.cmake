@@ -6,5 +6,4 @@ function(test)
   assert(DEREF "{map.home.mbslib.Documents.test}" STREQUAL "/home/mbslib/Documents/test")
 
 
-
 endfunction()

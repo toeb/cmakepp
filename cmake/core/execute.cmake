@@ -1,15 +1,29 @@
 
+  # input:
   # {
-  #  path:<executable_path>,
-  #  args:<args ...>,
-  #  [timeout: ],
-  #  [cwd: ],
-  #  
-  # } 
+  #  path:<executable_path>, // path to executable
+  #  args:<args ...>,        // command line arguments to executable
+  #  [timeout: ],            // timout
+  #  [cwd: ],                // current working dir (default is whatever pwd returns)
+  #
+  # }
+  # returns:
+  # {
+  #   path: ...,
+  #   args: ...,
+  #   timeout: ...,
+  #   cwd: ...,
+  #   output: <string>,   // all output of the process (stderr, and stdout)
+  #   result: <int>       // return code of the process (normally 0 indicates success)
+  # }
+  #
   #
   function(execute processStart)
     obj("${processStart}")
     ans(processStart)
+  
+    map_clone_deep(${processStart})
+    ans(processResult)
 
     map_get(${processStart} "path")
     ans(path)
@@ -22,6 +36,8 @@
 
     if(timeout)
       set(timeout TIMEOUT ${timeout})
+    else()
+      map_set(${processResult} timeout -1)
     endif()
 
     map_tryget(${processStart} "cwd")
@@ -33,6 +49,7 @@
       if(NOT IS_DIRECTORY "${cwd}")
         file(MAKE_DIRECTORY "${cwd}")
       endif()
+      map_set(${processResult} cwd "${cwd}")
       set(cwd WORKING_DIRECTORY ${cwd})
     endif()
 
@@ -45,9 +62,8 @@
       ERROR_VARIABLE output
     )
 
-    map_clone_deep(${processStart})
-    ans(processResult)
-
+  
+    
     map_set(${processResult} output "${output}")
     map_set(${processResult} result "${result}")
 

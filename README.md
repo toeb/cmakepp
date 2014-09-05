@@ -7,7 +7,7 @@
 objects, methods, functions, maps, inheritance, parsers, lists, ...
 # Installing
 
-Download the repository and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
+Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
 be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7`
 
 # usage:
@@ -25,56 +25,58 @@ cmake -P oo-cmake-tests.cmake
 `oocmake` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
 
 * Features
-  - eval - evaluates cmake code and is the basis of many advanced features
-  - shell
-    + readline - allows user input from the keyboard
-    + directory and file functions (like bash)
-       * cd(), pushd(), popd(), mkdir() pwd(), touch(), ls(), fappend(), fwrite(),...
-       * path(possbilyRelativePath) -> gets the absolute path 
-  - debugging
-    + some convinience functions
-    + breakpoint() - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
-  - vcs
-    + hg()... hg(init), hg(clone <url>), ...
-    + git()... git(init), git(clone <url>),... shorthand for executing git in any directory
-  - string 
-    + string_slice
-    + string_splice
-    + parsing and comparing semantic versions (semver)
-    + ...
-  = lists -extension to cmake list() functionaly
-*** peeking, popping, sorting, map, fold, predicates(any,all,contains,...)
-** maps - basic map functions and utility functions (nested data structures for cmake)
-*** get/set/append/remove operations
-*** extended operations
-**** nav - navigate through a path of maps, allows getting and setting e.g. nav(res = map1.prop1.prop12), nav(resultmap.prop.otherprop = res)....
-**** serialization
-***** json
-***** quickmap format (native to cmake )
-**** invert
-**** import
-**** capture
-**** extract
-**** omit
-**** partial
-**** pick
-**** values
-**** algorithms
-***** depth first serach
-***** breadth first search
-***** graph search
-***** ...
-****
-*** expression syntax.
-**** obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}") -> creates the specified object
-** functions
-*** define dynamic functions (without cluttering the namespace)
-*** call functions dynamically (basically allowing ${functionName}(arg1 arg2 ...)
-*** set a variable to the result of functions rcall(result = somefunction())
-*** lambda functions (a shorthand syntax for defining inline functions. ): (var1,var2)-> do_somthing($var1); do_something_else($var2) 
-*** import functions (from files, from string, ...)
-** object - object oriented programming with prototypical inheritance, member functions
-*** example.  (strange but valid cmake)
+	* interactive cmake console (icmake.bat, icmake.sh)
+	* eval - evaluates cmake code and is the basis of many advanced features
+	* shell
+		* readline - allows user input from the keyboard
+		* "plattfrom independent" shell execution using shell() 
+		* directory and file functions (like bash)
+			* cd(), pushd(), popd(), mkdir() pwd(), touch(), ls(), fappend(), fwrite(),...
+			* path(possbilyRelativePath) -> gets the absolute path 
+	* debugging
+		* some convenience functions
+		* breakpoint() - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
+	* vcs
+		* hg()... hg(init), hg(clone <url>), ...
+		* git()... git(init), git(clone <url>),... shorthand for executing git in any directory
+	* string functions 
+		* string_slice
+		* string_splice
+		* parsing and comparing semantic versions (semver)
+		* ...
+	* lists -extension to cmake list() functionaly
+		* peeking, popping, sorting, map, fold, predicates(any,all,contains,...)
+	* maps - basic map functions and utility functions (nested data structures for cmake)
+		* get/set/append/remove operations
+		* extended operations
+		* nav - navigate through a path of maps, allows getting and setting e.g. nav(res = map1.prop1.prop12), nav(resultmap.prop.otherprop = res)....
+		* serialization
+			* json
+			* quickmap format (native to cmake)
+		* invert
+		* import
+		* capture
+		* extract
+		* omit
+		* partial
+		* pick
+		* values
+		* algorithms
+			* depth first serach
+			* breadth first search
+			* graph search
+			* ...
+		* ...
+		* expression syntax.
+			* obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}") -> creates the specified object
+	* functions
+		* define dynamic functions (without cluttering the namespace)
+		* call functions dynamically (basically allowing ${functionName}(arg1 arg2 ...) `call(${functionName}(arg1 arg2 ...))`
+		* set a variable to the result of functions `rcall(result = somefunction())`
+		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
+		* import functions (from files, from string, ...)
+	* object - object oriented programming with prototypical inheritance, member functions
+		* example.  (strange but valid cmake)
 ```
 function(BaseType)
 	# initialize a field
@@ -118,43 +120,45 @@ rcall(result = myobj.add(3))
 rcall(result = myobj.sub(2))
 # result == 1, output 1
 ```
-** other things like web queries, packing and unpacking,...
+	
+	* other things like web queries, packing and unpacking,...
 
+NOTE: the list is incomplete
+# Interactive CMake Shell
 
+If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `icmake.bat` or `icmake.sh` which gives you a prompt with the all functions available in `oocmake`.
 
-# Expressions
+`icmake` allows you to enter valid cmake and also a more lazily you can neglect to enter the parentheses around functions e.g. `cd my/path ` -> `cd(my/path)`
 
+Since console interaction is complicated with cmake and cmake itself is not very general purpose by design the interactive cmake shell is not as user friendly as it should be.  If you input an error the shell will terminate because cmake terminates. This problem might be addressed in the future (I have an idea however not the time to implement and test it)
+Example:
 ```
-<expr> ::= <literal>|
-<expr>
-<function call>::= <function>(<expr>)
-<string value> ::= '<cdata>'|"<cdata>"
-<list> ::= <value>|<value>,<list>
-<dereferenced value> ::= *<ref> 
-<value> ::= <string>|<string>;<value>|<empty>
-<empty> ::= <string> # length 0
-<rvalue> ::= <empty>|<function call>|<string>|*<ref>|$<cmake var name>
-<lvalue> ::= $<cmake var name>|*<ref>
-<assignment> ::= <lvalue> = <rvalue>
-<navigation> ::= <ref>.<key>|<ref>[<index>]|<var>[index]|<ref>[<key>]
-<ref> ::= <cmake var name> # ${<cmake varname>} evaluates to a string: |ref:<type>:<id>
-<cmake var name> ::= # a variable which evaluates to a value when ${<cmake var name>}
-<indexer> ::= <expr>[<expr>]
-<expr> ::= <string>|<expr><expr>|{single expr}|<var>
-<single expr> ::= 	<var> = <expr> |
-					<function>(<expr>) | 
-					* <ref>
-					<ref>.
-<var> ::= <cmake var name>|<ref>|<ref path>
-<ref> ::=  
-<function> ::= <function cmake>|<function string>|<function string>|<function lambda>
-
-<function cmake> := # name of function defined by cmake's function(<name>)...endfunction()
-<function string> ::=  # a cmake function definition
-<function file> ::= # a valid cmake file containing a <function string>
-<function lambda> ::= (<args>)-><command>;<command>;... #  call return or let the last ans() be returned
+> ./icmake.sh
+icmake> cd /usr/tobi
+"/usr/tobi"
+icmake> pwd
+"/usr/tobi"
+icmake> @echo off
+echo is now off
+icmake> pwd
+icmake> message("${ANS}")
+/usr/tobi
+icmake> @echo on
+echo is now on
+icmake> function(myfunc name)\  # <-- backslash allows multiline input
+	        message("hello ${name}") \
+	        obj("{name: $name}")\
+	        ans(person)\
+	        return(${person})\
+        endfunction()
+"/usr/tobi"                 # <-- the last output of any function is always repeated. 
+icmake> myfunc Tobi
+hello Tobi  				# <-- output in function using message
+{"name":"Tobi"} 			# <-- json serialized return value of function
+icmake> quit
+icmake is quitting
+> 
 ```
-
 
 # Returning values
 
