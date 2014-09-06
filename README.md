@@ -342,7 +342,12 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 I have written a couple of usefull (if not essential) functions with which managing functions becomes a lot easier
 ```
-eval(string)			# executes the given cmake code
+eval(string)			# executes the given cmake code 
+						# if the code returns something (see return)
+						# the result will be available after eval() using ans()
+eval_ref(<var>)         # executes the given code
+						# since this is a macro the code is passed as a variable name
+						# however this allows using set(PARENT_SCOPE) 
 function_new()			# returns a unqiue name for a function
 function_import(function_ish as function_name) # imports a function under the specified name
 call(function_ish([args ...])) # calls a function
