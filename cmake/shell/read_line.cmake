@@ -5,7 +5,7 @@ function(read_line)
   ans(value_file)
 
   if(WIN32)
-    file_tmp("bat" "@echo off\nset val=\nset /p val=\necho | set /p dummyName=\"%val%\"> ${value_file}")
+    file_tmp("bat" "@echo off\nsetlocal EnableDelayedExpansion\nset val=\nset /p val=\necho !val!> \"${value_file}\"")
     ans(shell_script)
   else()
     file_tmp("sh" "#!/bin/bash\nread text\necho -n $text>${value_file}")
@@ -15,9 +15,14 @@ function(read_line)
   endif()
 
   # execute shell script which write the keyboard input to the ${value_file}
-  execute_process(COMMAND  "${shell_script}")
+  execute_process(COMMAND "${shell_script}")
+
   # read value file
   file(READ "${value_file}" line)
+
+  # strip trailing '\n'
+  string(REGEX REPLACE "(.*)\n$" "\\1" line "${line}")
+
   # remove temp files
   file(REMOVE "${shell_script}")
   file(REMOVE "${value_file}")
