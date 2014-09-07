@@ -269,12 +269,48 @@ map_append_string()
  
 Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
 
+## Json Serialziation and Deserialization
+
+I have written five functions which you can use to serialize and deserialize json.  
+
+### Functions
+
+* `json(<map>)` 
+    - transforms the specified object graph to condensed json (no superfluos whitespace)
+    - cycles are detected but not handled. (the property will not be set if it would cause a cycle e.g. map with a self reference would be serialized to `{"selfref":}` which is incorrect json... which will be addressed in the future )  
+    - unicode is not transformed into `\uxxxx` because of lacking unicode support in cmake
+* `json_indented(<map>)` 
+    - same as `json()` however is formatted to be readable ie instead of `{"var":"val","obj":{"var":["arr","ay"]}}` it will be 
+```
+{
+	"var":"var",
+	"obj":[
+		"arr",
+		"ay"
+	]
+}
+```
+* `json_deserialize(<json_string>)`
+	- deserialized a json string ignoring any unicode escapes (`\uxxxx`)
+* `json_read(<file>)`
+	- directly deserializes af json file into a map
+* `json_write(<file> <map>)`
+	- write the map to the file
+
+### Caveats
+As can be seen in the functions' descriptions unicode is not support. Also you should probably avoid cycles.  
+
+### Caching
+Because deserialization is extremely slow I chose to cache the results of deserialization. So the first time you deserialize something large it might take long however the next time it will be fast (if it hasn't changed).
+This is done by creating a hash from the input string and using it as a cache key. The cache is file based using Quick Map Syntax (which is alot faster to parse since it only has to be included by cmake).  
+
 ## Quick Map Syntax
-To quickly define a map in cmake I introduce the quick map syntax which revolves around these 4 functions and is quite intuitive to understand:
+To quickly define a map in cmake I introduce the quick map syntax which revolves around these 5 functions and is quite intuitive to understand:
 ```
 map([key]) # creates, returns a new map (and parent map at <key> to the new map) 
 key(<key>)	# sets the current key
 val([arg ...])	# sets the value at current map[current key] to <args>
+kv(<key> [arg ...]) # same as writing key(<key>) LF val([arg ...]) 
 end() # finishes the current map and returns it
 ```
 
@@ -289,10 +325,8 @@ map()
  value(Becker)
  value(projects)
  	map()
- 		key(name)
- 		value(oo-cmake)
- 		key(url)
- 		value(https://github.org/toeb/oo-cmake)
+ 		kv(name oo-cmake)
+ 		kv(url https://github.org/toeb/oo-cmake)
  	end()
  	map()
  		key(name)

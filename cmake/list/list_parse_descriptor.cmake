@@ -3,7 +3,7 @@
 function(list_parse_descriptor descriptor)  
   cmake_parse_arguments("" "" "UNUSED_ARGS;ERROR;CUTOFFS" "" ${ARGN})
   set(args ${_UNPARSED_ARGUMENTS})
-  map_import(${descriptor})
+  scope_import_map(${descriptor})
   list_find_first(args ${labels})
   ans(starting_index)
 

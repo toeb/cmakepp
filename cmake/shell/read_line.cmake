@@ -5,6 +5,8 @@ function(read_line)
   ans(value_file)
 
   if(WIN32)
+    # thanks to Fraser999 for fixing whis to dissallow variable expansion and whitespace stripping
+    # etc. See merge comments
     file_tmp("bat" "@echo off\nsetlocal EnableDelayedExpansion\nset val=\nset /p val=\necho !val!> \"${value_file}\"")
     ans(shell_script)
   else()
@@ -20,8 +22,11 @@ function(read_line)
   # read value file
   file(READ "${value_file}" line)
 
-  # strip trailing '\n'
-  string(REGEX REPLACE "(.*)\n$" "\\1" line "${line}")
+  # strip trailing '\n' which might get added by the shell script. as there is no way to input \n at the end 
+  # manually this does not change for any system
+  if("${line}" MATCHES "(\n|\r\n)$")
+    string(REGEX REPLACE "(\n|\r\n)$" "" line "${line}")
+  endif()
 
   # remove temp files
   file(REMOVE "${shell_script}")

@@ -13,7 +13,7 @@
       ans(descriptor)
       list(APPEND descriptors ${descriptor})
 
-      map_import(${descriptor})
+      scope_import_map(${descriptor})
       set(current_help)
       list(GET labels 0 first_label)
       set(current_help ${first_label})
@@ -34,7 +34,7 @@
     message("${structure_help}")
     message("Details: ")
     foreach(descriptor ${descriptors})
-      map_import(${descriptor})
+      scope_import_map(${descriptor})
       list_to_string( labels ", ")
       ans(res)
       message("${displayName}: ${res}")
