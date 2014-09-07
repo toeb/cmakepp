@@ -5,13 +5,13 @@
   ans(res)
   map_tryget("${version}" prerelease)
   ans(prerelease)
-  if("${prerelease}_" STREQUAL "_")
+  if(NOT "${prerelease}_" STREQUAL "_")
     set(res "${res}-${prerelease}")
   endif()
 
-  map_tryget("${version}" metadata)
+  map_tryget("${version}" metadatas)
   ans(metadata)
-  if("${metadata}_" STREQUAL "_")
+  if(NOT "${metadata}_" STREQUAL "_")
     set(res "${res}+${metadata}")
   endif()
 
