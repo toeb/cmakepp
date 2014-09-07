@@ -3,7 +3,7 @@ function(test)
   function(path_format path vars)
     obj("${vars}")
     ans(vars)
-    map_import("${vars}")
+    scope_import_map("${vars}")
 
     map_format("${vars}" "${path}")
     ans(path)

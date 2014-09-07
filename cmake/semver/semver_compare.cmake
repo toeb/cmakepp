@@ -9,8 +9,8 @@ function(semver_compare  left right)
  ans(right)
 
 
-map_import(${left} left)
-map_import(${right} right)
+  scope_import_map(${left} left_)
+  scope_import_map(${right} right_)
 
  semver_component_compare( ${left_major} ${right_major})
  ans(cmp)

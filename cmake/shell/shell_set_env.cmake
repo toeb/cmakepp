@@ -12,7 +12,9 @@ function(shell_redirect code)
   file_tmp("txt" "")
   ans(tmp_file)
   shell("code > ${tmp_file}")
-  file(REMOVE "")
+  fread("${tmp_file}")
+  
+  file(REMOVE "${tmp_file}")
 endfunction()
 
 function(shell_get key)
