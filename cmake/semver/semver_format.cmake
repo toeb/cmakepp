@@ -9,7 +9,7 @@
     set(res "${res}-${prerelease}")
   endif()
 
-  map_tryget("${version}" metadatas)
+  map_tryget("${version}" metadata)
   ans(metadata)
   if(NOT "${metadata}_" STREQUAL "_")
     set(res "${res}+${metadata}")
