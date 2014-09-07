@@ -1,4 +1,4 @@
-
+# checks if the constraint holds for the specified version
 function(semver_constraint_evaluate  constraint version)
   semver_constraint_compile("${constraint}")
   ans(compiled_constraint)
