@@ -25,7 +25,7 @@ cmake -P oo-cmake-tests.cmake
 `oocmake` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
 
 * Features
-	* interactive cmake console (icmake.bat, icmake.sh)
+	* [interactive cmake console](#icmake) (icmake.bat, icmake.sh)
 	* eval - evaluates cmake code and is the basis of many advanced features
 	* shell
 		* readline - allows user input from the keyboard
@@ -42,17 +42,21 @@ cmake -P oo-cmake-tests.cmake
 	* string functions 
 		* string_slice
 		* string_splice
-		* parsing and comparing semantic versions (semver)
+		* Semantic Versions ([semver](#semver))
+			- normalizing 
+			- convert to object
+			- semver constraints
+			-
 		* ...
 	* lists -extension to cmake list() functionaly
 		* peeking, popping, sorting, map, fold, predicates(any,all,contains,...)
-	* maps - basic map functions and utility functions (nested data structures for cmake)
+	* [maps](#maps) - basic map functions and utility functions (nested data structures for cmake)
 		* get/set/append/remove operations
 		* extended operations
 		* nav - navigate through a path of maps, allows getting and setting e.g. nav(res = map1.prop1.prop12), nav(resultmap.prop.otherprop = res)....
 		* serialization
-			* json
-			* quickmap format (native to cmake)
+			* [json](#json)
+			* [quickmap format](#quickmap) (native to cmake)
 		* invert
 		* import
 		* capture
@@ -70,12 +74,13 @@ cmake -P oo-cmake-tests.cmake
 		* expression syntax.
 			* obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}") -> creates the specified object
 	* functions
+		* [returning values](#return)
 		* define dynamic functions (without cluttering the namespace)
 		* call functions dynamically (basically allowing ${functionName}(arg1 arg2 ...) `call(${functionName}(arg1 arg2 ...))`
 		* set a variable to the result of functions `rcall(result = somefunction())`
 		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
 		* import functions (from files, from string, ...)
-	* object - object oriented programming with prototypical inheritance, member functions
+	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
 		* example.  (strange but valid cmake)
 ```
 function(BaseType)
@@ -124,7 +129,7 @@ rcall(result = myobj.sub(2))
 	* other things like web queries, packing and unpacking,...
 
 NOTE: the list is incomplete
-# Interactive CMake Shell
+# <a name="icmake"></a>Interactive CMake Shell
 
 If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `icmake.bat` or `icmake.sh` which gives you a prompt with the all functions available in `oocmake`.
 
@@ -160,7 +165,7 @@ icmake is quitting
 > 
 ```
 
-# Returning values
+# <a name="return"></a>Returning values
 
 **Related Functions**
 
@@ -248,7 +253,7 @@ assert(${val} STREQUAL "hello world")
 ```
 
 
-# Maps
+# <a name="maps"></a> Maps
 
 Using refs it easy to implement a map datastructure:
 ```
@@ -269,7 +274,7 @@ map_append_string()
  
 Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
 
-## Json Serialziation and Deserialization
+## <a name="json"></a>Json Serialziation and Deserialization
 
 I have written five functions which you can use to serialize and deserialize json.  
 
@@ -304,7 +309,7 @@ As can be seen in the functions' descriptions unicode is not support. Also you s
 Because deserialization is extremely slow I chose to cache the results of deserialization. So the first time you deserialize something large it might take long however the next time it will be fast (if it hasn't changed).
 This is done by creating a hash from the input string and using it as a cache key. The cache is file based using Quick Map Syntax (which is alot faster to parse since it only has to be included by cmake).  
 
-## Quick Map Syntax
+## <a name="quickmap"></a>Quick Map Syntax
 To quickly define a map in cmake I introduce the quick map syntax which revolves around these 5 functions and is quite intuitive to understand:
 ```
 map([key]) # creates, returns a new map (and parent map at <key> to the new map) 
@@ -419,7 +424,7 @@ function(global_counter)
 endfunction()
 ```
 
-# Objects 
+# <a name="objects"></a>Objects 
 
 Objects are an extension of the maps.  These are the functions which are available:
 ```
@@ -449,7 +454,7 @@ __destruct__	# a function that is called when the object is destroyed
 ```
 
 
-# Parsing and handling semantic versions
+# <a name="semver"></a>Parsing and handling semantic versions
 
 
 A `semantic version` gives a specific meaning to it components. It allows software engineers to quickly determine weather versioned components of their software can be updated or if breaking changes could occur.  
