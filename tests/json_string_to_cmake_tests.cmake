@@ -9,7 +9,7 @@ function(test)
 
   json_string_to_cmake("\"\"")
   ans(res)
-  assert(NOT DEFINED res)
+  assert("${res}_" STREQUAL "_")
 
   string(ASCII 10 char)
   json_string_to_cmake("\"\\n\"")
