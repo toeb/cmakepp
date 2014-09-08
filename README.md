@@ -10,24 +10,23 @@ objects, methods, functions, maps, inheritance, parsers, lists, ...
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
 be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7`
 
-# usage:
-Look trough the files in the package.  Most functions will be commented and the other's usage can be inferred.  all functions are avaiable as soon as you include the oo-cmake.cmake file.
+# Usage
+Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the oo-cmake.cmake file.
 
 # Testing
-
 To test the code (alot is tested but not all) run the following in the root dir of oo-cmake 
 ``` 
 cmake -P oo-cmake-tests.cmake 
 ```
 
-#Feature Overview
+# Feature Overview
 
 `oocmake` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
 
 * Features
-	* interactive cmake console (icmake.bat, icmake.sh)
-	* eval - evaluates cmake code and is the basis of many advanced features
-	* shell
+	* [interactive cmake console](#icmake) (icmake.bat, icmake.sh)
+	* [eval](#eval) - evaluates cmake code and is the basis of many advanced features
+	* [shell](#shell)
 		* readline - allows user input from the keyboard
 		* "plattfrom independent" shell execution using shell() 
 		* directory and file functions (like bash)
@@ -39,20 +38,24 @@ cmake -P oo-cmake-tests.cmake
 	* vcs
 		* hg()... hg(init), hg(clone <url>), ...
 		* git()... git(init), git(clone <url>),... shorthand for executing git in any directory
-	* string functions 
+	* [string functions](#string functions) 
 		* string_slice
 		* string_splice
-		* parsing and comparing semantic versions (semver)
+		* Semantic Versions ([semver](#semver))
+			- normalizing 
+			- convert to object
+			- semver constraints
+			-
 		* ...
-	* lists -extension to cmake list() functionaly
+	* [lists](#lists) -extension to cmake list() functionaly
 		* peeking, popping, sorting, map, fold, predicates(any,all,contains,...)
-	* maps - basic map functions and utility functions (nested data structures for cmake)
+	* [maps](#maps) - basic map functions and utility functions (nested data structures for cmake)
 		* get/set/append/remove operations
 		* extended operations
 		* nav - navigate through a path of maps, allows getting and setting e.g. nav(res = map1.prop1.prop12), nav(resultmap.prop.otherprop = res)....
 		* serialization
-			* json
-			* quickmap format (native to cmake)
+			* [json](#json)
+			* [quickmap format](#quickmap) (native to cmake)
 		* invert
 		* import
 		* capture
@@ -67,64 +70,20 @@ cmake -P oo-cmake-tests.cmake
 			* graph search
 			* ...
 		* ...
-		* expression syntax.
+	* [expression syntax](#expr).
 			* obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}") -> creates the specified object
 	* functions
+		* [returning values](#return)
 		* define dynamic functions (without cluttering the namespace)
 		* call functions dynamically (basically allowing ${functionName}(arg1 arg2 ...) `call(${functionName}(arg1 arg2 ...))`
 		* set a variable to the result of functions `rcall(result = somefunction())`
 		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
 		* import functions (from files, from string, ...)
-	* object - object oriented programming with prototypical inheritance, member functions
-		* example.  (strange but valid cmake)
-```
-function(BaseType)
-	# initialize a field
-	this_set(accu 0)
-	# declare a functions which adds a value to the accumulator of this object
-	proto_declarefunction(accuAdd)
-	function(${accuAdd} b)
-		this_get(accu)
-		math_eval("${accu} + ${b}")
-		ans(accu)
-		this_set(accu "${accu}")
-		call(this.printAccu())
-		return(${accu})
-	endfunction()
-
-	proto_declarefunction(printAccu)
-	function(${printAccu})
-		this_get(accu)
-		message("value of accu: ${accu}")
-	endfunction()
-endfunction()
-function(MyType)
-	# inherit another type
-	this_inherit(BaseType)
- 	# create a subtract from accu function
- 	proto_declarefunction(accuSub)
- 	function(${accuSub} b)
- 		this_get(accu)
- 		math_eval("${accu} - ${b}")
-		this_set(accu "${accu}")
-		call(this.printAccu())
-		return(${accu})
- 	endfunction()
-
-endfunction()
-
-new(MyType)
-ans(myobj)
-rcall(result = myobj.add(3))
-# result == 3, output 3
-rcall(result = myobj.sub(2))
-# result == 1, output 1
-```
-	
+	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
 	* other things like web queries, packing and unpacking,...
 
 NOTE: the list is incomplete
-# Interactive CMake Shell
+# <a name="icmake"></a>Interactive CMake Shell
 
 If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `icmake.bat` or `icmake.sh` which gives you a prompt with the all functions available in `oocmake`.
 
@@ -160,7 +119,7 @@ icmake is quitting
 > 
 ```
 
-# Returning values
+# <a name="return"></a>Returning values
 
 **Related Functions**
 
@@ -248,7 +207,7 @@ assert(${val} STREQUAL "hello world")
 ```
 
 
-# Maps
+# <a name="maps"></a> Maps
 
 Using refs it easy to implement a map datastructure:
 ```
@@ -269,7 +228,7 @@ map_append_string()
  
 Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
 
-## Json Serialziation and Deserialization
+## <a name="json"></a>Json Serialziation and Deserialization
 
 I have written five functions which you can use to serialize and deserialize json.  
 
@@ -304,7 +263,7 @@ As can be seen in the functions' descriptions unicode is not support. Also you s
 Because deserialization is extremely slow I chose to cache the results of deserialization. So the first time you deserialize something large it might take long however the next time it will be fast (if it hasn't changed).
 This is done by creating a hash from the input string and using it as a cache key. The cache is file based using Quick Map Syntax (which is alot faster to parse since it only has to be included by cmake).  
 
-## Quick Map Syntax
+## <a name="quickmap"></a>Quick Map Syntax
 To quickly define a map in cmake I introduce the quick map syntax which revolves around these 5 functions and is quite intuitive to understand:
 ```
 map([key]) # creates, returns a new map (and parent map at <key> to the new map) 
@@ -419,11 +378,11 @@ function(global_counter)
 endfunction()
 ```
 
-# Objects 
+# <a name="objects"></a>Objects 
 
 Objects are an extension of the maps.  These are the functions which are available:
 ```
-obj_new([Constructor]) returns a ref to a object
+new([Constructor]) returns a ref to a object
 obj_get(obj)
 obj_set(obj)
 obj_has(obj)
@@ -433,6 +392,58 @@ obj_ownedkeys(obj)
 obj_call(obj)
 obj_callmember(obj key [args])
 obj_delete(obj)
+```
+
+## Example
+
+This is how you define prototypes and instanciate objects.  
+
+The syntax seems a bit strange and could be made much easier with a minor change to CMake... Go Cmake Gods give me true macro power! (allow to define a macro which can call function() and another which contains endfunction()) /Rant
+
+
+
+```
+function(BaseType)
+	# initialize a field
+	this_set(accu 0)
+	# declare a functions which adds a value to the accumulator of this object
+	proto_declarefunction(accuAdd)
+	function(${accuAdd} b)
+		this_get(accu)
+		math_eval("${accu} + ${b}")
+		ans(accu)
+		this_set(accu "${accu}")
+		call(this.printAccu())
+		return(${accu})
+	endfunction()
+
+	proto_declarefunction(printAccu)
+	function(${printAccu})
+		this_get(accu)
+		message("value of accu: ${accu}")
+	endfunction()
+endfunction()
+function(MyType)
+	# inherit another type
+	this_inherit(BaseType)
+ 	# create a subtract from accu function
+ 	proto_declarefunction(accuSub)
+ 	function(${accuSub} b)
+ 		this_get(accu)
+ 		math_eval("${accu} - ${b}")
+		this_set(accu "${accu}")
+		call(this.printAccu())
+		return(${accu})
+ 	endfunction()
+
+endfunction()
+
+new(MyType)
+ans(myobj)
+rcall(result = myobj.add(3))
+# result == 3, output 3
+rcall(result = myobj.sub(2))
+# result == 1, output 1
 ```
 
 ## Special hidden Fields
@@ -449,7 +460,7 @@ __destruct__	# a function that is called when the object is destroyed
 ```
 
 
-# Parsing and handling semantic versions
+# <a name="semver"></a>Parsing and handling semantic versions
 
 
 A `semantic version` gives a specific meaning to it components. It allows software engineers to quickly determine weather versioned components of their software can be updated or if breaking changes could occur.  
@@ -605,5 +616,17 @@ The following functions are usable for semantic versioning.
 ## Caveats
 
 * parsing, constraining and comparing semvers is slow. Do not use too much (you can  compile a semver constraint if it is to be evaluated agains many versions which helps a little with performance issues).  
+
+
+# <a name="eval"></a> Eval
+
+# <a name="string functions"></a> String Functions
+
+# <a name="lists"></a> Lists Functions
+
+# <a name="shell"></a> Shell Functions
+
+# <a name="expr"></a> Expression Syntax
+
 
 ... more coming soon

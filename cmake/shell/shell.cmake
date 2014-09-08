@@ -1,10 +1,12 @@
 # runs a shell script on the current platform
 # not that
 function(shell cmd)
-  if(WIN32)
+  shell_get()
+  ans(shell)
+  if("${shell}" STREQUAL "cmd")
     file_tmp("bat" "@echo off\n${cmd}")
     ans(shell_script)
-  else()
+  elseif("${shell}" STREQUAL "bash")
     file_tmp("sh" "#!/bin/bash\n${cmd}")
     ans(shell_script)
     # make script executable
