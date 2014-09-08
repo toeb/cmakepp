@@ -115,16 +115,26 @@ function(bash_profile_write path env)
   return_ans()
 endfunction()
 
+function(bash_autostart_read)
+  set(session_profile_path "$ENV{HOME}/.profile")
+  if(NOT EXISTS "${session_profile_path}")
+    return()
+  endif()
+  fread("${session_profile_path}")
+  ans(res)
+  return_ref(res)
+endfunction()
+
 # registers
 function(bash_autostart_register)
-  set(session_profile_path "~/.profile")
+  set(session_profile_path "$ENV{HOME}/.profile")
   if(NOT EXISTS "${session_profile_path}")
     touch("${session_profile_path}")
   endif()
   fread("${session_profile_path}")
   ans(profile)
 
-  set(profile_path "~/oocmake.profile.sh")
+  set(profile_path "$ENV{HOME}/oocmake.profile.sh")
 
   if(NOT EXISTS "${profile_path}")
     shell_script_create("${profile_path}" "")
@@ -140,9 +150,9 @@ function(bash_autostart_register)
   return()
 endfunction()
 
-# removes the cmake profile from ~/.profile
+# removes the cmake profile from $ENV{HOME}/.profile
 function(bash_autostart_unregister)
-  set(session_profile_path "~/.profile")
+  set(session_profile_path "$ENV{HOME}/.profile")
   if(NOT EXISTS "${session_profile_path}")
     return()
   endif()
@@ -157,17 +167,15 @@ endfunction()
 
 # returs true if the oocmake session profile (environment variables)are registered
 function(bash_autostart_isregistered)
-  set(session_profile_path "~/.profile")
-
+  set(session_profile_path "$ENV{HOME}/.profile")
   if(NOT EXISTS "${session_profile_path}")
     return(false)
   endif()
-
   fread("${session_profile_path}")
   ans(content)
   string_regex_escape("${session_profile_path}")
   ans(escaped)
-  if("${content}" MATCHES "${escaped}")
+  if("${content}" MATCHES "${session_profile_path}")
     return(true)
   endif()
   return(false)
