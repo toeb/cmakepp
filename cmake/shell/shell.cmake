@@ -1,6 +1,7 @@
 # runs a shell script on the current platform
 # not that
 function(shell cmd)
+  
   shell_get()
   ans(shell)
   if("${shell}" STREQUAL "cmd")
@@ -11,6 +12,7 @@ function(shell cmd)
     ans(shell_script)
     # make script executable
     execute_process(COMMAND "chmod" "+x" "${shell_script}")
+
   endif()
 
   # execute shell script which write the keyboard input to the ${value_file}

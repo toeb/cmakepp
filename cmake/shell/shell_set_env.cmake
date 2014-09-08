@@ -97,15 +97,12 @@ endfunction()
 
 # returns which shell is used (bash,cmd) returns false if shell is unknown
 function(shell_get)
-  shell_env_get(SHELL)
-  ans(res)
-  if(NOT res)
-    if(WIN32)
-      return("cmd")
-    endif()  
-    return(false)
+  if(WIN32)
+    return(cmd)
+  else()
+    return(bash)
   endif()
-  return(bash)
+
 endfunction()
 
 # creates the bash string using the map env which contains key value pairs
@@ -218,5 +215,17 @@ endfunction()
 
 # returns the value of the shell's environment variable ${key}
 function(shell_env_get key)
+  shell_get()
+  ans(shell)
+  if("${shell}" STREQUAL "cmd")
     shell_redirect("echo %${key}%")
+    ans(res)
+  elseif("${shell}" STREQUAL "bash")
+    shell_redirect("echo $${key}")
+    ans(res)
+  else()
+    message(FATAL_ERROR "${shell} not supported")
+  endif()
+
+  return_ref(res)
 endfunction()
