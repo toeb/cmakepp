@@ -1,4 +1,29 @@
-function(compress target dir)
+# compresses all files specified in glob expressions into ${target} tgz file
+# paths are qualified using path() so using cd() before hand will keep folder structure
+# usage: compress(<file> [<glob> ...]) - 
+# 
+function(compress target)
+  set(args ${ARGN})
+  
+  # target file
+  path("${target}")
+  ans(target)
+
+  # get current working dir
+  pwd()
+  ans(pwd)
+
+  # get all files to compress
+  file_glob("${pwd}" ${args})
+  ans(paths)
+
+  # compres all files into target using paths relative to pwd()
+  tar(cvzf "${target}" ${paths})
+  return_ans()
+
+
+
+	# old implementation (will not be reached)
 	cmake_parse_arguments("" "RELATIVE;GLOB" "" "" ${ARGN})
 	set(globs ${ARGN})
 	if(_RELATIVE)
