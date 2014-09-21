@@ -206,7 +206,7 @@ endfunction()
 function(shell_redirect code)
   file_tmp("txt" "")
   ans(tmp_file)
-  shell("${code} > ${tmp_file}")
+  shell("${code}> \"${tmp_file}\"")
   fread("${tmp_file}")
   ans(res)
   file(REMOVE "${tmp_file}")
@@ -218,8 +218,16 @@ function(shell_env_get key)
   shell_get()
   ans(shell)
   if("${shell}" STREQUAL "cmd")
+    #setlocal EnableDelayedExpansion\nset val=\nset /p val=\necho %val%> \"${value_file}\"
     shell_redirect("echo %${key}%")
     ans(res)
+
+    # strip trailing '\n' which might get added by the shell script. as there is no way to input \n at the end 
+    # manually this does not change for any system
+    if("${line}" MATCHES "(\n|\r\n)$")
+      string(REGEX REPLACE "(\n|\r\n)$" "" res "${res}")
+    endif()
+    
   elseif("${shell}" STREQUAL "bash")
     shell_redirect("echo $${key}")
     ans(res)
