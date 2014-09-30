@@ -8,7 +8,7 @@
 # nav(a.b.c CLONE_DEEP d.e.f) clones the value of d.e.f depely and assigns it to a.b.c
 function(nav navigation_expression)
   set(args ${ARGN})
-  if(NOT DEFINED args)
+  if("${args}_" STREQUAL "_")
     map_navigate(res "${navigation_expression}")
     return(${res})
   endif()

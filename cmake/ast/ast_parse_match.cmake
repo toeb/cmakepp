@@ -14,7 +14,7 @@
     stream_take_string(${stream} "${match}")
     ans(res)
     # could not parse if stream did not match "${match}"
-    if(NOT DEFINED res)
+    if("${res}_" STREQUAL "_")
       return(false)
     endif()
 

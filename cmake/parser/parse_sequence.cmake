@@ -28,7 +28,7 @@
         parse_sequence("${rstring}")
         ans(res)
 
-        if(NOT DEFINED res)
+        if("${res}_" STREQUAL "_")
           return(false)
         endif()
 

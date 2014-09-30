@@ -7,7 +7,7 @@ function(list_fold lst aggregator)
   list_pop_front(rst)
   ans(left)
   
-  if(NOT DEFINED rst)
+  if("${rst}_" STREQUAL "_")
     return(${left})
   endif()
 

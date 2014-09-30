@@ -1,6 +1,6 @@
 
 function(list_peek_back  __list_peek_back_lst)
-  if(NOT DEFINED ${__list_peek_back_lst})
+  if("${__list_peek_back_lst}_" STREQUAL "_")
     return()
   endif()
   list(LENGTH ${__list_peek_back_lst} len)
