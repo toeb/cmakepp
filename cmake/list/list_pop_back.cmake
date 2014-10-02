@@ -1,7 +1,7 @@
 # removes the last element from list and returns it
 function(list_pop_back __list_pop_back_lst)
 
-  if("${${__list_pop_back_lst}}_" STREQUAL "_")
+  if("${${__list_pop_back_lst}}_" STREQUAL "_")
     return()
   endif()
   list(LENGTH "${__list_pop_back_lst}" len)
