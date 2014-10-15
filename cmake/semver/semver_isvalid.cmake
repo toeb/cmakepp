@@ -9,6 +9,10 @@ function(semver_isvalid version)
   semver("${version}")
   ans(version)
 
+  if(NOT version)
+    return(false)
+  endif()
+
 #  nav(version.major)
   map_tryget(${version} major)
   ans(current)
