@@ -80,6 +80,12 @@ cmake -P oo-cmake-tests.cmake
 		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
 		* import functions (from files, from string, ...)
 	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
+	* events
+		* you can globally register and call events 
+	* targets
+		* [access to a list of all defined targets](#target_list)
+		* easier access to target properties
+		* 
 	* other things like web queries, packing and unpacking,...
 	* [implementation notes](#implementation_notes)
 NOTE: the list is incomplete
@@ -658,6 +664,32 @@ The following functions are usable for semantic versioning.
 * parsing, constraining and comparing semvers is slow. Do not use too much (you can  compile a semver constraint if it is to be evaluated agains many versions which helps a little with performance issues).  
 
 
+# <a name="targets"></a> Targets
+
+## target_list and project_list
+
+CMake as of version 2.8.7 does not support a list of all defined targets.
+Therfore I overwrote all target adding functions `add_library`, `add_executable`, `add_custom_target`, `add_test`, ... which now register the name of the target globally in a list. You can access this list by using the function `target_list()` which returns the list of known target names .  Note that only targets defined before the `target_list()`  call are known.  
+
+I did the same thing for the  `project()` command.
+
+## target debug functions
+
+To quickly get an overview of how your target is configured write `print_target(<target_name>)` it will print the json representation of the target as a message.
+
+To see how were all your targetes are type `print_project_tree` which will show the json representation of all your prrojects and targets.
+
+## target property functions
+
+accessing target properties made easier by the following functions
+
+* `target_get(<target> <prop-name>)` returns the value of the target property
+* `target_set(<target> <prop-name> [<value> ...])` sets the value of the target property
+* `target_append(<target> <prop-name> [<value> ...])` appends the values to the current value of `<prop-name>` 
+* `target_has(<target> <prop-name>)->bool` returns true iff the target has a property called `<prop-name>`
+* 
+
+
 # <a name="eval"></a> Eval
 
 # <a name="string functions"></a> String Functions
@@ -712,5 +744,8 @@ endfunction()
 ```
 
 So If you read some of the functions and see very strange variable names this is the explanation.
+
+
+
 
 ... more coming soon

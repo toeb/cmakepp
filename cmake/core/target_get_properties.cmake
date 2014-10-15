@@ -1,4 +1,4 @@
-function(target_get_properties result target)
+function(target_get_properties target)
   set(props
     DEBUG_OUTPUT_NAME
     DEBUG_POSTFIX
@@ -156,5 +156,5 @@ function(target_get_properties result target)
   end()
   
   ans(res)
-  set(${result} ${res} PARENT_SCOPE)
+  return_ref(res)
 endfunction()
