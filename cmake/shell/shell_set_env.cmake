@@ -8,6 +8,91 @@ function(shell_env_set key value)
   endif()
 endfunction()
 
+function(shell_env_append key value)
+  if(WIN32)
+    shell("SETX ${key} %${key}%;${value}")
+
+  else()
+    message(WARNING "shell_set_env not implemented for anything else than windows")
+
+  endif()
+endfunction()
+
+function(shell_env_prepend key value)
+
+endfunction()
+
+# 
+function(shell_path_add path)
+  set(args ${ARGN})
+  list_extract_flag(args "--prepend")
+  ans(prepend)
+
+  shell_path_get()
+  ans(paths)
+  path("${path}")
+  ans(path)
+  list_contains(paths "${path}")
+  ans(res)
+  if(res)
+    return(false)
+  endif()
+
+
+  if(prepend)
+    set(paths "${path};${paths}")
+  else()
+    set(paths "${paths};${path}")
+  endif()
+
+  shell_path_set(${paths})
+
+  return(true)
+endfunction()
+
+function(shell_path_remove path)
+  shell_path_get()
+  ans(paths)
+
+  path("${path}")
+  ans(path)
+
+  list_contains(paths "${path}")
+  ans(res)
+  if(res)
+    list_remove(paths "${path}")
+    shell_path_set(${paths})
+    return(true)
+  else()
+    return(false)
+  endif()
+
+endfunction()
+#C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Git\cmd;C:\Program Files\Mercurial\;C:\Program Files\nodejs\;C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\
+#C:\ProgramData\chocolatey\bin;C:\Program Files\Mercurial;C:\Users\Tobi\AppData\Roaming\npm
+function(shell_path_get)
+    shell_env_get(Path)
+    ans(paths)
+    set(paths2)
+    foreach(path ${paths})
+      file(TO_CMAKE_PATH path "${path}")
+      list(APPEND paths2 "${path}")
+    endforeach()
+    return_ans(paths2)
+
+endfunction()
+
+
+function(shell_path_set)
+  set(args ${ARGN})
+  if(WIN32)
+    string(REPLACE "\\\\" "\\" args "${args}")
+  endif()
+  message("setting path ${args}")
+  shell_env_set(Path "${args}")
+  return()
+endfunction()
+
 # creates a shell script file containing the specified code and the correct extesion to execute
 # with execute_process
 function(shell_script_create path code)
@@ -224,8 +309,8 @@ function(shell_env_get key)
 
     # strip trailing '\n' which might get added by the shell script. as there is no way to input \n at the end 
     # manually this does not change for any system
-    if("${line}" MATCHES "(\n|\r\n)$")
-      string(REGEX REPLACE "(\n|\r\n)$" "" res "${res}")
+    if("${res}" MATCHES "(\n|\r\n)+$")
+      string(REGEX REPLACE "(\n|\r\n)+$" "" res "${res}")
     endif()
     
   elseif("${shell}" STREQUAL "bash")
