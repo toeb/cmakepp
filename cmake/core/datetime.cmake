@@ -25,6 +25,19 @@ function(datetime)
 
     return("${dt}")
   else()
-    message(FATAL_ERROR "oocmake's datetime is implemented  for your system")
+
+    message(WARNING "oocmake's datetime is not implemented  for your system")
+    set(yyyy)
+    set(MM)
+    set(dd)
+    set(hh)
+    set(mm)
+    set(ss)
+    set(ms)
+    
+    map_capture(${dt} yyyy MM dd hh mm ss ms)
+
+    return("${dt}")
+
   endif()
 endfunction()
