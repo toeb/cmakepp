@@ -1,5 +1,6 @@
 function(test)
-
+  mkdir("${test_dir}")
+  cd("${test_dir}")
   function(get_property_list)
     cmake(--help-property-list --result)
     ans(res)

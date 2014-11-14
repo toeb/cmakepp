@@ -69,8 +69,6 @@
 
     return_ref(result_path)
   endfunction()
-
-
 # transforms a path to a path relative to base_dir
 #function(path_relative base_dir path)
 #  path("${base_dir}")

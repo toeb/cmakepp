@@ -16,12 +16,12 @@
     ans(parser_id)
     
     #
-   # message(FORMAT "${parser_id} parser parsing ${definition_id}..")
-   # message(PUSH)
+    #message(FORMAT "${parser_id} parser parsing ${definition_id}..")
+    #message(PUSH)
     __call_string_parser("${parser_id}" "${rstring}")
     ans(res)
-   # message(POP)
-   # message(FORMAT "${parser_id} parser returned: ${res} rest is ")
+    #message(POP)
+    #message(FORMAT "${parser_id} parser returned: ${res} rest is ")
    #list(LENGTH res len)
  #  if(len)
    #  message("parsed '${res}' with ${parser_id} parser")

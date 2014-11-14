@@ -1,4 +1,5 @@
 function(test)
+return()
 # @ todo complete bulk glob
   function(bulk_glob path)
     path(path)
@@ -96,7 +97,6 @@ function(test)
   list_split_at(lstA lhs rhs 4)
   ans(res)
   assert(res)
-  assert
 
   function(regex_ignore str)
     set(args ${ARGN})

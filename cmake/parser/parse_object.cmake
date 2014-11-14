@@ -81,6 +81,7 @@ function(parse_object rstring)
       endif()
 
       if("${object_value}_" STREQUAL "_")
+        
         set(object_value "")
       endif()
       

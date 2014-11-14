@@ -40,6 +40,7 @@
         #message("replace ${replace}")
         string(REGEX REPLACE "${regex}" "${replace}" match "${match}")
         #message("replaced :'${match}'")
+
     endif()
 
     map_tryget(${definition} transform)
@@ -50,6 +51,9 @@
         ans(match)
     endif()
 
+    if("${match}_" STREQUAL "_")
+        set(match "")
+    endif()
     # if success set rstring to rest of string
     ref_set(${rstring} "${str}")
 
