@@ -1,0 +1,10 @@
+
+function(file_find_up_parent path n target)
+  file_find_up("${path}" "${n}" "${target}")
+  ans(res)
+  if(NOT res)
+    return()
+  endif()
+  path_component("${res}" --parent-dir)
+  return_ans()
+endfunction()

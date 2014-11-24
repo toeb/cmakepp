@@ -24,6 +24,9 @@ function(project_object)
   if(NOT name)
     # set to current project name
     set(name ${project_name})
+    if(NOT name)
+      set(name "${PROJECT_NAME}")
+    endif()
   endif()
   
   map_tryget(global project_map)
