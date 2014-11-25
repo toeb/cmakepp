@@ -28,6 +28,11 @@
     map_get(${processStart} "path")
     ans(path)
 
+    ## check if path exists if not search using find_path
+    if(NOT path)
+      message(FATAL_ERROR "no executable given")
+    endif()
+
     map_tryget(${processStart} "args")
     ans(args)
 

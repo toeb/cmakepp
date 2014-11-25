@@ -3,15 +3,18 @@
 function(git_read_single_file repository branch path )
   file_tempdir()
   ans(tmp_dir)
-  pushd("${tmp_dir}")
+  mkdir("${tmp_dir}")
+
   set(branch_arg)
   if(branch)
     set(branch_arg --branch "${branch}") 
   endif()
 
   git(clone --no-checkout ${branch_arg} --depth 1 "${repository}" "${tmp_dir}" --return-code)
-  ans(success)
-  if(NOT success)
+  ans(error)
+
+  if(error)
+    rm(-r "${tmp_dir}")
     popd()
     return()
   endif()
@@ -21,15 +24,22 @@ function(git_read_single_file repository branch path )
   endif()
 
 
-
-  git(show --format=raw "${branch}:${path}")
+  pushd("${tmp_dir}")
+  git(show --format=raw "${branch}:${path}" --result)
   ans(result)
-  nav(res = result.output)
-  nav(success = result.result)
+
+  map_tryget(${result} output)
+  ans(res)
+  map_tryget(${result} result)  
+  ans(error)
+  popd()
+
 
   popd()
+  rm(-r "${tmp_dir}")
+
   
-  if(NOT success)
+  if(error)
     return()
   endif()
   

@@ -11,5 +11,3 @@ function(git_dir)
   ans(res)
   return_ref(res)
 endfunction()
-
-

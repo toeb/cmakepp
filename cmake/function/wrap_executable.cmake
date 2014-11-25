@@ -17,7 +17,7 @@
         list_extract_flag(args --result)
         ans(result_flag)
         list_extract_flag(args --return-code)
-        ans(success_flag)
+        ans(return_code_flag)
         set(executable \"${executable}\")
         execute(\"{
           path:$executable,
@@ -29,19 +29,20 @@
           return(\${execution_result})
         endif()
 
-        if(success_flag)
-          map_tryget(\${execution_result} result)
-          return_ans()
-        endif()
-        nav(error = execution_result.result)
+        map_tryget(\${execution_result} result)
+        ans(error)
 
-        if(NOT \"\${error}\" STREQUAL 0)
-          message(FATAL_ERROR \"failed to execute ${alias} - return code is \${error}\")
+        if(return_code_flag)
+          return_ref(error)
+        endif()
+
+        if(NOT \"\${error}\" EQUAL 0)
+          message(FATAL_ERROR \"failed to execute ${alias} - return code is '\${error}'\")
           return()
         endif()
 
-        nav(stdout = execution_result.output)
-        return_ref(stdout)
+        map_tryget(\${execution_result} output)
+        return_ans()
       endfunction()
       ")
     return()
