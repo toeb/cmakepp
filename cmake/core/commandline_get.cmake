@@ -2,7 +2,11 @@
 function(commandline_get)
   set(args)
   foreach(i RANGE ${CMAKE_ARGC})  
-    list(APPEND args "${CMAKE_ARGV${i}}")
+    set(current ${CMAKE_ARGV${i}})
+    string(REPLACE \\ / current "${current}")
+    list(APPEND args "${current}")
+    
   endforeach()  
+
   return_ref(args)
 endfunction() 

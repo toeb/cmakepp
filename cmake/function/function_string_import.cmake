@@ -1,5 +1,5 @@
 
-function(import_function_string function_string)
+function(function_string_import function_string)
   set_ans("")
   eval("${function_string}")
   return()

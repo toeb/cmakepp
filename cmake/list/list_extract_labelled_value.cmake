@@ -52,4 +52,3 @@ function(list_extract_labelled_value lst label)
 
   return_ref(vals)
 endfunction()
-

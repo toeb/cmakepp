@@ -64,6 +64,6 @@ function(function_import)
 
 
 
-  inject_function(function_string  "${function_string}" RENAME "${function_name}")
-  import_function_string("${function_string}")
+  function_string_rename(function_string  "${function_string}" "${function_name}")
+  function_string_import("${function_string}")
 endfunction()
