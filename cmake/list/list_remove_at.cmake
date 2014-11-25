@@ -3,9 +3,15 @@ function(list_remove_at __list_remove_at_lst)
   if(NOT "${__list_remove_at_lst}")
     return()
   endif()
-  set(args ${ARGN})
-  list_select("${__list_remove_at_lst}" "(idx)->list_normalize_index($__list_remove_at_lst $idx)")
-  ans(args)
+  set(args)
+
+  foreach(arg ${ARGN})
+      list_normalize_index(${__list_remove_at_lst} ${arg})
+      ans(res)
+      list(APPEND args ${res})
+  endforeach()
+  #list_select("${__list_remove_at_lst}" "(idx)->list_normalize_index($__list_remove_at_lst $idx)")
+  #ans(args)
 
 
 

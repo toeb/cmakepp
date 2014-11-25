@@ -80,8 +80,14 @@ cmake -P oo-cmake-tests.cmake
 		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
 		* import functions (from files, from string, ...)
 	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
+	* events
+		* you can globally register and call events 
+	* targets
+		* [access to a list of all defined targets](#target_list)
+		* easier access to target properties
+		* 
 	* other things like web queries, packing and unpacking,...
-
+	* [implementation notes](#implementation_notes)
 NOTE: the list is incomplete
 # <a name="icmake"></a>Interactive CMake Shell
 
@@ -209,6 +215,9 @@ assert(${val} STREQUAL "hello world")
 
 # <a name="maps"></a> Maps
 
+Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
+
+## Functions
 Using refs it easy to implement a map datastructure:
 ```
 map_new()					# returns a unique reference to a map
@@ -220,13 +229,42 @@ map_tryget(map key)			# returns the stored value or nothing: ""
 map_sethidden(map key)	 	# sets a field in the map without adding the key to the keys collection
 map_remove()
 
-# specialized functions
+# some specialized functions
 map_append()
 map_append_string()
 
 ```
- 
-Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
+
+## Easy map handling with `nav()`
+
+Using the functions metnioned before can be cumbersome. Therefore I have added a universial function called `nav()` It allows you to use statements known from other programming languages. 
+
+
+### Example
+
+```
+set(myvar hello) # typical cmake assign statement
+nav(mymap.prop1 = myvar) # creates the variable mymap and sets its prop1 field to the value of myvar
+assert(DEREF {mymap.prop1} STREQUAL "hello") # assert allows map navigation replacing {<expr>} with the result of nav(<expr>)
+
+nav(mymap.prop2 myvar) # creates the property prop2 on mymap and assigns the value myvar
+assert(DEREF {mymap.prop2} STREQUAL "myvar")
+
+nav(res = mymap.prop1) # sets res to the value of mymap.prop1
+assert("${res}" STREQUAL "hello")
+
+nav(res FORMAT "{mymap.prop1}-{mymap.prop2}") #you can also format a string using the {} syntax
+assert("${res}" STREQUAL "hello-myvar") 
+
+nav(a.b.c.d.e 3) # 
+json(${a})
+ans(res)
+assert(${res} STREQUAL "{\"b\":{\"c\":{\"d\":{\"e\":3}}}}")
+
+```
+### Caveats 
+* objects are created on the fly
+* nav is slow because it uses a lot of regex and loops to parse the expressions
 
 ## <a name="json"></a>Json Serialziation and Deserialization
 
@@ -380,7 +418,13 @@ endfunction()
 
 # <a name="objects"></a>Objects 
 
-Objects are an extension of the maps.  These are the functions which are available:
+Objects are an extension of the maps. I split up maps and objects because objects are a lot slower (something like 2x-3x slower) and if you do not need objects you should not use them (handling 1000s of maps is already slow enough).
+
+However I hope that soon CMake will provide the functionality needed to make all this faster.
+
+
+## Functions
+These are the basic functions which are available (there are more which all use these basic ones): 
 ```
 new([Constructor]) returns a ref to a object
 obj_get(obj)
@@ -393,6 +437,8 @@ obj_call(obj)
 obj_callmember(obj key [args])
 obj_delete(obj)
 ```
+
+
 
 ## Example
 
@@ -618,6 +664,32 @@ The following functions are usable for semantic versioning.
 * parsing, constraining and comparing semvers is slow. Do not use too much (you can  compile a semver constraint if it is to be evaluated agains many versions which helps a little with performance issues).  
 
 
+# <a name="targets"></a> Targets
+
+## target_list and project_list
+
+CMake as of version 2.8.7 does not support a list of all defined targets.
+Therfore I overwrote all target adding functions `add_library`, `add_executable`, `add_custom_target`, `add_test`, ... which now register the name of the target globally in a list. You can access this list by using the function `target_list()` which returns the list of known target names .  Note that only targets defined before the `target_list()`  call are known.  
+
+I did the same thing for the  `project()` command.
+
+## target debug functions
+
+To quickly get an overview of how your target is configured write `print_target(<target_name>)` it will print the json representation of the target as a message.
+
+To see how were all your targetes are type `print_project_tree` which will show the json representation of all your prrojects and targets.
+
+## target property functions
+
+accessing target properties made easier by the following functions
+
+* `target_get(<target> <prop-name>)` returns the value of the target property
+* `target_set(<target> <prop-name> [<value> ...])` sets the value of the target property
+* `target_append(<target> <prop-name> [<value> ...])` appends the values to the current value of `<prop-name>` 
+* `target_has(<target> <prop-name>)->bool` returns true iff the target has a property called `<prop-name>`
+* 
+
+
 # <a name="eval"></a> Eval
 
 # <a name="string functions"></a> String Functions
@@ -627,6 +699,53 @@ The following functions are usable for semantic versioning.
 # <a name="shell"></a> Shell Functions
 
 # <a name="expr"></a> Expression Syntax
+
+# <a name="implementation_notes"></a> Implementation Notes
+
+## Passing By Ref
+
+Passing a variable to a function can be done by value and or by reference.
+```
+function(byval var)
+	message("${var}")
+endfunction()
+
+function(byref ref)
+	message("${${ref}}")
+endfunction()
+
+set(some_val 3)
+
+byval(${some_val}) # prints 3
+byref(some_val) # prints 3
+
+```
+
+Passing 'by ref' is possible because a function inherits its parent scope. The problem with passing by ref is the following:
+
+```
+function(byref ref)
+	set(val 1)
+	message("${${ref}} ${val}")
+endfunction()
+
+set(val 2)
+byref(val) #expected to print "2 1" but actually prints "2 2"
+```
+
+The workaround I chose was to mangle all variable names starting with a `__<function_name>_<varname>`  (however special care has to be taken with recursive functions). This should stop accidental namespace collisions:
+
+```
+function(byref __byref_ref)
+	set(__byref_val 1)
+	message("${${__byref_ref}} ${__byref_val}")
+endfunction()
+
+```
+
+So If you read some of the functions and see very strange variable names this is the explanation.
+
+
 
 
 ... more coming soon

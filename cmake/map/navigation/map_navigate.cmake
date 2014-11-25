@@ -21,6 +21,7 @@ function(map_navigate result navigation_expression)
 
 	# split off reference from navigation expression
 	unset(ref)
+	#_message("${navigation_expression}")
 	string(REGEX MATCH "^[^\\[|\\.]*" ref "${navigation_expression}")
 	string(LENGTH "${ref}" len )
 	string(SUBSTRING "${navigation_expression}" ${len} -1 navigation_expression )

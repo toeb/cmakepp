@@ -1,4 +1,6 @@
 function(is_function_file result function_file)
+	path("${function_file}")
+	ans(function_file)
 	if(NOT EXISTS ${function_file})
 		return_value(false)
 	endif()

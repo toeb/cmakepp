@@ -7,8 +7,8 @@
     if(${idx} LESS 0)
       return(false)     
     endif()
-
     list(REMOVE_AT "${__list_extract_flag}" "${idx}") 
     set("${__list_extract_flag}" "${${__list_extract_flag}}" PARENT_SCOPE)
     return(true)
 endfunction()
+

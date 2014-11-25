@@ -4,6 +4,13 @@
 # set(command_line_args "--quiet-mode --cache-dir \"path to cache dir\"") # etc
 # then
 # include(/path/to/oo-cmake.cmake)
+
+
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/core/include_guard.cmake")
+include_guard(${CMAKE_CURRENT_LIST_FILE})
+
+
+
 cmake_minimum_required(VERSION 2.8.7)
 
 cmake_policy(SET CMP0007 NEW)
@@ -90,6 +97,7 @@ map()
 end()
 ans(oocmake_config_definition)
 
+cd("${CMAKE_SOURCE_DIR}")
 # setup config_function for oocmake
 config_setup("oocmake_config" ${oocmake_config_definition})
 oocmake_config(show_help)

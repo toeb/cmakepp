@@ -1,5 +1,14 @@
 function(test)
 
+  return()
+  oocmake_config(base_dir)
+  ans(dir)
+message("tick")
+  json3file("${dir}/resources/json.json")
+  ans(res)
+message("tock")
+json_print(${res})
+  message("res ${res} ${dir}")
 return()
 # too slow -->  commented out
   language("${package_dir}/resources/json-language.json")

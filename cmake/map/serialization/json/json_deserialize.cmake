@@ -2,5 +2,5 @@
 # little to no error notification (be sure your json is valid)
 function(json_deserialize json)
 	json2("${json}")
-	return_ans()
+  return_ans()
 endfunction()

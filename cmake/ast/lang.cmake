@@ -15,7 +15,7 @@
     obj_get(${context} "${target}")
     ans(current_target)
 
-    if(NOT DEFINED current_target)
+    if("${current_target}_" STREQUAL "_")
         return()
     endif()
 

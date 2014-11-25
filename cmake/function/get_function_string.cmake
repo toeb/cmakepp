@@ -26,11 +26,13 @@ function(get_function_string result func)
 	endif()
 
 
-	is_function_file(is_file "${func}")
+	path("${func}")
+	ans(fpath)
+	is_function_file(is_file "${fpath}")
 
 
 	if(is_file)
-		load_function(file_content "${func}")
+		load_function(file_content "${fpath}")
 		get_function_string(file_content "${file_content}")
 		set(${result} ${file_content} PARENT_SCOPE)
 		return()

@@ -122,7 +122,7 @@ function(assert)
 	endif()
 
 	# if message is not set add default message
-	if(NOT DEFINED _MESSAGE)
+	if("${_MESSAGE}_" STREQUAL "_")
 		list_to_string( _UNPARSED_ARGUMENTS " ")
 		ans(msg)
 		set(_MESSAGE "assertion failed1: '${_UNPARSED_ARGUMENTS}'")

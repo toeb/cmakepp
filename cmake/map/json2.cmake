@@ -1,5 +1,5 @@
 function(json2 input)
- 
+  
   json2_definition()
   ans(lang)
   language_initialize(${lang})

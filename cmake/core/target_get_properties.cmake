@@ -1,4 +1,10 @@
-function(target_get_properties result target)
+# returns a map of all set target properties for target
+# if target does not exist it returns null
+function(target_get_properties target)
+
+  if(NOT TARGET "${target}")
+    return()
+  endif()
   set(props
     DEBUG_OUTPUT_NAME
     DEBUG_POSTFIX
@@ -90,9 +96,9 @@ function(target_get_properties result target)
     LINK_INTERFACE_MULTIPLICITY_RELEASE
     LINK_SEARCH_END_STATIC
     LINK_SEARCH_START_STATIC
-    LOCATION
-    LOCATION_DEBUG
-    LOCATION_RELEASE
+    #LOCATION
+    #LOCATION_DEBUG
+    #LOCATION_RELEASE
     MACOSX_BUNDLE
     MACOSX_BUNDLE_INFO_PLIST
     MACOSX_FRAMEWORK_INFO_PLIST
@@ -142,19 +148,23 @@ function(target_get_properties result target)
     VS_WINRT_REFERENCES
     WIN32_EXECUTABLE
     XCODE_ATTRIBUTE_WHATEVER
+    IS_TEST_EXECUTABLE
   )
   map()
+  kv(name ${target})
+  kv(project_name ${PROJECT_NAME})
+
+
   foreach(property ${props})
-  get_property(isset TARGET ${target} PROPERTY ${property} SET)
-  if(isset)
-    get_property(value TARGET ${target} PROPERTY ${property})
-    key("${property}")
-    val("${value}")
-    #value(KEY "${property}" "${value}")
-  endif()
+    get_property(isset TARGET ${target} PROPERTY ${property} SET)
+    if(isset)
+        get_property(value TARGET ${target} PROPERTY ${property})
+        key("${property}")
+        val("${value}")    
+    endif()
   endforeach()
   end()
   
   ans(res)
-  set(${result} ${res} PARENT_SCOPE)
+  return_ref(res)
 endfunction()

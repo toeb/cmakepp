@@ -11,6 +11,8 @@ set(test_dir "${temp_dir}/test_dir")
 
 foreach(test ${tests})
   file(REMOVE_RECURSE "${test_dir}")
+  file(MAKE_DIRECTORY "${test_dir}")
+  
 	function_import("${test}" as test_function REDEFINE)
 	message(STATUS "running test ${test}... ")
 	test_function()
