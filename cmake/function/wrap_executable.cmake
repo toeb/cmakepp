@@ -2,7 +2,8 @@
 # the alias function's varargs will be passed on as command line arguments. 
 # if you specify --result the function will return a the execution result object (see execute()) 
 # if you specify --return-code the function will return the returncode
-# else only the application output will be returned
+# else only the application output will be returned 
+# and if the application terminates with an exit code != 0 a fatal error will be raised
   function(wrap_executable alias executable)
     set_ans("")
     eval("  
@@ -35,6 +36,7 @@
         nav(error = execution_result.result)
 
         if(NOT \"\${error}\" STREQUAL 0)
+          message(FATAL_ERROR \"failed to execute ${alias} - return code is \${error}\")
           return()
         endif()
 

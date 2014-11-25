@@ -5,12 +5,12 @@ function(git_remote_refs uri)
   ans(result)
 
   map_tryget(${result} result)
-  ans(success)
+  ans(error)
   map_tryget(${result} output)
   ans(res)
 
-  if(NOT success)
-    return_value()
+  if(error)
+    return()
   endif()
 
   string_split( "${res}" "\n")

@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.0.0)
 # this initialization script excpects configuration arguments in the var 
 # command_line_args.  when including it be sure to specifiy them as needed
 # like so: 
@@ -5,24 +6,26 @@
 # then
 # include(/path/to/oo-cmake.cmake)
 
+get_property(is_included GLOBAL PROPERTY oocmake_include_guard)
+if(is_included)
+  _return()
+endif()
+set_property(GLOBAL PROPERTY oocmake_include_guard true)
 
-include("${CMAKE_CURRENT_LIST_DIR}/cmake/core/include_guard.cmake")
-include_guard(${CMAKE_CURRENT_LIST_FILE})
+#include("${CMAKE_CURRENT_LIST_DIR}/cmake/core/include_guard.cmake")
+#include_guard(${CMAKE_CURRENT_LIST_FILE})
 
 
-
-cmake_minimum_required(VERSION 2.8.7)
 
 cmake_policy(SET CMP0007 NEW)
 cmake_policy(SET CMP0012 NEW)
 
 # installation dir of oocmake
-set(base_dir "${CMAKE_CURRENT_LIST_DIR}")
+set(oocmake_base_dir "${CMAKE_CURRENT_LIST_DIR}")
 
 # include functions needed for initializing oocmake
 include(CMakeParseArguments)
-include("${base_dir}/cmake/core/require.cmake")
-include("${base_dir}/cmake/core/parse_command_line.cmake")
+#include("${oocmake_base_dir}/cmake/core/parse_command_line.cmake")
 
 
 # get temp dir which is needed by a couple of functions in oocmake
@@ -39,7 +42,10 @@ function(oocmake_config key)
 endfunction()
 
 ## includes all cmake files of oocmake 
-require("${base_dir}/cmake/*.cmake")
+
+include("${oocmake_base_dir}/cmake/core/require.cmake")
+require("${oocmake_base_dir}/cmake/*.cmake")
+
 
 ## setup global variables to contain command_line_args
 parse_command_line(command_line_args "${command_line_args}") # parses quoted command line args
