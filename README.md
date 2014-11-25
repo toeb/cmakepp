@@ -8,7 +8,7 @@ objects, methods, functions, maps, inheritance, parsers, lists, ...
 # Installing
 
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
-be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7`
+be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=3.0.0` most of its functions also work with `2.8.7`
 
 # Usage
 Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the oo-cmake.cmake file.
