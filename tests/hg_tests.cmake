@@ -6,32 +6,11 @@ function(test)
     return()
   endif() 
 
+  hg(--version --quiet)
+  ans(res)
 
-  mkdir("${test_dir}")  
-  cd("${test_dir}")
+  assert("${res}" MATCHES "${HG_VERSION_STRING}")
 
-  
-
-  mkdir("myrepo")
-
-  cd(myrepo)
-  fwrite(test1 "some data")
-  fwrite(test2 "some more data")
-
-
-  hg(init)
-return()
-  hg(add)
-  hg(commit -m "some commit")
-
-
-  cd(..)
-  hg(clone ${test_dir}/myrepo copyofrepo)
-  cd(copyofrepo)
-  fwrite(test3 "lalal")
-  hg(add)
-  hg(commit -m "yay")
-  hg(push)
 
 
 
