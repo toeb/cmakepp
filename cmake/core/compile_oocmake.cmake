@@ -23,7 +23,7 @@
         file(GLOB_RECURSE files "${base_dir}/cmake/**.cmake")
 
 
-        list(APPEND files "${base_dir}/oo-cmake-config.cmake")
+
         foreach(file ${files} ) 
           file(READ  "${file}" content)      
           file(APPEND "${target}" "\n\n\n${content}\n\n")

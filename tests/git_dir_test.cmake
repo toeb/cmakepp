@@ -1,5 +1,5 @@
 function(test)
-
+cd("${test_dir}")
   pushd(repo --create)
   git(init)
   pushd("a/b/c/d" --create)
@@ -9,12 +9,7 @@ function(test)
   popd()
   popd()
 
-  assert("${res}" STREQUAL "${test_dir}/repo/.git")
 
 
-  cps_dir()
-  ans(res)
-
-  assert(NOT res)
 
 endfunction()

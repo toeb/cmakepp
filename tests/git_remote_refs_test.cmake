@@ -1,6 +1,7 @@
 function(test)
-
-  pushd("${test_dir}/repo" --create)
+  pwd()
+  ans(pwd)
+  pushd("repo" --create)
     git(init)
     fwrite("README.md" "hello")
     git(add .)
@@ -9,7 +10,7 @@ function(test)
 
 
   cd("${test_dir}")
-  git_remote_refs("repo")
+  git_remote_refs("${test_dir}/repo")
   ans(refs)
 
 

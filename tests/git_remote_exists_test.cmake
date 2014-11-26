@@ -1,7 +1,5 @@
 function(test)
-  pushd()
-  mkdir("${test_dir}/repo1")
-  cd("${test_dir}/repo1")
+  pushd(repo1 --create)
   git(init)
   popd()
 
