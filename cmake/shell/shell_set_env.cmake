@@ -1,3 +1,28 @@
+## returns the current users home directory on all OSs
+## 
+function(home_dir)
+  shell_get()
+  ans(shell)
+  if("${shell}" STREQUAL "cmd")
+    shell_env_get("HOMEDRIVE")
+    ans(dr)
+    shell_env_get("HOMEPATH")
+    ans(p)
+    set(res "${dr}${p}")
+    path("${res}")
+    ans(res)
+  elseif("${shell}" STREQUAL "bash")
+    shell_env_get(HOME)
+    ans(res)
+  else()
+    message(FATAL_ERROR "supported shells: cmd & bash")
+  endif() 
+  return_ref(res)
+endfunction()
+
+
+
+
 # sets a system wide environment variable 
 # the variable will not be available until a new console is started
 function(shell_env_set key value)
@@ -306,13 +331,6 @@ function(shell_env_get key)
     #setlocal EnableDelayedExpansion\nset val=\nset /p val=\necho %val%> \"${value_file}\"
     shell_redirect("echo %${key}%")
     ans(res)
-
-    # strip trailing '\n' which might get added by the shell script. as there is no way to input \n at the end 
-    # manually this does not change for any system
-    if("${res}" MATCHES "(\n|\r\n)+$")
-      string(REGEX REPLACE "(\n|\r\n)+$" "" res "${res}")
-    endif()
-    
   elseif("${shell}" STREQUAL "bash")
     shell_redirect("echo $${key}")
     ans(res)
@@ -320,5 +338,12 @@ function(shell_env_get key)
     message(FATAL_ERROR "${shell} not supported")
   endif()
 
+
+    # strip trailing '\n' which might get added by the shell script. as there is no way to input \n at the end 
+    # manually this does not change for any system
+    if("${res}" MATCHES "(\n|\r\n)+$")
+      string(REGEX REPLACE "(\n|\r\n)+$" "" res "${res}")
+    endif()
+    
   return_ref(res)
 endfunction()

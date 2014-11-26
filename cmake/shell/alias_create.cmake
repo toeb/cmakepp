@@ -6,12 +6,22 @@ function(alias_create name command_string)
 
   set(path "${bin_dir}/${name}.bat")
 
-  if(WIN32)
-    message("creating windows alias")
+  shell_get()
+  ans(shell)
+
+  if("${shell}" STREQUAL "cmd")
     file_write("${path}" "@echo off\r\n${command_string} %*")
+  elseif("${shell}" STREQUAL "bash")
+    home_dir()
+    ans(dir)
+    path("${dir}/.bashrc")
+    ans(bc)
+    fappend("${bc}" "\nalias ${name}='${command_string}'")
   else()
-    message("only implemented for windows")
+    message(FATAL_ERROR "creating alias is not supported by oocmake on your system shell :${shell}")
   endif()
+
+
 
 
 

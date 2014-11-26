@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 2.8.7)
 # this initialization script excpects configuration arguments in the var 
 # command_line_args.  when including it be sure to specifiy them as needed
 # like so: 
