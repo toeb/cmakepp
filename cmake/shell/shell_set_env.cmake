@@ -1,37 +1,6 @@
-## returns the current users home directory on all OSs
-## 
-function(home_dir)
-  shell_get()
-  ans(shell)
-  if("${shell}" STREQUAL "cmd")
-    shell_env_get("HOMEDRIVE")
-    ans(dr)
-    shell_env_get("HOMEPATH")
-    ans(p)
-    set(res "${dr}${p}")
-    path("${res}")
-    ans(res)
-  elseif("${shell}" STREQUAL "bash")
-    shell_env_get(HOME)
-    ans(res)
-  else()
-    message(FATAL_ERROR "supported shells: cmd & bash")
-  endif() 
-  return_ref(res)
-endfunction()
 
 
 
-
-# sets a system wide environment variable 
-# the variable will not be available until a new console is started
-function(shell_env_set key value)
-  if(WIN32)
-    shell("SETX ${key} ${value}")
-  else()
-    message(WARNING "shell_set_env not implemented for anything else than windows")
-  endif()
-endfunction()
 
 function(shell_env_append key value)
   if(WIN32)
