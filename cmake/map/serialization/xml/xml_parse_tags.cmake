@@ -22,7 +22,8 @@ function(xml_parse_tags xml tag)
 
 
     map()
-      kv(value "${match}")
+      kv(tag "${tag}")
+      kv(value "${match}")    
       map(attrs)
         string(REGEX MATCHALL "${regex_attrs}" attrs "${attrs}")
         foreach(attr ${attrs})
