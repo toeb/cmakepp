@@ -296,6 +296,11 @@ endfunction()
 function(shell_env_get key)
   shell_get()
   ans(shell)
+
+  if(WIN32)
+    
+  endif()
+
   if("${shell}" STREQUAL "cmd")
     #setlocal EnableDelayedExpansion\nset val=\nset /p val=\necho %val%> \"${value_file}\"
     shell_redirect("echo %${key}%")
