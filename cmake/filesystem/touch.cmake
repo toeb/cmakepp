@@ -3,10 +3,18 @@
 function(touch path)
   path("${path}")
   ans(path)
-  if(NOT EXISTS "${path}" )
-    file(WRITE "${path}" "")
-    return()
+
+  set(args ${ARGN})
+  list_extract_flag(--nocreate)
+  ans(nocreate)
+
+  set(cmd touch)
+  if(nocreate)
+    set(cmd touch_nocreate)
   endif()
-  file(APPEND "${path}" "")
+
+  cmake(-E ${cmd} "${path}")
+
   return()
 endfunction()
+
