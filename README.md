@@ -28,21 +28,23 @@ cmake -P oo-cmake-tests.cmake
 	* [eval](#eval) - evaluates cmake code and is the basis of many advanced features
 	* [shell](#shell)
 		* readline - allows user input from the keyboard
-		* "plattfrom independent" shell execution using shell() 
+		* "plattfrom independent" shell execution using `shell()`
 		* directory and file functions (like bash)
-			* cd(), pushd(), popd(), mkdir() pwd(), touch(), ls(), fappend(), fwrite(),...
-			* path(possbilyRelativePath) -> gets the absolute path 
+			* `cd()`, `pushd()`, `popd()`, `mkdir()`, `pwd()`, `touch()`, `ls()`, `fappend()`, `fwrite()`, ...
+			* `path(unqualified)` -> returns the fully qualified path 
+	* [Command Execution](#execute) simplifying access to exectables using the shell tools.
 	* debugging
 		* some convenience functions
-		* breakpoint() - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
-	* vcs
-		* hg()... hg(init), hg(clone <url>), ...
-		* git()... git(init), git(clone <url>),... shorthand for executing git in any directory
-		* svn()... svn(checkout ...), shorthand for executing svn in any directory
+		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
+	* [Version Control Systems]("vcs")
+		* `hg()` convenience function for calling mercurial vcs
+		* `git()` convenience function for calling git vcs
+		* `svn()` convenience function for calling subversion vcs
+		* utility methods for working with the different systems
 	* [Date/Time](#datetime)
 	  * function for getting the correct date and time on all OSs
-	  * 
-	* [Windows Registry](#windows regstry)
+	* [Events](#events) allows registering event handlers and emitting events
+	* [Windows Registry](#windowsregstry)
 		* `reg()` shorthand for working with windows registry command line interface
 		* read write manipulate registry values
 		* query registry keys for values
@@ -91,7 +93,7 @@ cmake -P oo-cmake-tests.cmake
 	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
 	* events
 		* you can globally register and call events 
-	* targets
+	* [Targets](#targets)
 		* [access to a list of all defined targets](#target_list)
 		* easier access to target properties
 		* 
@@ -412,7 +414,7 @@ function_inject(function_ish)	# imports a function, injecting before call, after
 
 ## Function Patterns
 
-### Initializer function
+### <a href="initializer_function"></a> Initializer function
 
 If you want to execute code only once for a function (e.g. create  a datastructure before executing the function) you can use the Initializer Patter.:
 ```
@@ -693,7 +695,7 @@ The following functions are usable for semantic versioning.
 ## target_list and project_list
 
 CMake as of version 2.8.7 does not support a list of all defined targets.
-Therfore I overwrote all target adding functions `add_library`, `add_executable`, `add_custom_target`, `add_test`, ... which now register the name of the target globally in a list. You can access this list by using the function `target_list()` which returns the list of known target names .  Note that only targets defined before the `target_list()`  call are known.  
+Therfore I overwrote all target adding functions `add_library`, `add_executable`, `add_custom_target`, `add_test`, `install` ... which now register the name of the target globally in a list. You can access this list by using the function `target_list()` which returns the list of known target names .  Note that only targets defined before the `target_list()`  call are known.  
 
 I did the same thing for the  `project()` command.
 
@@ -711,14 +713,17 @@ accessing target properties made easier by the following functions
 * `target_set(<target> <prop-name> [<value> ...])` sets the value of the target property
 * `target_append(<target> <prop-name> [<value> ...])` appends the values to the current value of `<prop-name>` 
 * `target_has(<target> <prop-name>)->bool` returns true iff the target has a property called `<prop-name>`
-* 
 
 
-# <a name="windows registry></a> Windows Registry
 
-Even though cmake and oocmake are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (cmake -E delete_regv write_regv, get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)) and hard to work with. Therfore I implemented a wrapper for the windows command line tool [`REG`](http://technet.microsoft.com/en-us/library/cc732643.aspx) called `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`.
+# <a name="windowsregistry"></a> Windows Registry
+
+
+Even though cmake and oocmake are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (`cmake -E delete_regv` `write_regv`, `get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)` ) and hard to work with. Therefore I implemented a wrapper for the windows registry command line tool [REG](http://technet.microsoft.com/en-us/library/cc732643.aspx) and called it `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`. See also [wrap_executable](#executable)
+
 
 ## Availables Functions
+
 
 Using this command I have added convinience functions for manipulating registry keys and values
 
@@ -735,7 +740,10 @@ Using this command I have added convinience functions for manipulating registry 
 * `<reg_entry>` is a object with the fields key, value_name, value, type which describes a registry entry
 
 
+
 ## Using windows registry functions example
+
+
 ```
 set(kv HKCU/Environment testValue1)
 
@@ -805,9 +813,236 @@ In the future date time arithmetic might be added
 
 # <a name="eval"></a> Eval
 
+`eval()` is one of the most central functions in oocmake.  It is the basis for many hacks an workarounds which oocmake uses to enhance the scripting language.
+
+`eval` is not native to cmake (native eval would greatly increase the performance of this library) 
+
+Internally it works by writing cmake script to a file and including it
+
 ## Functions
 
-* `eval(code)` 
+* `eval(code)` executes the specified code. `set(x z PARENT_SCOPE)` is not however you can return a value. 
+
+## Examples
+
+Defining a Function and calling it
+
+```
+eval("
+function(say_hello name)
+	return(\"hello \${name}!\") # note: escape cmake double quotes and dolar sign in front of vars
+endfunction()
+")
+
+say_hello(Tobias)
+ans(res)
+assert("${res}" STREQUAL "hello Tobias!")
+
+```
+
+dynamically calling a function
+
+```
+# three handlers
+function(handler1 a)
+	return("handler1 ${a}")
+endfunction()
+function(handler2 a)
+	return("handler2 ${a}")
+endfunction()
+function(handler3 a)
+	return("handler3 ${a}" )
+endfunction()
+# list of handlers
+set(handlers handler1 handler2 handler3)
+# intialize result
+set(results)
+# set input value
+set(val 3)
+foreach(handler ${handlers})
+	# dynamically call handler
+	eval("${handler}(${val})")	
+	ans(res)
+	# append result to list
+	list(APPEND results ${res})
+endforeach()
+# check if list equals expected results
+assert(EQUALS ${results} "handler1 3" "handler2 3" "handler3 3")
+```
+
+
+# <a name="events"></a> Events
+
+Events are often usefull when working with modules. CMake of course has no need for events generally. Some of my projects (cutil/cps) needed them however. For example the package manager cps uses them to allow hooks on package install/uninstall/load events which the packages can register.
+
+
+## Example
+
+
+```
+# create an event handler
+function(my_event_handler arg)
+ message("${event_name} called: ${arg}")
+ return("answer1")
+endfunction()
+
+# add an event handler
+event_addhandler(irrelevant_event_name my_event_handler)
+# add lambda event handler
+event_addhandler(irrelevant_event_name "(arg)->return($arg)")
+# anything callable can be used as an event handler (even a cmake file containing a single function)
+
+# emit event calls all registered event handlers in order
+# and concatenates their return values
+# side effects: prints irrelevent_event_name called: i am an argument
+event_emit(irrelevant_event_name "i am an argument")
+ans(result)
+
+
+assert(EQUALS ${result} answer1 "i am an argument")
+```
+
+## Functions and Datatypes
+
+* `<event id>` a globally unique identifier for an event (any name you want except `on_event` )
+* `on event` a special event that gets fired on all events (mainly for debugging purposes)
+* `event_addhandler(<event id> <callable>)` registers an event handler for the globally unique event identified by `<event id>` see definition for callable in [functions section](#functions)
+* `event_removehandler(<event id> <callable>)` removes the specified event handler from the handler list (it is no longer invoked when event is emitted)
+* `event_emit(<event id> [arg ...]) -> any[]` invokes the event identified by `<event id>` calls every handler passing along the argument list. every eventhandler's return value is concatenated and returned.  It is possible to register event handlers during call of the event itself the emit routine continues as long as their are uncalled registered event handlers but does not call them twice.
+* ... (functions for dynamic events, access to all available events)
+
+# <a name="vcs"></a> Version Control System utilities
+
+Working with the version control system can be a crutch in CMake. Therefore I created helpers and convenience functions which allow simple usage. Consider the following CMake code which you would have to use to clone cutil's git repository
+
+```
+
+find_package(Git)
+if(NOT GIT_FOUND)
+	message(FATAL_ERROR "Git is required!")
+endif()
+set(cutil_base_dir "/some/path")
+if(NOT IS_DIRECTORY "${cutil_base_dir}")
+	if(EXISTS "${cutil_base_dir}")
+		message(FATAL_ERROR "${cutil_base_dir} is a file")
+	endif()
+	file(MAKE_DIRECTORY "${cutil_base_dir}")
+endif()
+execute_process(COMMAND "${GIT_EXECUTABLE}" clone "https://github.com/toeb/cutil.git" "${cutil_base_dir}" RESULT_VARIABLE error ERROR_VARIABLE error)
+if(error)
+	message(FATAL_ERROR "could not clone https:// .... because "${error}")
+endif()
+execute_process(COMMAND "${GIT_EXECUTABLE}" submodule init WORKING_DIRECTORY "${cutil_base_dir}" RESULT_VARIABLE error)
+if(error)
+	message(FATAL_ERROR "could not init submodules because "${error}")
+endif()
+execute_process(COMMAND "${GIT_EXECUTABLE}" submodule update --recursive WORKING_DIRECTORY "${cutil_base_dir}" RESULT_VARIABLE error)
+if(error)
+	message(FATAL_ERROR "could not update submodules")
+endif()
+```
+
+Using convenience functions this distills down to
+
+```
+# set the current directory to ${cutil_base_dir} and creates it if it does not exist
+cd(${cutil_base_dir} --create) 
+# automatically fails on error with error message
+git(clone "http://github.com/toeb/cutil.git" .)
+git(submodule init)
+git(submodule update --recursive)
+```
+
+So alot of unecessary repeating code can be omitted.  
+
+## Git
+
+### Functions
+
+* `git()` function for git command line client with same usage, except `git ...` -> `git(...)` (created using wrap_executable)
+* `git_base_dir([<unqualified path>]) -> <qualified path>` returns the repositories base directory
+* `git_dir([<unqualified path>]) -> <qualified path>` returns the repositories .git directory 
+* `git_read_single_file(<repository uri> <branch|""> <repository path>) -> <content of file>` reads a file from a remote repository
+* `git_remote_exists(<potential repository uri>) -> bool` returns true if the uri points to a valid git repository
+* `git_remote_refs(<repository uri>) -> <remote ref>[]` returns a list of `<remote ref>` objects
+* `<remote ref>` a objects containing the following fields
+  * `type : HEAD | <branch name>` -> the type of ref
+  * `name : <string>` -> the name of the ref 
+  * `revision: <hash>` -> the revision associated with the ref
+* `git_repository_name() -> <string>`  returns the name of the repository. 
+
+## Subversion
+
+* `svn()` function for svn command line client with same usage, except `svn ...` -> `svn(...)` (created using wrap_exetuable)
+* `svn_get_revision(<uri>)` returns the revision number of the specifed `<uri>`
+* `svn_info(<uri>)-><svn info>` returns an object containing the following fields
+	- path: specified relative path
+	- revision: revision number
+	- kind
+	- url: uri
+	- root: repository root
+	- uuid
+* ...
+
+## Mercurial
+
+* `hg()` function for mercurial command line client with same usage except `hg ...` -> `hg(...)`
+* ...
+
+# <a name="execute"></a> # Executing External Programms
+
+Using external applications more complex than necessary in cmake imho. I tried to make it as easy as possible.  Wrapping an external programm is now very simple as you can see in the following example for git:
+
+This is all the code you need to create a function which wraps the git executable.  It uses the [initializer function pattern](#initializer_function). 
+
+```
+function(git)
+  # initializer block (will only be executed once)
+  find_package(Git)
+  if(NOT GIT_FOUND)
+    message(FATAL_ERROR "missing git")
+  endif()
+  # function redefinition inside wrap_executable
+  wrap_executable(git "${GIT_EXECUTABLE}")
+  # delegate to redefinition and return value
+  git(${ARGN})
+  return_ans()
+endfunction() 
+```
+
+Another example:
+
+```
+find_package(Hg)
+set(cmdline --version)
+execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
+ans(res)
+map_get(${res} result)
+ans(error)
+map_get(${res} output)
+ans(stdout)
+assert(NOT error) # error code is 0
+assert("${stdout}" MATCHES "mercurial") # output contains mercurial
+json_print(${res}) # outputs input and output of process
+
+```
+
+## Functions and Datatypes
+
+* `execute(<process start ish> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
+	* example: `execute("{path:'<command>', args:['a','b']}")`  
+* `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
+* `<process start ish>` a string which can be converted to a `<process start>` object
+* `<process start>` a map/object containing the following fields
+	- `path` command name / path of executable *required*
+	- `args` command line arguments to pass along to command, use `string_semicolon_encode` if you want to have an argument with semicolons *optional*
+	- `timeout:<int>` *optional* number of seconds to wait before failing
+	- `cwd:<unqualified path>` *optional*  by default it is whatever `pwd()` currently returns
+* `<process info>` contains all the fields of `<process start>` and additionaly
+	- `output:<stdout>`  the output of the command execution. (merged error and stdout streams)
+	- `result:<int>` the return code of the execution.  0 normally indicates success.
+
+
 
 # <a name="string functions"></a> String Functions
 
@@ -818,6 +1053,7 @@ In the future date time arithmetic might be added
 # <a name="expr"></a> Expression Syntax
 
 # <a name="implementation_notes"></a> Implementation Notes
+
 
 ## Passing By Ref
 

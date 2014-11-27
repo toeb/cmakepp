@@ -1,9 +1,9 @@
 # emits the specified event 
 # calls all registered event handlers for event '<name>'
-function(event_emit name)
-  event_get("${name}")
+function(event_emit event_name)
+  event_get("${event_name}")
   ans(event)
-  set(success)
+  set(result)
 
   if(event)    
     set(previous_handlers)
@@ -22,14 +22,16 @@ function(event_emit name)
 
       foreach(handler ${handlers})
         rcall(success = "${handler}"(${ARGN}))
+        list(APPEND result "${success}")
       endforeach()
 
     endwhile()
   endif()
 
-  if(NOT "${name}" STREQUAL "on_event")
-    event_emit(on_event "${name}" "${ARGN}")
+  if(NOT "${event_name}" STREQUAL "on_event")
+    event_emit(on_event "${event_name}" "${ARGN}")
+    return_ans()
   endif()
 
-  return_ref(success)
+  return_ref(result)
 endfunction() 
