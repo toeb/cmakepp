@@ -35,7 +35,7 @@ cmake -P oo-cmake-tests.cmake
 	* debugging
 		* some convenience functions
 		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
-	* [version control systems]("vcs")
+	* [version control systems](#vcs)
 		* `hg()` convenience function for calling mercurial vcs
 		* `git()` convenience function for calling git vcs
 		* `svn()` convenience function for calling subversion vcs
