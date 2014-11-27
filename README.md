@@ -39,6 +39,9 @@ cmake -P oo-cmake-tests.cmake
 		* hg()... hg(init), hg(clone <url>), ...
 		* git()... git(init), git(clone <url>),... shorthand for executing git in any directory
 		* svn()... svn(checkout ...), shorthand for executing svn in any directory
+	* [Date/Time](#datetime)
+	  * function for getting the correct date and time on all OSs
+	  * 
 	* [Windows Registry](#windows regstry)
 		* `reg()` shorthand for working with windows registry command line interface
 		* read write manipulate registry values
@@ -784,9 +787,27 @@ ans(res)
 json_print(${res})
 assert(EQUALS DEREF {res.testValue1} a c e)
 ```
+# <a name="datetime"></a> Date/Time
+
+I have provided you with a functions which returns a datetime object to get the current date and time on all OSs including windows. It uses file(TIMESTAMP) internally so the resolution is 1s.  It would be possible to enhance this functionality to included milliseconds however that is more system dependent and therefore a decieded against it.  
+
+`datetime()` currently only returns the local time. extending it to return UTC would be easy but I have not yet needed it
+
+In the future date time arithmetic might be added
+
+## Functions
+
+* `datetime()` returns the current date time as a `<datetime object>`
+* `<datetime object>` an object containing the following fields: `yyyy` `MM` `dd` `hh` `mm` `ss`
+
+
 
 
 # <a name="eval"></a> Eval
+
+## Functions
+
+* `eval(code)` 
 
 # <a name="string functions"></a> String Functions
 
