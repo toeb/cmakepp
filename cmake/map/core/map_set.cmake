@@ -1,6 +1,5 @@
 # set a value in the map
 function(map_set this key )
-  #tick()
   set(property_ref "${this}.${key}")
   get_property(has_key GLOBAL PROPERTY "${property_ref}" SET)
 	if(NOT has_key)

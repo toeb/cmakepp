@@ -26,61 +26,36 @@ cmake -P oo-cmake-tests.cmake
 * Features
 	* [interactive cmake console](#icmake) (icmake.bat, icmake.sh)
 	* [eval](#eval) - evaluates cmake code and is the basis of many advanced features
-	* [shell](#shell)
-		* readline - allows user input from the keyboard
-		* "plattfrom independent" shell execution using `shell()`
-		* directory and file functions (like bash)
-			* `cd()`, `pushd()`, `popd()`, `mkdir()`, `pwd()`, `touch()`, `ls()`, `fappend()`, `fwrite()`, ...
-			* `path(unqualified)` -> returns the fully qualified path 
-	* [Command Execution](#execute) simplifying access to exectables using the shell tools.
+	* [shell](#shell) - "platform independent" shell script execution
+		* [aliases](#aliases) - platform independent shell aliases
+		* [console](#console) - functions for console input and output
+	* [filesystem](#filesystem) - directory and file functions with close relations to bash syntax
+		* [compression/decompression](#compression) - compressing and decompressing tgz and zip files
+	* [command execution](#execute) simplifying access to exectables using the shell tools.
 	* debugging
 		* some convenience functions
 		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
-	* [Version Control Systems]("vcs")
+	* [version control systems]("vcs")
 		* `hg()` convenience function for calling mercurial vcs
 		* `git()` convenience function for calling git vcs
 		* `svn()` convenience function for calling subversion vcs
 		* utility methods for working with the different systems
-	* [Date/Time](#datetime)
+	* [cmake](#cmake) calling cmake from cmake.
+	* [date/time](#datetime)
 	  * function for getting the correct date and time on all OSs
-	* [Events](#events) allows registering event handlers and emitting events
+	* [events](#events) allows registering event handlers and emitting events
 	* [Windows Registry](#windowsregstry)
 		* `reg()` shorthand for working with windows registry command line interface
 		* read write manipulate registry values
 		* query registry keys for values
-	* [string functions](#string functions) 
-		* string_slice
-		* string_splice
-		* Semantic Versions ([semver](#semver))
-			- normalizing 
-			- convert to object
-			- semver constraints
-			-
-		* ...
-	* [lists](#lists) -extension to cmake list() functionaly
-		* peeking, popping, sorting, map, fold, predicates(any,all,contains,...)
-	* [maps](#maps) - basic map functions and utility functions (nested data structures for cmake)
-		* get/set/append/remove operations
-		* extended operations
-		* nav - navigate through a path of maps, allows getting and setting e.g. nav(res = map1.prop1.prop12), nav(resultmap.prop.otherprop = res)....
+	* [string functions](#string functions) - advanced string manipulation		
+	* [lists](#lists) -extension to cmake and normalization of cmake's `list()` functionality
+	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
+		* graph algorithms 
 		* serialization
 			* [json](#json)
 			* [quickmap format](#quickmap) (native to cmake)
 			* [xml](#xml)
-		* invert
-		* import
-		* capture
-		* extract
-		* omit
-		* partial
-		* pick
-		* values
-		* algorithms
-			* depth first serach
-			* breadth first search
-			* graph search
-			* ...
-		* ...
 	* [expression syntax](#expr).
 			* obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}") -> creates the specified object
 	* functions
@@ -97,7 +72,7 @@ cmake -P oo-cmake-tests.cmake
 		* [access to a list of all defined targets](#target_list)
 		* easier access to target properties
 		* 
-	* other things like web queries, packing and unpacking,...
+	* other things like web queries
 	* [implementation notes](#implementation_notes)
 NOTE: the list is incomplete
 # <a name="icmake"></a>Interactive CMake Shell
@@ -1044,7 +1019,162 @@ json_print(${res}) # outputs input and output of process
 
 
 
-# <a name="string functions"></a> String Functions
+# <a name="filesystem"></a> Filesystem
+
+I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) it is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
+
+```
+# as soon as you include `oo-cmake.cmake` the current directory is set to 
+# "${CMAKE_SOURCE_DIR}" which is the directory from which you script file 
+# is called in script mode (`cmake -P`) or the directory of the root 
+# `CMakeLists.txt` file in configure and build steps.
+pwd() # returns the current dir
+ans(path)
+
+assert("${path}" STREQUAL "${CMAKE_SOURCE_DIR}")
+
+
+pushd("dir1" --create) # goto  ${CMAKE_SOURCE_DIR}/dir1; Create if not exists
+ans(path)
+assert("${path}" STREQUAL "${CMAKE_SOURCE_DIR}/dir1")
+
+fwrite("README.md" "This is the readme file.") # creates the file README.md in dir1
+assert(EXISTS "${CMAKE_SOURCE_DIR}/dir1/README.md") 
+
+
+pushd(dir2 --create) # goto ${CMAKE_SOURCE_DIR}/dir1/dir2 and create it if it does not exist
+fwrite("README2.md" "This is another readme file")
+
+cd(../..) # use relative path specifiers to navigate path stack
+ans(path)
+
+assert(${path} STREQUAL "${CMAKE_SOURCE_DIR}") # up up -> we are where we started
+
+popd() # path stack is popped. path before was ${CMAKE_SOURCE_DIR}/dir1
+ans(path)
+
+assert(${path} STREQUAL "${CMAKE_SOURCE_DIR}/dir1")
+
+
+mkdir("dir3")
+cd(dir3)
+# current dir is now ${CMAKE_SOURCE_DIR}/dir1/dir3
+
+# execute() uses the current pwd() as the working dir so the following
+# clones the oo-cmake repo into ${CMAKE_SOURCE_DIR}/dir1/dir3
+git(clone https://github.com/toeb/oo-cmake.git ".")
+
+
+# remove all files and folders
+rm(.)
+
+
+popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
+
+```
+
+
+## Functions and datatypes
+
+* `<windows path>`  a windows path possibly with and possibly with drive name `C:\Users\Tobi\README.md`
+* `<relative path>` a simple relative path '../dir2/./test.txt'
+* `<qualified path>` a fully qualified path depending on OS it only contains forward slashes and is cmake's `get_filename_component(result "${input} REAL_PATH)` returns. All symlinks are resolved. It is absolute
+* `<unqualified path> ::= <windows path>|<relative path>|<qualified path>` 
+* `path(<unqualified path>)-><qualified path>` qualifies a path and returns it.  if path is relative (with no drive letter under windows or no initial / on unix) it will be qualified with the current directory `pwd()`
+* `pwd()-> <qualified path>` returns the top of the path stack. relative paths are relative to `pwd()`
+* `cd(<unqualified> [--create]) -> <qualified path>` changes the top of the path stack.  returns the `<qualified path>` corresonding to input. if `--create` is specified the directory will be created if it does not exist. if `cd()` is navigated towards a non existing directory and `--create` is not specified it will cause a `FATAL_ERROR`
+* `pushd(<unqualified path> [--create]) -> <qualified path>` works the same `cd()` except that it pushes the top of the path stack down instead of replacing it
+* `popd()-><qualified path>` removes the top of the path stack and returns the new top path
+* `dirs()-> <qualified path>[]` returns all paths in the path stack from bottom to top
+* file functions
+	- `fread(<unqualified path>)-><string>` returns the contents of the specified file
+	- `lines(<unqualified path>)-><string>[]` returns the contents of the specified file in a list of lines
+	- `download(<uri> [<target:unqualified path>] [--progress])` downloads the file to target, if target is an existing directory the downloaded filename will be extracted from uri else path is treated as the target filepath
+	- `fappend(<unqualified path> <content:string>)->void` appends the specified content to the target file
+	- `fwrite(<unqualified path> <content:string>)->void` writes the content to the target file (overwriting it)
+	- `parent_dir(<unqualified path>)-><qualified path>` returns the parent directory of the specified path
+	- `file_timestamp(<unqualified path>)-><timestampstring>` returns the timestamp string for the specified path yyyy-MM-ddThh:mm:ss
+	- `ls([<unqualified path>])-><qualified path>[]` returns files and subfolders of specified path
+	- `mkdir(<unqualified path>)-><qualfied path>` creates the specified dir and returns its qualified path
+	- `mkdirs(<unqualified path>...)-><qualified path>[]` creates all of the directories specified
+	- `mktemp([<unqualified path>])-><qualified path>` creates a temporary directory optionally you can specify where this directory is created (by default it is created in TMP_DIR)
+	- `mv(<sourcefile> <targetfile>|[<sourcefile> ...] <existing targetdir>)->void` moves the specifeid path to the specified target if last argument is an existing directory all previous files will be moved there else only two arguments are allowed
+	- `paths([<unqualified path> ...])-><qualified path>[]` returns the qualified path for every unqualified path received as input
+	- `touch(<unqualified path> [--nocreate])-><qualified path>` touches the specified file creating it if it does not exist. if `--nocreate` is specified the file will not be created if it does not exist. the qualified path for the specified file is returned
+	- `home_dir()-><qualified path>` returns the users home directory
+	- `home_path(<relative path>)-><qualified path>` returns fully qualified  path relative to the user's home directory
+	- ... (more functions are coming whenver they are needed)
+
+# <a name="shell"></a> Shell
+
+
+## <a name="console"></a> Console Interaction
+
+Since I have been using cmake for what it has not been created (user interaction) I needed to enhance console output and "invent" console input.  using shell magic it became possible for me to read input from the shell during cmake execution.  You can see it in action in the interactive cmake shell `icmake` (start it by running cmake -P icmake.cmake) Also I was missing a way of writing to the shell without appending a linebreak - using `cmake -E echo_append` it was possibly for me to output data without ending the line.  
+
+
+### Functions
+
+* `read_line()-><string>` prompts the user to input text. waiting for a line break. the result is a string containing the line read from console
+* `echo_append([args ...])` appends the specifeid arguments to stdout without a new line at the end
+* `echo([args ...])` appends the specified arguments to stdout and adds a new line
+ 
+
+
+## <a name="aliases"></a> Aliases
+
+Since I like to provide command line tools based on cmake (using cmake as a cross plattform shell in some sense) I also needed the ability to create aliases in a platform independent way. Even though I have a couple of limitations I have found a good posibillity to do what I want. See the following example of how to create a cross platform way to dowload a file:
+
+```
+fwrite("datetimescript.cmake" "
+include(\${oocmake_base_dir}/oo-cmake.cmake)
+datetime()
+ans(dt)
+json_print(${dt})
+")
+path("datetimescript.cmake")
+ans(fullpath)
+alias_create("my_datetime" "cmake -P \"${fullpath}\"")
+
+```
+
+After executing the above code the current shell will have access to the my_datetime alias and the following call will be possible without any reference to cmake - in this case the cmake command is called of course but `create_alias` can be used to create a alias for any type of executable as bash and windows commandprompts do not differ too much in this respect
+
+```
+shell> my_datetime
+{
+ "yyyy":"2014",
+ "MM":"11",
+ "dd":"27",
+ "hh":"22",
+ "mm":"51",
+ "ss":"32",
+ "ms":"0"
+}
+```
+
+### Functions and Datatypes
+
+* `alias_create(<alias name> <shell code>)`  - under windows this registers a directory in the users PATH variable. In this directory batch files are created. Under Unix the .bashrc is edited and a alias is inserted.
+	- Not implemented yet:
+		+ `alias_exists`
+		+ `alias_remove`
+		+ `alias_list`
+
+
+
+
+
+# <a name="cmake"></a> CMake Command
+
+Like the version control system I also wrappend cmake itself into an easy to use function called `cmake(...)`  this allows me to start subinstances of cmake
+
+
+# <a name="fork"><a> Fork
+
+using cmd's start and bash's ampersand operator it should be possible to fork off processes.
+
+# <a name="string_functions"></a> String Functions
 
 # <a name="lists"></a> Lists Functions
 

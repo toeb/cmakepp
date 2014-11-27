@@ -15,6 +15,6 @@ function(touch path)
 
   cmake(-E ${cmd} "${path}")
 
-  return()
+  return_ref(path)
 endfunction()
 
