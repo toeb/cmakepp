@@ -26,9 +26,11 @@ function(test)
       cmake(--build . --result)
       ans(build_result)
 
+
       json_print(${configure_result})
       message("res ${res}") 
       popd()
+      
 
       wrap_executable("${name}" "${dir}/")
 
@@ -36,7 +38,9 @@ function(test)
   
 
     compile_command(sayhello "#include <iostream>\n int main(int argc, const char ** argv){ std::cout << \"message(whatup)\" << std::endl;}")
-    sayhello()
+    sayhello(--result)
+    ans(res)
+    json_print(${res})
 
 
 endfunction()

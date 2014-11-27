@@ -11,3 +11,8 @@
 *.lai
 *.la
 *.a
+
+
+# oocmake temp dir
+tmp
+bin

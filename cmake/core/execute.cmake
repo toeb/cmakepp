@@ -2,7 +2,7 @@
   # input:
   # {
   #  path:<executable_path>, // path to executable
-  #  args:<args ...>,        // command line arguments to executable
+  #  args:<args ...>,        // command line arguments to executable, use string_semicolon_encode() on an argument if you want to pass an argument with semicolons
   #  [timeout: ],            // timout
   #  [cwd: ],                // current working dir (default is whatever pwd returns)
   #
@@ -27,6 +27,11 @@
 
     map_get(${processStart} "path")
     ans(path)
+
+    ## check if path exists if not search using find_path
+    if(NOT path)
+      message(FATAL_ERROR "no executable given")
+    endif()
 
     map_tryget(${processStart} "args")
     ans(args)
@@ -53,19 +58,40 @@
       set(cwd WORKING_DIRECTORY ${cwd})
     endif()
 
-    execute_process(
-      COMMAND "${path}" ${args}
-      ${timeout}
-      ${cwd}
+
+    # now compile the command string and evaluate
+    # this allows using encoded semicolons
+set(argstring)
+ foreach(arg ${args})
+
+      cmake_string_escape("${arg}")
+      ans(arg)
+      
+      string_semicolon_decode("${arg}")
+      ans(arg)      
+
+
+      set(argstring "${argstring} \"${arg}\"")
+      
+endforeach()
+
+    set(execute_process_command "
+execute_process(
+      COMMAND \"\${path}\" ${argstring}
+      \${timeout}
+      \${cwd}
       RESULT_VARIABLE result
       OUTPUT_VARIABLE output
       ERROR_VARIABLE output
-    )
+  )
 
-  
-    
-    map_set(${processResult} output "${output}")
-    map_set(${processResult} result "${result}")
+map_set(\${processResult} output \"\${output}\")
+map_set(\${processResult} result \"\${result}\")
+      ")
+
+    #message("execute_process_command ${execute_process_command}")
+   
+    eval("${execute_process_command}")
 
     return(${processResult})
   endfunction()

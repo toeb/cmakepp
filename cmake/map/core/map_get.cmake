@@ -12,7 +12,6 @@ endfunction()
 # faster way of accessing map.  however fails if key contains escape sequences, escaped vars or @..@ substitutions
 # if thats the case comment out this macro
 macro(map_get __map_get_map __map_get_key)
-  #tick()
   set(__map_get_property_ref "${__map_get_map}.${__map_get_key}")
   get_property(__ans GLOBAL PROPERTY "${__map_get_property_ref}")
   if(NOT __ans)

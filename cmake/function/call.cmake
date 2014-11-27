@@ -9,7 +9,6 @@
 # * a navigation path
   # no output except through return values or referneces
   function(call)
-
     return_reset()
     # I used garbled variable names to keep from hiding parent scope varaibles
    # message("wooooaoaat? ${ARGN}")

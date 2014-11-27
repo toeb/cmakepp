@@ -5,6 +5,7 @@
 # eval will not modify ans (the code evaluated may modify ans)
 # variabls starting with __eval should not be used in code
 function(eval code)
+
   # variables which come before incldue() are obfuscated names so that
   # they do not clutter the scope
   
@@ -42,6 +43,7 @@ endfunction()
 # eval will not modify ans (the code evaluated may modify ans)
 # vars starting with __eval should not be used in code
 function(eval __eval_code)
+  
   # one file per execution of cmake (if this file were in memory it would probably be faster...)
   file_make_temporary("")
   ans(__eval_temp_file)

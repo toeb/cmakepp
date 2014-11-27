@@ -26,50 +26,36 @@ cmake -P oo-cmake-tests.cmake
 * Features
 	* [interactive cmake console](#icmake) (icmake.bat, icmake.sh)
 	* [eval](#eval) - evaluates cmake code and is the basis of many advanced features
-	* [shell](#shell)
-		* readline - allows user input from the keyboard
-		* "plattfrom independent" shell execution using shell() 
-		* directory and file functions (like bash)
-			* cd(), pushd(), popd(), mkdir() pwd(), touch(), ls(), fappend(), fwrite(),...
-			* path(possbilyRelativePath) -> gets the absolute path 
+	* [shell](#shell) - "platform independent" shell script execution
+		* [aliases](#aliases) - platform independent shell aliases
+		* [console](#console) - functions for console input and output
+	* [filesystem](#filesystem) - directory and file functions with close relations to bash syntax
+		* [compression/decompression](#compression) - compressing and decompressing tgz and zip files
+	* [command execution](#execute) simplifying access to exectables using the shell tools.
 	* debugging
 		* some convenience functions
-		* breakpoint() - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
-	* vcs
-		* hg()... hg(init), hg(clone <url>), ...
-		* git()... git(init), git(clone <url>),... shorthand for executing git in any directory
-	* [string functions](#string functions) 
-		* string_slice
-		* string_splice
-		* Semantic Versions ([semver](#semver))
-			- normalizing 
-			- convert to object
-			- semver constraints
-			-
-		* ...
-	* [lists](#lists) -extension to cmake list() functionaly
-		* peeking, popping, sorting, map, fold, predicates(any,all,contains,...)
-	* [maps](#maps) - basic map functions and utility functions (nested data structures for cmake)
-		* get/set/append/remove operations
-		* extended operations
-		* nav - navigate through a path of maps, allows getting and setting e.g. nav(res = map1.prop1.prop12), nav(resultmap.prop.otherprop = res)....
+		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
+	* [version control systems]("vcs")
+		* `hg()` convenience function for calling mercurial vcs
+		* `git()` convenience function for calling git vcs
+		* `svn()` convenience function for calling subversion vcs
+		* utility methods for working with the different systems
+	* [cmake](#cmake) calling cmake from cmake.
+	* [date/time](#datetime)
+	  * function for getting the correct date and time on all OSs
+	* [events](#events) allows registering event handlers and emitting events
+	* [Windows Registry](#windowsregstry)
+		* `reg()` shorthand for working with windows registry command line interface
+		* read write manipulate registry values
+		* query registry keys for values
+	* [string functions](#string functions) - advanced string manipulation		
+	* [lists](#lists) -extension to cmake and normalization of cmake's `list()` functionality
+	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
+		* graph algorithms 
 		* serialization
 			* [json](#json)
 			* [quickmap format](#quickmap) (native to cmake)
-		* invert
-		* import
-		* capture
-		* extract
-		* omit
-		* partial
-		* pick
-		* values
-		* algorithms
-			* depth first serach
-			* breadth first search
-			* graph search
-			* ...
-		* ...
+			* [xml](#xml)
 	* [expression syntax](#expr).
 			* obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}") -> creates the specified object
 	* functions
@@ -82,11 +68,11 @@ cmake -P oo-cmake-tests.cmake
 	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
 	* events
 		* you can globally register and call events 
-	* targets
+	* [Targets](#targets)
 		* [access to a list of all defined targets](#target_list)
 		* easier access to target properties
 		* 
-	* other things like web queries, packing and unpacking,...
+	* other things like web queries
 	* [implementation notes](#implementation_notes)
 NOTE: the list is incomplete
 # <a name="icmake"></a>Interactive CMake Shell
@@ -266,6 +252,21 @@ assert(${res} STREQUAL "{\"b\":{\"c\":{\"d\":{\"e\":3}}}}")
 * objects are created on the fly
 * nav is slow because it uses a lot of regex and loops to parse the expressions
 
+
+## <a name="xml"></a> Naive Xml Deserialization
+
+Xml Deserialization is a complex subject in CMake.  I have currently implemented a single naive implementation based on regular expressions which *does not* allow recursive nodes (ie nodes with the same tag being child of one another).
+
+
+
+### Functions
+
+* `xml_node(<name> <value> <attributes:object>)->{ tag:<name>, value:<value>, attrs:{<key>:<value>}}`  creates a naive xml node representation.
+* `xml_parse_nodes(<xml:string> <tag:string>)-> list of xml_nodes`  this function looks for the specified tag in the string (matching every instance(no recursive tags)) it parses the found nodes attributes and value (innerXml). You can then use `nav()`, `map_get()` etc functions to parse the nodes
+
+
+
+
 ## <a name="json"></a>Json Serialziation and Deserialization
 
 I have written five functions which you can use to serialize and deserialize json.  
@@ -388,7 +389,7 @@ function_inject(function_ish)	# imports a function, injecting before call, after
 
 ## Function Patterns
 
-### Initializer function
+### <a href="initializer_function"></a> Initializer function
 
 If you want to execute code only once for a function (e.g. create  a datastructure before executing the function) you can use the Initializer Patter.:
 ```
@@ -669,7 +670,7 @@ The following functions are usable for semantic versioning.
 ## target_list and project_list
 
 CMake as of version 2.8.7 does not support a list of all defined targets.
-Therfore I overwrote all target adding functions `add_library`, `add_executable`, `add_custom_target`, `add_test`, ... which now register the name of the target globally in a list. You can access this list by using the function `target_list()` which returns the list of known target names .  Note that only targets defined before the `target_list()`  call are known.  
+Therfore I overwrote all target adding functions `add_library`, `add_executable`, `add_custom_target`, `add_test`, `install` ... which now register the name of the target globally in a list. You can access this list by using the function `target_list()` which returns the list of known target names .  Note that only targets defined before the `target_list()`  call are known.  
 
 I did the same thing for the  `project()` command.
 
@@ -687,12 +688,493 @@ accessing target properties made easier by the following functions
 * `target_set(<target> <prop-name> [<value> ...])` sets the value of the target property
 * `target_append(<target> <prop-name> [<value> ...])` appends the values to the current value of `<prop-name>` 
 * `target_has(<target> <prop-name>)->bool` returns true iff the target has a property called `<prop-name>`
-* 
+
+
+
+# <a name="windowsregistry"></a> Windows Registry
+
+
+Even though cmake and oocmake are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (`cmake -E delete_regv` `write_regv`, `get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)` ) and hard to work with. Therefore I implemented a wrapper for the windows registry command line tool [REG](http://technet.microsoft.com/en-us/library/cc732643.aspx) and called it `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`. See also [wrap_executable](#executable)
+
+
+## Availables Functions
+
+
+Using this command I have added convinience functions for manipulating registry keys and values
+
+* `reg()` access to REG command line tool under windows (fails on other OSs)
+* `reg_write_value(key value_name value)` writes a registry value (overwrites if it exists)
+* `reg_read_value(key value_name)` returns the value of a registry value
+* `reg_query_values(key)` returns a map containing all values of a specific registry key
+* `reg_append_value(key value_name [args...])` append the specified values to the registries value
+* `reg_prepend_value(key value_name [args...])` prepends the specified values to the registries value
+* `reg_append_if_not_exists(key value_name [args ...]) appends the specifeid values to the registries value if they are not already part of it, returns only the values which were appended as result
+* `reg_remove_value(key value_name [args ...])` removes the specified values from the registries value
+* `reg_contains_value(key value_name)` returns true iff the registry contains the specified value
+* `reg_query(key)` returns a list of `<reg_entry>` objects which describe found values
+* `<reg_entry>` is a object with the fields key, value_name, value, type which describes a registry entry
+
+
+
+## Using windows registry functions example
+
+
+```
+set(kv HKCU/Environment testValue1)
+
+## read/write
+reg_write_value(${kv} "b;c")
+reg_read_value(${kv})
+ans(res)
+assert(EQUALS ${res} b c)
+
+## append
+reg_append_value(${kv} "d")
+reg_read_value(${kv})
+ans(res)
+assert(EQUALS ${res} b c d)
+
+## prepend
+reg_prepend_value(${kv} "a")
+reg_read_value(${kv})
+ans(res)
+assert(EQUALS ${res} a b c d)
+
+
+## append if not exists
+reg_append_if_not_exists(${kv} b c e f)
+ans(res)
+assert(res)
+assert(EQUALS ${res} e f)
+reg_read_value(${kv})
+ans(res)
+assert(EQUALS ${res} a b c d e f)
+
+
+## remove
+reg_remove_value(${kv} b d f)
+reg_read_value(${kv})
+ans(res)
+assert(EQUALS ${res} a c e)
+
+
+## contains
+reg_contains_value(${kv} e)  
+ans(res)
+assert(res)
+
+
+## read key
+reg_query_values(HKCU/Environment)
+ans(res)
+json_print(${res})
+assert(EQUALS DEREF {res.testValue1} a c e)
+```
+# <a name="datetime"></a> Date/Time
+
+I have provided you with a functions which returns a datetime object to get the current date and time on all OSs including windows. It uses file(TIMESTAMP) internally so the resolution is 1s.  It would be possible to enhance this functionality to included milliseconds however that is more system dependent and therefore a decieded against it.  
+
+`datetime()` currently only returns the local time. extending it to return UTC would be easy but I have not yet needed it
+
+In the future date time arithmetic might be added
+
+## Functions
+
+* `datetime()` returns the current date time as a `<datetime object>`
+* `<datetime object>` an object containing the following fields: `yyyy` `MM` `dd` `hh` `mm` `ss`
+
+
 
 
 # <a name="eval"></a> Eval
 
-# <a name="string functions"></a> String Functions
+`eval()` is one of the most central functions in oocmake.  It is the basis for many hacks an workarounds which oocmake uses to enhance the scripting language.
+
+`eval` is not native to cmake (native eval would greatly increase the performance of this library) 
+
+Internally it works by writing cmake script to a file and including it
+
+## Functions
+
+* `eval(code)` executes the specified code. `set(x z PARENT_SCOPE)` is not however you can return a value. 
+
+## Examples
+
+Defining a Function and calling it
+
+```
+eval("
+function(say_hello name)
+	return(\"hello \${name}!\") # note: escape cmake double quotes and dolar sign in front of vars
+endfunction()
+")
+
+say_hello(Tobias)
+ans(res)
+assert("${res}" STREQUAL "hello Tobias!")
+
+```
+
+dynamically calling a function
+
+```
+# three handlers
+function(handler1 a)
+	return("handler1 ${a}")
+endfunction()
+function(handler2 a)
+	return("handler2 ${a}")
+endfunction()
+function(handler3 a)
+	return("handler3 ${a}" )
+endfunction()
+# list of handlers
+set(handlers handler1 handler2 handler3)
+# intialize result
+set(results)
+# set input value
+set(val 3)
+foreach(handler ${handlers})
+	# dynamically call handler
+	eval("${handler}(${val})")	
+	ans(res)
+	# append result to list
+	list(APPEND results ${res})
+endforeach()
+# check if list equals expected results
+assert(EQUALS ${results} "handler1 3" "handler2 3" "handler3 3")
+```
+
+
+# <a name="events"></a> Events
+
+Events are often usefull when working with modules. CMake of course has no need for events generally. Some of my projects (cutil/cps) needed them however. For example the package manager cps uses them to allow hooks on package install/uninstall/load events which the packages can register.
+
+
+## Example
+
+
+```
+# create an event handler
+function(my_event_handler arg)
+ message("${event_name} called: ${arg}")
+ return("answer1")
+endfunction()
+
+# add an event handler
+event_addhandler(irrelevant_event_name my_event_handler)
+# add lambda event handler
+event_addhandler(irrelevant_event_name "(arg)->return($arg)")
+# anything callable can be used as an event handler (even a cmake file containing a single function)
+
+# emit event calls all registered event handlers in order
+# and concatenates their return values
+# side effects: prints irrelevent_event_name called: i am an argument
+event_emit(irrelevant_event_name "i am an argument")
+ans(result)
+
+
+assert(EQUALS ${result} answer1 "i am an argument")
+```
+
+## Functions and Datatypes
+
+* `<event id>` a globally unique identifier for an event (any name you want except `on_event` )
+* `on event` a special event that gets fired on all events (mainly for debugging purposes)
+* `event_addhandler(<event id> <callable>)` registers an event handler for the globally unique event identified by `<event id>` see definition for callable in [functions section](#functions)
+* `event_removehandler(<event id> <callable>)` removes the specified event handler from the handler list (it is no longer invoked when event is emitted)
+* `event_emit(<event id> [arg ...]) -> any[]` invokes the event identified by `<event id>` calls every handler passing along the argument list. every eventhandler's return value is concatenated and returned.  It is possible to register event handlers during call of the event itself the emit routine continues as long as their are uncalled registered event handlers but does not call them twice.
+* ... (functions for dynamic events, access to all available events)
+
+# <a name="vcs"></a> Version Control System utilities
+
+Working with the version control system can be a crutch in CMake. Therefore I created helpers and convenience functions which allow simple usage. Consider the following CMake code which you would have to use to clone cutil's git repository
+
+```
+
+find_package(Git)
+if(NOT GIT_FOUND)
+	message(FATAL_ERROR "Git is required!")
+endif()
+set(cutil_base_dir "/some/path")
+if(NOT IS_DIRECTORY "${cutil_base_dir}")
+	if(EXISTS "${cutil_base_dir}")
+		message(FATAL_ERROR "${cutil_base_dir} is a file")
+	endif()
+	file(MAKE_DIRECTORY "${cutil_base_dir}")
+endif()
+execute_process(COMMAND "${GIT_EXECUTABLE}" clone "https://github.com/toeb/cutil.git" "${cutil_base_dir}" RESULT_VARIABLE error ERROR_VARIABLE error)
+if(error)
+	message(FATAL_ERROR "could not clone https:// .... because "${error}")
+endif()
+execute_process(COMMAND "${GIT_EXECUTABLE}" submodule init WORKING_DIRECTORY "${cutil_base_dir}" RESULT_VARIABLE error)
+if(error)
+	message(FATAL_ERROR "could not init submodules because "${error}")
+endif()
+execute_process(COMMAND "${GIT_EXECUTABLE}" submodule update --recursive WORKING_DIRECTORY "${cutil_base_dir}" RESULT_VARIABLE error)
+if(error)
+	message(FATAL_ERROR "could not update submodules")
+endif()
+```
+
+Using convenience functions this distills down to
+
+```
+# set the current directory to ${cutil_base_dir} and creates it if it does not exist
+cd(${cutil_base_dir} --create) 
+# automatically fails on error with error message
+git(clone "http://github.com/toeb/cutil.git" .)
+git(submodule init)
+git(submodule update --recursive)
+```
+
+So alot of unecessary repeating code can be omitted.  
+
+## Git
+
+### Functions
+
+* `git()` function for git command line client with same usage, except `git ...` -> `git(...)` (created using wrap_executable)
+* `git_base_dir([<unqualified path>]) -> <qualified path>` returns the repositories base directory
+* `git_dir([<unqualified path>]) -> <qualified path>` returns the repositories .git directory 
+* `git_read_single_file(<repository uri> <branch|""> <repository path>) -> <content of file>` reads a file from a remote repository
+* `git_remote_exists(<potential repository uri>) -> bool` returns true if the uri points to a valid git repository
+* `git_remote_refs(<repository uri>) -> <remote ref>[]` returns a list of `<remote ref>` objects
+* `<remote ref>` a objects containing the following fields
+  * `type : HEAD | <branch name>` -> the type of ref
+  * `name : <string>` -> the name of the ref 
+  * `revision: <hash>` -> the revision associated with the ref
+* `git_repository_name() -> <string>`  returns the name of the repository. 
+
+## Subversion
+
+* `svn()` function for svn command line client with same usage, except `svn ...` -> `svn(...)` (created using wrap_exetuable)
+* `svn_get_revision(<uri>)` returns the revision number of the specifed `<uri>`
+* `svn_info(<uri>)-><svn info>` returns an object containing the following fields
+	- path: specified relative path
+	- revision: revision number
+	- kind
+	- url: uri
+	- root: repository root
+	- uuid
+* ...
+
+## Mercurial
+
+* `hg()` function for mercurial command line client with same usage except `hg ...` -> `hg(...)`
+* ...
+
+# <a name="execute"></a> # Executing External Programms
+
+Using external applications more complex than necessary in cmake imho. I tried to make it as easy as possible.  Wrapping an external programm is now very simple as you can see in the following example for git:
+
+This is all the code you need to create a function which wraps the git executable.  It uses the [initializer function pattern](#initializer_function). 
+
+```
+function(git)
+  # initializer block (will only be executed once)
+  find_package(Git)
+  if(NOT GIT_FOUND)
+    message(FATAL_ERROR "missing git")
+  endif()
+  # function redefinition inside wrap_executable
+  wrap_executable(git "${GIT_EXECUTABLE}")
+  # delegate to redefinition and return value
+  git(${ARGN})
+  return_ans()
+endfunction() 
+```
+
+Another example:
+
+```
+find_package(Hg)
+set(cmdline --version)
+execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
+ans(res)
+map_get(${res} result)
+ans(error)
+map_get(${res} output)
+ans(stdout)
+assert(NOT error) # error code is 0
+assert("${stdout}" MATCHES "mercurial") # output contains mercurial
+json_print(${res}) # outputs input and output of process
+
+```
+
+## Functions and Datatypes
+
+* `execute(<process start ish> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
+	* example: `execute("{path:'<command>', args:['a','b']}")`  
+* `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
+* `<process start ish>` a string which can be converted to a `<process start>` object
+* `<process start>` a map/object containing the following fields
+	- `path` command name / path of executable *required*
+	- `args` command line arguments to pass along to command, use `string_semicolon_encode` if you want to have an argument with semicolons *optional*
+	- `timeout:<int>` *optional* number of seconds to wait before failing
+	- `cwd:<unqualified path>` *optional*  by default it is whatever `pwd()` currently returns
+* `<process info>` contains all the fields of `<process start>` and additionaly
+	- `output:<stdout>`  the output of the command execution. (merged error and stdout streams)
+	- `result:<int>` the return code of the execution.  0 normally indicates success.
+
+
+
+# <a name="filesystem"></a> Filesystem
+
+I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) it is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
+
+```
+# as soon as you include `oo-cmake.cmake` the current directory is set to 
+# "${CMAKE_SOURCE_DIR}" which is the directory from which you script file 
+# is called in script mode (`cmake -P`) or the directory of the root 
+# `CMakeLists.txt` file in configure and build steps.
+pwd() # returns the current dir
+ans(path)
+
+assert("${path}" STREQUAL "${CMAKE_SOURCE_DIR}")
+
+
+pushd("dir1" --create) # goto  ${CMAKE_SOURCE_DIR}/dir1; Create if not exists
+ans(path)
+assert("${path}" STREQUAL "${CMAKE_SOURCE_DIR}/dir1")
+
+fwrite("README.md" "This is the readme file.") # creates the file README.md in dir1
+assert(EXISTS "${CMAKE_SOURCE_DIR}/dir1/README.md") 
+
+
+pushd(dir2 --create) # goto ${CMAKE_SOURCE_DIR}/dir1/dir2 and create it if it does not exist
+fwrite("README2.md" "This is another readme file")
+
+cd(../..) # use relative path specifiers to navigate path stack
+ans(path)
+
+assert(${path} STREQUAL "${CMAKE_SOURCE_DIR}") # up up -> we are where we started
+
+popd() # path stack is popped. path before was ${CMAKE_SOURCE_DIR}/dir1
+ans(path)
+
+assert(${path} STREQUAL "${CMAKE_SOURCE_DIR}/dir1")
+
+
+mkdir("dir3")
+cd(dir3)
+# current dir is now ${CMAKE_SOURCE_DIR}/dir1/dir3
+
+# execute() uses the current pwd() as the working dir so the following
+# clones the oo-cmake repo into ${CMAKE_SOURCE_DIR}/dir1/dir3
+git(clone https://github.com/toeb/oo-cmake.git ".")
+
+
+# remove all files and folders
+rm(.)
+
+
+popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
+
+```
+
+
+## Functions and datatypes
+
+* `<windows path>`  a windows path possibly with and possibly with drive name `C:\Users\Tobi\README.md`
+* `<relative path>` a simple relative path '../dir2/./test.txt'
+* `<qualified path>` a fully qualified path depending on OS it only contains forward slashes and is cmake's `get_filename_component(result "${input} REAL_PATH)` returns. All symlinks are resolved. It is absolute
+* `<unqualified path> ::= <windows path>|<relative path>|<qualified path>` 
+* `path(<unqualified path>)-><qualified path>` qualifies a path and returns it.  if path is relative (with no drive letter under windows or no initial / on unix) it will be qualified with the current directory `pwd()`
+* `pwd()-> <qualified path>` returns the top of the path stack. relative paths are relative to `pwd()`
+* `cd(<unqualified> [--create]) -> <qualified path>` changes the top of the path stack.  returns the `<qualified path>` corresonding to input. if `--create` is specified the directory will be created if it does not exist. if `cd()` is navigated towards a non existing directory and `--create` is not specified it will cause a `FATAL_ERROR`
+* `pushd(<unqualified path> [--create]) -> <qualified path>` works the same `cd()` except that it pushes the top of the path stack down instead of replacing it
+* `popd()-><qualified path>` removes the top of the path stack and returns the new top path
+* `dirs()-> <qualified path>[]` returns all paths in the path stack from bottom to top
+* file functions
+	- `fread(<unqualified path>)-><string>` returns the contents of the specified file
+	- `lines(<unqualified path>)-><string>[]` returns the contents of the specified file in a list of lines
+	- `download(<uri> [<target:unqualified path>] [--progress])` downloads the file to target, if target is an existing directory the downloaded filename will be extracted from uri else path is treated as the target filepath
+	- `fappend(<unqualified path> <content:string>)->void` appends the specified content to the target file
+	- `fwrite(<unqualified path> <content:string>)->void` writes the content to the target file (overwriting it)
+	- `parent_dir(<unqualified path>)-><qualified path>` returns the parent directory of the specified path
+	- `file_timestamp(<unqualified path>)-><timestampstring>` returns the timestamp string for the specified path yyyy-MM-ddThh:mm:ss
+	- `ls([<unqualified path>])-><qualified path>[]` returns files and subfolders of specified path
+	- `mkdir(<unqualified path>)-><qualfied path>` creates the specified dir and returns its qualified path
+	- `mkdirs(<unqualified path>...)-><qualified path>[]` creates all of the directories specified
+	- `mktemp([<unqualified path>])-><qualified path>` creates a temporary directory optionally you can specify where this directory is created (by default it is created in TMP_DIR)
+	- `mv(<sourcefile> <targetfile>|[<sourcefile> ...] <existing targetdir>)->void` moves the specifeid path to the specified target if last argument is an existing directory all previous files will be moved there else only two arguments are allowed
+	- `paths([<unqualified path> ...])-><qualified path>[]` returns the qualified path for every unqualified path received as input
+	- `touch(<unqualified path> [--nocreate])-><qualified path>` touches the specified file creating it if it does not exist. if `--nocreate` is specified the file will not be created if it does not exist. the qualified path for the specified file is returned
+	- `home_dir()-><qualified path>` returns the users home directory
+	- `home_path(<relative path>)-><qualified path>` returns fully qualified  path relative to the user's home directory
+	- ... (more functions are coming whenver they are needed)
+
+# <a name="shell"></a> Shell
+
+
+## <a name="console"></a> Console Interaction
+
+Since I have been using cmake for what it has not been created (user interaction) I needed to enhance console output and "invent" console input.  using shell magic it became possible for me to read input from the shell during cmake execution.  You can see it in action in the interactive cmake shell `icmake` (start it by running cmake -P icmake.cmake) Also I was missing a way of writing to the shell without appending a linebreak - using `cmake -E echo_append` it was possibly for me to output data without ending the line.  
+
+
+### Functions
+
+* `read_line()-><string>` prompts the user to input text. waiting for a line break. the result is a string containing the line read from console
+* `echo_append([args ...])` appends the specifeid arguments to stdout without a new line at the end
+* `echo([args ...])` appends the specified arguments to stdout and adds a new line
+ 
+
+
+## <a name="aliases"></a> Aliases
+
+Since I like to provide command line tools based on cmake (using cmake as a cross plattform shell in some sense) I also needed the ability to create aliases in a platform independent way. Even though I have a couple of limitations I have found a good posibillity to do what I want. See the following example of how to create a cross platform way to dowload a file:
+
+```
+fwrite("datetimescript.cmake" "
+include(\${oocmake_base_dir}/oo-cmake.cmake)
+datetime()
+ans(dt)
+json_print(${dt})
+")
+path("datetimescript.cmake")
+ans(fullpath)
+alias_create("my_datetime" "cmake -P \"${fullpath}\"")
+
+```
+
+After executing the above code the current shell will have access to the my_datetime alias and the following call will be possible without any reference to cmake - in this case the cmake command is called of course but `create_alias` can be used to create a alias for any type of executable as bash and windows commandprompts do not differ too much in this respect
+
+```
+shell> my_datetime
+{
+ "yyyy":"2014",
+ "MM":"11",
+ "dd":"27",
+ "hh":"22",
+ "mm":"51",
+ "ss":"32",
+ "ms":"0"
+}
+```
+
+### Functions and Datatypes
+
+* `alias_create(<alias name> <shell code>)`  - under windows this registers a directory in the users PATH variable. In this directory batch files are created. Under Unix the .bashrc is edited and a alias is inserted.
+	- Not implemented yet:
+		+ `alias_exists`
+		+ `alias_remove`
+		+ `alias_list`
+
+
+
+
+
+# <a name="cmake"></a> CMake Command
+
+Like the version control system I also wrappend cmake itself into an easy to use function called `cmake(...)`  this allows me to start subinstances of cmake
+
+
+# <a name="fork"><a> Fork
+
+using cmd's start and bash's ampersand operator it should be possible to fork off processes.
+
+# <a name="string_functions"></a> String Functions
 
 # <a name="lists"></a> Lists Functions
 
@@ -701,6 +1183,7 @@ accessing target properties made easier by the following functions
 # <a name="expr"></a> Expression Syntax
 
 # <a name="implementation_notes"></a> Implementation Notes
+
 
 ## Passing By Ref
 
