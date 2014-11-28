@@ -1,9 +1,3 @@
-#imports a function from a file
-# todo function(eat) fails because name is not reaplaced
-# todo function(thefunction result) \n fails
-# todo \r\n\t in signature
-# todo function name starting with function fail
-
 function(function_import)
   cmake_parse_arguments("" "REDEFINE;ONCE" "as" "" ${ARGN})
   #_UNPARSED_ARGUMENTS

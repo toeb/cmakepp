@@ -11,7 +11,6 @@ function(git_remote_refs uri)
   map_tryget(${result} output)
   ans(res)
 
-  json_print(${result})
   if(error)
     return()
   endif()

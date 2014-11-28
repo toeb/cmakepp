@@ -32,6 +32,7 @@ cmake -P oo-cmake-tests.cmake
 	* [filesystem](#filesystem) - directory and file functions with close relations to bash syntax
 		* [compression/decompression](#compression) - compressing and decompressing tgz and zip files
 	* [command execution](#execute) simplifying access to exectables using the shell tools.
+	* [cmake tool compilation](#tooling) simple c/c++ tools for cmake
 	* debugging
 		* some convenience functions
 		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
@@ -1168,6 +1169,64 @@ shell> my_datetime
 # <a name="cmake"></a> CMake Command
 
 Like the version control system I also wrappend cmake itself into an easy to use function called `cmake(...)`  this allows me to start subinstances of cmake
+
+# <a name="tooling"><a> CMake Tooling
+
+To create tools for CMake (wherever something cannot be done with cmake) I created a very simple function called `compile_tool(<name> <src>)`
+
+This function does the following tasks
+
+* creates a cmake project with CMakeLists file and a single executable target the target has a single source file (whatever you put in `<src>`)
+* compiles this tool (the tool may only use standard headers currently)
+* caches the compiled tool so that it is not recompiled unless src changes
+* creates a wrapper function in cmake called `<name>` which evaluates the cmake code that the command outputs
+* arguments passed to wrapper `<name>` are passed along as command line args for the main method.
+
+*note*: this will change in the future as it is a very naive implementation.
+
+
+## Example
+
+Because cmake does not support getting the current time in milliseconds since the epoch the need arose for me to compile custom code. This code is the example for using the `compile_tool(..)` function.
+
+```
+## returns the number of milliseconds since epoch
+function(millis)
+  # initializer function pattern - because compile_tool
+  # redefines the millis function this code is only executed once
+  compile_tool(
+  	# first argument: the name of the tool 
+  	# and the function name to be defined  	
+  	millis 
+  	# second argument: the source code to compile
+  	# with default compiler/generator under you system  	
+  	"
+    #include <iostream>
+    #include <chrono>
+    int main(int argc, const char ** argv){
+     // use chrono to get the current time in milliseconds
+     auto now = std::chrono::system_clock::now();
+     auto duration = now.time_since_epoch();
+     auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+     // return cmake code which is to be evaluated by command wrapper
+     // set_ans will let the eval function return the specified value
+     std::cout<< \"set_ans(\" << millis << \")\";
+     return 0;
+    }
+    "
+    )
+  ## compile_tool has either failed or succesfully defined the function
+  ## wrapper called millis
+  millis(${ARGN})
+  return_ans()
+endfunction()
+
+# now you can use millis
+millis()
+ans(ms)
+message("time since epoch in milliseconds: ${ms}")
+```
+
 
 
 # <a name="fork"><a> Fork

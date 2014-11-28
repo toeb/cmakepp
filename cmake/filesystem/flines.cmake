@@ -5,3 +5,4 @@ function(flines path)
   file(STRINGS "${path}" res)
   return_ref(res)
 endfunction()
+
