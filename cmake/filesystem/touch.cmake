@@ -1,20 +1,52 @@
 # creates a file or updates the file access time
 # *by appending an empty string
 function(touch path)
-  path("${path}")
-  ans(path)
 
-  set(args ${ARGN})
-  list_extract_flag(--nocreate)
-  ans(nocreate)
+  if("${CMAKE_MAJOR_VERSION}" LESS 3)
+    function(touch path)
 
-  set(cmd touch)
-  if(nocreate)
-    set(cmd touch_nocreate)
+      path("${path}")
+      ans(path)
+
+      set(args ${ARGN})
+      list_extract_flag(args --nocreate)
+      ans(nocreate)
+
+      if(NOT EXISTS "${path}" AND nocreate)
+        return_ref(path)
+      elseif(NOT EXISTS "${path}")
+        file(WRITE "${path}" "")        
+      else()
+        file(APPEND "${path}" "")
+      endif()
+
+
+      return_ref(path)
+
+    endfunction()
+  else()
+    function(touch path)
+      path("${path}")
+      ans(path)
+
+      set(args ${ARGN})
+      list_extract_flag(args --nocreate)
+      ans(nocreate)
+
+
+
+      set(cmd touch)
+      if(nocreate)
+        set(cmd touch_nocreate)
+
+      endif()
+
+      cmake(-E ${cmd} "${path}")
+
+      return_ref(path)
+    endfunction()
   endif()
-
-  cmake(-E ${cmd} "${path}")
-
-  return_ref(path)
+  touch("${path}")
+  return_ans()
 endfunction()
 

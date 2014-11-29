@@ -11,33 +11,29 @@ function(test)
   set(setC a b )
 
 
-  set_equal(nullSet nullSet)
+  set_isequal(nullSet nullSet)
   ans(res)
   assert(res)
 
-  set_equal(oneSet nullSet)
+  set_isequal(oneSet nullSet)
   ans(res)
   assert(NOT res)
 
-  set_equal(oneSet oneSet)
+  set_isequal(oneSet oneSet)
   ans(res)
   assert(res)
 
-  set_equal(setA setB)
+  set_isequal(setA setB)
   ans(res)
   assert(res)
 
-  set_equal(setB setC)
+  set_isequal(setB setC)
   ans(res)
   assert(NOT res)
 
 
 
 
- function(set_normalize theset)
-
-
- endfunction()
 
 
 

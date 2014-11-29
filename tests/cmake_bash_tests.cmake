@@ -78,8 +78,10 @@ assert("${res}" STREQUAL "${test_dir}/test")
   touch(test1/f1.txt)
   touch(test1/f2.txt)
   ls(test1)
-
   ans(res)
+
+  message("ls ${res}")
+
 assert(COUNT 2 ${res})  
 
 endfunction()

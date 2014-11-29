@@ -35,7 +35,7 @@ function(test)
   git(clone "https://github.com/toeb/oo-cmake" . --return-code)
   ans(ret)
   assert("${ret}" EQUAL 0)
-  assert(EXISTS "${test_dir}/dir3/cmake/core/git/git.cmake")
+  assert(EXISTS "${test_dir}/dir3/cmake/vcs/git/git.cmake")
 
 
 
