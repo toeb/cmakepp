@@ -1,9 +1,9 @@
 language: cpp
 compiler:
   - gcc
-env:
-  - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1"
-  - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
+#env:
+# - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1"
+# - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
 notifications:
   slack: fallto:MlnVOMNkx8YopsaSSxqh2Rcr
 before_install:
@@ -15,17 +15,21 @@ before_install:
   - git config --global user.name "Build Server"
 install:
      # install cmake --
-    - wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
-    - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
-    - cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
-    - cmake --build _builds --target install
-    - export PATH="`pwd`/_install/bin:${PATH}"
+    #- wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
+    #- tar xf "cmake-${CMAKE_VERSION}.tar.gz"
+    #- cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
+    #- cmake --build _builds --target install
+    #- export PATH="`pwd`/_install/bin:${PATH}"
     # -- end
     # verify installed cmake --
-    - which cmake
-    - cmake --version
+    #- which cmake
+    #- cmake --version    
     # -- end
-script: "cmake -P oo-cmake-tests.cmake"
+script: "cmake -P build/script.cmake"
+after_success: "cmake -P build/after_success.cmake"
+after_failure: "cmake -P build/after_failure.cmake"
+after_script: "cmake -P build/after_script.cmake"
+
 branches:
   only:
     - master

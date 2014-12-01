@@ -56,6 +56,7 @@ function(compile_tool name src)
     ans(error)
     map_tryget(${build_result} output)
     ans(log)
+    popd()
 
     if(NOT "${error}" STREQUAL "0")        
       message(FATAL_ERROR "failed to compile tool :\n ${log}")
@@ -63,7 +64,6 @@ function(compile_tool name src)
     endif()
 
 
-    popd()
   endif()
   
         
