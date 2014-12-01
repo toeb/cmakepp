@@ -15,6 +15,7 @@ Look through the files in the package.  Most functions will be commented and the
 
 # Testing
 To test the code (alot is tested but not all) run the following in the root dir of oo-cmake 
+
 ``` 
 cmake -P oo-cmake-tests.cmake 
 ```
@@ -24,7 +25,7 @@ cmake -P oo-cmake-tests.cmake
 `oocmake` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
 
 * Features
-	* [interactive cmake console](#icmake) (icmake.bat, icmake.sh)
+	* [interactive cmake console](#icmake) (`cmake -P icmake.cmake`)
 	* [eval](#eval) - evaluates cmake code and is the basis of many advanced features
 	* [shell](#shell) - "platform independent" shell script execution
 		* [aliases](#aliases) - platform independent shell aliases
@@ -34,7 +35,7 @@ cmake -P oo-cmake-tests.cmake
 	* [command execution](#execute) simplifying access to exectables using the shell tools.
 	* debugging
 		* some convenience functions
-		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if -DDEBUG_CMAKE was specified in command line)
+		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if `-DDEBUG_CMAKE` was specified in command line)
 	* [version control systems](#vcs)
 		* `hg()` convenience function for calling mercurial vcs
 		* `git()` convenience function for calling git vcs
@@ -43,31 +44,30 @@ cmake -P oo-cmake-tests.cmake
 	* [cmake](#cmake) calling cmake from cmake.
 	* [date/time](#datetime)
 	  * function for getting the correct date and time on all OSs
+	  * get milliseconds since epoch
 	* [events](#events) allows registering event handlers and emitting events
 	* [Windows Registry](#windowsregstry)
 		* `reg()` shorthand for working with windows registry command line interface
 		* read write manipulate registry values
 		* query registry keys for values
-	* [string functions](#string functions) - advanced string manipulation		
-	* [lists](#lists) -extension to cmake and normalization of cmake's `list()` functionality
+	* [string functions](#stringfunctions) - advanced string manipulation		
+	* [lists](#lists) - extension to cmake and normalization of cmake's `list()` functionality
 	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
 		* graph algorithms 
-		* serialization
+		* serialization/deserialization
 			* [json](#json)
 			* [quickmap format](#quickmap) (native to cmake)
 			* [xml](#xml)
 	* [expression syntax](#expr).
-			* obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}") -> creates the specified object
+			* `obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}")` -> creates the specified object
 	* functions
 		* [returning values](#return)
 		* define dynamic functions (without cluttering the namespace)
-		* call functions dynamically (basically allowing ${functionName}(arg1 arg2 ...) `call(${functionName}(arg1 arg2 ...))`
+		* call functions dynamically (basically allowing `${functionName}(arg1 arg2 ...)` by typing  `call(${functionName}(arg1 arg2 ...))`)
 		* set a variable to the result of functions `rcall(result = somefunction())`
 		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
 		* import functions (from files, from string, ...)
 	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
-	* events
-		* you can globally register and call events 
 	* [Targets](#targets)
 		* [access to a list of all defined targets](#target_list)
 		* easier access to target properties
@@ -77,7 +77,7 @@ cmake -P oo-cmake-tests.cmake
 NOTE: the list is incomplete
 # <a name="icmake"></a>Interactive CMake Shell
 
-If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `icmake.bat` or `icmake.sh` which gives you a prompt with the all functions available in `oocmake`.
+If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `oocmake` and cmake in general.
 
 `icmake` allows you to enter valid cmake and also a more lazily you can neglect to enter the parentheses around functions e.g. `cd my/path ` -> `cd(my/path)`
 
