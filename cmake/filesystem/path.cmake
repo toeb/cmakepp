@@ -3,6 +3,7 @@
 # if path is a fully qualified name it returns path
 # else path is interpreted as the relative path 
 function(path path)
+  string(REPLACE \\ / path "${path}")
   get_filename_component(realpath "${path}" REALPATH)
   if("_${path}" MATCHES "^_[a-zA-Z]:\\/")
     # windows absolute path
