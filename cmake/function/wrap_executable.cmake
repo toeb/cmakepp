@@ -35,14 +35,17 @@
         if(return_code_flag)
           return_ref(error)
         endif()
+        map_tryget(\${execution_result} output)
+        ans(stdout)
 
         if(NOT \"\${error}\" EQUAL 0)
-          message(FATAL_ERROR \"failed to execute ${alias} - return code is '\${error}'\")
+
+          message(FATAL_ERROR \"failed to execute ${alias} - return code is '\${error}'\\n stderr:\\n \${stdout} \")
+
           return()
         endif()
 
-        map_tryget(\${execution_result} output)
-        return_ans()
+        return_ref(sdout)
       endfunction()
       ")
     return()
