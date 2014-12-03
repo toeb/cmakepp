@@ -1,74 +1,11 @@
 function(test)
-  
-  ## returns the user data path for the specified id
-  ## normally located in %HOME_DIR%/.oocmake
-  function(user_data_path)  
-    if(NOT id)
-      message(FATAL_ERROR)
-    endif()
 
-    #checksum_string("${id}")
-    #ans(id)
-    
-    home_dir()
-    ans(home_dir)
-    set(storage_dir "${home_dir}/.oocmake")
-    if(NOT EXISTS "${storage_dir}")
-      mkdir("${storage_dir}")
-    endif()
-    set(storage_file "${storage_dir}/${id}.cmake")
-    return_ref(storage_file)
-  endfunction()
-
-
-  function(user_data_read id)
-    user_data_path("${id}")
-    ans(storage_file)
-
-    if(NOT EXISTS "${storage_file}")
-      return()
-    endif()
-
-    qm_read("${storage_file}")
-    return_ans()
-  endfunction()
-
-  function(user_data id)
-    user_data_read("${id}")
-    ans(res)
-    if(NOT res)
-
-    endif()
-    return_ref(res)
-  endfunction()
-
-  function(user_data_clear id)
-    user_data_path("${id}")
-    ans(res)
-    if(EXISTS "${res}")
-      rm("${res}")
-      return(true)
-    endif()
-    return(false)
-  endfunction()
-
-
-  function(user_data_write id)
-    user_data_path("${id}")
-    ans(path)
-
-    qm_write("${path}" ${ARGN})
-    return_ans()
-  endfunction()
-
-
-
-
-  user_data_path(testkey)
+  ## print the user data path
+  user_data_dir()
   ans(res)
   message("user data is located in ${res}")
 
-
+  ## remove any prexistin user data under testkey
   user_data_clear("testkey")
 
   # read empty user data
@@ -99,7 +36,7 @@ function(test)
 
   end()
   ans(res)
-
+  set(original "${res}")
   user_data_write(testkey "${res}")
 
   user_data_read(testkey)
@@ -112,47 +49,39 @@ function(test)
   assert(NOT "${res}" STREQUAL "${res2}")
 
 
-  
-  function(user_data_set nav)
-    set(args ${ARGN})
-    list_extract_labelled_value(args --user-data-id)
-    ans(id)
-    if(NOT id)
-      set(id default)
-    endif()
-    user_data_read("${id}")
-    ans(res)
-    message("res.${nav} ${args}")
-    map_navigate_set("${res}.${nav}" ${args})
-    json_print(${res})
-    user_data_write("${id}" ${res})
-    return_ans()
-  endfunction()
+  ## get stored user data keys
+  user_data_ids()
+  ans(res)
 
-  function(user_data_get expr)
-    set(args ${ARGN})
-    list_extract_labelled_value(args --user-data-id)
-    ans(id)
-    if(NOT id)
-      set(id default)
-    endif()
-    user_data_read("${id}")
-    ans(res)
-    nav(data = res."${expr}")
-    return_ref(data)
-  endfunction()
+  assert(CONTAINS testkey ${res})
+
+  ## get a single user data
+  user_data_get(testkey 43.jasd)
+  ans(res)
+  assert("${res}" STREQUAL "asd")
 
 
-  user_data_set(my.value 123 --user-data-id testkey)
-  nav(res.my.value  123)
-
-  user_data_read("testkey")
-  ans(res2)
-
-  map_equal("${res2}" "${res}")
-
+  ## get root user data
+  user_data_get(testkey)
+  ans(res)
+  assert(res)
+  map_equal("${res}" "${original}")
   ans(isequal)
+
   assert(isequal)
+
+
+  ## set specific user data
+  user_data_set(testkey a.b.c 323)
+  user_data_get(testkey a.b.c)
+  ans(res)
+  assert("${res}" STREQUAL 323)
+
+  ## set root user data
+  user_data_set(testkey . 123)
+  user_data_get(testkey)
+  ans(res)
+  assert("${res}" STREQUAL "123")
 
 
 
