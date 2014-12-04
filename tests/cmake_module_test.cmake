@@ -10,7 +10,7 @@ function(test)
   #   cmake_function_files:<glob>  // are globbed and appended in 
   #   
   # }
-
+#http://www.cmake.org/cmake/help/v3.0/manual/cmake-developer.7.html#find-modules
   function(listing_append_comment listing comment)
 
     string_split("${comment}" \n")

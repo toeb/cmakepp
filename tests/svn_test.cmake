@@ -9,6 +9,7 @@ function(test)
   
   svn(--version --quiet)
   ans(res)
+  message("${res}")
   string(STRIP "${res}" res)
   assert("${res}" STREQUAL "${Subversion_VERSION_SVN}")
 
