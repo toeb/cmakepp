@@ -1,6 +1,7 @@
 function(test)
 
-
+  message("test inconcolusive")
+  return()
 
   timer_start(mytimer)
   timer_start(mysecondtimer)
