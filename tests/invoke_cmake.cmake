@@ -4,11 +4,8 @@ function(test)
   cmake(--help-command string --result)
   ans(res)
 
-  json_print(${res})
+  map_tryget(${res} result)
+  ans(error)
 
-
-
-  message("res ${res}")
-
-  assert("${res}" MATCHES "String operations.")
+  assert(NOT error)
 endfunction()
