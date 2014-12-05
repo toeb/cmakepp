@@ -70,6 +70,7 @@ cmake -P oo-cmake-tests.cmake
 		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
 		* import functions (from files, from string, ...)
 	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
+	* [process management](#process_management) - platform independent forking, waiting, controlling separate process from cmake 
 	* [Targets](#targets)
 		* [access to a list of all defined targets](#target_list)
 		* easier access to target properties
@@ -1294,7 +1295,20 @@ json_print(${res})
 
 ```
 
-# <a name="fork"><a> Fork
+# <a name="process_management"><a> Process Management
+
+When working with large applications in oocmake it becomes necessary to work in parallel.  I implemented a platform independent controll mechanism for spawning killing and waiting for processes.  
+
+
+## Functions and Datatypes
+
+* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process
+* `<process start info> ::= { }`  
+* `process_spawn():<process info>`
+* `process_kill(<id:<process id>>)`
+* `process_list()`
+* `process_status()`
+
 
 using cmd's start and bash's ampersand operator it should be possible to fork off processes.
 
