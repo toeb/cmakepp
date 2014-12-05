@@ -14,7 +14,7 @@ function(test)
 #http://www.cmake.org/cmake/help/v3.0/manual/cmake-developer.7.html#find-modules
   function(listing_append_comment listing comment)
 
-    string_split("${comment}" \n")
+    string_split("${comment}" "\n")
     ans(comment)
     foreach(line ${comment})
       list(APPEND "#${line}")

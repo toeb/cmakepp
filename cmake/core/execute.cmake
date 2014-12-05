@@ -1,18 +1,18 @@
 
   # input:
   # {
-  #  path:<executable_path>, // path to executable
-  #  args:<args ...>,        // command line arguments to executable, use string_semicolon_encode() on an argument if you want to pass an argument with semicolons
-  #  [timeout: ],            // timout
-  #  [cwd: ],                // current working dir (default is whatever pwd returns)
+  #  <path:<executable>>, // path to executable or executable name -> shoudl be renamed to command
+  #  <args:<arg ...>>,        // command line arguments to executable, use string_semicolon_encode() on an argument if you want to pass an argument with semicolons
+  #  <?timeout:<seconds>],            // timout
+  #  <?cwd:<unqualified path>>,                // current working dir (default is whatever pwd returns)
   #
   # }
   # returns:
   # {
   #   path: ...,
   #   args: ...,
-  #   timeout: ...,
-  #   cwd: ...,
+  #   <timeout:<seconds>> ...,
+  #   <cwd:<qualified path>> ...,
   #   output: <string>,   // all output of the process (stderr, and stdout)
   #   result: <int>       // return code of the process (normally 0 indicates success)
   # }
@@ -48,7 +48,9 @@
     map_tryget(${processStart} "cwd")
     ans(cwd)
 
-    get_filename_component(cwd "${cwd}" REALPATH)
+    #get_filename_component(cwd "${cwd}" REALPATH)
+    path("${cwd}")
+    ans(cwd)
 
     if(cwd)
       if(NOT IS_DIRECTORY "${cwd}")
@@ -61,9 +63,8 @@
 
     # now compile the command string and evaluate
     # this allows using encoded semicolons
-set(argstring)
- foreach(arg ${args})
-
+    set(argstring)
+    foreach(arg ${args})
       cmake_string_escape("${arg}")
       ans(arg)
       
@@ -73,24 +74,23 @@ set(argstring)
 
       set(argstring "${argstring} \"${arg}\"")
       
-endforeach()
+    endforeach()
 
     set(execute_process_command "
-execute_process(
-      COMMAND \"\${path}\" ${argstring}
-      \${timeout}
-      \${cwd}
-      RESULT_VARIABLE result
-      OUTPUT_VARIABLE output
-      ERROR_VARIABLE output
-  )
+        execute_process(
+          COMMAND \"\${path}\" ${argstring}
+          \${timeout}
+          \${cwd}
+          RESULT_VARIABLE result
+          OUTPUT_VARIABLE output
+          ERROR_VARIABLE output
+        )
 
-map_set(\${processResult} output \"\${output}\")
-map_set(\${processResult} result \"\${result}\")
-      ")
+        map_set(\${processResult} output \"\${output}\")
+        map_set(\${processResult} result \"\${result}\")
+    ")
 
-    #message("execute_process_command ${execute_process_command}")
-   
+     
     eval("${execute_process_command}")
 
 
