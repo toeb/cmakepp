@@ -45,7 +45,7 @@
           return()
         endif()
 
-        return_ref(sdout)
+        return_ref(stdout)
       endfunction()
       ")
     return()
