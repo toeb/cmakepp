@@ -93,5 +93,10 @@ map_set(\${processResult} result \"\${result}\")
    
     eval("${execute_process_command}")
 
+
+    if(OOCMAKE_DEBUG_EXECUTE)
+      json_print(${processResult})
+    endif()
+
     return(${processResult})
   endfunction()

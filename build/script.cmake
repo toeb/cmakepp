@@ -15,6 +15,9 @@ oocmake_config(temp_dir)
 ans(temp_dir)
 set(test_dir "${temp_dir}/test_dir")
 
+
+set(OOCMAKE_DEBUG_EXECUTE true)
+
 foreach(test ${tests})
   file(REMOVE_RECURSE "${test_dir}")
   file(MAKE_DIRECTORY "${test_dir}")
