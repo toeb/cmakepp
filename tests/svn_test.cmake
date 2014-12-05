@@ -7,10 +7,16 @@ function(test)
   endif()
 
   
-  svn(--version --quiet)
+  svn(--version --quiet --result)  
   ans(res)
-  message("${res}")
+
+  json_print(${res})
+
+
+  map_tryget(${res} output)
+  ans(res)
   string(STRIP "${res}" res)
+
   assert("${res}" STREQUAL "${Subversion_VERSION_SVN}")
 
 
