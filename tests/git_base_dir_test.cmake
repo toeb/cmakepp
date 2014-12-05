@@ -1,5 +1,5 @@
 function(test)
-
+cd("${test_dir}")
   pushd("repo" --create)
   git(init)
   pushd("a/b/c" --create)  

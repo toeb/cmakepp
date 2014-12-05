@@ -6,6 +6,8 @@ function(test)
     return()
   endif() 
 
+  cd("${test_dir}")
+
   hg(--version --quiet)
   ans(res)
 

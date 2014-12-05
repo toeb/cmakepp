@@ -33,6 +33,7 @@ cmake -P oo-cmake-tests.cmake
 	* [filesystem](#filesystem) - directory and file functions with close relations to bash syntax
 		* [compression/decompression](#compression) - compressing and decompressing tgz and zip files
 	* [command execution](#execute) simplifying access to exectables using the shell tools.
+	* [cmake tool compilation](#tooling) simple c/c++ tools for cmake
 	* debugging
 		* some convenience functions
 		* `breakpoint()` - stops execution at specified location and allows inspection of cmake variables, execution of code (if `-DDEBUG_CMAKE` was specified in command line)
@@ -58,6 +59,7 @@ cmake -P oo-cmake-tests.cmake
 			* [json](#json)
 			* [quickmap format](#quickmap) (native to cmake)
 			* [xml](#xml)
+	* [user data](#userdata) - persists and retrieves data for the current user (e.g. allowing cross build/ script configuration)
 	* [expression syntax](#expr).
 			* `obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}")` -> creates the specified object
 	* functions
@@ -72,8 +74,9 @@ cmake -P oo-cmake-tests.cmake
 		* [access to a list of all defined targets](#target_list)
 		* easier access to target properties
 		* 
-	* other things like web queries
 	* [implementation notes](#implementation_notes)
+
+
 NOTE: the list is incomplete
 # <a name="icmake"></a>Interactive CMake Shell
 
@@ -110,6 +113,30 @@ icmake> quit
 icmake is quitting
 > 
 ```
+
+
+# Formalisms 
+
+To describe cmake functions I use formalisms which I found most useful they should be intuitively understandable but here I want to describe them in detail.
+
+
+
+* `@` denotes character data
+* `<string> ::= "\""@"\""` denotes a string literal
+* `<regex> ::= /<string>/` denotes a regular expression (as cmake defines it)
+* `<identifier> ::= /[a-zA-Z0-9_-]+/` denotes a identifier which can be used for definitions
+* `<datatype> ::= "<" "any"|"bool"|"number"|""|"void"|""|<structured data> <?"...">">"` denotes a datatype the elipses denotes that multiple values in array form are described else the datatype can be `any`, `bool`, `number`, `<structured data>` etc.. 
+* `<named definitiont> ::= "<"<identifier>">"`
+* `<definition> ::= "<"<?"?"><identifier>|<identifier>":"<datatype>|<datatype>>">"`  denotes a possibly name piece of data. this is used in signatures and object descriptions e.g. `generate_greeting(<firstname:<string>> <?lastname:<string>>):<string>` specifies a function which which takes a required parameter called `first_name` which is of type `string` and an optional parameter called `lastname` which is of type `string` and returns a `string`
+* `<structured data> ::= "{"<? <named definition> ...>"}"`
+* `<void>` primitve which stand for nothing
+* `<falseish>:"false"|""|"no"` cmake's false values (list incomplete)
+* `<trueish>: !<falseish>`
+* `<bool> ::= "true":"false"` indicates a well defined true or false value
+* `<boolish> ::= <trueish>|<falsish>|<bool>`
+* `<any> ::= <string>|<number>|<structured data>|<bool>|<void>`
+* ... @todo
+
 
 # <a name="return"></a>Returning values
 
@@ -1169,6 +1196,103 @@ shell> my_datetime
 
 Like the version control system I also wrappend cmake itself into an easy to use function called `cmake(...)`  this allows me to start subinstances of cmake
 
+# <a name="tooling"><a> CMake Tooling
+
+To create tools for CMake (wherever something cannot be done with cmake) I created a very simple function called `compile_tool(<name> <src>)`
+
+This function does the following tasks
+
+* creates a cmake project with CMakeLists file and a single executable target the target has a single source file (whatever you put in `<src>`)
+* compiles this tool (the tool may only use standard headers currently)
+* caches the compiled tool so that it is not recompiled unless src changes
+* creates a wrapper function in cmake called `<name>` which evaluates the cmake code that the command outputs
+* arguments passed to wrapper `<name>` are passed along as command line args for the main method.
+
+*note*: this will change in the future as it is a very naive implementation.
+
+
+## Example
+
+Because cmake does not support getting the current time in milliseconds since the epoch the need arose for me to compile custom code. This code is the example for using the `compile_tool(..)` function.
+
+```
+## returns the number of milliseconds since epoch
+function(millis)
+  # initializer function pattern - because compile_tool
+  # redefines the millis function this code is only executed once
+  compile_tool(
+  	# first argument: the name of the tool 
+  	# and the function name to be defined  	
+  	millis 
+  	# second argument: the source code to compile
+  	# with default compiler/generator under you system  	
+  	"
+    #include <iostream>
+    #include <chrono>
+    int main(int argc, const char ** argv){
+     // use chrono to get the current time in milliseconds
+     auto now = std::chrono::system_clock::now();
+     auto duration = now.time_since_epoch();
+     auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+     // return cmake code which is to be evaluated by command wrapper
+     // set_ans will let the eval function return the specified value
+     std::cout<< \"set_ans(\" << millis << \")\";
+     return 0;
+    }
+    "
+    )
+  ## compile_tool has either failed or succesfully defined the function
+  ## wrapper called millis
+  millis(${ARGN})
+  return_ans()
+endfunction()
+
+# now you can use millis
+millis()
+ans(ms)
+message("time since epoch in milliseconds: ${ms}")
+```
+
+
+# <a name="userdata"><a> User Data
+
+User Data is usefull for reading and writing configuration per user.  It is available for all cmake execution and can be undestood as an extra variable scope. It however allows maps which help structure data more clearly.  User Data is stored in the users home directory (see `home_dir`) where a folder called `.oocmake` inside are files in a quickmap format which can be edited in an editor of choice besides being managed by the following functions.  User Data is always read and persisted directly (which is slower but makes the system more consistent)
+
+## Functions and Datatypes
+
+* `<identifier>`  a string
+* `user_data_get(<id:<identifier>> [<nav:<navigation expression>>|"."|""]):<any>` returns the user data for the specified identifier, if a navigation expression is specified the userdata map will be navigated to the specified map path and the data is returned (or null if the data does not exist). 
+* `user_data_set(<id:<identifier>> <<nav:<navigation expression>>|"."|""|> [<data:any ...>]):<qualified path>` sets the user data identified by id and navigated to by  navigation
+* `user_data_dir():<qualified path>` returns the path where the userdata is stored: `$HOME_DIR/.oocmake`
+* `user_data_ids():<identifier ...>` returns a set of identifiers where user data was stored
+* `user_data_clear(<"--all"^<id:<identifier>>>):<void>` if `--all` is specified all user data is removed. (use with caution) else only the user data identified by `<id>` is removed
+* `user_data_read(<id:<identifier>>):<any>` deserializes the user data identified by id and returns it (`user_data_get` and `user_data_set` are based on this function)
+* `user_data_write(<id:<identifier>> [<data:<any> ...>]):<qualified path>` serializes and persists the specified data and associates it with `<id>`
+* `user_data_path(<id:<identifier>> ):<qualified path>` returns the filename under which the user data identified by `<id>` is located
+
+## Example
+
+```
+
+## store user data during cmake script execution/configuration/generation steps
+## this call creates and stores data in the users home directory/.oocmake
+user_data_set(myuserdata configoptions.configvalue "my value" 34)
+
+
+## any other file executed afterwards
+user_data_get(myuserdata)
+ans(res)
+
+json_print(${res}) 
+
+## outputs the folloing
+# {
+#	  configoptions:{
+#	    configvalue:["my value",34]
+#   }
+# }
+
+```
 
 # <a name="fork"><a> Fork
 

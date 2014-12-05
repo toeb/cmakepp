@@ -2,9 +2,12 @@
 # without checking files themselves
 # uses md5 as a default, other algorithms are possible (see string or file for algorithm names)
   function(checksum_layout dir)
-    get_filename_component(dir "${dir}" REALPATH)
+    path("${dir}")
+    ans(dir)
+
     set(args ${ARGN})
     list_extract(args checksum_alg)
+
     if(NOT checksum_alg)
       set(checksum_alg MD5)
     endif()

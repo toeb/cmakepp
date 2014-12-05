@@ -1,8 +1,11 @@
 function(test)
   mkdir("${test_dir}")
   cd("${test_dir}")
-  cmake(--help-command string)
+  cmake(--help-command string --result)
   ans(res)
 
-  assert("${res}" MATCHES "String operations.")
+  map_tryget(${res} result)
+  ans(error)
+
+  assert(NOT error)
 endfunction()

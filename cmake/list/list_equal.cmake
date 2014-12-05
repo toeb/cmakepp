@@ -73,7 +73,7 @@ function(list_equal)
 	lambda(lambda "${lambda}")
 
 	# import function string 
-	function_import("${lambda}" as comparator REDEFINE)
+	function_import("${lambda}" as __list_equal_comparator REDEFINE)
 		
 	set(res)
 	# compare list
@@ -82,7 +82,7 @@ function(list_equal)
 		list(GET listA ${i} a)
 		list(GET listB ${i} b)
 		#message("comparing ${a} ${b}")
-		comparator(res ${a} ${b})
+		__list_equal_comparator(res ${a} ${b})
 		if(NOT res)
 			return(false)
 		endif()

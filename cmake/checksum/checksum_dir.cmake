@@ -2,7 +2,9 @@
 # including file content
 # uses md5 as a default, other algorithms are possible (see string or file for algorithm names)
   function(checksum_dir dir)
-    get_filename_component(dir "${dir}" REALPATH)
+    path("${dir}")
+    ans(dir)
+
     set(args ${ARGN})
     list_extract(args checksum_alg)
     if(NOT checksum_alg)
@@ -12,7 +14,7 @@
     file(GLOB_RECURSE files RELATIVE "${dir}" "${dir}/**")
     set(checksums)
     foreach(file ${files})
-      checksum_file("${test_dir}/${file}" "${checksum_alg}")
+      checksum_file("${dir}/${file}" "${checksum_alg}")
       ans(file_checksum)
       checksum_string("${file}" "${checksum_alg}")
       ans(string_checksum)

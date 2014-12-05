@@ -21,6 +21,8 @@
   map_set(${constraint} "branch" ${branch})
   return (${constraint})
  endfunction()
+
+ 
 function(line_info)
   set(t1 ${CMAKE_CURRENT_LIST_FILE})
   set(t2 ${CMAKE_CURRENT_LIST_LINE})
