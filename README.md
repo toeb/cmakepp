@@ -1049,7 +1049,7 @@ json_print(${res}) # outputs input and output of process
 
 # <a name="filesystem"></a> Filesystem
 
-I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) it is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
+I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) and is compatible to CMake's understanding of paths. It is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
 
 ```
 # as soon as you include `oo-cmake.cmake` the current directory is set to 
@@ -1104,10 +1104,13 @@ popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
 
 ## Functions and datatypes
 
+* `<directory> ::= <path|qualifies to an existing directory>` 
+* `<file> ::= <path|qualifies to an existing file>`
 * `<windows path>`  a windows path possibly with and possibly with drive name `C:\Users\Tobi\README.md`
 * `<relative path>` a simple relative path '../dir2/./test.txt'
 * `<qualified path>` a fully qualified path depending on OS it only contains forward slashes and is cmake's `get_filename_component(result "${input} REAL_PATH)` returns. All symlinks are resolved. It is absolute
 * `<unqualified path> ::= <windows path>|<relative path>|<qualified path>` 
+* `<path> ::= <unqualified path>`
 * `path(<unqualified path>)-><qualified path>` qualifies a path and returns it.  if path is relative (with no drive letter under windows or no initial / on unix) it will be qualified with the current directory `pwd()`
 * `pwd()-> <qualified path>` returns the top of the path stack. relative paths are relative to `pwd()`
 * `cd(<unqualified> [--create]) -> <qualified path>` changes the top of the path stack.  returns the `<qualified path>` corresonding to input. if `--create` is specified the directory will be created if it does not exist. if `cd()` is navigated towards a non existing directory and `--create` is not specified it will cause a `FATAL_ERROR`
@@ -1297,20 +1300,23 @@ json_print(${res})
 
 # <a name="process_management"><a> Process Management
 
+
+
 When working with large applications in oocmake it becomes necessary to work in parallel.  I implemented a platform independent controll mechanism for spawning killing and waiting for processes.  
 
 
 ## Functions and Datatypes
 
+* `<command>`
 * `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process
-* `<process start info> ::= { }`  
+* `<process start info> ::= { <command>, <? <args:<any>... >, <cwd:<directory>>  }`  
 * `process_spawn():<process info>`
 * `process_kill(<id:<process id>>)`
 * `process_list()`
 * `process_status()`
 
 
-using cmd's start and bash's ampersand operator it should be possible to fork off processes.
+
 
 # <a name="string_functions"></a> String Functions
 
