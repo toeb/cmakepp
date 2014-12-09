@@ -1,6 +1,6 @@
 # wraps the the win32 bash shell if available (Cygwin)
 function(win32_bash)
-  find_package(Cygwin QUIETLY)
+  find_package(Cygwin )
   if(NOT Cygwin_FOUND)
     message(FATAL_ERROR "Cygwin was not found on your system")
   endif()

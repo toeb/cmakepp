@@ -1,34 +1,5 @@
 function(test)
   
-  
-  cd(dir1 --create)
-  ans(path)
-  
-  # fork a single script which waits 3 seconds then writes to test.txt in cwd
-  set($ENV{greeting} buhuhuhu)
-  process_fork_script("
-    execute_process(COMMAND \${CMAKE_COMMAND} -E sleep 2)
-    file(WRITE test.txt hello \$ENV{greeting})
-  ")
-
-  ans(ph)
-
-  ## file should not be created yet
-  assert(NOT EXISTS "${test_dir}/dir1/test.txt")
-
-  ## wait for script to complete
-  process_wait_all(${ph})
-
-  # assert that file was written
-  assert(EXISTS "${test_dir}/dir1/test.txt")
-  fread(test.txt)
-  ans(res)
-
-  #assert("${res}" STREQUAL "buhuhuhu")
-  
-
-  cd(../dir2 --create)
-
 
 
 
@@ -58,6 +29,39 @@ function(test)
   json_print(${res})
 
   return()
+
+
+
+  cd(dir1 --create)
+  ans(path)
+  
+  # fork a single script which waits 3 seconds then writes to test.txt in cwd
+  set(ENV{CUTIL_PATH} buhuhuhu)
+
+  message("greeting $ENV{PATH}")
+  process_fork_script("
+    message(\"greeeting \$ENV{CUTIL_PATH}\")
+    execute_process(COMMAND \${CMAKE_COMMAND} -E sleep 4)
+    file(WRITE test.txt \"\$ENV{greeting}mamama\")
+  ")
+
+  ans(ph)
+
+  ## file should not be created yet
+  assert(NOT EXISTS "${test_dir}/dir1/test.txt")
+
+  ## wait for script to complete
+  process_wait_all(${ph})
+
+  # assert that file was written
+  assert(EXISTS "${test_dir}/dir1/test.txt")
+  fread(test.txt)
+  ans(res)
+
+  assert("${res}" STREQUAL "buhuhuhu")
+  
+
+  cd(../dir2 --create)
 
 
   endfunction()

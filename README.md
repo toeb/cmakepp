@@ -394,26 +394,54 @@ ref_print(${themap})
 		"number":"99"
 	}
 }
+
+  map_set(${res} type "${func_type}")
+  map_set(${res} name "${func_name}")
+  map_set(${res} args "${all_args}")
+  map_set(${res} code "${function_string}")
+
 ```
 
-# Functions
+# Functions and Datatypes
+
 Functions in cmake are not variables - they have a separate global only scope in which they are defined.  
 *A Note on Macros* You SHOULD NOT use macros... They will more likely than not have unintended side effects because of the way the are evaluated.
 
 I have written a couple of usefull (if not essential) functions with which managing functions becomes a lot easier
+
+* Datatypes
+	* `<cmake code> ::= <string>` any valid cmake code
+	* `<cmake function file> ::= <cmake file>` a cmake script file containing a single function 
+	* `<function string> :: <cmake code>` a string containing a single function
+	* `<cmake file> ::= <path>` a file containing valid cmake code
+	* `<function call> ::=<function?!>(<any...>)` a function call can be evaluated to a valid cmake code line which executes the function specified
+	* `<function>` ::= <identifier>` any cmake function or macro name for which `if(COMMAND <function>)` evaluates to true.  This can be directly called
+	* `<function?!>` ::= <function>|<cmake function file>|<lambda>|<function&>|<function string>|<function string&>  a function?! can be any type of code which somehow evaluates to a function
+	* `<function info> ::= {type:<function type>, name:<identifier>, args:<arg ...>, code:<function string>|<function call>}` a map containing information on a specific function. if possible the info map contains the original source code of the function
+* Functions
+	* `eval(<cmake code>)` executes the given cmake code. If the code returns something (see return) the result will be available after the `eval()` call using `ans()`
+	* `eval_ref(<cmake code&>)` executes the given code.  Since this is a macro the code is passed as a variable name (reference) to suppress automatic variable expansion. This allows you to eval code which uses the `set(x y PARENT_SCOPE)` 
+	* `function_new()`	returns a unqiue name for a function.  
+	* `is_function(<value:any>):<bool>` returns true if the specified value is a function
+	* `function_import(<cmake function?!> as <function_name:<identifier>>)` imports a function under the specified name 
+	* `call(<function call>)` calls a function and returns the return value of the call.
+	* `rcall(<identifier> = <function call>)` calls a function and sets the specified identifier to the return value of the call.
+	* `function_info(<function?!>):<function info>`	returns info on name, arguments, type of function
+	* `wrap_platform_specific_function(<function_name:<identifier>>` a helper method which allows platform the correct choice for platform specific functions. Consider getting an environment variable like the home directory.  Under Linux this is `$ENV{HOME}` under Windows this is `$ENV{HOME_DRIVE}$ENV{HOME_DIR}` depending on the os the result is 'the same' but you get it is different.  this function looks for specialized functions and imports the most fitting one as `<function_name>`.  If no function is found which matches the platform a dummy function is implemented which throws a `FATAL_ERROR` detailing how you can alleviate the missing implementation problem. 
+	* `curry`
+	* `bind`
+	* Lambdas
+		* `<lambda code>`  string of code similar to cmake.  a typical lambda looks like this `(a)-> return_truth($a STREQUAL "hello")`
+		* `lambda(<lambda code>):<function string>`
+		* `lambda_import(<lambda code>)`
+		* `lambda_parse()`
+
+
+## Examples
+
 ```
-eval(string)			# executes the given cmake code 
-						# if the code returns something (see return)
-						# the result will be available after eval() using ans()
-eval_ref(<var>)         # executes the given code
-						# since this is a macro the code is passed as a variable name
-						# however this allows using set(PARENT_SCOPE) 
-function_new()			# returns a unqiue name for a function
-function_import(function_ish as function_name) # imports a function under the specified name
-call(function_ish([args ...])) # calls a function
-function_info(function_ish)	# returns info on name, arguments, type of function
-function_inject(function_ish)	# imports a function, injecting before call, after call data
 ```
+
 
 ## Function Patterns
 
@@ -1248,7 +1276,17 @@ json_print(${res})
 
 # <a name="process_management"><a> Process Management
 
-## <a name="execute"></a> # Wrapping and Executing External Programms
+This section how to manage processes and external programs.  Besides replacements for cmake's `execute_process` function this section defines a control system for parallel processes controlled from any cmake.  
+
+## Common Definitions
+
+The following definitions are common to the following subsections.  
+
+* `<command>` a path or filename to an executable programm.
+* `<process start info> ::= { <command>, <<args:<any ...>>, <cwd:<directory>>  }`  
+
+
+## <a name="execute"></a> Wrapping and Executing External Programms
 
 Using external applications is more complex than necessary in cmake in my opinion. I tried to make it as easy as possible. Using the convenience of the [filesystem functions](#filesystem) and maps wrapping an external programm and using it as well as pure execution is now very simple as you can see in the following example for git:
 
@@ -1354,12 +1392,10 @@ This example shows a more usefull case:  Checking out multiple repositories in p
 
 ### Functions and Datatypes
 * datatypes
-	* `<command>` a path or filename to an executable programm.
 	* `<process handle> ::= { status:<process status> , pid:<process id> }` process handle is a runtime unique map which is used to address a process.  The process handle may contain more properties than specified - only the specified ones are available on all systems - these properties contain values which are implementation specific.
 	* `<process info> ::= { }` a map containing verbose information on a proccess. only the specified fields are available on all platforms.  More are available depending on the OS you use. You should not try to use these without examining their origin / validity.
 	* `<process status> ::= "running"|"completed"|"unknown"`
 	* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process
-	* `<process start info> ::= { <command>, <? <args:<any>... >, <cwd:<directory>>  }`  
 * platform specific low level functions 
 	* `process_fork(<process start info?!>):<process handle>` platfrom specific function which starts a process and returns a process handle
 	* `process_kill(<process handle?!>)` platform specific function which stops a process.
