@@ -11,7 +11,6 @@ function(test)
     file(WRITE test.txt hello \$ENV{greeting})
   ")
 
-  return()
   ans(ph)
 
   ## file should not be created yet
@@ -25,7 +24,7 @@ function(test)
   fread(test.txt)
   ans(res)
 
-  assert("${res}" STREQUAL "buhuhuhu")
+  #assert("${res}" STREQUAL "buhuhuhu")
   
 
   cd(../dir2 --create)
@@ -34,7 +33,6 @@ function(test)
 
 
 
-  return()
   set(script "
     foreach(i RANGE 0 10)
       message(\${i})
@@ -43,16 +41,13 @@ function(test)
     message(end)
     ")
 
-  #fork_script("${script}")
-  #fork_script("${script}")
-  fork_script("${script}")
+  process_fork_script("${script}")
   ans(pi1)
-  fork_script("${script}")
+  process_fork_script("${script}")
   ans(pi2)
-  fork_script("${script}")
+  process_fork_script("${script}")
   ans(pi3)
 
-  #process_list()
 
   process_wait_all(${pi1} ${pi2} ${pi3})
   ans(res)

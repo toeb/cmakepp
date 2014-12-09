@@ -992,58 +992,6 @@ So alot of unecessary repeating code can be omitted.
 * `hg()` function for mercurial command line client with same usage except `hg ...` -> `hg(...)`
 * ...
 
-# <a name="execute"></a> # Executing External Programms
-
-Using external applications more complex than necessary in cmake imho. I tried to make it as easy as possible.  Wrapping an external programm is now very simple as you can see in the following example for git:
-
-This is all the code you need to create a function which wraps the git executable.  It uses the [initializer function pattern](#initializer_function). 
-
-```
-function(git)
-  # initializer block (will only be executed once)
-  find_package(Git)
-  if(NOT GIT_FOUND)
-    message(FATAL_ERROR "missing git")
-  endif()
-  # function redefinition inside wrap_executable
-  wrap_executable(git "${GIT_EXECUTABLE}")
-  # delegate to redefinition and return value
-  git(${ARGN})
-  return_ans()
-endfunction() 
-```
-
-Another example:
-
-```
-find_package(Hg)
-set(cmdline --version)
-execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
-ans(res)
-map_get(${res} result)
-ans(error)
-map_get(${res} output)
-ans(stdout)
-assert(NOT error) # error code is 0
-assert("${stdout}" MATCHES "mercurial") # output contains mercurial
-json_print(${res}) # outputs input and output of process
-
-```
-
-## Functions and Datatypes
-
-* `execute(<process start ish> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
-	* example: `execute("{path:'<command>', args:['a','b']}")`  
-* `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
-* `<process start ish>` a string which can be converted to a `<process start>` object
-* `<process start>` a map/object containing the following fields
-	- `path` command name / path of executable *required*
-	- `args` command line arguments to pass along to command, use `string_semicolon_encode` if you want to have an argument with semicolons *optional*
-	- `timeout:<int>` *optional* number of seconds to wait before failing
-	- `cwd:<unqualified path>` *optional*  by default it is whatever `pwd()` currently returns
-* `<process info>` contains all the fields of `<process start>` and additionaly
-	- `output:<stdout>`  the output of the command execution. (merged error and stdout streams)
-	- `result:<int>` the return code of the execution.  0 normally indicates success.
 
 
 
@@ -1289,7 +1237,7 @@ ans(res)
 
 json_print(${res}) 
 
-## outputs the folloing
+## outputs the following
 # {
 #	  configoptions:{
 #	    configvalue:["my value",34]
@@ -1300,20 +1248,127 @@ json_print(${res})
 
 # <a name="process_management"><a> Process Management
 
+## <a name="execute"></a> # Wrapping and Executing External Programms
 
+Using external applications is more complex than necessary in cmake in my opinion. I tried to make it as easy as possible. Using the convenience of the [filesystem functions](#filesystem) and maps wrapping an external programm and using it as well as pure execution is now very simple as you can see in the following example for git:
 
-When working with large applications in oocmake it becomes necessary to work in parallel.  I implemented a platform independent controll mechanism for spawning killing and waiting for processes.  
+### Examples
+This is all the code you need to create a function which wraps the git executable.  It uses the [initializer function pattern](#initializer_function). 
 
+```
+function(git)
+  # initializer block (will only be executed once)
+  find_package(Git)
+  if(NOT GIT_FOUND)
+    message(FATAL_ERROR "missing git")
+  endif()
+  # function redefinition inside wrap_executable
+  wrap_executable(git "${GIT_EXECUTABLE}")
+  # delegate to redefinition and return value
+  git(${ARGN})
+  return_ans()
+endfunction() 
+```
 
-## Functions and Datatypes
+Another example showing usage of the `execute()` function:
 
-* `<command>`
-* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process
-* `<process start info> ::= { <command>, <? <args:<any>... >, <cwd:<directory>>  }`  
-* `process_spawn():<process info>`
-* `process_kill(<id:<process id>>)`
-* `process_list()`
-* `process_status()`
+```
+find_package(Hg)
+set(cmdline --version)
+execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
+ans(res)
+map_get(${res} result)
+ans(error)
+map_get(${res} output)
+ans(stdout)
+assert(NOT error) # error code is 0
+assert("${stdout}" MATCHES "mercurial") # output contains mercurial
+json_print(${res}) # outputs input and output of process
+
+```
+
+### Functions and Datatypes
+
+* `execute(<process start info ?!> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
+	* example: `execute("{path:'<command>', args:['a','b']}")`  
+* `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
+* `<process start info?!>` a string which can be converted to a `<process start>` object using the `process_start_info()` function.
+* `<process start info>` a map/object containing the following fields
+	- `command` command name / path of executable *required*
+	- `args` command line arguments to pass along to command, use `string_semicolon_encode` if you want to have an argument with semicolons *optional*
+	- `timeout:<int>` *optional* number of seconds to wait before failing
+	- `cwd:<unqualified path>` *optional*  by default it is whatever `pwd()` currently returns
+* `<process info>` contains all the fields of `<process start>` and additionaly
+	- `output:<stdout>`  the output of the command execution. (merged error and stdout streams)
+	- `result:<int>` the return code of the execution.  0 normally indicates success.
+* `process_start_info(<process start info?!>):<process start info>` creates a valid `<process start info>` object from the input argument.  If the input is invalid the function fails fatally.
+
+## Parallel Processes 
+
+When working with large applications in cmake it can become necessary to work in parallel processes. Since all cmake target systems support multitasking from the command line it is possible to implement cmake functions to control it.  I implemented a platform independent control mechanism for forking, killing, querying and waiting for processes.  The lowlevel functions are platform specific the others are based onthis abstraction layer.   
+
+### Inter Process Communication
+
+* Environment variables
+* Files
+* Captures
+
+### Examples
+
+This example forks a script into three separate cmake processes. The program ends when all scripts are done executing.
+```
+# define a script which counts to 10 and then 
+# note that a fresh process means that cmake has not loaded oocmake
+set(script "
+foreach(i RANGE 0 10)
+  message(\${i})
+  execute_process(COMMAND \${CMAKE_COMMAND} -E sleep 1)
+endforeach()
+message(end)
+")
+
+# start each script - fork_script returns without waiting for the process to finish.
+# a handle to the created process is returned.
+fork_script("${script}")
+ans(handle1)
+fork_script("${script}")
+ans(handle2)
+fork_script("${script}")
+ans(handle3)
+
+# wait for every process to finish. returns the handles in order in which the process finishes
+process_wait_all(${handle1} ${handle2} ${handle3})
+ans(res)
+
+## print the process handles in order of completion
+json_print(${res})
+
+```
+
+This example shows a more usefull case:  Checking out multiple repositories in parallel.
+
+### Caveats
+
+* Forking is slow - it can take seconds. The task needs to be a very large one for it to compensate the overhead.
+* forking uses platform specific functions - It might cause problems on less well tested OSs
+
+### Functions and Datatypes
+* datatypes
+	* `<command>` a path or filename to an executable programm.
+	* `<process handle> ::= { status:<process status> , pid:<process id> }` process handle is a runtime unique map which is used to address a process.  The process handle may contain more properties than specified - only the specified ones are available on all systems - these properties contain values which are implementation specific.
+	* `<process info> ::= { }` a map containing verbose information on a proccess. only the specified fields are available on all platforms.  More are available depending on the OS you use. You should not try to use these without examining their origin / validity.
+	* `<process status> ::= "running"|"completed"|"unknown"`
+	* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process
+	* `<process start info> ::= { <command>, <? <args:<any>... >, <cwd:<directory>>  }`  
+* platform specific low level functions 
+	* `process_fork(<process start info?!>):<process handle>` platfrom specific function which starts a process and returns a process handle
+	* `process_kill(<process handle?!>)` platform specific function which stops a process.
+	* `process_list():<process handle ...>` platform specific function which returns a process handle for all running processes on OS.
+	* `process_info(<process handle?!>):<process info>` platform specific function which returns a verbose process info
+	* `process_isrunning(<process handle?!>):<bool>` returns true iff process is running. 
+* `process_timeout(<n:<seconds>>):<process handle>` starts a process which times out in `<n>` seconds. 
+* `process_wait_all(<process handle?!...> <?"--timeout" <n:<seconds>>> <?"--quietly">):<process handle ...>` waits for all specified process handles and returns them in the order that they completed.  If the `--timeout <n>` value is specified the function returns as soon as the timeout is reached returning only the process finished up to that point. The function normally prints status messages which can be supressed via the `--quietly` flag.    
+* `process_wait_any(<process handle?!...> <?"--timeout" <n:<seconds>>> <?"--quietly">):<?process handle>` waits for any of the specified processes to finish, returning the handle of the first one to finished. If `--timeout <n>` is specified the function will return `null` after `n` seconds if no process completed up to that point in time. You can specify `--quietly` if you want to suppress the status messages. 
 
 
 
