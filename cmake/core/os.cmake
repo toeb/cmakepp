@@ -2,8 +2,10 @@
 function(os)
   if(WIN32)
     return(Windows)
+  elseif(UNIX)
+    return(Linux)
   else()
-    return(Unknown)
+    return()
   endif()
 
 

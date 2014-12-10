@@ -17,6 +17,7 @@
     process_handles(${args})
     ans(processes)
 
+
     list(LENGTH processes running_processes)
     set(process_count ${running_processes})
     if(NOT quietly)
@@ -33,9 +34,10 @@
     while(processes)
       list_pop_front(processes)
       ans(process)
-      process_isrunning(${process})
+      process_refresh_handle(${process})
       ans(isrunning)
       
+      message(FORMAT "{process.pid} isrunning {isrunning} {process.state} ")
       if(NOT quietly)
         tick()
       endif()

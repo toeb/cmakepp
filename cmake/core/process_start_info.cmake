@@ -1,7 +1,10 @@
-function(process_start_info obj)
-  obj("${obj}")
+function(process_start_info in)
+  obj("${in}")
   ans(obj)
 
+  if(NOT obj)
+    message(FATAL_ERROR "invalid process start info ${in}")
+  endif()
   set(argn ${ARGN})
 
   set(path)
@@ -10,8 +13,10 @@ function(process_start_info obj)
   set(args)
   set(parameters)
   set(timeout)
-  scope_import_map(${obj})
+  set(arg_string)
+  set(command_string)
 
+  scope_import_map(${obj})
 
   if("${args}_" STREQUAL "_")
     set(args ${parameters})
@@ -19,7 +24,6 @@ function(process_start_info obj)
 
 
   # now compile the command string
-  set(arg_string)
   foreach(arg ${args})
     cmake_string_escape("${arg}")
     ans(arg)
@@ -41,6 +45,7 @@ function(process_start_info obj)
     set(timeout -1)
   endif()
 
+  set(command_string "${command} ${arg_string}")
 
 
 

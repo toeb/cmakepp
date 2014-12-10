@@ -1406,7 +1406,11 @@ This example shows a more usefull case:  Checking out multiple repositories in p
 * `process_wait_all(<process handle?!...> <?"--timeout" <n:<seconds>>> <?"--quietly">):<process handle ...>` waits for all specified process handles and returns them in the order that they completed.  If the `--timeout <n>` value is specified the function returns as soon as the timeout is reached returning only the process finished up to that point. The function normally prints status messages which can be supressed via the `--quietly` flag.    
 * `process_wait_any(<process handle?!...> <?"--timeout" <n:<seconds>>> <?"--quietly">):<?process handle>` waits for any of the specified processes to finish, returning the handle of the first one to finished. If `--timeout <n>` is specified the function will return `null` after `n` seconds if no process completed up to that point in time. You can specify `--quietly` if you want to suppress the status messages. 
 
+### Caveats
 
+
+* I have not found a platform independent way to handle process return codes. You will need to communicate through files
+* complex command line  arguments cause problems 
 
 
 # <a name="string_functions"></a> String Functions
