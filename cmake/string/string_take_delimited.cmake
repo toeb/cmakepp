@@ -5,7 +5,10 @@ function(string_take_delimited str_name )
   if("${delimiter}_" STREQUAL "_")
     set(delimiter \")
   endif()
-  set(regex "${delimiter}([^${delimiter}]*)${delimiter}")
+  
+  # '(([^']|\\\\')*)'
+
+  set(regex "${delimiter}(([^${delimiter}]|\\\\${delimiter})*)${delimiter}")
   string_take_regex(${str_name} "${regex}")
 
   ans(match)
