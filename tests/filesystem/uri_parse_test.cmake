@@ -1,131 +1,117 @@
 function(test)
 
+  function(test_uri uri expected )
+    set(args ${ARGN})
+    list_extract_flag(args --print)
+    ans(print)
 
 
-  uri_parse("")
-  ans(res)
+    uri_parse("${uri}" ${args})
+    ans(uut)
+    
+    if(print)
+      json_print(${uut})
+    endif()
 
-  assertf("{res.scheme}" ISNULL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" ISNULL)
+    obj("${expected}")
+    ans(expected)
 
-  uri_parse(".")
-  ans(res)
-  assertf("{res.scheme}" ISNULL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" "." ARE_EQUAL)
+    map_iterator(${expected})
+    ans(iter)
+
+    while(true)
+      map_iterator_break(iter)
+      map_tryget(${uut} ${iter.key})
+      ans(value)
+      assert(EQUALS ${iter.value} ${value})
+    endwhile()
+  endfunction()
+
+
+
+  ## test userinfo
+
+  test_uri("test" "{user_info:null}")
+  test_uri("//becker@localhost" "{user_info:'becker'}")
+  test_uri("//becker:password@localhost" "{user_info:'becker:password'}")
   
-  uri_parse("..")
-  ans(res)
-  assertf("{res.scheme}" ISNULL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" ".." ARE_EQUAL)
-  
-  
-  uri_parse("/")
-  ans(res)
-  assertf("{res.scheme}" ISNULL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" "/" ARE_EQUAL)
-  assertf("{res.segments}" ISNULL)
-  
-  
-  uri_parse("../")
-  ans(res)
-  assertf("{res.scheme}" ISNULL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" ".." ARE_EQUAL)
+  ## test dns fields
+
+  test_uri("//becker.tobi:asdasd@192.168.0.1:2313/path/to/nirvana" "{password:'asdasd', user_name:'becker.tobi', ip:'192.168.0.1', port:'2313'}") 
 
 
-  uri_parse("./")
-  ans(res)
-  assertf("{res.scheme}" ISNULL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" "." ARE_EQUAL)
+  ## test authority
+  test_uri("test" "{authority:null}")
+  test_uri("//www.google.de" "{authority:'www.google.de'}")
+  test_uri("http://www.google.de" "{authority:'www.google.de'}")
 
-  uri_parse("~/")
-  ans(res)
-  assertf("{res.scheme}" ISNULL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" "~" ARE_EQUAL)
-  
-  uri_parse("c:\\test\\directory")
-  ans(res)
-  
-  assertf("{res.scheme}" c ARE_EQUAL)
-  assertf("{res.net_root}" ISNULL)
-  assertf("{res.abs_root}" / ARE_EQUAL)
-  assertf("{res.segments}" test directory ARE_EQUAL)
-
-  uri_parse("\\\\TOBI-PC\\Share1\\asd.txt")
-  ans(res)
-  assertf("{res.authority}" "TOBI-PC" ARE_EQUAL)
-  assertf("{res.net_root}" ISNOTNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" Share1 asd.txt ARE_EQUAL)
-  assertf("{res.extension}" txt ARE_EQUAL)
-  assertf("{res.file}" asd.txt ARE_EQUAL)
-  assertf("{res.file_name}" asd ARE_EQUAL)
-
-
-
-  uri_parse("c:/test/directory")
-  ans(res)
-  
-  uri_parse("http://www.google.de/service/index.html?abc=unglaublich&def=unbelievable")
-  ans(res)
-  assertf("{res.scheme}" "http" ARE_EQUAL)
-  assertf("{res.authority}" "www.google.de" ARE_EQUAL)
-  assertf("{res.net_root}" ISNOTNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" service index.html ARE_EQUAL)
-  assertf("{res.extension}" html ARE_EQUAL)
-  assertf("{res.file}" index.html ARE_EQUAL)
-  assertf("{res.file_name}" index ARE_EQUAL)
-  assertf("{res.fragment}" ISNULL)
-  assertf("{res.query}" "abc=unglaublich&def=unbelievable" ARE_EQUAL)
 
   
-  uri_parse("scheme1+scheme2://www.welt.de/article2014-1-2/title/view.xml?id=asdasd#nananan")
-  ans(res)
-  assertf("{res.scheme}" "scheme1+scheme2" ARE_EQUAL)
-  assertf("{res.authority}" "www.welt.de" ARE_EQUAL)
-  assertf("{res.net_root}" ISNOTNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" "article2014-1-2" title view.xml ARE_EQUAL)
-  assertf("{res.extension}" xml ARE_EQUAL)
-  assertf("{res.file}" view.xml ARE_EQUAL)
-  assertf("{res.file_name}" view ARE_EQUAL)
-  assertf("{res.query}" id=asdasd ARE_EQUAL)
-  assertf("{res.fragment}" nananan ARE_EQUAL)
+  # test net_path
+
+  test_uri("test" "{net_path:null}")
+  test_uri("C:\\test\\path" "{net_path:'/C:/test/path'}") # because file:// is prepended it is a net_path
+  test_uri("/test" "{net_path:'/test'}") # because file:// is prepended it is a net_path
+  test_uri("http://localhost" "{net_path:'localhost'}")
+  test_uri("http://google.de/file.txt" "{net_path:'google.de/file.txt'}")
+  test_uri("mailto:becker@google.de" "{net_path:null}")# no not path because no //
+  test_uri("scheme:/de/fa" "{net_path:null}")# no not path because no //
 
 
-
-
-  uri_parse("'scheme1+scheme2://tobi:password@192.168.0.1:23/path/to/nix' aoidjaosjdasd")
-  ans(res)
-
-  assertf("{res.scheme}" "scheme1+scheme2" ARE_EQUAL)
-  assertf("{res.authority}" "tobi:password@192.168.0.1:23" ARE_EQUAL)
-  assertf("{res.net_root}" ISNOTNULL)
-  assertf("{res.abs_root}" ISNULL)
-  assertf("{res.segments}" path to nix  ARE_EQUAL)
-  assertf("{res.file}" nix ARE_EQUAL)
-  assertf("{res.file_name}" nix ARE_EQUAL)
-  assertf("{res.query}"  ISNULL)
-  assertf("{res.fragment}"  ISNULL)
-  assertf("{res.rest}" " aoidjaosjdasd" ARE_EQUAL)
   
-  # check that spaces in segments are treate correctly
-  uri_parse("'c:\\asd b\\herge 323/test test.txt'")
-  ans(res)
-  assertf("{res.segments}" "asd%20b" "herge%20323" "test%20test.txt" ARE_EQUAL)
-  json_print(${res})
+  ## test normalization
+
+  test_uri("test a b c" "{uri:'test',rest:' a b c'}")
+  test_uri("'test a b c'" "{uri:'test%20a%20b%20c'}")
+  test_uri("\"test a b c\"" "{uri:'test%20a%20b%20c'}")
+  test_uri("<test a b c>" "{uri:'test%20a%20b%20c'}")
+  test_uri("C:/test a b c" "{uri:'file:///C:/test',rest:' a b c'}")
+  test_uri("C:\\test\\other a b c" "{uri:'file:///C:/test/other',rest:' a b c'}")
+  test_uri("/dev/null a b c" "{uri:'file:///dev/null',rest:' a b c'}")
+  test_uri("'C:/test a b c'" "{uri:'file:///C:/test%20a%20b%20c'}")
+  test_uri("'C:\\test\\other a b c'" "{uri:'file:///C:/test/other%20a%20b%20c'}")
+  test_uri("'/dev/null a b c'" "{uri:'file:///dev/null%20a%20b%20c'}")
+  test_uri("//sometext" "{uri:'//sometext'}")
+
+  ## test path
+
+  test_uri("test a b c" "{path:'test'}")
+  test_uri("'test a b c'" "{path:'test%20a%20b%20c'}")
+  test_uri("C:\\test a b c" "{path:'/C:/test'}")
+  test_uri("'C:\\test\\path b\\file.exe'" "{path:'/C:/test/path%20b/file.exe'}")
+  test_uri("'a/b c/d'" "{path:'a/b%20c/d'}")
+  test_uri("/a/b/c" "{path:'/a/b/c'}")
+  test_uri("/a/b/c/" "{path:'/a/b/c/'}")
+  test_uri("D:/" "{path:'/D:/'}")
+  test_uri("\"C:/Program Files(x86)/Microsoft Visual Studio/Common7\"" "{path:'/C:/Program%20Files(x86)/Microsoft%20Visual%20Studio/Common7'}")
+  test_uri("https://www.google.de/u/20/view.xmls?asd=32#showme" "{path:'/u/20/view.xmls'}")
+  test_uri("somescheme:somepath/a/b/c" "{path:'somepath/a/b/c'}")
+
+  ## test segments
+  
+  test_uri("test a b c" "{segments:'test'}")
+  test_uri("'test a'" "{segments:'test a'}")
+  test_uri("https://github.com/test2" "{segments:'test2'}")
+  test_uri("https://github.com/test2/test3" "{segments:['test2','test3']}")
+  test_uri("mailto:toeb@github.com" "{segments:'toeb@github.com'}")
+  test_uri("'C:\\Program Files\\cmake\\bin\\cmake.exe'" "{segments: ['C:','Program Files', 'cmake', 'bin', 'cmake.exe']}")
+  test_uri("C:\\" "{segments:'C:'}")
+  test_uri("C:/" "{segments:'C:'}")
+  test_uri("/" "{segments:null}")
+
+  ## test lastsegment
+  
+  test_uri("test/a/b/c.txt" "{last_segment:'c.txt'}")
+  test_uri("c.txt" "{last_segment:'c.txt'}")
+  test_uri("/" "{last_segment:null}")
+
+
+  ## test file
+  test_uri("test.txt" "{file:'test.txt', file_name:'test', extension:'txt'}")
+  test_uri("test" "{file:'test', file_name:'test', extension:null}")
+  test_uri("test.txt.xml" "{file:'test.txt.xml' , file_name:'test.txt', extension:'xml'}")
+  test_uri("/" "{file:null,file_name:null,extension:null}")
+
+return()
 
 endfunction()

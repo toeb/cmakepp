@@ -1,8 +1,33 @@
 function(test)
 
 
+
+
+  map()
+
+    foreach(i RANGE 1 50)
+      math(EXPR r "${i} * ${i}")
+      kv("${i}" "${r}")
+    endforeach()
+  end()
+
+  ans(map)
+  timer_start(init)
+  map_iterator(${map})
+  ans(mapit)
+  timer_print_elapsed(init)
+ 
+  timer_start(mapit)
+  while(true)
+    map_iterator_break(mapit)
+    message("${mapit.key}: ${mapit.value}")
+  endwhile()
+  timer_print_elapsed(mapit)
+
   
+
 return()
+
   
   function(iterator)
     map_new()
@@ -54,6 +79,11 @@ return()
 
     return(${end})
   endfunction()
+
+
+  
+
+  return()
 
 file(GLOB files "C:/Windows/System32/**")
   list(LENGTH files len)

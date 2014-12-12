@@ -47,26 +47,51 @@ function(test)
   assertf("{res.args}" ARE_EQUAL a "\"\"" c)
   assertf("{res.command}" "test" ARE_EQUAL)
 
-
+function(string_take_commandline_arg __string_take_commandline_arg_string_ref)
+  string_take_regex(${__string_take_commandline_arg_string_ref} " *(\"([^\"]|\\\")*\"|[^ ])")
+  ans(__string_take_commandline_arg_result)
+  string_take_whitespace(__string_take_commandline_arg_result)
+  set("${__string_take_commandline_arg_string_ref}" "${${__string_take_commandline_arg_string_ref}}" PARENT_SCOPE)
+  return_ref(__string_take_commandline_arg_result)
+endfunction()
 
   function(process_start_info_parse_string str)
     uri_parse("${str}")
     ans(url)
 
     json_print(${url})
+    map_tryget(${url} rest)
+    ans(rest)   
 
+    map_tryget(${url} undelimited)
+    ans(command)
+
+    set(args)
+    while(true)
+      string_take_commandline_arg(rest)
+      ans(arg)
+      list(APPEND args "${arg}")
+      if("${arg}_" STREQUAL "_")
+        break()
+      endif()
+    endwhile()
 
     map_capture_new(command args)
     return_ans()
   endfunction()
 
+
   process_start_info_parse_string("test a b c")
   ans(res)
+  assertf("{res.command}" STREQUAL "test")
+  assertf("{res.args}"  a b c ARE_EQUAL)
 
 
-  process_start_info_parse_string("c:\\test.exe a b c")
+
+  process_start_info_parse_string("'c:\\test j\\ads.exe' a b c")
   ans(res)
-
+  assertf("{res.command}"  "c:\\test j\\ads.exe" ARE_EQUAL)
+  assertf("{res.args}"  a b c ARE_EQUAL)
 
   json_print(${res})
 

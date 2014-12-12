@@ -51,7 +51,8 @@ cmake -P oo-cmake-tests.cmake
 		* `reg()` shorthand for working with windows registry command line interface
 		* read write manipulate registry values
 		* query registry keys for values
-	* [string functions](#stringfunctions) - advanced string manipulation		
+	* [string functions](#stringfunctions) - advanced string manipulation	
+	* [URIs](#uris) - Uniform Resource Identifier parsing and formatting	
 	* [lists](#lists) - extension to cmake and normalization of cmake's `list()` functionality
 	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
 		* graph algorithms 
@@ -127,7 +128,7 @@ To describe cmake functions I use formalisms which I found most useful they shou
 * `<regex> ::= /<string>/` denotes a regular expression (as cmake defines it)
 * `<identifier> ::= /[a-zA-Z0-9_-]+/` denotes a identifier which can be used for definitions
 * `<datatype> ::= "<" "any"|"bool"|"number"|""|"void"|""|<structured data> <?"...">">"` denotes a datatype the elipses denotes that multiple values in array form are described else the datatype can be `any`, `bool`, `number`, `<structured data>` etc.. 
-* `<named definitiont> ::= "<"<identifier>">"`
+* `<named definition> ::= "<"<identifier>">"`
 * `<definition> ::= "<"<?"?"><identifier>|<identifier>":"<datatype>|<datatype>>">"`  denotes a possibly name piece of data. this is used in signatures and object descriptions e.g. `generate_greeting(<firstname:<string>> <?lastname:<string>>):<string>` specifies a function which which takes a required parameter called `first_name` which is of type `string` and an optional parameter called `lastname` which is of type `string` and returns a `string`
 * `<structured data> ::= "{"<? <named definition> ...>"}"`
 * `<void>` primitve which stand for nothing
@@ -136,6 +137,9 @@ To describe cmake functions I use formalisms which I found most useful they shou
 * `<bool> ::= "true":"false"` indicates a well defined true or false value
 * `<boolish> ::= <trueish>|<falsish>|<bool>`
 * `<any> ::= <string>|<number>|<structured data>|<bool>|<void>`
+* `<named function parameter>`
+* `<function parameter> ::= <definition>|<named function parameter>`
+* `<function definition> `
 * ... @todo
 
 
@@ -1412,6 +1416,76 @@ This example shows a more usefull case:  Checking out multiple repositories in p
 * I have not found a platform independent way to handle process return codes. You will need to communicate through files
 * complex command line  arguments cause problems 
 
+
+# <a name="uris"></a> Uniform Resource Identifiers (URIs)
+
+Uniform Resource Identifiers are often used for more than just internet addresses.  They are able to identify any type of resource and are truly cross platform.  Even something as simple as parsing a path can take on complex forms in edge cases.  My motivation for writing an URI parser was that I needed a sure way to identify a path in a command line call. 
+
+My work is based arround [RFC2396](https://www.ietf.org/rfc/rfc2396.txt) by Berners Lee et al.  The standard is enhanced by allowing delimited URIs and Windows Paths as URIs. You can always turn this behaviour off however and use flags to use the pure standard.
+
+URI parsing with cmake is not something you should do thousands of times because alot of regex calls go into generating an uri object.
+
+## Example
+
+*Parse an URI and print it to the Console*
+```
+uri("https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails some other data")
+ans(res)
+json_print(${res})
+```
+
+results in:
+```
+{
+	uri:'https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails',
+	scheme:'https',
+	scheme_specific_part:'//www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails',
+	authority:'www.google.de',
+	path:'/u/0/mail',
+	query:'arg1=123&arg2=arg4',
+	fragment:'readmails',
+	rest:' some other data',
+	input:'https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails some other data',
+}
+```
+
+*Perverted Example*
+```
+uri("'scheme1+http://user:password@102.13.44.%60:23%54/'" --delimited --whitespace)
+ans(res)
+json_print(${res})
+```
+
+## DataTypes and Functions
+
+* `<uri> ::= `
+	* `uri:<string>` all of the uri as specified 
+	* `scheme:<string>` the scheme part of the uri without the colon e.g. `https` from `https://github.com`	 
+	* `scheme_specific_part` the part of the uri that comes after the scheme and its colon e.g. `//github.com` from the previous example
+	* `autority:<string>` the domain, host,port and user info part of the domain 
+	* `path:<string>` the hierarchical part of the uri 
+	* `query:<string>` the query part of the uri
+	* `fragment:<string>` the fragment part of the uri
+* `<uri~> ::= <string>|<uri>` a uri or a string which can be converted into a valid uri
+* `uri(<uri~>):<uri>` 
+* `uri_parse(<uri_string:<string>> <?--notnull> <?--file> <?--escape-whitespace> <?--delimited> ):<uri?>`
+	* `<--escape-whitespace>` 
+	* `<--file>` 
+	* `<--notnull>` 
+	* `<--delimited>` 
+* `uri_to_path(<uri~>):<string>`
+* 
+
+
+## Caveats
+
+* Parsing is always a performance problem in CMake therfore parsing URIs is also a performance problem don't got parsing thousands of uris. I Tried to parse 100 URIs on my MBP 2011 and it took 6716 ms so 67ms to parse a single uri
+* Non standard behaviour can always ensue when working with file paths and spaces and windows.  However this is the closest I came to having a general solution
+
+## Future Work
+
+* allow more options for parsing
+* option for quick parse or slow parse 
 
 # <a name="string_functions"></a> String Functions
 
