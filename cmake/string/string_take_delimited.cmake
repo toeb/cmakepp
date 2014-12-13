@@ -54,6 +54,15 @@ function(regex_delimited_string)
   endif()
   #set(regex "${delimiter_begin}(([^${delimiter_end}])*)${delimiter_end}")
   set(delimiter_end "${delimiter_end}" PARENT_SCOPE)
-  set(regex "${delimiter_begin}(([^${delimiter_end}]|\\\\${delimiter_end})*)${delimiter_end}")
+  #set(regex "${delimiter_begin}(([^${delimiter_end}\\]|(\\[${delimiter_end}])|\\\\)*)${delimiter_end}")
+  regex_escaped_string("${delimiter_begin}" "${delimiter_end}")
+  ans(regex)
+  return_ref(regex)
+endfunction()
+
+
+function(regex_escaped_string delimiter_begin delimiter_end)
+
+  set(regex "${delimiter_begin}(([^${delimiter_end}\\]|(\\${delimiter_end})|\\\\)*)${delimiter_end}")
   return_ref(regex)
 endfunction()

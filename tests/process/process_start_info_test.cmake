@@ -1,5 +1,45 @@
 function(test)
 
+  function(string_take_commandline_arg str_ref)
+    string_take_whitespace(${str_ref})
+    set(regex "(\"([^\"\\\\]|\\\\.)*\")|[^ ]+")
+    string_take_regex(${str_ref} "${regex}")
+    ans(res)
+    if(NOT "${res}_" STREQUAL _)
+      set("${str_ref}" "${${str_ref}}" PARENT_SCOPE)
+    endif()
+    if("${res}" MATCHES "\".*\"")
+      string_take_delimited(res "\"")
+      ans(res)
+    endif()
+
+    return_ref(res)
+
+
+  endfunction()
+
+
+  set(str "aa bb cc \"d e\" f \"ll\\\"oo\"")
+  string_take_commandline_arg(str)
+  ans(res)
+  assert("${res}" STREQUAL "aa")
+  string_take_commandline_arg(str)
+  ans(res)
+  assert("${res}" STREQUAL "bb")
+  string_take_commandline_arg(str)
+  ans(res)
+  assert("${res}" STREQUAL "cc")
+  string_take_commandline_arg(str)
+  ans(res)
+  assert("${res}" STREQUAL "d e")
+
+  string_take_commandline_arg(str)
+  ans(res)
+  assert("${res}" STREQUAL "f")
+
+  string_take_commandline_arg(str)
+  ans(res)
+  assert("${res}" STREQUAL "ll\"oo")
 
   command_line_escape(a b c "hallo du" "asdfdef" "lalala\"\"")
   ans(res)
@@ -11,65 +51,39 @@ function(test)
 
 
 
-  function(process_start_info_parse_list)
-
-#    command_line_escape(${ARGN})
- #   ans(args)
+  function(command_line_parse)
     set(args ${ARGN})
 
     list_pop_front(args)
     ans(command)
 
-    map_capture_new(command args)
+    command_line_parse_string("${command}")
+    ans(res)
+
+    if(NOT "${args}_" STREQUAL "_")
+      map_append(${res} args ${args})
+    endif()
+
     return_ans()
   endfunction()
 
-
-
-  process_start_info_parse_list(test )
-  ans(res)
-  assertf("{res.args}" ISNULL)
-  assertf("{res.command}" "test" ARE_EQUAL)
-
-  process_start_info_parse_list(test a b c)
-  ans(res)
-  assertf("{res.args}" a b c ARE_EQUAL)
-  assertf("{res.command}" "test" ARE_EQUAL)
-
-  process_start_info_parse_list(test "a b" c "d e")
-  ans(res)
-  assertf("{res.args}" ARE_EQUAL "a b" c "d e")
-  assertf("{res.command}" "test" ARE_EQUAL)
-
-
-  process_start_info_parse_list(test a "\"\"" c)
-  ans(res)
-  assertf("{res.args}" ARE_EQUAL a "\"\"" c)
-  assertf("{res.command}" "test" ARE_EQUAL)
-
-function(string_take_commandline_arg __string_take_commandline_arg_string_ref)
-  string_take_regex(${__string_take_commandline_arg_string_ref} " *(\"([^\"]|\\\")*\"|[^ ])")
-  ans(__string_take_commandline_arg_result)
-  string_take_whitespace(__string_take_commandline_arg_result)
-  set("${__string_take_commandline_arg_string_ref}" "${${__string_take_commandline_arg_string_ref}}" PARENT_SCOPE)
-  return_ref(__string_take_commandline_arg_result)
-endfunction()
-
-  function(process_start_info_parse_string str)
+  function(command_line_parse_string str)
     uri_parse("${str}")
-    ans(url)
+    ans(uri)
 
-    json_print(${url})
-    map_tryget(${url} rest)
+    map_tryget(${uri} rest)
     ans(rest)   
 
-    map_tryget(${url} undelimited)
+    uri_to_localpath("${uri}")
     ans(command)
-
+    
     set(args)
     while(true)
       string_take_commandline_arg(rest)
       ans(arg)
+      string_parse_delimited("${arg}")
+      ans(arg)
+
       list(APPEND args "${arg}")
       if("${arg}_" STREQUAL "_")
         break()
@@ -81,7 +95,50 @@ endfunction()
   endfunction()
 
 
-  process_start_info_parse_string("test a b c")
+
+  define_test_function(test_uut command_line_parse)  
+
+  test_uut("{command: 'test' ,args:null}" 
+    test)
+  test_uut("{command: 'test' ,args:['a', 'b', 'c']}"
+   test a b c)
+  test_uut("{command: 'test' ,args:['a b', 'c','d e']}"
+   test "a b" c "d e")
+
+
+  define_test_function(test_uut command_line_parse_string)
+
+  test_uut(
+    "{command:'test', args:['a','b','c']}" 
+    "test a b c"
+    )
+  test_uut(
+    "{command:'c:/my/path/to/command.exe', args:['a b', 'c','d']}"
+    "c:\\my\\path\\to\\command.exe \"a b\" c d"
+    )  
+
+  test_uut(
+    "{command:'../asd', args:[
+      'ab',
+      'bc',
+      'c d',
+      'e',
+      'lll ooko',
+      'f',
+      'g'
+
+    ]}"
+    "../bsd/../asd ab bc \"c d\" e \"lll ooko\" f g"
+    )
+
+  test_uut(
+    "{command:'a b', args:['c','d','e']}"
+    "'a b'" c d e)
+
+
+return()
+
+  process_start_info_parse_string("/test/ a b c")
   ans(res)
   assertf("{res.command}" STREQUAL "test")
   assertf("{res.args}"  a b c ARE_EQUAL)

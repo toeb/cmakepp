@@ -233,7 +233,10 @@ assert(${val} STREQUAL "hello world")
 
 # <a name="maps"></a> Maps
 
-Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
+Maps are very versatile and are missing dearly from CMake in my opinion. Maps are references as is standard in many languages. They are signified by having properties which are adressed by keys and can take any value.
+
+Due to the "variable variable" system (ie names of variables are string which can be generated from other variables) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})`.  
+
 
 ## Functions
 Using refs it easy to implement a map datastructure:
@@ -252,6 +255,42 @@ map_append()
 map_append_string()
 
 ```
+
+* `m(<structured data~>):<map>` creates a map from any kind of structured data
+
+## Map Iterators
+
+For a more intuitive way to work with maps I developed a `map_iterator` which which allows forward iteration of all maps. The syntax is held simple so that you can quickly go through a map as you can see in the following example:
+
+### Example 
+
+*Iterate through a maps's key/value pairs and prints them*
+
+```
+m(mymap = "{a:1,b:2,c:3}")
+map_iterator(${mymap})
+ans(it)
+while(true)
+	map_iterator_break(it)
+	# you have access to ${it.key} and ${it.value}
+	message("${it.key} = ${it.value}")
+endwhile()
+```
+*output*
+```
+a = 1
+b = 2
+c = 3
+```
+
+### Functions and Datatypes
+
+* `<map iterator> ::= *internal data*` contains data which the iterator functions use.
+* `<map iterator ref> ::= <iterator&>` a variable which contains an iterator
+* `map_iterator(<map>): <map iterator>` creates a map iterator for the specied map
+* `map_iterator_next(<iterator ref>):<bool>` returns true if the iterator could be advanced to the next key, also sets the variables `<iterator ref>.key` and `<iterator ref>.value` in the current scope
+* `map_iterator_current(<iterator ref>):<value>` also sets `<iterator ref>.key` and `<iterator ref>.value` 
+* `map_iterator_break(<iterator>)` only usable inside a loop (normally a while loop) it calls `break()` when the iterator has ended also sets `<iterator ref>.key` and `<iterator ref>.value` 
 
 ## Easy map handling with `nav()`
 
@@ -1434,27 +1473,147 @@ ans(res)
 json_print(${res})
 ```
 
-results in:
+*output*
 ```
 {
-	uri:'https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails',
-	scheme:'https',
-	scheme_specific_part:'//www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails',
-	authority:'www.google.de',
-	path:'/u/0/mail',
-	query:'arg1=123&arg2=arg4',
-	fragment:'readmails',
-	rest:' some other data',
-	input:'https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails some other data',
+ "input":"https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails some other data",
+ "uri":"https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails",
+ "rest":" some other data",
+ "delimiters":null,
+ "scheme":"https",
+ "scheme_specific_part":"//www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails",
+ "net_path":"www.google.de/u/0/mail/",
+ "authority":"www.google.de",
+ "path":"/u/0/mail/",
+ "query":"arg1=123&arg2=arg4",
+ "fragment":"readmails",
+ "user_info":null,
+ "user_name":null,
+ "password":null,
+ "host_port":"www.google.de",
+ "host":"www.google.de",
+ "labels":[
+  "www",
+  "google",
+  "de"
+ ],
+ "top_label":"de",
+ "domain":"google.de",
+ "ip":null,
+ "port":null,
+ "trailing_slash":false,
+ "last_segment":"mail",
+ "segments":[
+  "u",
+  0,
+  "mail"
+ ],
+ "encoded_segments":[
+  "u",
+  0,
+  "mail"
+ ],
+ "file":"mail",
+ "extension":null,
+ "file_name":"mail"
 }
 ```
 
+*Absolute Windows Path*
+
+```
+# output for C:\windows\path
+{
+ "input":"C:\\windows\\path",
+ "uri":"file:///C:/windows/path",
+ "rest":null,
+ "delimiters":null,
+ "scheme":"file",
+ "scheme_specific_part":"///C:/windows/path",
+ "net_path":"/C:/windows/path",
+ "authority":null,
+ "path":"/C:/windows/path",
+ "query":null,
+ "fragment":null,
+ "user_info":null,
+ "user_name":null,
+ "password":null,
+ "host_port":null,
+ "host":null,
+ "labels":null,
+ "top_label":null,
+ "domain":null,
+ "ip":null,
+ "port":null,
+ "trailing_slash":false,
+ "last_segment":"path",
+ "segments":[
+  "C:",
+  "windows",
+  "path"
+ ],
+ "encoded_segments":[
+  "C:",
+  "windows",
+  "path"
+ ],
+ "file":"path",
+ "extension":null,
+ "file_name":"path"
+}
+```
+
+
 *Perverted Example*
 ```
-uri("'scheme1+http://user:password@102.13.44.%60:23%54/'" --delimited --whitespace)
+uri("'scheme1+http://user:password@102.13.44.22:23%54/C:\\Program Files(x86)/dir number 1\\file.text.txt?asd=23#asd'")
 ans(res)
 json_print(${res})
 ```
+*output*
+```
+{
+ "input":"'scheme1+http://user:password@102.13.44.32:234/C:\\Progr%61m Files(x86)/dir number 1\\file.text.txt?asd=23#asd'",
+ "uri":"scheme1+http://user:password@102.13.44.32:234/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt?asd=23#asd",
+ "rest":null,
+ "delimiters":null,
+ "scheme":"scheme1+http",
+ "scheme_specific_part":"//user:password@102.13.44.32:234/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt?asd=23#asd",
+ "net_path":"user:password@102.13.44.32:234/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt",
+ "authority":"user:password@102.13.44.32:234",
+ "path":"/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt",
+ "query":"asd=23",
+ "fragment":"asd",
+ "user_info":"user:password",
+ "user_name":"user",
+ "password":"password",
+ "host_port":"102.13.44.32:234",
+ "host":"102.13.44.32",
+ "labels":null,
+ "top_label":null,
+ "domain":null,
+ "ip":"102.13.44.32",
+ "port":234,
+ "trailing_slash":false,
+ "last_segment":"file.text.txt",
+ "segments":[
+  "C:",
+  "Program Files(x86)",
+  "dir number 1",
+  "file.text.txt"
+ ],
+ "encoded_segments":[
+  "C:",
+  "Progr%61m%20Files(x86)",
+  "dir%20number%201",
+  "file.text.txt"
+ ],
+ "file":"file.text.txt",
+ "extension":"txt",
+ "file_name":"file.text"
+}
+```
+
 
 ## DataTypes and Functions
 
