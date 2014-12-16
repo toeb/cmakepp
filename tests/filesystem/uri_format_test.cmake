@@ -1,12 +1,9 @@
 function(test)
 
-  uri_to_path("\"c:\\test\\a b\\test.txt\"")
+  uri_to_localpath("\"c:\\test\\a b\\test.txt\"")
   ans(res)
 
-
-
-  message("${res}")
-
+  assert("${res}" STREQUAL "c:/test/a b/test.txt")
 
 
 

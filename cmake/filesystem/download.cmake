@@ -7,7 +7,7 @@
 function(download url)
   set(args ${ARGN})
 
-  list_extract_flag(--progress)
+  list_extract_flag(args --progress)
   ans(show_progress)
   if(show_progress)
     set(show_progress SHOW_PROGRESS)

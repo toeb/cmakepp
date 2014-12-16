@@ -4,20 +4,20 @@
 
 [![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=devel)](https://travis-ci.org/toeb/oo-cmake)
 [![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
-objects, methods, functions, maps, inheritance, parsers, lists, ...
+objects, methods, functions, maps, inheritance, parsers, lists, process management,  ...
 # Installing
 
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
-be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=3.0.0` most of its functions also work with `2.8.7`
+be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7` 
 
 # Usage
 Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the oo-cmake.cmake file.
 
 # Testing
-To test the code (alot is tested but not all) run the following in the root dir of oo-cmake 
+To test the code (alot is tested but not all) run the following in the root dir of oo-cmake *this take long :)*
 
 ``` 
-cmake -P oo-cmake-tests.cmake 
+cmake -P build/script.cmake 
 ```
 
 # Feature Overview
@@ -79,7 +79,8 @@ cmake -P oo-cmake-tests.cmake
 	* [implementation notes](#implementation_notes)
 
 
-NOTE: the list is incomplete
+*NOTE: the list is incomplete*
+
 # <a name="icmake"></a>Interactive CMake Shell
 
 If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `oocmake` and cmake in general.
@@ -1386,17 +1387,11 @@ json_print(${res}) # outputs input and output of process
 
 ## Parallel Processes 
 
-When working with large applications in cmake it can become necessary to work in parallel processes. Since all cmake target systems support multitasking from the command line it is possible to implement cmake functions to control it.  I implemented a platform independent control mechanism for forking, killing, querying and waiting for processes.  The lowlevel functions are platform specific the others are based onthis abstraction layer.   
-
-### Inter Process Communication
-
-* Environment variables
-* Files
-* Captures
+When working with large applications in cmake it can become necessary to work in parallel processes. Since all cmake target systems support multitasking from the command line it is possible to implement cmake functions to control it.  I implemented a 'platform independent' (platform on which either powershell or bash is available) control mechanism for starting, killing, querying and waiting for processes.  The lowlevel functions are platform specific the others are based on the abstraction layer that the provide.   
 
 ### Examples
 
-This example forks a script into three separate cmake processes. The program ends when all scripts are done executing.
+This example starts a script into three separate cmake processes. The program ends when all scripts are done executing.
 ```
 # define a script which counts to 10 and then 
 # note that a fresh process means that cmake has not loaded oocmake
@@ -1410,11 +1405,11 @@ message(end)
 
 # start each script - fork_script returns without waiting for the process to finish.
 # a handle to the created process is returned.
-fork_script("${script}")
+process_start_script("${script}")
 ans(handle1)
-fork_script("${script}")
+process_start_script("${script}")
 ans(handle2)
-fork_script("${script}")
+process_start_script("${script}")
 ans(handle3)
 
 # wait for every process to finish. returns the handles in order in which the process finishes
@@ -1426,19 +1421,83 @@ json_print(${res})
 
 ```
 
-This example shows a more usefull case:  Checking out multiple repositories in parallel.
+This example shows a more usefull case:  Downloading multiple 'large' files parallely to save time
 
-### Caveats
+```
 
-* Forking is slow - it can take seconds. The task needs to be a very large one for it to compensate the overhead.
-* forking uses platform specific functions - It might cause problems on less well tested OSs
+  ## define a function which downloads  
+  ## all urls specified to the current dir
+  ## returns the path for every downloaded files
+  function(download_files_parallel)
+    ## get current working dir
+    pwd()
+    ans(target_dir)
+
+    ## process start loop 
+    ## starts a new process for every url to download
+    set(handles)
+    foreach(url ${ARGN})
+      ## start download by creating a cmake script
+      process_start_script("
+        include(${oocmake_base_dir}/oo-cmake.cmake) # include oocmake
+        download(\"${url}\" \"${target_dir}\")
+        ans(result_path)
+        message(STATUS ${target_dir}/\${result_path})
+        ")
+      ans(handle)
+      ## store process handle 
+      list(APPEND handles ${handle})
+    endforeach()
+
+    ## wait for all downloads to finish
+    process_wait_all(${handles})
+
+    set(result_paths)
+    foreach(handle ${handles})
+      ## get process stdout
+      process_stdout(${handle})
+      ans(output)
+
+      ## remove '-- ' from beginning of output which is
+      ## automatically prependend by message(STATUS) 
+      string(SUBSTRING "${output}" 3 -1 output)
+
+      ## store returned file path
+      list(APPEND result_paths ${output})
+
+    endforeach()
+
+    ## return file paths of downloaded files
+    return_ref(result_paths)
+  endfunction()
+
+
+  ## create and goto ./download_dir
+  cd("download_dir" --create)
+
+  ## start downloading files in parallel by calling previously defined function
+  download_files_parallel(
+    http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz
+    http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
+  )
+  ans(paths)
+
+
+  ## assert that every the files were downloaded
+  foreach(path ${paths})
+    assert(EXISTS "${path}")
+  endforeach()
+
+
+```
+
 
 ### Functions and Datatypes
 * datatypes
-	* `<process handle> ::= { status:<process status> , pid:<process id> }` process handle is a runtime unique map which is used to address a process.  The process handle may contain more properties than specified - only the specified ones are available on all systems - these properties contain values which are implementation specific.
+	* `<process handle> ::= { state:<process state> , pid:<process id> }` process handle is a runtime unique map which is used to address a process.  The process handle may contain more properties than specified - only the specified ones are available on all systems - these properties contain values which are implementation specific.
 	* `<process info> ::= { }` a map containing verbose information on a proccess. only the specified fields are available on all platforms.  More are available depending on the OS you use. You should not try to use these without examining their origin / validity.
-	* `<process status> ::= "running"|"completed"|"unknown"`
-	* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process
+	* `<process state> ::= "running"|"terminated"|"unknown"`
+	* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process (normally a integer)
 * platform specific low level functions 
 	* `process_start(<process start info?!>):<process handle>` platfrom specific function which starts a process and returns a process handle
 	* `process_kill(<process handle?!>)` platform specific function which stops a process.
@@ -1446,14 +1505,36 @@ This example shows a more usefull case:  Checking out multiple repositories in p
 	* `process_info(<process handle?!>):<process info>` platform specific function which returns a verbose process info
 	* `process_isrunning(<process handle?!>):<bool>` returns true iff process is running. 
 * `process_timeout(<n:<seconds>>):<process handle>` starts a process which times out in `<n>` seconds. 
-* `process_wait_all(<process handle?!...> <?"--timeout" <n:<seconds>>> <?"--quietly">):<process handle ...>` waits for all specified process handles and returns them in the order that they completed.  If the `--timeout <n>` value is specified the function returns as soon as the timeout is reached returning only the process finished up to that point. The function normally prints status messages which can be supressed via the `--quietly` flag.    
+* `process_wait(<process handle~> [--timeout <n:seconds>]):<process handle>` waits for the specified process to finish or the specified timeout to run out. returns null if timeout runs out before process finishes.
+* `process_wait_all(<process handle?!...> <[--timeout <n:seconds>] [--quietly]):<process handle ...>` waits for all specified process handles and returns them in the order that they completed.  If the `--timeout <n>` value is specified the function returns as soon as the timeout is reached returning only the process finished up to that point. The function normally prints status messages which can be supressed via the `--quietly` flag.    
 * `process_wait_any(<process handle?!...> <?"--timeout" <n:<seconds>>> <?"--quietly">):<?process handle>` waits for any of the specified processes to finish, returning the handle of the first one to finished. If `--timeout <n>` is specified the function will return `null` after `n` seconds if no process completed up to that point in time. You can specify `--quietly` if you want to suppress the status messages. 
+* `process_stdout(<process handle~>):<string>` returns all data written to standard output stream of the process specified up to the current point in time
+* `process_stderr(<process handle~>):<string>` return all data written to standard error stream of the process specified up to the current point in time
+*   `process_return_code(<process handle~>):<int?>` returns nothing or the process return code if the process is finished
+*   `process_start_script(<cmake code>):<process handle>` starts a separate cmake process which runs the specified cmake code.
 
+### Inter Process Communication
+
+To communicate with you processes you can use any of the following well known mechanisms
+
+* Environment Variables
+	- the started processes have access to you current Environment. So when you call `set(ENV{VAR} value)` before starting a process that process will have read access to the variable `$ENV{VAR}` 
+* Command Line Arguments
+	- all variables passed to `start_process` will be passed allong
+	- Command Line Variables are sometimes problematic as they must be escaped correctly and this does not always happen as expected. So you might want to choose another mechanism to transmit complex data to your process
+	- Command Line Variables are limited by their string length depending on you host os.
+* Files
+	- Files are the easiest and safest way to communicate large amounts of data to another process. If you can try to use file communication
+* stderr, stdout
+	- The output of a process started with `start_process` becomes available to you when the process ends at latest, You can choose to poll stdout and take data as soon as it is written to the output streams 
+* return code
+	- the returns code tells you how you process finished and is often enough result information for a process you start
+	
 ### Caveats
 
+* process starting is slow - it can take seconds (it takes 900ms on my machine). The task needs to be a very large one for it to compensate the overhead.
+* parallel processes use platform specific functions - It might cause problems on less well tested OSs and some may not be supported.  (currently only platforms with bash or powershell are supported ie Windows and Linux)
 
-* I have not found a platform independent way to handle process return codes. You will need to communicate through files
-* complex command line  arguments cause problems 
 
 
 # <a name="uris"></a> Uniform Resource Identifiers (URIs)
