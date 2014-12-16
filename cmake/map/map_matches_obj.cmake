@@ -1,0 +1,10 @@
+## returns true if lhs has all properties (and recursive properties)
+## that rhs has
+  function(map_match_obj lhs rhs)
+    obj("${lhs}")
+    ans(lhs)
+    obj("${rhs}")
+    ans(rhs)
+    map_matches("${lhs}" "${rhs}")
+    return_ans()
+  endfunction()
