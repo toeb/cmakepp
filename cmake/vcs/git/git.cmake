@@ -1,5 +1,5 @@
 function(git)
-  find_package(Git QUIETLY)
+  find_package(Git)
   if(NOT GIT_FOUND)
     message(FATAL_ERROR "missing git")
   endif()

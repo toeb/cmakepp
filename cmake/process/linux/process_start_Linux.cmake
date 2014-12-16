@@ -1,8 +1,4 @@
-function(nohup)
-    wrap_executable(nohup nohup)
-    nohup(${ARGN})
-    return_ans()
-endfunction()
+
 
 # process_fork implementation specific to linux
 # uses bash and nohup to start a process 
@@ -15,7 +11,11 @@ function(process_start_Linux)
     endif()
 
     scope_import_map(${process_start_info})
+
+    command_line_args_combine(${args})
+    ans(arg_string)
     set(command_string "${command} ${arg_string}")
+  
 
 
 
