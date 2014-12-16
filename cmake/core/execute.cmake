@@ -40,7 +40,10 @@
 
     command_line_args_combine(${args})
     ans(arg_string)
-       
+    
+    ## todo - test this
+    string(REPLACE \\ \\\\ arg_string "${arg_string}")
+
 
     set(execute_process_command "
         execute_process(

@@ -5,7 +5,7 @@ function(win32_powershell_create_array)
     ## compile powershell array for argument list
     set(arg_list)
     foreach(arg ${ARGN})
-      string_escape("${arg}")
+      string_encode_delimited("${arg}" \")
       ans(arg)
       list(APPEND arg_list "${arg}")
     endforeach()

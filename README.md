@@ -120,6 +120,8 @@ icmake is quitting
 
 # Formalisms 
 
+This section is incomplete and currently the functions described below do not all adhere to the formalisms. This will be adressed soon(ish)
+
 To describe cmake functions I use formalisms which I found most useful they should be intuitively understandable but here I want to describe them in detail.
 
 
