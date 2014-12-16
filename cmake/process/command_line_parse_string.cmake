@@ -15,7 +15,7 @@
     while(true)
       string_take_commandline_arg(rest)
       ans(arg)
-      string_parse_delimited("${arg}")
+      string_decode_delimited("${arg}")
       ans(arg)
 
       list(APPEND args "${arg}")

@@ -1,5 +1,6 @@
-## escapes a string with the specified delimiters
-function(string_escape str)
+## escapes a string to be delimited
+## by the the specified delimiters
+function(string_encode_delimited str)
     delimiters(${ARGN})
     ans(ds)
     list_pop_front(ds)
