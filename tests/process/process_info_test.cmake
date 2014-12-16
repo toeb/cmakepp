@@ -1,6 +1,5 @@
 function(test)
 
-
   process_list()
   ans(p)
   list_pop_front(p)

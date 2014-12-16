@@ -1,4 +1,7 @@
 function(test)
+
+
+
   #set(OOCMAKE_DEBUG_EXECUTE true)
   
   assert(NOT COMMAND test_exectutable_wrapper)

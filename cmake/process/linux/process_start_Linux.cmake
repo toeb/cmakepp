@@ -3,11 +3,16 @@ function(nohup)
     nohup(${ARGN})
     return_ans()
 endfunction()
+
 # process_fork implementation specific to linux
 # uses bash and nohup to start a process 
-function(process_fork_Linux process_start_info)
-    process_start_info("${process_start_info}")
+function(process_start_Linux)
+    process_start_info(${ARGN})
     ans(process_start_info)
+
+    if(NOT process_start_info)
+      return()
+    endif()
 
     scope_import_map(${process_start_info})
     set(command_string "${command} ${arg_string}")

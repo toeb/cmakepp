@@ -1,9 +1,18 @@
 
 ## platform specific implementation for process_list under windows
 function(process_list_Windows)
-  win32_tasklist(/V /FO CSV)
-  ans(res)
-  csv_deserialize(${res} --headers)
-  ans(res)
-  return_ref(res)      
+  win32_wmic(process where "processid > 0" get processid) #ignore idle process
+  ans(ids)
+
+  string(REGEX MATCHALL "[0-9]+" matches "${ids}")
+  set(ids)
+  foreach(id ${matches})
+    process_handle("${id}")
+    ans(handle)
+    list(APPEND ids ${id})
+  endforeach()
+
+  return_ref(ids)
+
+
 endfunction()

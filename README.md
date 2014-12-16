@@ -1440,7 +1440,7 @@ This example shows a more usefull case:  Checking out multiple repositories in p
 	* `<process status> ::= "running"|"completed"|"unknown"`
 	* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process
 * platform specific low level functions 
-	* `process_fork(<process start info?!>):<process handle>` platfrom specific function which starts a process and returns a process handle
+	* `process_start(<process start info?!>):<process handle>` platfrom specific function which starts a process and returns a process handle
 	* `process_kill(<process handle?!>)` platform specific function which stops a process.
 	* `process_list():<process handle ...>` platform specific function which returns a process handle for all running processes on OS.
 	* `process_info(<process handle?!>):<process info>` platform specific function which returns a verbose process info

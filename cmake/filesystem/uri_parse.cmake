@@ -130,7 +130,7 @@ endfunction()
 ## normalizes the input for the uri
 ## expects <uri> to have a property called input
 ## ensures a property called uri is added to <uri> which contains a valid uri string 
-function(uri_normalize_input uri)
+function(uri_normalize_input input_uri)
   set(flags ${ARGN})
 
 
@@ -141,7 +141,7 @@ function(uri_normalize_input uri)
   set(delimiters "''" "\"\"" "<>")
   set(encode_input 32) # character codes to encode in delimited input
   set(ignore_leading_whitespace true)
-  map_get("${uri}" input)
+  map_get("${input_uri}" input)
   ans(input)
 
   if(ignore_leading_whitespace)
@@ -157,6 +157,7 @@ function(uri_normalize_input uri)
     endif()
   endforeach()
 
+  set(delimiters "${delimiter}")
 
     # if string is delimited encode whitespace 
     if(NOT "${delimited}_" STREQUAL "_")
@@ -177,41 +178,40 @@ function(uri_normalize_input uri)
 
     # the whole uri is delimited by a space or end of string
     string_take_regex(input "${uric}+")
-    ans(uri_string)
+    ans(uri)
 
-    set(rest "${input}")
+    if("${rest}_" STREQUAL "_")
+      set(rest "${input}")
+    endif()
+
 
     set(windows_absolute_path false)
     if(default_file_scheme)
       if(handle_windows_paths)
         # replace backward slash with forward slash
         # for windows paths - non standard behaviour
-        string(REPLACE \\ /  uri_string "${uri_string}")
+        string(REPLACE \\ /  uri "${uri}")
       endif()  
 
 
-      if("_${uri_string}" MATCHES "^_/" AND NOT "_${uri_string}" MATCHES "^_//")
-        set(uri_string "file://${uri_string}")
+      if("_${uri}" MATCHES "^_/" AND NOT "_${uri}" MATCHES "^_//")
+        set(uri "file://${uri}")
       endif()
 
-      if("_${uri_string}" MATCHES "^_[a-zA-Z]:")
+      if("_${uri}" MATCHES "^_[a-zA-Z]:")
         #local windows path no scheme -> scheme is file://
         # <drive letter>: is replaced by /<drive letter>|/
         # also colon after drive letter is normalized to  ${driveletter_separator}
-        string(REGEX REPLACE "^_([a-zA-Z]):(.+)" "\\1${driveletter_separator}\\2" uri_string "_${uri_string}")
-        set(uri_string "file:///${uri_string}")
+        string(REGEX REPLACE "^_([a-zA-Z]):(.+)" "\\1${driveletter_separator}\\2" uri "_${uri}")
+        set(uri "file:///${uri}")
         set(windows_absolute_path true)
       endif()
 
     endif()
     
-    # the rest is not part of uri
-
-    map_set(${uri} uri "${uri_string}")
-    map_set(${uri} rest "${input}")
-    map_set(${uri} delimiters "${delimiter}")
-    map_set(${uri} windows_absolute_path "${windows_absolute_path}")
-    return_ref(uri)
+    # the rest is not part of input_uri
+    map_capture(${input_uri} uri rest delimited_rest delimiters windows_absolute_path)
+    return_ref(input_uri)
 
 endfunction()
 

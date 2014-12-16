@@ -4,7 +4,7 @@ function(test)
   ## tests weather process_kill terminates a running process
 
   ## arrange
-  process_fork_script("execute_process(COMMAND sleep 100)")
+  process_timeout(100)
   ans(handle)
 
 

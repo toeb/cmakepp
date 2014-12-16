@@ -13,15 +13,15 @@ function(wrap_executable alias executable)
       if(NOT IS_DIRECTORY \"\${cwd}\")
         message(FATAL_ERROR \"${alias}: '\${cwd}' is not a directory, try setting it via cd()\")
       endif()
-      set(args \${ARGN})
-      list_extract_flag(args --result)
+      set(cmd_line_args \${ARGN})
+      list_extract_flag(cmd_line_args --result)
       ans(result_flag)
-      list_extract_flag(args --return-code)
+      list_extract_flag(cmd_line_args --return-code)
       ans(return_code_flag)
       set(executable \"${executable}\")
       execute(\"{
         path:$executable,
-        args:$args,
+        args:$cmd_line_args,
         cwd:$cwd
       }\")
       ans(execution_result)

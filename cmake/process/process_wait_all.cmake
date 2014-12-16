@@ -37,7 +37,7 @@
       process_refresh_handle(${process})
       ans(isrunning)
       
-      message(FORMAT "{process.pid} isrunning {isrunning} {process.state} ")
+      #message(FORMAT "{process.pid} isrunning {isrunning} {process.state} ")
       if(NOT quietly)
         tick()
       endif()

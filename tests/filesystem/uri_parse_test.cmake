@@ -30,8 +30,7 @@ function(test)
 
 ## normalized path
 
-test_uri("../asd/../../bsd/csd/dsd/../../esd/./fsd" "{normalized_segments:['..','..','bsd', 'csd', 'fsd']}" )
-
+test_uri("../asd/../../bsd/csd/dsd/../../esd/./fsd" "{normalized_segments:['..','..','bsd', 'esd', 'fsd']}" )
 # examples
 #  test_uri("'scheme1+http://user:password@102.13.44.32:234/C:\\Progr%61m Files(x86)/dir number 1\\file.text.txt?asd=23#asd'" "{}")
 #  test_uri("https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails some other data" "{}" --print)

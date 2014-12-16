@@ -1,14 +1,19 @@
 function(test)
 
+
+
+
+
   ## runs three scripts and expects then to stop in a particular order
 
-  process_fork_script("execute_process(COMMAND sleep 4)")
+
+  process_timeout(4)
   ans(h1)
 
-  process_fork_script("execute_process(COMMAND sleep 8)")
+  process_timeout(8)
   ans(h2)
 
-  process_fork_script("execute_process(COMMAND sleep 1)")
+  process_timeout(1)  
   ans(h3)
 
 

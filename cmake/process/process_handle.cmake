@@ -8,8 +8,8 @@ function(process_handle handlish)
 
   if(ismap)
     set(handle ${handlish})
-  elseif( "${handlish}" MATCHES "[1-9][0-9]*")
-    string(REGEX MATCH "[1-9][0-9]*" handlish "${handlish}")
+  elseif( "${handlish}" MATCHES "[0-9]+")
+    string(REGEX MATCH "[0-9]+" handlish "${handlish}")
 
     map_tryget(__process_handles ${handlish})
     ans(handle)

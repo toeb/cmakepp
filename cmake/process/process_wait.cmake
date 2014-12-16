@@ -18,6 +18,7 @@
 
     if("${timeout}" LESS 0)
       while(true)
+
         process_refresh_handle(${handle})
         ans(isrunning)
         if(NOT isrunning)
@@ -39,6 +40,7 @@
         process_refresh_handle(${handle})
         ans(isrunning)
         if(NOT isrunning)
+          process_kill(${timeout_handle})
           return(${handle})
         endif()
         process_refresh_handle(${timeout_handle})

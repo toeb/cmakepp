@@ -18,14 +18,19 @@
   # }
   #
   #
-  function(execute processStart)
-    process_start_info("${processStart}")
+  function(execute)
+    process_start_info(${ARGN})
     ans(processStart)
+
+    if(NOT processStart)
+      return()
+    endif()
 
     #obj("${processStart}")
   
     map_clone_deep(${processStart})
     ans(processResult)
+
 
     scope_import_map(${processStart})
 
@@ -33,7 +38,9 @@
     set(cwd WORKING_DIRECTORY "${cwd}")
 
 
-    
+    command_line_args_combine(${args})
+    ans(arg_string)
+       
 
     set(execute_process_command "
         execute_process(

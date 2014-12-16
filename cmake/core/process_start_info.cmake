@@ -1,11 +1,31 @@
-function(process_start_info in)
-  obj("${in}")
+## takes a <command line~> or <process start info~>
+## and returns a valid  process start info
+function(process_start_info)
+  set(__args ${ARGN})
+
+  list_extract_labelled_value(__args TIMEOUT)
+  ans(timeout_arg)
+
+  list_extract_labelled_value(__args WORKING_DIRECTORY)
+  ans(cwd_arg)
+
+  if("${ARGN}_" STREQUAL "_")
+    return()
+  endif()
+
+
+  obj("${ARGN}")
   ans(obj)
 
   if(NOT obj)
-    message(FATAL_ERROR "invalid process start info ${in}")
+    command_line(${__args})
+    ans(obj)
   endif()
-  set(argn ${ARGN})
+
+
+  if(NOT obj)
+    message(FATAL_ERROR "invalid process start info ${ARGN}")
+  endif()
 
   set(path)
   set(cwd)
@@ -22,18 +42,6 @@ function(process_start_info in)
     set(args ${parameters})
   endif()
 
-
-  # now compile the command string
-  foreach(arg ${args})
-    cmake_string_escape("${arg}")
-    ans(arg)
-    
-    string_semicolon_decode("${arg}")
-    ans(arg)      
-
-    set(arg_string "${arg_string} \"${arg}\"")      
-  endforeach()
-
   if("${command}_" STREQUAL "_")
     set(command "${path}")
     if("${command}_" STREQUAL "_")
@@ -41,13 +49,20 @@ function(process_start_info in)
     endif()
   endif()
 
+  if(timeout_arg)
+    set(timeout "${timeout_arg}")
+  endif()
+
   if("${timeout}_" STREQUAL "_" )
     set(timeout -1)
   endif()
 
-  set(command_string "${command} ${arg_string}")
 
 
+
+  if(cwd_arg)
+    set(cwd "${cwd_arg}")
+  endif()
 
   path("${cwd}")
   ans(cwd)
@@ -63,7 +78,7 @@ function(process_start_info in)
 
 
   # create a map from the normalized input vars
-  map_capture_new(command args arg_string cwd timeout)
+  map_capture_new(command args cwd timeout)
   return_ans()
 
 endfunction()

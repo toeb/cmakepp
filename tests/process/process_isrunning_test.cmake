@@ -5,7 +5,7 @@ function(test)
 
   
 
-process_fork_script("execute_process(COMMAND sleep 4)")
+process_timeout(4)
 ans(handle)
 
 ## act
