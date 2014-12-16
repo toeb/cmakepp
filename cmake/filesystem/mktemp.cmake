@@ -1,4 +1,3 @@
-
 # creates a temporary directory 
 # you can specify an optional parent directory in which it should be created
 # usage: mktemp([where])-> <absoute path>

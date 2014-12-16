@@ -6,7 +6,9 @@
     if(isobj)
       return("${object_ish}")
     endif()
-
-    script("${object_ish}")
-    return_ans()
+    if("${object_ish}" MATCHES "^{.*}$")
+     script("${object_ish}")
+     return_ans()
+    endif()
+    return()
   endfunction()

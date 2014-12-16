@@ -4,20 +4,20 @@
 
 [![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=devel)](https://travis-ci.org/toeb/oo-cmake)
 [![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
-objects, methods, functions, maps, inheritance, parsers, lists, ...
+objects, methods, functions, maps, inheritance, parsers, lists, process management,  ...
 # Installing
 
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
-be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=3.0.0` most of its functions also work with `2.8.7`
+be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7` 
 
 # Usage
 Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the oo-cmake.cmake file.
 
 # Testing
-To test the code (alot is tested but not all) run the following in the root dir of oo-cmake 
+To test the code (alot is tested but not all) run the following in the root dir of oo-cmake *this take long :)*
 
 ``` 
-cmake -P oo-cmake-tests.cmake 
+cmake -P build/script.cmake 
 ```
 
 # Feature Overview
@@ -51,7 +51,8 @@ cmake -P oo-cmake-tests.cmake
 		* `reg()` shorthand for working with windows registry command line interface
 		* read write manipulate registry values
 		* query registry keys for values
-	* [string functions](#stringfunctions) - advanced string manipulation		
+	* [string functions](#stringfunctions) - advanced string manipulation	
+	* [URIs](#uris) - Uniform Resource Identifier parsing and formatting	
 	* [lists](#lists) - extension to cmake and normalization of cmake's `list()` functionality
 	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
 		* graph algorithms 
@@ -70,6 +71,7 @@ cmake -P oo-cmake-tests.cmake
 		* lambda functions (a shorthand syntax for defining inline functions.  `(var1,var2)-> do_somthing($var1); do_something_else($var2)` 
 		* import functions (from files, from string, ...)
 	* [objects](#objects) - object oriented programming with prototypical inheritance, member functions
+	* [process management](#process_management) - platform independent forking, waiting, controlling separate process from cmake 
 	* [Targets](#targets)
 		* [access to a list of all defined targets](#target_list)
 		* easier access to target properties
@@ -77,7 +79,8 @@ cmake -P oo-cmake-tests.cmake
 	* [implementation notes](#implementation_notes)
 
 
-NOTE: the list is incomplete
+*NOTE: the list is incomplete*
+
 # <a name="icmake"></a>Interactive CMake Shell
 
 If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `oocmake` and cmake in general.
@@ -126,7 +129,7 @@ To describe cmake functions I use formalisms which I found most useful they shou
 * `<regex> ::= /<string>/` denotes a regular expression (as cmake defines it)
 * `<identifier> ::= /[a-zA-Z0-9_-]+/` denotes a identifier which can be used for definitions
 * `<datatype> ::= "<" "any"|"bool"|"number"|""|"void"|""|<structured data> <?"...">">"` denotes a datatype the elipses denotes that multiple values in array form are described else the datatype can be `any`, `bool`, `number`, `<structured data>` etc.. 
-* `<named definitiont> ::= "<"<identifier>">"`
+* `<named definition> ::= "<"<identifier>">"`
 * `<definition> ::= "<"<?"?"><identifier>|<identifier>":"<datatype>|<datatype>>">"`  denotes a possibly name piece of data. this is used in signatures and object descriptions e.g. `generate_greeting(<firstname:<string>> <?lastname:<string>>):<string>` specifies a function which which takes a required parameter called `first_name` which is of type `string` and an optional parameter called `lastname` which is of type `string` and returns a `string`
 * `<structured data> ::= "{"<? <named definition> ...>"}"`
 * `<void>` primitve which stand for nothing
@@ -135,6 +138,9 @@ To describe cmake functions I use formalisms which I found most useful they shou
 * `<bool> ::= "true":"false"` indicates a well defined true or false value
 * `<boolish> ::= <trueish>|<falsish>|<bool>`
 * `<any> ::= <string>|<number>|<structured data>|<bool>|<void>`
+* `<named function parameter>`
+* `<function parameter> ::= <definition>|<named function parameter>`
+* `<function definition> `
 * ... @todo
 
 
@@ -228,7 +234,10 @@ assert(${val} STREQUAL "hello world")
 
 # <a name="maps"></a> Maps
 
-Maps are very verstile and are missing from CMake. Due to the "variable variable" system (ie names of variables are string which can be generated from other variablees) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})` 
+Maps are very versatile and are missing dearly from CMake in my opinion. Maps are references as is standard in many languages. They are signified by having properties which are adressed by keys and can take any value.
+
+Due to the "variable variable" system (ie names of variables are string which can be generated from other variables) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})`.  
+
 
 ## Functions
 Using refs it easy to implement a map datastructure:
@@ -247,6 +256,42 @@ map_append()
 map_append_string()
 
 ```
+
+* `mm(<structured data~>):<map>` creates a map from any kind of structured data
+
+## Map Iterators
+
+For a more intuitive way to work with maps I developed a `map_iterator` which which allows forward iteration of all maps. The syntax is held simple so that you can quickly go through a map as you can see in the following example:
+
+### Example 
+
+*Iterate through a maps's key/value pairs and prints them*
+
+```
+mm(mymap = "{a:1,b:2,c:3}")
+map_iterator(${mymap})
+ans(it)
+while(true)
+	map_iterator_break(it)
+	# you have access to ${it.key} and ${it.value}
+	message("${it.key} = ${it.value}")
+endwhile()
+```
+*output*
+```
+a = 1
+b = 2
+c = 3
+```
+
+### Functions and Datatypes
+
+* `<map iterator> ::= *internal data*` contains data which the iterator functions use.
+* `<map iterator ref> ::= <iterator&>` a variable which contains an iterator
+* `map_iterator(<map>): <map iterator>` creates a map iterator for the specied map
+* `map_iterator_next(<iterator ref>):<bool>` returns true if the iterator could be advanced to the next key, also sets the variables `<iterator ref>.key` and `<iterator ref>.value` in the current scope
+* `map_iterator_current(<iterator ref>):<value>` also sets `<iterator ref>.key` and `<iterator ref>.value` 
+* `map_iterator_break(<iterator>)` only usable inside a loop (normally a while loop) it calls `break()` when the iterator has ended also sets `<iterator ref>.key` and `<iterator ref>.value` 
 
 ## Easy map handling with `nav()`
 
@@ -393,26 +438,54 @@ ref_print(${themap})
 		"number":"99"
 	}
 }
+
+  map_set(${res} type "${func_type}")
+  map_set(${res} name "${func_name}")
+  map_set(${res} args "${all_args}")
+  map_set(${res} code "${function_string}")
+
 ```
 
-# Functions
+# Functions and Datatypes
+
 Functions in cmake are not variables - they have a separate global only scope in which they are defined.  
 *A Note on Macros* You SHOULD NOT use macros... They will more likely than not have unintended side effects because of the way the are evaluated.
 
 I have written a couple of usefull (if not essential) functions with which managing functions becomes a lot easier
+
+* Datatypes
+	* `<cmake code> ::= <string>` any valid cmake code
+	* `<cmake function file> ::= <cmake file>` a cmake script file containing a single function 
+	* `<function string> :: <cmake code>` a string containing a single function
+	* `<cmake file> ::= <path>` a file containing valid cmake code
+	* `<function call> ::=<function?!>(<any...>)` a function call can be evaluated to a valid cmake code line which executes the function specified
+	* `<function>` ::= <identifier>` any cmake function or macro name for which `if(COMMAND <function>)` evaluates to true.  This can be directly called
+	* `<function?!>` ::= <function>|<cmake function file>|<lambda>|<function&>|<function string>|<function string&>  a function?! can be any type of code which somehow evaluates to a function
+	* `<function info> ::= {type:<function type>, name:<identifier>, args:<arg ...>, code:<function string>|<function call>}` a map containing information on a specific function. if possible the info map contains the original source code of the function
+* Functions
+	* `eval(<cmake code>)` executes the given cmake code. If the code returns something (see return) the result will be available after the `eval()` call using `ans()`
+	* `eval_ref(<cmake code&>)` executes the given code.  Since this is a macro the code is passed as a variable name (reference) to suppress automatic variable expansion. This allows you to eval code which uses the `set(x y PARENT_SCOPE)` 
+	* `function_new()`	returns a unqiue name for a function.  
+	* `is_function(<value:any>):<bool>` returns true if the specified value is a function
+	* `function_import(<cmake function?!> as <function_name:<identifier>>)` imports a function under the specified name 
+	* `call(<function call>)` calls a function and returns the return value of the call.
+	* `rcall(<identifier> = <function call>)` calls a function and sets the specified identifier to the return value of the call.
+	* `function_info(<function?!>):<function info>`	returns info on name, arguments, type of function
+	* `wrap_platform_specific_function(<function_name:<identifier>>` a helper method which allows platform the correct choice for platform specific functions. Consider getting an environment variable like the home directory.  Under Linux this is `$ENV{HOME}` under Windows this is `$ENV{HOME_DRIVE}$ENV{HOME_DIR}` depending on the os the result is 'the same' but you get it is different.  this function looks for specialized functions and imports the most fitting one as `<function_name>`.  If no function is found which matches the platform a dummy function is implemented which throws a `FATAL_ERROR` detailing how you can alleviate the missing implementation problem. 
+	* `curry`
+	* `bind`
+	* Lambdas
+		* `<lambda code>`  string of code similar to cmake.  a typical lambda looks like this `(a)-> return_truth($a STREQUAL "hello")`
+		* `lambda(<lambda code>):<function string>`
+		* `lambda_import(<lambda code>)`
+		* `lambda_parse()`
+
+
+## Examples
+
 ```
-eval(string)			# executes the given cmake code 
-						# if the code returns something (see return)
-						# the result will be available after eval() using ans()
-eval_ref(<var>)         # executes the given code
-						# since this is a macro the code is passed as a variable name
-						# however this allows using set(PARENT_SCOPE) 
-function_new()			# returns a unqiue name for a function
-function_import(function_ish as function_name) # imports a function under the specified name
-call(function_ish([args ...])) # calls a function
-function_info(function_ish)	# returns info on name, arguments, type of function
-function_inject(function_ish)	# imports a function, injecting before call, after call data
 ```
+
 
 ## Function Patterns
 
@@ -991,64 +1064,12 @@ So alot of unecessary repeating code can be omitted.
 * `hg()` function for mercurial command line client with same usage except `hg ...` -> `hg(...)`
 * ...
 
-# <a name="execute"></a> # Executing External Programms
-
-Using external applications more complex than necessary in cmake imho. I tried to make it as easy as possible.  Wrapping an external programm is now very simple as you can see in the following example for git:
-
-This is all the code you need to create a function which wraps the git executable.  It uses the [initializer function pattern](#initializer_function). 
-
-```
-function(git)
-  # initializer block (will only be executed once)
-  find_package(Git)
-  if(NOT GIT_FOUND)
-    message(FATAL_ERROR "missing git")
-  endif()
-  # function redefinition inside wrap_executable
-  wrap_executable(git "${GIT_EXECUTABLE}")
-  # delegate to redefinition and return value
-  git(${ARGN})
-  return_ans()
-endfunction() 
-```
-
-Another example:
-
-```
-find_package(Hg)
-set(cmdline --version)
-execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
-ans(res)
-map_get(${res} result)
-ans(error)
-map_get(${res} output)
-ans(stdout)
-assert(NOT error) # error code is 0
-assert("${stdout}" MATCHES "mercurial") # output contains mercurial
-json_print(${res}) # outputs input and output of process
-
-```
-
-## Functions and Datatypes
-
-* `execute(<process start ish> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
-	* example: `execute("{path:'<command>', args:['a','b']}")`  
-* `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
-* `<process start ish>` a string which can be converted to a `<process start>` object
-* `<process start>` a map/object containing the following fields
-	- `path` command name / path of executable *required*
-	- `args` command line arguments to pass along to command, use `string_semicolon_encode` if you want to have an argument with semicolons *optional*
-	- `timeout:<int>` *optional* number of seconds to wait before failing
-	- `cwd:<unqualified path>` *optional*  by default it is whatever `pwd()` currently returns
-* `<process info>` contains all the fields of `<process start>` and additionaly
-	- `output:<stdout>`  the output of the command execution. (merged error and stdout streams)
-	- `result:<int>` the return code of the execution.  0 normally indicates success.
 
 
 
 # <a name="filesystem"></a> Filesystem
 
-I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) it is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
+I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) and is compatible to CMake's understanding of paths. It is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
 
 ```
 # as soon as you include `oo-cmake.cmake` the current directory is set to 
@@ -1103,10 +1124,13 @@ popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
 
 ## Functions and datatypes
 
+* `<directory> ::= <path|qualifies to an existing directory>` 
+* `<file> ::= <path|qualifies to an existing file>`
 * `<windows path>`  a windows path possibly with and possibly with drive name `C:\Users\Tobi\README.md`
 * `<relative path>` a simple relative path '../dir2/./test.txt'
 * `<qualified path>` a fully qualified path depending on OS it only contains forward slashes and is cmake's `get_filename_component(result "${input} REAL_PATH)` returns. All symlinks are resolved. It is absolute
 * `<unqualified path> ::= <windows path>|<relative path>|<qualified path>` 
+* `<path> ::= <unqualified path>`
 * `path(<unqualified path>)-><qualified path>` qualifies a path and returns it.  if path is relative (with no drive letter under windows or no initial / on unix) it will be qualified with the current directory `pwd()`
 * `pwd()-> <qualified path>` returns the top of the path stack. relative paths are relative to `pwd()`
 * `cd(<unqualified> [--create]) -> <qualified path>` changes the top of the path stack.  returns the `<qualified path>` corresonding to input. if `--create` is specified the directory will be created if it does not exist. if `cd()` is navigated towards a non existing directory and `--create` is not specified it will cause a `FATAL_ERROR`
@@ -1285,7 +1309,7 @@ ans(res)
 
 json_print(${res}) 
 
-## outputs the folloing
+## outputs the following
 # {
 #	  configoptions:{
 #	    configvalue:["my value",34]
@@ -1294,9 +1318,414 @@ json_print(${res})
 
 ```
 
-# <a name="fork"><a> Fork
+# <a name="process_management"><a> Process Management
 
-using cmd's start and bash's ampersand operator it should be possible to fork off processes.
+This section how to manage processes and external programs.  Besides replacements for cmake's `execute_process` function this section defines a control system for parallel processes controlled from any cmake.  
+
+## Common Definitions
+
+The following definitions are common to the following subsections.  
+
+* `<command>` a path or filename to an executable programm.
+* `<process start info> ::= { <command>, <<args:<any ...>>, <cwd:<directory>>  }`  
+
+
+## <a name="execute"></a> Wrapping and Executing External Programms
+
+Using external applications is more complex than necessary in cmake in my opinion. I tried to make it as easy as possible. Using the convenience of the [filesystem functions](#filesystem) and maps wrapping an external programm and using it as well as pure execution is now very simple as you can see in the following example for git:
+
+### Examples
+This is all the code you need to create a function which wraps the git executable.  It uses the [initializer function pattern](#initializer_function). 
+
+```
+function(git)
+  # initializer block (will only be executed once)
+  find_package(Git)
+  if(NOT GIT_FOUND)
+    message(FATAL_ERROR "missing git")
+  endif()
+  # function redefinition inside wrap_executable
+  wrap_executable(git "${GIT_EXECUTABLE}")
+  # delegate to redefinition and return value
+  git(${ARGN})
+  return_ans()
+endfunction() 
+```
+
+Another example showing usage of the `execute()` function:
+
+```
+find_package(Hg)
+set(cmdline --version)
+execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
+ans(res)
+map_get(${res} result)
+ans(error)
+map_get(${res} output)
+ans(stdout)
+assert(NOT error) # error code is 0
+assert("${stdout}" MATCHES "mercurial") # output contains mercurial
+json_print(${res}) # outputs input and output of process
+
+```
+
+### Functions and Datatypes
+
+* `execute(<process start info ?!> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
+	* example: `execute("{path:'<command>', args:['a','b']}")`  
+* `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
+* `<process start info?!>` a string which can be converted to a `<process start>` object using the `process_start_info()` function.
+* `<process start info>` a map/object containing the following fields
+	- `command` command name / path of executable *required*
+	- `args` command line arguments to pass along to command, use `string_semicolon_encode` if you want to have an argument with semicolons *optional*
+	- `timeout:<int>` *optional* number of seconds to wait before failing
+	- `cwd:<unqualified path>` *optional*  by default it is whatever `pwd()` currently returns
+* `<process info>` contains all the fields of `<process start>` and additionaly
+	- `output:<stdout>`  the output of the command execution. (merged error and stdout streams)
+	- `result:<int>` the return code of the execution.  0 normally indicates success.
+* `process_start_info(<process start info?!>):<process start info>` creates a valid `<process start info>` object from the input argument.  If the input is invalid the function fails fatally.
+
+## Parallel Processes 
+
+When working with large applications in cmake it can become necessary to work in parallel processes. Since all cmake target systems support multitasking from the command line it is possible to implement cmake functions to control it.  I implemented a 'platform independent' (platform on which either powershell or bash is available) control mechanism for starting, killing, querying and waiting for processes.  The lowlevel functions are platform specific the others are based on the abstraction layer that the provide.   
+
+### Examples
+
+This example starts a script into three separate cmake processes. The program ends when all scripts are done executing.
+```
+# define a script which counts to 10 and then 
+# note that a fresh process means that cmake has not loaded oocmake
+set(script "
+foreach(i RANGE 0 10)
+  message(\${i})
+  execute_process(COMMAND \${CMAKE_COMMAND} -E sleep 1)
+endforeach()
+message(end)
+")
+
+# start each script - fork_script returns without waiting for the process to finish.
+# a handle to the created process is returned.
+process_start_script("${script}")
+ans(handle1)
+process_start_script("${script}")
+ans(handle2)
+process_start_script("${script}")
+ans(handle3)
+
+# wait for every process to finish. returns the handles in order in which the process finishes
+process_wait_all(${handle1} ${handle2} ${handle3})
+ans(res)
+
+## print the process handles in order of completion
+json_print(${res})
+
+```
+
+This example shows a more usefull case:  Downloading multiple 'large' files parallely to save time
+
+```
+
+  ## define a function which downloads  
+  ## all urls specified to the current dir
+  ## returns the path for every downloaded files
+  function(download_files_parallel)
+    ## get current working dir
+    pwd()
+    ans(target_dir)
+
+    ## process start loop 
+    ## starts a new process for every url to download
+    set(handles)
+    foreach(url ${ARGN})
+      ## start download by creating a cmake script
+      process_start_script("
+        include(${oocmake_base_dir}/oo-cmake.cmake) # include oocmake
+        download(\"${url}\" \"${target_dir}\")
+        ans(result_path)
+        message(STATUS ${target_dir}/\${result_path})
+        ")
+      ans(handle)
+      ## store process handle 
+      list(APPEND handles ${handle})
+    endforeach()
+
+    ## wait for all downloads to finish
+    process_wait_all(${handles})
+
+    set(result_paths)
+    foreach(handle ${handles})
+      ## get process stdout
+      process_stdout(${handle})
+      ans(output)
+
+      ## remove '-- ' from beginning of output which is
+      ## automatically prependend by message(STATUS) 
+      string(SUBSTRING "${output}" 3 -1 output)
+
+      ## store returned file path
+      list(APPEND result_paths ${output})
+
+    endforeach()
+
+    ## return file paths of downloaded files
+    return_ref(result_paths)
+  endfunction()
+
+
+  ## create and goto ./download_dir
+  cd("download_dir" --create)
+
+  ## start downloading files in parallel by calling previously defined function
+  download_files_parallel(
+    http://www.cmake.org/files/v3.0/cmake-3.0.2.tar.gz
+    http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
+  )
+  ans(paths)
+
+
+  ## assert that every the files were downloaded
+  foreach(path ${paths})
+    assert(EXISTS "${path}")
+  endforeach()
+
+
+```
+
+
+### Functions and Datatypes
+* datatypes
+	* `<process handle> ::= { state:<process state> , pid:<process id> }` process handle is a runtime unique map which is used to address a process.  The process handle may contain more properties than specified - only the specified ones are available on all systems - these properties contain values which are implementation specific.
+	* `<process info> ::= { }` a map containing verbose information on a proccess. only the specified fields are available on all platforms.  More are available depending on the OS you use. You should not try to use these without examining their origin / validity.
+	* `<process state> ::= "running"|"terminated"|"unknown"`
+	* `<process id> ::= <string>` a unspecified systemwide unique string which identifies a process (normally a integer)
+* platform specific low level functions 
+	* `process_start(<process start info?!>):<process handle>` platfrom specific function which starts a process and returns a process handle
+	* `process_kill(<process handle?!>)` platform specific function which stops a process.
+	* `process_list():<process handle ...>` platform specific function which returns a process handle for all running processes on OS.
+	* `process_info(<process handle?!>):<process info>` platform specific function which returns a verbose process info
+	* `process_isrunning(<process handle?!>):<bool>` returns true iff process is running. 
+* `process_timeout(<n:<seconds>>):<process handle>` starts a process which times out in `<n>` seconds. 
+* `process_wait(<process handle~> [--timeout <n:seconds>]):<process handle>` waits for the specified process to finish or the specified timeout to run out. returns null if timeout runs out before process finishes.
+* `process_wait_all(<process handle?!...> <[--timeout <n:seconds>] [--quietly]):<process handle ...>` waits for all specified process handles and returns them in the order that they completed.  If the `--timeout <n>` value is specified the function returns as soon as the timeout is reached returning only the process finished up to that point. The function normally prints status messages which can be supressed via the `--quietly` flag.    
+* `process_wait_any(<process handle?!...> <?"--timeout" <n:<seconds>>> <?"--quietly">):<?process handle>` waits for any of the specified processes to finish, returning the handle of the first one to finished. If `--timeout <n>` is specified the function will return `null` after `n` seconds if no process completed up to that point in time. You can specify `--quietly` if you want to suppress the status messages. 
+* `process_stdout(<process handle~>):<string>` returns all data written to standard output stream of the process specified up to the current point in time
+* `process_stderr(<process handle~>):<string>` return all data written to standard error stream of the process specified up to the current point in time
+*   `process_return_code(<process handle~>):<int?>` returns nothing or the process return code if the process is finished
+*   `process_start_script(<cmake code>):<process handle>` starts a separate cmake process which runs the specified cmake code.
+
+### Inter Process Communication
+
+To communicate with you processes you can use any of the following well known mechanisms
+
+* Environment Variables
+	- the started processes have access to you current Environment. So when you call `set(ENV{VAR} value)` before starting a process that process will have read access to the variable `$ENV{VAR}` 
+* Command Line Arguments
+	- all variables passed to `start_process` will be passed allong
+	- Command Line Variables are sometimes problematic as they must be escaped correctly and this does not always happen as expected. So you might want to choose another mechanism to transmit complex data to your process
+	- Command Line Variables are limited by their string length depending on you host os.
+* Files
+	- Files are the easiest and safest way to communicate large amounts of data to another process. If you can try to use file communication
+* stderr, stdout
+	- The output of a process started with `start_process` becomes available to you when the process ends at latest, You can choose to poll stdout and take data as soon as it is written to the output streams 
+* return code
+	- the returns code tells you how you process finished and is often enough result information for a process you start
+	
+### Caveats
+
+* process starting is slow - it can take seconds (it takes 900ms on my machine). The task needs to be a very large one for it to compensate the overhead.
+* parallel processes use platform specific functions - It might cause problems on less well tested OSs and some may not be supported.  (currently only platforms with bash or powershell are supported ie Windows and Linux)
+
+
+
+# <a name="uris"></a> Uniform Resource Identifiers (URIs)
+
+Uniform Resource Identifiers are often used for more than just internet addresses.  They are able to identify any type of resource and are truly cross platform.  Even something as simple as parsing a path can take on complex forms in edge cases.  My motivation for writing an URI parser was that I needed a sure way to identify a path in a command line call. 
+
+My work is based arround [RFC2396](https://www.ietf.org/rfc/rfc2396.txt) by Berners Lee et al.  The standard is enhanced by allowing delimited URIs and Windows Paths as URIs. You can always turn this behaviour off however and use flags to use the pure standard.
+
+URI parsing with cmake is not something you should do thousands of times because alot of regex calls go into generating an uri object.
+
+## Example
+
+*Parse an URI and print it to the Console*
+```
+uri("https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails some other data")
+ans(res)
+json_print(${res})
+```
+
+*output*
+```
+{
+ "input":"https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails some other data",
+ "uri":"https://www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails",
+ "rest":" some other data",
+ "delimiters":null,
+ "scheme":"https",
+ "scheme_specific_part":"//www.google.de/u/0/mail/?arg1=123&arg2=arg4#readmails",
+ "net_path":"www.google.de/u/0/mail/",
+ "authority":"www.google.de",
+ "path":"/u/0/mail/",
+ "query":"arg1=123&arg2=arg4",
+ "fragment":"readmails",
+ "user_info":null,
+ "user_name":null,
+ "password":null,
+ "host_port":"www.google.de",
+ "host":"www.google.de",
+ "labels":[
+  "www",
+  "google",
+  "de"
+ ],
+ "top_label":"de",
+ "domain":"google.de",
+ "ip":null,
+ "port":null,
+ "trailing_slash":false,
+ "last_segment":"mail",
+ "segments":[
+  "u",
+  0,
+  "mail"
+ ],
+ "encoded_segments":[
+  "u",
+  0,
+  "mail"
+ ],
+ "file":"mail",
+ "extension":null,
+ "file_name":"mail"
+}
+```
+
+*Absolute Windows Path*
+
+```
+# output for C:\windows\path
+{
+ "input":"C:\\windows\\path",
+ "uri":"file:///C:/windows/path",
+ "rest":null,
+ "delimiters":null,
+ "scheme":"file",
+ "scheme_specific_part":"///C:/windows/path",
+ "net_path":"/C:/windows/path",
+ "authority":null,
+ "path":"/C:/windows/path",
+ "query":null,
+ "fragment":null,
+ "user_info":null,
+ "user_name":null,
+ "password":null,
+ "host_port":null,
+ "host":null,
+ "labels":null,
+ "top_label":null,
+ "domain":null,
+ "ip":null,
+ "port":null,
+ "trailing_slash":false,
+ "last_segment":"path",
+ "segments":[
+  "C:",
+  "windows",
+  "path"
+ ],
+ "encoded_segments":[
+  "C:",
+  "windows",
+  "path"
+ ],
+ "file":"path",
+ "extension":null,
+ "file_name":"path"
+}
+```
+
+
+*Perverted Example*
+```
+uri("'scheme1+http://user:password@102.13.44.22:23%54/C:\\Program Files(x86)/dir number 1\\file.text.txt?asd=23#asd'")
+ans(res)
+json_print(${res})
+```
+*output*
+```
+{
+ "input":"'scheme1+http://user:password@102.13.44.32:234/C:\\Progr%61m Files(x86)/dir number 1\\file.text.txt?asd=23#asd'",
+ "uri":"scheme1+http://user:password@102.13.44.32:234/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt?asd=23#asd",
+ "rest":null,
+ "delimiters":null,
+ "scheme":"scheme1+http",
+ "scheme_specific_part":"//user:password@102.13.44.32:234/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt?asd=23#asd",
+ "net_path":"user:password@102.13.44.32:234/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt",
+ "authority":"user:password@102.13.44.32:234",
+ "path":"/C:/Progr%61m%20Files(x86)/dir%20number%201/file.text.txt",
+ "query":"asd=23",
+ "fragment":"asd",
+ "user_info":"user:password",
+ "user_name":"user",
+ "password":"password",
+ "host_port":"102.13.44.32:234",
+ "host":"102.13.44.32",
+ "labels":null,
+ "top_label":null,
+ "domain":null,
+ "ip":"102.13.44.32",
+ "port":234,
+ "trailing_slash":false,
+ "last_segment":"file.text.txt",
+ "segments":[
+  "C:",
+  "Program Files(x86)",
+  "dir number 1",
+  "file.text.txt"
+ ],
+ "encoded_segments":[
+  "C:",
+  "Progr%61m%20Files(x86)",
+  "dir%20number%201",
+  "file.text.txt"
+ ],
+ "file":"file.text.txt",
+ "extension":"txt",
+ "file_name":"file.text"
+}
+```
+
+
+## DataTypes and Functions
+
+* `<uri> ::= `
+	* `uri:<string>` all of the uri as specified 
+	* `scheme:<string>` the scheme part of the uri without the colon e.g. `https` from `https://github.com`	 
+	* `scheme_specific_part` the part of the uri that comes after the scheme and its colon e.g. `//github.com` from the previous example
+	* `autority:<string>` the domain, host,port and user info part of the domain 
+	* `path:<string>` the hierarchical part of the uri 
+	* `query:<string>` the query part of the uri
+	* `fragment:<string>` the fragment part of the uri
+* `<uri~> ::= <string>|<uri>` a uri or a string which can be converted into a valid uri
+* `uri(<uri~>):<uri>` 
+* `uri_parse(<uri_string:<string>> <?--notnull> <?--file> <?--escape-whitespace> <?--delimited> ):<uri?>`
+	* `<--escape-whitespace>` 
+	* `<--file>` 
+	* `<--notnull>` 
+	* `<--delimited>` 
+* `uri_to_path(<uri~>):<string>`
+* 
+
+
+## Caveats
+
+* Parsing is always a performance problem in CMake therfore parsing URIs is also a performance problem don't got parsing thousands of uris. I Tried to parse 100 URIs on my MBP 2011 and it took 6716 ms so 67ms to parse a single uri
+* Non standard behaviour can always ensue when working with file paths and spaces and windows.  However this is the closest I came to having a general solution
+
+## Future Work
+
+* allow more options for parsing
+* option for quick parse or slow parse 
 
 # <a name="string_functions"></a> String Functions
 

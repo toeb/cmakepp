@@ -18,67 +18,33 @@
   # }
   #
   #
-  function(execute processStart)
-    obj("${processStart}")
+  function(execute)
+    process_start_info(${ARGN})
     ans(processStart)
+
+    if(NOT processStart)
+      return()
+    endif()
+
+    #obj("${processStart}")
   
     map_clone_deep(${processStart})
     ans(processResult)
 
-    map_get(${processStart} "path")
-    ans(path)
 
-    ## check if path exists if not search using find_path
-    if(NOT path)
-      message(FATAL_ERROR "no executable given")
-    endif()
+    scope_import_map(${processStart})
 
-    map_tryget(${processStart} "args")
-    ans(args)
-
-    map_tryget(${processStart} "timeout")
-    ans(timeout)
-
-    if(timeout)
-      set(timeout TIMEOUT ${timeout})
-    else()
-      map_set(${processResult} timeout -1)
-    endif()
-
-    map_tryget(${processStart} "cwd")
-    ans(cwd)
-
-    #get_filename_component(cwd "${cwd}" REALPATH)
-    path("${cwd}")
-    ans(cwd)
-
-    if(cwd)
-      if(NOT IS_DIRECTORY "${cwd}")
-        file(MAKE_DIRECTORY "${cwd}")
-      endif()
-      map_set(${processResult} cwd "${cwd}")
-      set(cwd WORKING_DIRECTORY ${cwd})
-    endif()
+    set(timeout TIMEOUT ${timeout})
+    set(cwd WORKING_DIRECTORY "${cwd}")
 
 
-    # now compile the command string and evaluate
-    # this allows using encoded semicolons
-    set(argstring)
-    foreach(arg ${args})
-      cmake_string_escape("${arg}")
-      ans(arg)
-      
-      string_semicolon_decode("${arg}")
-      ans(arg)      
-
-
-      set(argstring "${argstring} \"${arg}\"")
-      
-    endforeach()
+    command_line_args_combine(${args})
+    ans(arg_string)
+       
 
     set(execute_process_command "
         execute_process(
-          COMMAND \"\${path}\" ${argstring}
+          COMMAND \"\${command}\" ${arg_string}
           \${timeout}
           \${cwd}
           RESULT_VARIABLE result
@@ -87,8 +53,12 @@
         )
 
         map_set(\${processResult} output \"\${output}\")
+        map_set(\${processResult} stdout \"\${output}\")
         map_set(\${processResult} result \"\${result}\")
+        map_set(\${processResult} error \"\${result}\")
+        map_set(\${processResult} return_code \"\${result}\")
     ")
+
 
      
     eval("${execute_process_command}")
