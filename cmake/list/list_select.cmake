@@ -12,3 +12,18 @@ function(list_select __list_select_lst selector)
   message("list_select end")
 	return_ref(__list_select_result_list)
 endfunction()
+
+
+
+## fast implementation of list_select
+function(list_select __list_select_lst __list_select_selector)
+  function_import("${__list_select_selector}" as __list_select_selector REDEFINE)
+
+  set(__res)
+  set(__ans)
+  foreach(__list_select_current_arg ${${__list_select_lst}})
+    __list_select_selector(${__list_select_current_arg})
+    list(APPEND __res ${__ans})
+  endforeach()
+  return_ref(__res)  
+endfunction()
