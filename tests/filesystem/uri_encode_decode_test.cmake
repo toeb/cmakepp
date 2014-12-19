@@ -32,21 +32,6 @@ endfunction()
 
 
 
-return()
-
-
-
-function(ascii_table)
-  map_new()
-  ans(map)
-
-  foreach(i RANGE 1 255)
-
-  endforeach()
-
-endfunction()
-
-endfunction()
 
 
 
