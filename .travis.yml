@@ -30,7 +30,7 @@ after_success: "cmake -P build/after_success.cmake"
 after_failure: "cmake -P build/after_failure.cmake"
 after_script: "cmake -P build/after_script.cmake"
 
-branches:
-  only:
-    - master
-    - devel
+# branches:
+#   only:
+#     - master
+#     - devel

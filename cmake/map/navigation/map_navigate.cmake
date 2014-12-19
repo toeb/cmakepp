@@ -62,7 +62,7 @@ function(map_navigate result navigation_expression)
 			map_tryget(${current}  "${index}")
 			ans(current)
 		elseif(index_type STREQUAL "[")
-			message(FATAL_ERROR "map_navigate: not supported")
+			message(FATAL_ERROR "map_navigate: indexation '[<index>]' is not supported")
 			# get by index
 			ref_get( ${current} )
 			ans(lst)
