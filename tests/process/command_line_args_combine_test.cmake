@@ -1,6 +1,6 @@
 function(test)
 
-
+  
 
   command_line_args_combine(a b c)
   ans(res)

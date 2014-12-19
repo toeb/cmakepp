@@ -1,6 +1,6 @@
 ![cps logo](/logo.png "cps logo")
 
-## pure cmake object oriented scripting
+## A CMake Enhancement Suite
 
 [![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=devel)](https://travis-ci.org/toeb/oo-cmake)
 [![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
@@ -259,7 +259,7 @@ map_append_string()
 
 ```
 
-* `m(<structured data~>):<map>` creates a map from any kind of structured data
+* `mm(<structured data~>):<map>` creates a map from any kind of structured data
 
 ## Map Iterators
 
@@ -270,7 +270,7 @@ For a more intuitive way to work with maps I developed a `map_iterator` which wh
 *Iterate through a maps's key/value pairs and prints them*
 
 ```
-m(mymap = "{a:1,b:2,c:3}")
+mm(mymap = "{a:1,b:2,c:3}")
 map_iterator(${mymap})
 ans(it)
 while(true)

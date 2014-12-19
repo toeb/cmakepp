@@ -5,7 +5,7 @@
         set(args \${ARGN})
         list_extract_flag(args --print)
         ans(print)
-        m(parsed = \"\${expected}\")
+        mm(parsed = \"\${expected}\")
         if(parsed)
           set(expected \${parsed})
         endif()
