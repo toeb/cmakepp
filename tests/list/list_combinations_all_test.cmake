@@ -1,5 +1,16 @@
 function(test)
  
+  set(lst 0 1)
+  list_combinations(lst lst lst)
+  ans(res)
+  assert(${res} CONTAINS 000)
+  assert(${res} CONTAINS 001)
+  assert(${res} CONTAINS 010)
+  assert(${res} CONTAINS 011)
+  assert(${res} CONTAINS 100)
+  assert(${res} CONTAINS 101)
+  assert(${res} CONTAINS 110)
+  assert(${res} CONTAINS 111)
 
 
   set(listA a b)
