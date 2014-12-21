@@ -1,6 +1,8 @@
 function(test)
   set(thelist 1 0 0)
   list_extract(thelist v1 v2 v3)
+  ans(res)
+  assert(${res} ISNULL)
   assert(${v1} STREQUAL 1)
   assert(${v2} STREQUAL 0)
   assert(${v3} STREQUAL 0)

@@ -48,7 +48,7 @@
       set(last_index ${current_index})
       list_pop_front( path )  
       ans(current_index)
-      list_empty(path)
+      list_isempty(path)
       ans(is_done)
 
       
