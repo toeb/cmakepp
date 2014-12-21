@@ -15,7 +15,7 @@ function(list_remove_at __list_remove_at_lst)
 
 
 
-  list(REMOVE "${__list_remove_at_lst}" ${args})
+  list(REMOVE_AT "${__list_remove_at_lst}" ${args})
 
   set("${__list_remove_at_lst}" "${${__list_remove_at_lst}}" PARENT_SCOPE)
 

@@ -1,6 +1,6 @@
 # sets the lists value at index to the specified value
 # the index is normalized -> negativ indices count down from back of list 
-  function(list_set __list_set_lst index value)
+  function(list_set_at __list_set_lst index value)
     if("${index}" EQUAL -1)
       #insert element at end
       list(APPEND ${__list_set_lst} ${value})
