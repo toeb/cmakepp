@@ -1,5 +1,5 @@
 # removes the specifed range from the lst and returns remaining elements
-function(list_without lst start_index end_index)
+function(list_without_range lst start_index end_index)
 
   list_normalize_index(${lst} -1)
   ans(list_end)

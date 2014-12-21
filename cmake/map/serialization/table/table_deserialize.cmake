@@ -59,7 +59,7 @@ function(table_deserialize input)
       ans(header)
       map_set(${l} "${header}" "${col}")        
     endforeach()
-    list_append(result ${l})
+    list(APPEND result ${i})
   endforeach()
 
   return_ref(result)

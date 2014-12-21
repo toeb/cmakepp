@@ -1,4 +1,4 @@
-
+## Returns the last element of a list without modifying it
 function(list_peek_back  __list_peek_back_lst)
   if("${${__list_peek_back_lst}}_" STREQUAL "_")
     return()

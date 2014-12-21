@@ -5,7 +5,7 @@
   function(path_find_first_parent_dir_containing dir )
     file_glob_up("${dir}" 0 ${ARGN})
     ans(matches)
-    list_first(matches)
+    list_peek_front(matches)
     ans(first_match)
     if(NOT first_match)
       return()

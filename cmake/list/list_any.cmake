@@ -1,4 +1,3 @@
-
 ## returns true if there exists an element
 ## for which the predicate holds
 function(list_any __list_any_lst __list_any_predicate)
