@@ -7,6 +7,8 @@ function(test)
   pwd()
   ans(cwd)
 
+
+
   assert(${dirs} EQUALS "${cwd}/path/dir1/dir2" "${cwd}/path/dir1" "${cwd}/path")
 
 

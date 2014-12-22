@@ -13,6 +13,11 @@ function(path_parent_dirs path)
   path("${path}")
   ans(path)
 
+  set(isrooted false)
+  if("_${path}" MATCHES "^_[/]")
+    set(isrooted true)
+  endif()
+
   path_split("${path}")
   ans(parts)
 
@@ -25,6 +30,10 @@ function(path_parent_dirs path)
     list_pop_back(parts)
     path_combine(${parts})
     ans(current)      
+
+    if(isrooted)
+      set(current "/${current}")
+    endif()
     
     if("_${current}" STREQUAL "_")
       break()
