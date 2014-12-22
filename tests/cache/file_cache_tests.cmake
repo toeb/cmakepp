@@ -33,7 +33,7 @@ function(test)
   ans(res)
   assert(NOT res)
 
-
+return()
 
 function(cached_get)
 

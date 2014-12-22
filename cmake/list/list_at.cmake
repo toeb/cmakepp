@@ -1,8 +1,12 @@
-function(list_at  lst idx)
-  list(LENGTH ${lst} len)
-  if(${idx} LESS 0)
-    math(EXPR idx "${len} ${idx}")
-  endif()
-  list(GET ${lst} ${idx} value)
-  return_ref(value)
-endfunction()
+
+
+  ## returns all elements whose index are specfied in that order
+  ## 
+  function(list_at __list_at_lst)
+    set(__list_at_result)
+    foreach(__list_at_idx ${ARGN})
+      list_get(${__list_at_lst} ${__list_at_idx})
+      list(APPEND __list_at_result ${__ans})
+    endforeach()
+    return_ref(__list_at_result)
+  endfunction()

@@ -1,5 +1,5 @@
-# returns a list containing the unqiue set of all
-# passed list referencese
+# returns a list containing the unqiue set of all elements
+# contained in passed list referencese
 function(list_union)
   if(NOT ARGN)
     return()

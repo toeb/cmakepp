@@ -1,4 +1,4 @@
-#returns a list of numbers [ start_index, end_index)
+# returns a list of numbers [ start_index, end_index)
 # if start_index equals end_index the list is empty
 # if end_index is less than start_index then the indices are in declining order
 # ie index_range(5 3) => 5 4

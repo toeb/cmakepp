@@ -46,6 +46,13 @@ function(get_function_string result func)
 		return()
 	endif()
 
+	lambda_parse("${func}")
+	ans(parsed_lambda)
+
+	if(parsed_lambda)
+		set(${result} "${parsed_lambda}" PARENT_SCOPE)
+		return()
+	endif()
 
 	if(NOT (is_string OR is_file OR is_cmake_func)  )
 		message(FATAL_ERROR "the following is not a function: '${func}' ")

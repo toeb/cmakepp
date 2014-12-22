@@ -48,7 +48,7 @@
       set(last_index ${current_index})
       list_pop_front( path )  
       ans(current_index)
-      list_empty(path)
+      list_isempty(path)
       ans(is_done)
 
       
@@ -124,7 +124,7 @@
           endif()
           map_get(${last_scope}  ${last_index})
           ans(last_value)
-          list_set(last_value ${current_index} "${rvalue}")
+          list_set_at(last_value ${current_index} "${rvalue}")
           ans(success)
           if(NOT success)
             message(FATAL_ERROR "cannot set ${current_index} because it is invalid for list")

@@ -1,4 +1,33 @@
 function(test)
+  # function(func a b c)
+  #   return(1)
+  # endfunction()
+
+
+  # function(call2 _function_ish _paren_open)
+  #   set(args ${ARGN})
+  #   list_pop_back(args)
+  #   ans(_paren_close)
+
+
+
+  #   if(COMMAND "${_function_ish}")
+  #     eval("${_function_ish}(\${args})")
+  #     return_ans()
+  #   endif()
+
+  #   message(FATAL_ERROR "cannot handle function")
+  # endfunction()
+
+  # timer_start(timer)
+  # foreach(i RANGE 0 1000)
+  #   #func( 1 2 3)
+  #   call(func(a b c))
+  # endforeach()
+  # timer_print_elapsed(timer)
+
+
+  # return()
   # simple call void => void 
   function(fu)
   return()

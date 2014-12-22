@@ -19,19 +19,11 @@
           json_print(\${uut})
         endif()
 
-        if(\"\${expected}_\" STREQUAL \"\${uut}_\")
-          return()
-        endif()
 
 
-        map_iterator(\${expected})
-        ans(it)
-        while(true)
-          map_iterator_break(it)
-          map_tryget(\${uut} \${it.key})
-          ans(actual_value)
-          assert(\${actual_value} \${it.value} EQUALS)
-        endwhile()
+        map_match(\"\${uut}\" \"\${expected}\")
+        ans(res)
+        assert(res MESSAGE \"values do not match\")
       endfunction()
 
     ")

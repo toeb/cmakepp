@@ -1,5 +1,20 @@
 function(test)
 
+  # performance test
+  # index_range(1 1000)
+  # ans(lst)
+  # timer_start(timer)
+  # while(true)
+  #   list_pop_front(lst)
+  #   ans(res)
+  #   if(NOT res)
+  #     break()
+  #   endif()
+
+  # endwhile()
+  # timer_print_elapsed(timer)
+
+
   set(lst 1 2 3 4 )
   list_pop_front( lst)
   ans(res)

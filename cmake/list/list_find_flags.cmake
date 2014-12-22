@@ -1,5 +1,5 @@
-
-# names are mangled to prevent namespace cluttering
+## returns a map of all found flags specified as ARGN
+##  
 function(list_find_flags __list_find_flags_lst)
   map_new()
   ans(__list_find_flags_result)

@@ -1,3 +1,7 @@
+## returns all possible combinations of the specified lists
+## e.g.
+## set(range 0 1)
+## list_combinations(range range range) -> 000 001 010 011 100 101 110 111
  function(list_combinations)
     set(lists ${ARGN})
     list_length(lists)

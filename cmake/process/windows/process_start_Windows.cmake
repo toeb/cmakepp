@@ -64,7 +64,7 @@
     ## hides the window 
     ## on execution you will notice that two windows open in quick succession
     set(outer "
-        start-process -filepath powershell -argumentlist @('-NoLogo','-NonInteractive','-ExecutionPolicy','ByPass','-WindowStyle','Hidden','-File','${inner_script}')
+        start-process -WindowStyle Hidden -filepath powershell -argumentlist @('-NoLogo','-NonInteractive','-ExecutionPolicy','ByPass','-WindowStyle','Hidden','-File','${inner_script}')
         exit
       ")
 
