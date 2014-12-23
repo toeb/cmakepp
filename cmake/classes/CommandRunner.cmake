@@ -7,7 +7,7 @@ function(CommandRunner)
 	# name for this command runner
 	this_set(name "CommandRunner")
 
-	this_declarecalloperation(callfunc)
+	this_declare_call(callfunc)
 	function(${callfunc})		
 		call(this.Run(${ARGN}))
 		return_ans()
@@ -75,7 +75,7 @@ function(CommandRunner)
 		endforeach()
 	endfunction()
 	# register the command
-	obj_callmember(${this} AddCommandHandler help ${Help})
+	obj_member_call(${this} AddCommandHandler help ${Help})
 
 
 

@@ -2,7 +2,7 @@ function(test)
 
 
   function(TestClass)
-    this_customgetter(getter)
+    this_declare_getter(getter)
     function(${getter} obj prop)
       return(${obj})
     endfunction()

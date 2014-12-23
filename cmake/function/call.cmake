@@ -61,7 +61,7 @@
       propref_get_ref("${__function_call_func}")
       ans(ref)
 
-      obj_callmember("${ref}" "${key}" ${__function_call_func})
+      obj_member_call("${ref}" "${key}" ${__function_call_func})
 
     endif()
 
@@ -96,13 +96,13 @@
       ref_isvalid("${__left}")
       ans(__left_isref)
       if(__left_isref)
-        obj_callmember("${__left}" "${__right}" ${__function_call_args})  
+        obj_member_call("${__left}" "${__right}" ${__function_call_args})  
         return_ans()
       endif()
       ref_isvalid("${${__left}}")
       ans(__left_isrefref)
       if(__left_isrefref)
-        obj_callmember("${${__left}}" "${__right}" ${__function_call_args})
+        obj_member_call("${${__left}}" "${__right}" ${__function_call_args})
         return_ans()
       endif()
     endif()

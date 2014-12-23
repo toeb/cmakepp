@@ -25,7 +25,7 @@ function(obj_new)
 
 
 	set(__current_constructor ${constructor})
-	obj_callmember(${instance} __constructor__ ${args})
+	obj_member_call(${instance} __constructor__ ${args})
 	ans(res)
 
 
