@@ -53,7 +53,7 @@ cmake -P build/script.cmake
 		* query registry keys for values
 	* [string functions](#stringfunctions) - advanced string manipulation	
 	* [URIs](#uris) - Uniform Resource Identifier parsing and formatting	
-	* [lists](#lists) - extension to cmake and normalization of cmake's `list()` functionality
+	* [lists](#lists) - common and usefull list and set operations.
 	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
 		* graph algorithms 
 		* serialization/deserialization
@@ -1731,7 +1731,33 @@ json_print(${res})
 
 # <a name="string_functions"></a> String Functions
 
-# <a name="lists"></a> Lists Functions
+# <a name="lists"></a> List and Set Functions
+
+CMake's programming model is a bit ambigous but also very simple. Every variable can be interpreted as a list and a string.  This duality makes everything a little complex because you can never know what which of both is meant. However if you tell the client of you CMake functions what you expect  you start to programm by convention which is very usefull in a very simple dynamic language like CMake Script.
+
+## Datatypes and Functions
+
+* `<list>  := <string ...>`  a variable in cmake which semicolon separated strings.
+* `<predicate> := (<any>):<bool>` a function which takes a single arg and returns a truth value 
+* `<list ref> :: <list&>` the name of the variable that contains a list
+* `<set> := <list>` a set is a list which contains only unique elements. You can create a set by using CMake's `list(REMOVE_DUPLICATES thelist)` function.
+* `index_range(<lo:int> <hi:int>):<int...>` returns a list of indices which includes `lo` but excludes `hi`.
+	- `index_range(3 5)`  -> `3;4`
+* `list_all(<list ref> <predicate>):<bool>` returns true iff predicate evaluates to true for all elements of the list
+* `list_any(<list ref> <predicate>):<bool>` returns true iff predicate evaluates to true for for at least one element of the list.
+* `list_at(<list ref> <indices:<int...>>):<list>` returns all elements of the list which specified by their indices. Repetions are allowed.
+	- `list_at(thelist 1 3 0 0)` -> `b;d;a;a` if the list contains the alphabet
+* `list_combinations(<list ref...>):<list>` returns all possible combinations of all specified lists
+	- `list_combinations(bin bin bin)` -> `000;001;010;011;100;101;110;111` if `bin = 0;1`   
+* `list_contains(<list ref> <args:any...>):<bool>` returns true if list contains all args specified
+* `list_count(<list ref> <predicate>):<int>` returns the number of elements for which the specified predicate evalautes to true
+* `list_difference(<list ref> <predicate>):<list>`
+* `list_equal(<lhs:<list ref>> <rhs:<list ref>>):<bool>` 
+* `list_erase(<list ref> <start_index> <end_index>):<void>` removes the specified range from the list
+* `list_erase_slice(<list ref> <start_index> <end_index>):<list>` removes the specified range from the list and returns the removed elements
+* `list_except(<lhs:<list ref>> <rhs:<list ref>>):<list>` returns the elements of lhs which are not in rhs
+* `list_extract(<list ref> <any&...>):<list>` removes the first n elements of the list and returns the rest of the list.  
+* `list_extract_any_flag`
 
 # <a name="shell"></a> Shell Functions
 

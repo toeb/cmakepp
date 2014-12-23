@@ -33,6 +33,7 @@ function(obj_new)
 		set(instance "${res}")
 	endif()
 
+	map_set_special(${instance} "object" true)
 
 	return_ref(instance)
 endfunction()
