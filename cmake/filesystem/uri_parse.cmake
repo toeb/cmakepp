@@ -27,7 +27,14 @@ function(uri_parse_authority uri)
   return()
 
 endfunction()
+function(uri_parse_scheme uri)
+  map_tryget(${uri} scheme)
+  ans(scheme)
 
+  string(REPLACE "+" "\;" schemes "${scheme}")
+  map_set(${uri} schemes ${schemes})
+
+endfunction()
 function(uri_parse_query uri)
 
 endfunction()
@@ -327,6 +334,7 @@ endfunction()
   
 
     # extended parse
+    uri_parse_scheme(${res})
     uri_parse_authority(${res})
     uri_parse_path(${res})
     uri_parse_file(${res})

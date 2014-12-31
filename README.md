@@ -1766,6 +1766,7 @@ CMake's programming model is a bit ambigous but also very simple. Every variable
 * `list_except(<lhs:<list ref>> <rhs:<list ref>>):<list>` returns the elements of lhs which are not in rhs
 * `list_extract(<list ref> <any&...>):<list>` removes the first n elements of the list and returns the rest of the list.  
 * `list_extract_any_flag`
+* `list_erase_slice(<list ref> <startindex:<int>> <endindex:<int>> <args:<any...>>):<list>` replaces the specified range of the list with the passed varargs.  returns the elements which were removed
 
 
 ## Caveats

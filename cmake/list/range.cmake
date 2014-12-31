@@ -1,0 +1,38 @@
+## returns a complete cmake range if the specified range is valid
+## a cmake range is built up the following way: RANGE <begin> <end> <increment> 
+function(range)
+    string(REPLACE ":" ";" "range" "${ARGN}")
+    list(APPEND range $ $ $)
+    list(GET range 0 begin)
+    list(GET range 1 increment)
+    list(GET range 2 end)
+    if("${begin}" STREQUAL RANGE)
+      return(${ARGN})
+    elseif("${begin}" STREQUAL "$")
+      set(begin *)
+    endif()
+    if("${end}" STREQUAL "$")
+      set(end ${increment})
+      set(increment 1)
+      if("${end}" STREQUAL "$")
+        if("${begin}" STREQUAL "*")
+          set(end "*")
+        elseif("${begin}" LESS 0)
+          math(EXPR end "0 ${begin} + 1")
+        else()
+          math(EXPR end "${begin} + 1")
+        endif()
+      endif()
+      # this code would automatically invert the increment if the range is starts with a higher index than it ends
+      #if("${end}" LESS "${begin}" OR "${begin}" STREQUAL "*")
+      #  set(increment -1)
+      #endif()
+    endif()
+    ## invalid range
+    if((${end} LESS ${begin} AND ${increment} GREATER 0) OR (${end} GREATER ${begin} AND ${increment} LESS 0))
+      return()
+    endif()
+
+
+    return(RANGE ${begin} ${end} ${increment})  
+  endfunction()
