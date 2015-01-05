@@ -109,12 +109,20 @@ function(test)
         set(is_lvalue_range false)
       endif()
       
+
+
       set(is_lvalue false)
+      
       if(is_range)
         if(is_lvalue_range)
-          
+          set(is_lvalue)
         endif()
+      else()
+        map_isvalid(${current_value})
+        ans(is_lvalue)
       endif()
+
+
 
       message("current_expression '${current_expression}' range:'${range}' isrange: '${is_range}' islvalue_range:'${is_lvalue_range}' previous_value:'${previous_value}' current_value:'${current_value}' is_lvalue: '${is_lvalue}'")
 
