@@ -40,7 +40,7 @@
        set(end_inclusivity true)
      endif()
 
-    # message("inc ${range} ${begin_inclusivity} ${end_inclusivity}")
+    # #message("inc ${range} ${begin_inclusivity} ${end_inclusivity}")
 
      string(REPLACE "INC_BEGIN" "" range "${range}")
      string(REPLACE "INC_END" "" range "${range}")
@@ -81,7 +81,7 @@
     list(GET range 0 begin)
     list(GET range 1 end)
     list(GET range 2 increment)
-    #message("partcount ${part_count}")
+    ##message("partcount ${part_count}")
     if(${part_count} GREATER 3)
       list(GET range 3 begin_inclusivity)
     endif()
@@ -89,7 +89,7 @@
       list(GET range 4 end_inclusivity)
     endif()
 
-    # message("inc ${range} ${begin_inclusivity} ${end_inclusivity}")
+    # #message("inc ${range} ${begin_inclusivity} ${end_inclusivity}")
 
 
     if((${end} LESS ${begin} AND ${increment} GREATER 0) OR (${end} GREATER ${begin} AND ${increment} LESS 0))
@@ -138,6 +138,7 @@
         set(length "${length}-1")
       endif()
     else()
+      #message("reverse begin ${begin} end ${end}")
       set(length "${begin}-${end}")
       if(begin_inclusivity)
         set(length "${length}+1")
@@ -150,20 +151,21 @@
     string(REPLACE "n-$" "1" length "${length}")
     string(REPLACE "$-n" "0-1" length "${length}")
     string(REPLACE "$-$" "0" length "${length}")
-
+    #message("length ${length}")
 
     if("${increment}" GREATER 1)
-      set(length "(${length})/${increment}")
+      set(length "(${length}-1)/${increment}+1")
     elseif("${increment}" LESS -1)
-      set(length "(${length})/(0${increment})")
+      set(length "(${length}-1)/(0-(0${increment}))+1")
+    elseif(${increment} EQUAL 0)
+      set(length 1)
     endif()
-
+    #message("length ${length}")
     if(NOT "${length}" MATCHES "\\$|n" )
       math(EXPR length "${length}")
     else()
-
+       # 
     endif()
-
     set(range "${begin}:${end}:${increment}:${begin_inclusivity}:${end_inclusivity}:${length}:${reverse}")
     #message("range '${range}'\n")
  

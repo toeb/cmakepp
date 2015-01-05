@@ -1,15 +1,17 @@
 function(test)
 
+
+  range_instanciate(5 "3:1:-2")
+  ans(res)
+  assert(${res} EQUALS 3:1:-2:true:true:2:true)
+
   range_instanciate(-1 1:3)
   ans(res)
   assert(${res} EQUALS 1:3:1:true:true:3:false)
 
-
-return()
   range_instanciate(9 "*")
   ans(res)
   assert(${res} EQUALS 0:9:1:true:true:10:false)
-
 
   range_instanciate(9 n/4:n*3/4) # 2 3 4 5 6 
   ans(res)
