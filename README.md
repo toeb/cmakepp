@@ -1,9 +1,12 @@
-![cps logo](/logo.png "cps logo")
+![oocmake logo](/logo.png "oocmake logo")
 
 ## A CMake Enhancement Suite
-
-[![Build Status](https://travis-ci.org/toeb/oo-cmake.png?branch=devel)](https://travis-ci.org/toeb/oo-cmake)
+[![Travis](https://img.shields.io/travis/toeb/oo-cmake.svg)]() 
+[![GitHub stars](https://img.shields.io/github/stars/toeb/oo-cmake.svg?)]()
+[![GitHub forks](https://img.shields.io/github/forks/toeb/oo-cmake.svg)]()
+[![GitHub issues](https://img.shields.io/github/issues/toeb/oo-cmake.svg)]()
 [![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
+
 objects, methods, functions, maps, inheritance, parsers, lists, process management,  ...
 # Installing
 
