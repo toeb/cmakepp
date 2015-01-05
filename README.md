@@ -1,7 +1,7 @@
 ![oocmake logo](/logo.png "oocmake logo")
 
 ## A CMake Enhancement Suite
-[![Travis](https://img.shields.io/travis/toeb/oo-cmake.svg)]() 
+[![Travis branch](https://img.shields.io/travis/toeb/oo-cmake/master.svg)]()
 [![GitHub stars](https://img.shields.io/github/stars/toeb/oo-cmake.svg?)]()
 [![GitHub forks](https://img.shields.io/github/forks/toeb/oo-cmake.svg)]()
 [![GitHub issues](https://img.shields.io/github/issues/toeb/oo-cmake.svg)]()
