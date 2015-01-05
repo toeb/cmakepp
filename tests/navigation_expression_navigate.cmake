@@ -1,163 +1,169 @@
 function(test)
 
-  function(cmake_range range)
+  function(navigation_expression_parse)
+    string(REPLACE "." ";" expression "${ARGN}")
+    string(REPLACE "[" ";[" expression "${expression}")
+    return_ref(expression)
+  endfunction()
+
+
+  navigation_expression_parse("a.b.c")
+  ans(res)
+  assert(${res} EQUALS a b c)
+
+  navigation_expression_parse("a.b[3].c")
+  ans(res)
+  assert(${res} EQUALS a b [3] c)
+
+  navigation_expression_parse("a.b[3][34].c")
+  ans(res)
+  assert(${res} EQUALS a b [3] [34] c)
+
+  navigation_expression_parse("[1]")
+  ans(res)
+  assert(${res} EQUALS [1])
+
+  navigation_expression_parse("[]")
+  ans(res)
+  assert(${res} EQUALS [])
+
+  navigation_expression_parse("[1][0]")
+  ans(res)
+  assert(${res} EQUALS [1] [0])
+
+  navigation_expression_parse("[1]" "[0]")
+  ans(res)
+  assert(${res} EQUALS [1] [0])
+
+
+  obj("{
+    a:{
+      b:{
+        c:{
+          d:123
+        }
+      }
+    },
+    e:[
+     4,
+     5,
+     {
+      f:{
+        g:{
+          h:789
+        }
+      }
+     },
+     6
+    ]
+  }")
+  ans(a)
+
+
+  set(b)
+  set(c asdf)
+  set(d asd bsd csd)
+  set(e asd bsd ${a} fsd)
+
+
+  function(navigation_expression_lvalue)
+    navigation_expression_parse("${ARGN}")
+    ans(expression) 
+    set(input ${expression})
+
+    list_pop_front(expression)
+    ans(cmake_ref)
+
+    set(current_value "${${cmake_ref}}")
+    map_isvalid("${current_value}")
+    ans(isref)
+
+    if(NOT isref)
+      set(ref)
+    else()
+      set(cmake_ref)
+      set(ref "${current_value}")
+    endif()
     
+    message(PUSH)
+    while(true)
+      list_pop_front(expression)
+      ans(current_expression)
+      list(LENGTH expression not_last)
+      set(previous_value ${current_value})
+      set(is_range false)
+      set(range ":")
+      if("${current_expression}" MATCHES "^\\[.*\\]$")
+        set(is_range true)
+        string_slice("${current_expression}" 1 -2)
+        ans(range)
+      endif()
+      list(LENGTH previous_value len)
+      range_instanciate(${len} "${range}")
+      ans(range)
+      string(REPLACE ":" ";" range "${range}")
+      list(GET range 5 is_lvalue_range)
+      if(is_lvalue_range EQUAL 1)
+        set(is_lvalue_range true)
+      else()
+        set(is_lvalue_range false)
+      endif()
+      
+      set(is_lvalue false)
+      if(is_range)
+        if(is_lvalue_range)
+          
+        endif()
+      endif()
+
+      message("current_expression '${current_expression}' range:'${range}' isrange: '${is_range}' islvalue_range:'${is_lvalue_range}' previous_value:'${previous_value}' current_value:'${current_value}' is_lvalue: '${is_lvalue}'")
+
+      ## break after last
+      if(NOT not_last)
+        break()
+      endif()
+    endwhile()
+
+    message(POP)
+
+    message("expression: '${input}' cmake_ref: '${cmake_ref}' val:'${val}' ref:'${ref}' prop:'${prop}' range:'${range}' ")
+
   endfunction()
-
-  set(var RANGE 1 10 2)
-set(var)
-  foreach(i ${var})
-    message("i ${i}")
-  endforeach()
-
- function(range_foreach)
-
- endfunction()
-
-
-
-
-  return()
-
-
-
-  function(list_range_unpack lst range)
-    list(LENGTH ${lst} list_count)
-    range_indices("${range}" "${list_count}")
-    ans(indices)
-    list(LENGTH indices index_count)
-    set(${lst}.indices ${indices} PARENT_SCOPE)
-    set(${lst}.index_count ${index_count} PARENT_SCOPE)
-    set(${lst}.count ${list_count} PARENT_SCOPE)
-  endfunction()
-
-
-
-  set(lstA a b c d e f)
-  list_range_unpack(lstA "2:3")
-  assert(${lstA.index_count} EQUALS 2)
-  assert(${lstA.count} EQUALS 6)
-  assert(${lstA.indices} EQUALS 2 3)
-
-
-  list_range_unpack(lstA "")
-  assert(${lstA.index_count} EQUALS 0)
-  assert(${lstA.count} EQUALS 6)
-  assert(${lstA.indices} ISNULL)
-  
-
-
-
-
-
-  return()
-
-  function(range_get lst range)
-    list_range_unpack("${lst}" "${range}")
-
-    if(NOT lst.index_count)
-      return()
-    endif()
-
-    list(GET ${lst} ${lst.indices} result)
-    return_ref(result)
-  endfunction()
-
-
-
-  set(lstA a b c d e f g h i j k l m n o p q r s t u v w x y z)
-
-  
-  range_get(lstA 1:3)
-  ans(res)
-  assert(${res} EQUALS b c d)
-
-  range_get(lstA 5:4)
-  ans(res)
-  assert(${res} ISNULL)
-
-  range_get(lstA "0:*")
-  ans(res)
-  assert(${res} EQUALS ${lstA})
-
-  range_get(lstA "1:2:*")
-  ans(res)
-  assert(${res} EQUALS b d f h j l n p r t v x z)
-
-  range_get(lstA "*:-1:0")
-  ans(res)
-  assert(${res} EQUALS z y x w v u t s r q p o n m l k j i h g f e d c b a)
-
+  navigation_expression_lvalue(e[2].b.c)     # cmake_ref:'' val:'' ref:'' prop:'' range:''
 return()
-  range_get(lstA "")
-  ans(res)
-  assert(${res} ISNULL)
+  navigation_expression_lvalue(a.b.c)       # cmake_ref:''  val:'' ref:'${a.b}'  prop:'c' range: '[:]'
+  navigation_expression_lvalue(a)           # cmake_ref:'a' val:'' ref:'' prop:'' range:'[0:$]'
+  navigation_expression_lvalue(a.b)         # cmake_ref:'a' val:'' ref:'${a}' prop:'b' range: [:]
+  navigation_expression_lvalue(a[0])        # cmake_ref:'a' val:'' ref:'' prop:'' range: [0]
+  navigation_expression_lvalue(a.b[0])      # cmake_ref:'a' val:'' ref:'${a}' prop:'b' range:'[0]'
+  navigation_expression_lvalue(a.e[2].f.g)  # cmake_ref:''  val:'' ref:'${a.e[2].f}' prop:'g' range:'[:]'
+  navigation_expression_lvalue(a.e[2])      # cmake_ref:'a' val:'' ref:'${a}' prop:'e' range:'[2]'
+  navigation_expression_lvalue(b.c)         # cmake_ref:'b' val:'' ref:'' prop:'c' range:'[:]'
+  navigation_expression_lvalue(b)           # cmake_ref:'b' val:'' ref:'' prop:'' range:'[:]'
+  navigation_expression_lvalue(c)           # cmake_ref:'c' val:'asdf' ref:'' prop:'' range:'[:]'
+  navigation_expression_lvalue(c.a)         # cmake_ref:'c' val:'asdf' ref:'' prop:'a' range:'[:]'
+  navigation_expression_lvalue(a.e[2 3].f.g) # cmake_ref:'' val:'' ref:'${a}' prop:'e' range:'[2 3]'
+  navigation_expression_lvalue(d[2 3])       # cmake_ref:'d' val:'' ref:'' prop:'' range:''
 
 
 
-  function(range_set_each lst range value)
-    list(LENGTH ${lst} itemCount)
-    range_indices("${range}" ${itemCount})
 
-  endfunction()
-
-  ## remove the specified range from the list
-  macro(range_remove lst range)
-    list_range_unpack("${lst}" ${range})
-    message("${${lst}.indices}")
-    if(${lst}.indexCount)
-      list(REMOVE_AT ${lst} ${${lst}.indices})
-    endif()
-  endmacro()
-
-  # sets the values of specified range with the varargs passed. 
-  # if there are less varags than elements to replace the rest of the elements
-  # are set to null
-  function(range_set lst range)
-    list(LENGTH ${lst})
-
-  endfunction()
-
-  set(lstA a b c d e f g h i j k l m n o p q r s t u v w x y z)
-  range_remove(lstA "0:2:*")
-
-  assert(${lstA} EQUALS b d f h j l n p r t v x z)
 
 return()
 
+  function(navigation_expression_lvalue)
+    navigtion_expression_parse(${ARGN})
+    ans(expression)
+    message("expression ${expression}")
+    
 
-  set(lstA a b c d e f g h i j k l m n o p q r s t u v w x y z)
-
-  range_get(lstA "")
-  ans(res)
-  assert(${res} ISNULL)
-
-  range_get(lstA 1:3)
-  ans(res)
-  assert(${res} EQUALS b c d)
-
-  range_get(lstA 5:4)
-  ans(res)
-  assert(${res} ISNULL)
-
-  range_get(lstA "0:*")
-  ans(res)
-  assert(${res} EQUALS ${lstA})
-
-  range_get(lstA "1:2:*")
-  ans(res)
-  assert(${res} EQUALS b d f h j l n p r t v x z)
-
-  range_get(lstA "*:-1:0")
-  ans(res)
-  assert(${res} EQUALS z y x w v u t s r q p o n m l k j i h g f e d c b a)
+  endfunction()
 
 
 
 
-  return()
 
-
+return()
   function(navigation_expression_navigate current)
     set(path)
     set(args ${ARGN})
