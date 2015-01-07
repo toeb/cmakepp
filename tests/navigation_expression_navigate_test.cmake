@@ -65,66 +65,77 @@ function(test)
   set(d asd bsd csd)
   set(e asd bsd ${a} fsd)
 
+  function(print_vars)
+    set(__str)
+    foreach(arg ${ARGN})
+      set(__str "${__str} ${arg}: '${${arg}}'")
+    endforeach()
+    message("${__str}")
+  endfunction()
+
+
 
   function(navigation_expression_lvalue)
     navigation_expression_parse("${ARGN}")
-    ans(expression) 
-    set(input ${expression})
+    ans(expressions) 
+    set(input ${expressions})
 
-    list_pop_front(expression)
-    ans(cmake_ref)
-
-    set(current_value "${${cmake_ref}}")
-    map_isvalid("${current_value}")
-    ans(isref)
-
-    if(NOT isref)
-      set(ref)
-    else()
-      set(cmake_ref)
-      set(ref "${current_value}")
-    endif()
+    list_peek_front(expressions)
+    map_capture_new(${expressions})
+    ans(current_ref)
+    ans(current_value)
+    set(current_property)
+    set(current_range)
     
-    message(PUSH)
+
+
     while(true)
-      list_pop_front(expression)
+      list_pop_front(expressions)
       ans(current_expression)
-      list(LENGTH expression not_last)
+      ## store wether the current iteration is the last iteration (length of expressions is 0 on last iteration)
+      list(LENGTH expressions not_last)
+
+      # store previous values
+      set(previous_ref ${current_ref})
       set(previous_value ${current_value})
+
+
       set(is_range false)
-      set(range ":")
+      set(current_range ":")
       if("${current_expression}" MATCHES "^\\[.*\\]$")
         set(is_range true)
         string_slice("${current_expression}" 1 -2)
-        ans(range)
+        ans(current_expression)
       endif()
-      list(LENGTH previous_value len)
-      range_instanciate(${len} "${range}")
-      ans(range)
-      string(REPLACE ":" ";" range "${range}")
-      list(GET range 5 is_lvalue_range)
-      if(is_lvalue_range EQUAL 1)
-        set(is_lvalue_range true)
-      else()
-        set(is_lvalue_range false)
-      endif()
-      
 
-
-      set(is_lvalue false)
-      
       if(is_range)
-        if(is_lvalue_range)
-          set(is_lvalue)
-        endif()
+        list_range_get(current_value "${current_expression}")
+        ans(current_value)
+
       else()
-        map_isvalid(${current_value})
-        ans(is_lvalue)
+        # is prop
+        map_tryget("${current_value}" "${current_expression}")
+        ans(current_value)
+      endif()
+
+      list(LENGTH current_value current_value_length)
+      list(LENGTH previous_value previous_value_length)
+
+      if(${current_value_length} EQUAL 0)
+        set(current_is_lvalue false)
+      elseif(${current_value_length} EQUAL 1)
+
+      else()
+        set(current_is_lvalue false)
+
       endif()
 
 
 
-      message("current_expression '${current_expression}' range:'${range}' isrange: '${is_range}' islvalue_range:'${is_lvalue_range}' previous_value:'${previous_value}' current_value:'${current_value}' is_lvalue: '${is_lvalue}'")
+      print_vars(current_expression current_ref current_value current_value_length current_range is_range)
+
+
+
 
       ## break after last
       if(NOT not_last)
@@ -134,10 +145,18 @@ function(test)
 
     message(POP)
 
-    message("expression: '${input}' cmake_ref: '${cmake_ref}' val:'${val}' ref:'${ref}' prop:'${prop}' range:'${range}' ")
+    print_vars(input)
 
   endfunction()
-  navigation_expression_lvalue(e[2].b.c)     # cmake_ref:'' val:'' ref:'' prop:'' range:''
+
+
+
+
+  navigation_expression_lvalue(e)     # cmake_ref:'' val:'' ref:'' prop:'' range:''
+
+  json_print(${e})
+  return()
+  navigation_expression_lvalue(e[2].a.b.c)     # cmake_ref:'' val:'' ref:'' prop:'' range:''
 return()
   navigation_expression_lvalue(a.b.c)       # cmake_ref:''  val:'' ref:'${a.b}'  prop:'c' range: '[:]'
   navigation_expression_lvalue(a)           # cmake_ref:'a' val:'' ref:'' prop:'' range:'[0:$]'
