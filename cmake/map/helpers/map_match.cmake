@@ -13,7 +13,7 @@
     ans(lhs_ismap)
 
   
-    if(NOT lhs OR NOT rhs)
+    if(NOT lhs_ismap OR NOT rhs_ismap)
       return(false)
     endif()
 
@@ -27,7 +27,7 @@
       map_tryget("${lhs}" "${it.key}")
       ans(lhs_value)
 
-      map_matches("${lhs_value}" "${it.key}")
+      map_matches("${lhs_value}" "${it.value}")
       ans(values_match)
 
       if(NOT values_match)

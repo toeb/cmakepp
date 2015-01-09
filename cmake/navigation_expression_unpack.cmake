@@ -11,7 +11,9 @@
       set(${ref}.is_range false)
       set(${ref}.is_property true )  
     endif()
+    message("range ${${ref}.range}")
     range_parse(${ref}.range)
+    ans(${ref}.range)
     range_partial_unpack(${ref}.range)
       
   endmacro()

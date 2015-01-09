@@ -1,6 +1,7 @@
 
   function(range_parse)
     string(REPLACE " " ";" range "${ARGN}")
+    string(REPLACE "," ";" range "${range}")
 
     string(REPLACE "(" "EXC_BEGIN" range "${range}")
     string(REPLACE ")" "EXC_END" range "${range}")

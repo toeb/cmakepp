@@ -1,5 +1,13 @@
 function(test)
 
+  map_match("123" "123")
+  ans(res)
+  assert(res)
+
+  map_match("123" "234")
+  ans(res)
+  assert(NOT res)
+
 
   map_match_obj("" "")
   ans(res)

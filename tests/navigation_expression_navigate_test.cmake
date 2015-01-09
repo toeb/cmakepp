@@ -1,40 +1,5 @@
 function(test)
 
-  function(navigation_expression_parse)
-    string(REPLACE "." ";" expression "${ARGN}")
-    string(REPLACE "[" ";[" expression "${expression}")
-    return_ref(expression)
-  endfunction()
-
-
-  navigation_expression_parse("a.b.c")
-  ans(res)
-  assert(${res} EQUALS a b c)
-
-  navigation_expression_parse("a.b[3].c")
-  ans(res)
-  assert(${res} EQUALS a b [3] c)
-
-  navigation_expression_parse("a.b[3][34].c")
-  ans(res)
-  assert(${res} EQUALS a b [3] [34] c)
-
-  navigation_expression_parse("[1]")
-  ans(res)
-  assert(${res} EQUALS [1])
-
-  navigation_expression_parse("[]")
-  ans(res)
-  assert(${res} EQUALS [])
-
-  navigation_expression_parse("[1][0]")
-  ans(res)
-  assert(${res} EQUALS [1] [0])
-
-  navigation_expression_parse("[1]" "[0]")
-  ans(res)
-  assert(${res} EQUALS [1] [0])
-
 
   obj("{
     a:{
@@ -65,13 +30,6 @@ function(test)
   set(d asd bsd csd)
   set(e asd bsd ${a} fsd)
 
-  function(print_vars)
-    set(__str)
-    foreach(arg ${ARGN})
-      set(__str "${__str} ${arg}: '${${arg}}'")
-    endforeach()
-    message("${__str}")
-  endfunction()
 
 
 
@@ -88,7 +46,7 @@ function(test)
     set(current_range)
     
 
-
+    set(path)
     while(true)
       list_pop_front(expressions)
       ans(current_expression)
@@ -136,7 +94,6 @@ function(test)
 
 
 
-
       ## break after last
       if(NOT not_last)
         break()
@@ -145,16 +102,68 @@ function(test)
 
     message(POP)
 
-    print_vars(input)
+    print_vars(input path)
 
   endfunction()
 
 
+  function(map_valid_path base_ref)
+    navigation_expression_parse("${ARGN}")
+    ans(expressions) 
+    set(input ${expressions})
+    
+    set(path)
 
+    while(true)
+
+      set(is_range false)
+      set(current_range ":")
+      if("${current_expression}" MATCHES "^\\[.*\\]$")
+        set(is_range true)
+        string_slice("${current_expression}" 1 -2)
+        ans(current_range)
+      else()
+        set(current_property "${current_expression}")
+      endif()
+
+      if(is_range)
+        map_tryget("${current_ref}" "${current_property}")
+        ans(current_value)
+        list_range_get(current_value "${current_range}")
+        ans(current_value)
+      else()
+        # isprop
+        map_tryget("${current_ref}" "${current_range}")  
+        ans(current_value)
+
+      endif()
+
+      map_isvalid("${current_value}")
+      ans(is_ref)
+
+      if(is_ref)
+        set(current_ref "${current_value}")
+        set(current_property)
+
+      else()
+        break()
+      endif()
+
+
+    endwhile()
+
+    print_vars(path)
+  endfunction()
+
+  navigation_expression_existing_path(a b c d)
+  ans(res)
+  assert(${res} EQUALS a b c d)
+
+return()
 
   navigation_expression_lvalue(e)     # cmake_ref:'' val:'' ref:'' prop:'' range:''
 
-  json_print(${e})
+  #json_print(${e})
   return()
   navigation_expression_lvalue(e[2].a.b.c)     # cmake_ref:'' val:'' ref:'' prop:'' range:''
 return()

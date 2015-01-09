@@ -1,0 +1,6 @@
+function(navigation_expression_parse)
+    string(REPLACE "." ";" expression "${ARGN}")
+    string(REPLACE "[" ";[" expression "${expression}")
+    string(REGEX REPLACE "^;" "" expression "${expression}")
+    return_ref(expression)
+  endfunction()
