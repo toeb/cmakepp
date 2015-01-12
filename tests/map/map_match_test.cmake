@@ -1,5 +1,8 @@
 function(test)
 
+  map_match_obj("{command:'a b',args:['c','d','e']}" "{command:'a b',args:['c','d','e']}")
+  ans(res)
+  assert(res)
 
   map_match_obj("{a:[1,2,{a:3,b:5},3]}" "{a:[1,2,{b:5},3]}")
   ans(res)

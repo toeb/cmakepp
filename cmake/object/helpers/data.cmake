@@ -5,7 +5,6 @@
   function(data)
     set(result)
     foreach(arg ${ARGN})
-
       if("${arg}" MATCHES "^(\\[|{).*(\\]|})$")
         script("${arg}")
         ans(val)
