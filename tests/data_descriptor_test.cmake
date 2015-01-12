@@ -87,7 +87,6 @@ function(test)
   endfunction()
 
   define_test_function(test_uut property_def)
-  
   # name test
   test_uut("{name:'asd'}" "asd")
   test_uut("{name:'asd'}" "{name:'asd'}")
@@ -98,10 +97,10 @@ function(test)
   test_uut("{display_name:'asd'}" "{name:'asd'}")
 
   # multiplicity_test
-  test_uut("{min:0,max:'*'}" "asd")
-  test_uut("{min:0,max:'*'}" "{name:'asd'}")
+  test_uut("{min:'0',max:'*'}" "asd")
+  test_uut("{min:'0',max:'*'}" "{name:'asd'}")
   test_uut("{min:1,max:'*'}" "{name:'asd', min:1}")
-  test_uut("{min:0,max:4}" "{name:'asd', max:4}")
+  test_uut("{min:'0',max:4}" "{name:'asd', max:4}")
   test_uut("{min:2,max:5}" "{name:'asd', min:2,max:5}")
 
 
@@ -119,7 +118,7 @@ function(test)
   ## test flags
   test_uut("{flags:'--asd'}" asd)
   test_uut("{flags:'--asd'}" "{name:'asd'}")
-  test_uut("{flags:'--asd'}" "{name:'asd', flags:['-a','--asd']}")
+  test_uut("{flags:['-a','--asd']}" "{name:'asd', flags:['-a','--asd']}")
 
 
   ## name test
@@ -131,7 +130,7 @@ function(test)
   ## property test
   test_uut("{properties:{}}" asd)
   test_uut("{properties:{}}" "{name:'asd'}")
-  test_uut("{properties:{prop1:{}}}" "{name:'asd', properties:{prop1:'val'}}")
+  test_uut("{properties:{prop1:'val'}}" "{name:'asd', properties:{prop1:'val'}}")
 
 return()
 

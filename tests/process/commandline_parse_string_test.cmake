@@ -7,12 +7,12 @@ function(test)
 
   test_uut("{command:'a b'}" "\"a b\" c d e")
   test_uut("{command:'a'}" "a b c")
+return()
   
   test_uut(
     "{command:'a b', args:['c','d','e']}"
     "\"a b\" c d e")
 
-return()
   test_uut(
     "{command:'test', args:['a','b','c']}" 
     "test a b c"

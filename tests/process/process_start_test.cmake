@@ -7,10 +7,10 @@ function(test)
   ## runs three scripts and expects then to stop in a particular order
 
 
-  process_timeout(4)
+  process_timeout(8)
   ans(h1)
 
-  process_timeout(8)
+  process_timeout(16)
   ans(h2)
 
   process_timeout(1)  

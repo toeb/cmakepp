@@ -8,7 +8,7 @@ function(test)
 
 	obj_new( TestClass)
 	ans(uut)
-	obj_callmember(${uut} test hello)
+	obj_member_call(${uut} test hello)
 	ans(res)
 	assert(res)
 	assert(${res} STREQUAL "hello hello")

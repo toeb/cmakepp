@@ -12,7 +12,7 @@ function(test)
 
   obj_new( TheTestClass)
   ans(uut)
-  obj_callmember(${uut} method)
+  obj_member_call(${uut} method)
   ans(res)
 
   assert(${res} STREQUAL "hello")

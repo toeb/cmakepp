@@ -66,7 +66,7 @@ function(test)
 
 	endfunction()
 	obj_setfunction(${obj} greet)
-	obj_callmember(${obj} greet res)
+	obj_member_call(${obj} greet res)
 	assert(res)
 	assert(${res} STREQUAL "Hello Tobias Becker!")
 	# alternatively you can also use obj_declarefunction
@@ -75,7 +75,7 @@ function(test)
 	function(${say_goodbye} result)
 		set(${result} "Goodbye ${first_name} ${last_name}!" PARENT_SCOPE)
 	endfunction()
-	obj_callmember(${obj} say_goodbye res)
+	obj_member_call(${obj} say_goodbye res)
 	assert(res)
 	assert(res STREQUAL "Goodbye Tobias Becker!")
 
@@ -86,7 +86,7 @@ function(test)
 	# 
 	obj_new()
 	ans(obj)
-	obj_callmember(${obj} print)
+	obj_member_call(${obj} print)
 
 	# this prints all members
 	# ie
@@ -122,11 +122,11 @@ function(test)
 	assert(type)
 	assert(${type} STREQUAL MyObject)
 	# call
-	obj_callmember(${obj} myMethod res)
+	obj_member_call(${obj} myMethod res)
 	assert(res)
 	assert(${res} STREQUAL "myMethod: hello")
 	obj_set(${obj} myValue "othervalue")
-	obj_callmember(${obj} myMethod res)
+	obj_member_call(${obj} myMethod res)
 	assert(res)
 	assert(${res} STREQUAL "myMethod: othervalue")
 	obj_get(${obj}  myNewProperty)

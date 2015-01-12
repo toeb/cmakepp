@@ -56,7 +56,7 @@ cmake -P build/script.cmake
 		* query registry keys for values
 	* [string functions](#stringfunctions) - advanced string manipulation	
 	* [URIs](#uris) - Uniform Resource Identifier parsing and formatting	
-	* [lists](#lists) - extension to cmake and normalization of cmake's `list()` functionality
+	* [lists](#lists) - common and usefull list and set operations.
 	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
 		* graph algorithms 
 		* serialization/deserialization
@@ -244,7 +244,7 @@ Maps are very versatile and are missing dearly from CMake in my opinion. Maps ar
 Due to the "variable variable" system (ie names of variables are string which can be generated from other variables) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})`.  
 
 
-## Functions
+## Functions and Datatypes
 Using refs it easy to implement a map datastructure:
 ```
 map_new()					# returns a unique reference to a map
@@ -325,6 +325,7 @@ ans(res)
 assert(${res} STREQUAL "{\"b\":{\"c\":{\"d\":{\"e\":3}}}}")
 
 ```
+
 ### Caveats 
 * objects are created on the fly
 * nav is slow because it uses a lot of regex and loops to parse the expressions
@@ -451,12 +452,15 @@ ref_print(${themap})
 
 ```
 
-# Functions and Datatypes
+
+# Functions
+
+CMake is a function oriented language. Every line in a cmake script is a function just a function call. It is the only available statement.  CMake does not allow dynamic function calling (ie calling a function which you first know at runtime). This has problem and some further funcitonality issues are addressed in this section.
 
 Functions in cmake are not variables - they have a separate global only scope in which they are defined.  
-*A Note on Macros* You SHOULD NOT use macros... They will more likely than not have unintended side effects because of the way the are evaluated.
+*A Note on Macros* Macros are also functions.  They do not have their own scope and evaluate arguments differently. They will more likely than not have unintended side effects because of the way the are evaluated. There are valid reasons to use macros but if you do not know them, you SHOULD NOT use macros...
 
-I have written a couple of usefull (if not essential) functions with which managing functions becomes a lot easier
+## Functions and Datatypes
 
 * Datatypes
 	* `<cmake code> ::= <string>` any valid cmake code
@@ -492,45 +496,49 @@ I have written a couple of usefull (if not essential) functions with which manag
 ```
 
 
-## Function Patterns
-
-### <a href="initializer_function"></a> Initializer function
-
-If you want to execute code only once for a function (e.g. create  a datastructure before executing the function) you can use the Initializer Patter.:
-```
-function(initalizing_function)
-	# initialization code
-	function(initializing_function)
-		# actual function code
-	endfunction()
-	initializing_function(${ARGN})
-	return_ans() # forwards the returned value
-endfunction()
-```
-
-*Example*
-```
-function(global_counter)
-	ref_set(global_counter_ref 0)
-	function(global_counter)
-		ref_get(global_counter_ref)
-		ans(count)
-		math(EXPR count "${count} + 1")
-		ref_set(global_counter_ref ${count})
-		return(${count})
-	endfunction()
-endfunction()
-```
-
 # <a name="objects"></a>Objects 
 
-Objects are an extension of the maps. I split up maps and objects because objects are a lot slower (something like 2x-3x slower) and if you do not need objects you should not use them (handling 1000s of maps is already slow enough).
-
-However I hope that soon CMake will provide the functionality needed to make all this faster.
+Objects are an extension of the maps. They add inheritance, member calls and custom member operations to the concept of maps. I split up maps and objects because objects are a lot slower (something like 2x-3x slower) and if you do not need objects you should not use them (handling 1000s of maps is already slow enough). The reason for the performance loss is the number of function calls needed to get the correct virtual function/property value.
 
 
-## Functions
+## Functions and Datatypes
+
 These are the basic functions which are available (there are more which all use these basic ones): 
+
+* Basic Object functions - Functions on which all other object functions base
+	- `<type> := <cmake function>` a type is represented by a globally unique cmake function.  This function acts as the constructor for the type. In this constructor you define inheritance, properties and member functions. The type may only be defined once.  So make sure the function name is and stays unique ie. is not overwritten somewhere else in the code.
+	- `<object> := <ref>` an object is the instance of a type. 
+	- `<member> := <key>` a string which identifies the member of an object
+	- `obj_new(<type>):<object>` creates the instance of a type. calls the constructor function specified by type and returns an object instance
+	- `obj_delete(<object>):<void>` deletes an object instance. You MAY call this. If you do the desctructor of an object is invoked. This function is defined for completeness sake and can only be implemented if CMake script changes. So don't worry about this ;).
+	- `obj_set(<object> <member> <value:<any...>>):<any>`  sets the object's  property identified by `<member>` to the specified value.  *the default behaviour can be seen in `obj_default_setter(...)` and MAY be overwridden by using `obj_declare_setter(...)`*
+	- `obj_get(<object> <member>):<any>` gets the value of the object's property identified by `<member>` *the default behaviour MAY be overwridden b using `obj_declare_getter`*  
+	- `obj_has(<object> <member>):<bool>` returns true iff the object has a property called `<member>`
+	- `obj_keys(<object>):<member...>` returns the list of available members
+	- `obj_member_call(<object> <member> <args:<any...>>):<any>` calls the specified member with the specified arguments and returns the result of the operation
+* Most `obj_*` functions are also available in the shorter `this-form` so `obj_get(<this:<object>> ...)` can also be used inside a member function or constructor by using the function `this_get(...)`.  This is achieved by forwarding the call from `this_get(...)` to `obj_get(${this} ...)`
+
+## Overriding default behaviour
+
+As is possible in JavaScript an Python I let you override default object operations by specifying custom member functions. You may set the following hidden object fields to the name of a function which implements the correct interface. You can see the default implementations by looking at the `obj_default_*` functions.  To ensure ease of use I provided functions which help you correctly override object behaviour.  
+
+* reserved hidden object fields
+	* `__setter__ : (<this> <member> <any...>):<any>` override the set operation. Return value may be anything. the default is void
+	* `__getter__ : (<this> <member>):<any>` override the get operation. expects the return value to be the value of the object's property identified by `<member>`
+	* `__get_keys__ : (<this>):<member ...>` override the operation which returns the list of available keys.  It is expected that all keys returned will are valid properties (they exist).
+	* `__has__ : (<this> <member>):<bool>` overrides the has operation. MUST return true iff the object has a property called `<member>`
+	* `__member_call__ : (<this> <member> <args:<any...>>):<return value:<any>>` this operation is invoked when `obj_member_call(...)` is called (and thus also when `call, rcall, etc` is called) overriding this function allows you to dispatch a call operation to the object member identified by `<member>` with the specified `args` it should return the result of the specified operation. The `this` variable is always set to the object instance current instance.
+	* `__cast__` @todo
+* helper functions
+	* `obj_declare_getter()`
+	* `obj_declare_setter()`
+	* `obj_declare_call()`
+	* `obj_declare_member_call()`  
+	* `obj_declare_get_keys()`
+	* `obj_declare_has_key()` @todo
+	* `obj_declare_cast()` @todo
+	
+
 ```
 new([Constructor]) returns a ref to a object
 obj_get(obj)
@@ -540,7 +548,7 @@ obj_owns(obj)
 obj_keys(obj)
 obj_ownedkeys(obj)
 obj_call(obj)
-obj_callmember(obj key [args])
+obj_member_call(obj key [args])
 obj_delete(obj)
 ```
 
@@ -1734,7 +1742,39 @@ json_print(${res})
 
 # <a name="string_functions"></a> String Functions
 
-# <a name="lists"></a> Lists Functions
+# <a name="lists"></a> List and Set Functions
+
+CMake's programming model is a bit ambigous but also very simple. Every variable can be interpreted as a list and a string.  This duality makes everything a little complex because you can never know what which of both is meant. However if you tell the client of you CMake functions what you expect  you start to programm by convention which is very usefull in a very simple dynamic language like CMake Script.
+
+## Datatypes and Functions
+
+* `<list>  := <string ...>`  a variable in cmake which semicolon separated strings.
+* `<predicate> := (<any>):<bool>` a function which takes a single arg and returns a truth value 
+* `<list ref> :: <list&>` the name of the variable that contains a list
+* `<set> := <list>` a set is a list which contains only unique elements. You can create a set by using CMake's `list(REMOVE_DUPLICATES thelist)` function.
+* `index_range(<lo:int> <hi:int>):<int...>` returns a list of indices which includes `lo` but excludes `hi`.
+	- `index_range(3 5)`  -> `3;4`
+* `list_all(<list ref> <predicate>):<bool>` returns true iff predicate evaluates to true for all elements of the list
+* `list_any(<list ref> <predicate>):<bool>` returns true iff predicate evaluates to true for for at least one element of the list.
+* `list_at(<list ref> <indices:<int...>>):<list>` returns all elements of the list which specified by their indices. Repetions are allowed.
+	- `list_at(thelist 1 3 0 0)` -> `b;d;a;a` if the list contains the alphabet
+* `list_combinations(<list ref...>):<list>` returns all possible combinations of all specified lists
+	- `list_combinations(bin bin bin)` -> `000;001;010;011;100;101;110;111` if `bin = 0;1`   
+* `list_contains(<list ref> <args:any...>):<bool>` returns true if list contains all args specified
+* `list_count(<list ref> <predicate>):<int>` returns the number of elements for which the specified predicate evalautes to true
+* `list_difference(<list ref> <predicate>):<list>`
+* `list_equal(<lhs:<list ref>> <rhs:<list ref>>):<bool>` 
+* `list_erase(<list ref> <start_index> <end_index>):<void>` removes the specified range from the list
+* `list_erase_slice(<list ref> <start_index> <end_index>):<list>` removes the specified range from the list and returns the removed elements
+* `list_except(<lhs:<list ref>> <rhs:<list ref>>):<list>` returns the elements of lhs which are not in rhs
+* `list_extract(<list ref> <any&...>):<list>` removes the first n elements of the list and returns the rest of the list.  
+* `list_extract_any_flag`
+* `list_erase_slice(<list ref> <startindex:<int>> <endindex:<int>> <args:<any...>>):<list>` replaces the specified range of the list with the passed varargs.  returns the elements which were removed
+
+
+## Caveats
+
+* some list functions wrap default cmake behaviour. That means that they are slower.  So in some cases where you are doing alot of function calling you should use the default cmake functions to make everything faster.
 
 # <a name="shell"></a> Shell Functions
 
@@ -1743,7 +1783,39 @@ json_print(${res})
 # <a name="implementation_notes"></a> Implementation Notes
 
 
-## Passing By Ref
+## <a href="initializer_function"></a> Initializer function
+
+If you want to execute code only once for a function (e.g. create  a datastructure before executing the function or finding a package) you can use the Initializer Pattern. Which redefines the function itside itself after executing one time code. 
+
+```
+function(initalizing_function)
+	# initialization code
+	function(initializing_function)
+		# actual function code
+	endfunction()
+	initializing_function(${ARGN})
+	return_ans() # forwards the returned value
+endfunction()
+```
+
+*Example*
+```
+function(global_counter)
+	ref_set(global_counter_ref 0)
+	function(global_counter)
+		ref_get(global_counter_ref)
+		ans(count)
+		math(EXPR count "${count} + 1")
+		ref_set(global_counter_ref ${count})
+		return(${count})
+	endfunction()
+endfunction()
+```
+
+
+## <a href="pass_by_ref"></a> Passing By Ref
+
+
 
 Passing a variable to a function can be done by value and or by reference.
 ```
@@ -1774,7 +1846,8 @@ set(val 2)
 byref(val) #expected to print "2 1" but actually prints "2 2"
 ```
 
-The workaround I chose was to mangle all variable names starting with a `__<function_name>_<varname>`  (however special care has to be taken with recursive functions). This should stop accidental namespace collisions:
+The `val` of the function's scope overwrites the `val` of the parent scope.
+The workaround I chose was to mangle all variable names starting with a `__<function_name>_<varname>`  (however special care has to be taken with recursive functions). This stops accidental namespace collisions:
 
 ```
 function(byref __byref_ref)

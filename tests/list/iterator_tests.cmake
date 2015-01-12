@@ -1,6 +1,13 @@
 function(test)
 
 
+return()
+  function(list_iterator_next)
+
+
+  endfunction()
+
+return()
 
 
   map()
