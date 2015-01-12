@@ -21,7 +21,7 @@ function(mm)
 
 
 
-  obj("${ARGN}")
+  data(${ARGN})
   return_ans()
 endfunction()
 

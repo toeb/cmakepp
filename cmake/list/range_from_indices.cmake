@@ -72,6 +72,7 @@
       elseif("${increment}" EQUAL 1)
         list(APPEND range "[${begin}:${end}]")
       else()
+        math(EXPR increment "0${increment}")
         list(APPEND range "[${begin}:${end}:${increment}]")
       endif()
   endmacro()

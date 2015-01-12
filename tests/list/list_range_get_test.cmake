@@ -19,4 +19,6 @@ function(test)
   list_range_get(listA 11 10 13 15 0 0 13)
   ans(res)
   assert(${res} EQUALS b a d f 0 0 d)
+
+  
 endfunction()

@@ -5,6 +5,6 @@
     ans(lhs)
     obj("${rhs}")
     ans(rhs)
-    map_matches("${lhs}" "${rhs}")
+    map_match("${lhs}" "${rhs}")
     return_ans()
   endfunction()
