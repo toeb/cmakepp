@@ -125,7 +125,7 @@ assert("${res}" STREQUAL f6b)
 
 function(TestClass44)
 this_set(muha asd)
-  this_declarecalloperation(op)
+  this_declare_call(op)
   function(${op})
     return("callop ${ARGN}")
   endfunction()

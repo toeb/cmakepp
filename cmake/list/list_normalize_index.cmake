@@ -4,6 +4,11 @@
 function(list_normalize_index __lst index )
   set(idx ${index})
   list(LENGTH ${__lst} length)
+
+  if("${idx}" STREQUAL "*")
+    set(idx ${length})
+  endif()
+  
   if(${idx} LESS 0)
     math(EXPR idx "${length} ${idx} + 1")
   endif()

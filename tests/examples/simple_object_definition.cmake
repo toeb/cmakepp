@@ -25,9 +25,9 @@ function(simple_object_definition)
 	obj_set(${obj2} val1 "me")
 
 	# call tostring for both objects
-	obj_callmember(${obj} toString )
+	obj_member_call(${obj} toString )
 	ans(res)
-	obj_callmember(${obj2} toString )
+	obj_member_call(${obj2} toString )
 	ans(res2)
 
 	assert(res)

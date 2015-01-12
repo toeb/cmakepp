@@ -1,6 +1,18 @@
 function(test)
 
 
+	# multivalue
+	map_equal("123;456" "123;456")
+	ans(res)
+	assert(res)
+
+	map_equal("123;456" "123;678")
+	ans(res)
+	assert(NOT res)
+
+	
+
+
 # with cycle
 	map_new()
 	ans(lhs)

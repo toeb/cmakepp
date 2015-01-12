@@ -28,6 +28,52 @@ function(test)
   endfunction()
 
 
+  ## test schemes
+
+  test_uri("asd+basd:" "{scheme:'asd+basd',schemes:['asd','basd'] }")
+
+
+
+
+
+return()
+  ## test query
+
+function(uri_parse_query uri)
+  map_tryget(${uri} query)
+  ans(query)
+
+  string(REPLACE "&" "\;" query_assignments "${query}")
+
+  map_new()
+  ans(query_data)
+  foreach(query_assignment ${query_assignments})
+    string(REPLACE "=" "\;"  value "${query_assignment}")
+    list_pop_front(value)
+    ans(key)
+    uri_decode(${value})
+    ans(value)
+    uri_decode(${key})
+    ans(key)
+    map_set(${query_data} "${key}" "${value}")
+  endforeach()
+
+
+  map_capture(${uri} query_assignments query_data)
+
+endfunction()
+
+
+  test_uri("?hello=asd" "{query:'hello=asd'}")
+  test_uri("?hello=asd" "{query_assignments:'hello=asd'}")
+  test_uri("?hello=asd&byby=bsd" "{query_assignments:['hello=asd','byby=bsd']}")
+  test_uri("?hello=asd&byby=asd" "{}" --print)
+
+
+
+return()
+
+
 ## normalized path
 
 test_uri("../asd/../../bsd/csd/dsd/../../esd/./fsd" "{normalized_segments:['..','..','bsd', 'esd', 'fsd']}" )

@@ -44,9 +44,9 @@ obj_set(${cat} food Catfood)		#set cat's food property to "Catfood"
 
 
 # call eat function for different objects
-obj_callmember(${bird} eat) 
-obj_callmember(${dog} eat)
-obj_callmember(${cat} eat)
+obj_member_call(${bird} eat) 
+obj_member_call(${dog} eat)
+obj_member_call(${cat} eat)
 
 #output should be
 #I am eating Birdfood

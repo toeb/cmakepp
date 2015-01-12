@@ -9,7 +9,7 @@ function(test)
 	ans(res)
 	assert(res)
 	set(res)
-	obj_callmember(${obj} to_string )
+	obj_member_call(${obj} to_string )
 	ans(res)
 	assert(res)
 
