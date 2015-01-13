@@ -31,7 +31,7 @@ function(assert)
 	# parse arguments
 	set(options EQUALS AREEQUAL ARE_EQUAL ACCU SILENT DEREF INCONCLUSIVE ISNULL ISNOTNULL)
 	set(oneValueArgs  COUNT MESSAGE RESULT MESSAGE_TYPE CONTAINS MISSING MATCH FILE_CONTAINS)
-	set(multiValueArgs PREDICATE)
+	set(multiValueArgs CALL PREDICATE )
 	set(prefix)
 	cmake_parse_arguments("${prefix}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 	#_UNPARSED_ARGUMENTS
@@ -55,6 +55,14 @@ function(assert)
 	if(_DEREF)
 		map_format( "${_UNPARSED_ARGUMENTS}")
 		ans(_UNPARSED_ARGUMENTS)
+	endif()
+
+	## transform call into further arguments
+	if(_CALL)
+		call(${_CALL})
+
+		ans(vars)
+		list(APPEND _UNPARSED_ARGUMENTS ${vars})
 	endif()
 
 	# 
