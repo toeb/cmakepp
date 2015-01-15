@@ -31,7 +31,7 @@
       endif()
     endforeach()
     if(return_lvalue)
-      map_capture_new(ref:current_ref property:current_property range:current_ranges value:current_value)
+      map_capture_new(ref:current_ref property:current_property range:current_ranges value:current_value --reassign)
       return_ans()
     endif()
     return_ref(current_value)

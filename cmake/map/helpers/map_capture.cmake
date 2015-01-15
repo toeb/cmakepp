@@ -1,10 +1,13 @@
 ## captures the listed variables in the map
 function(map_capture map )
   set(__map_capture_args ${ARGN})
+  list_extract_flag(__map_capture_args --reassign)
+  ans(__reassign)
   list_extract_flag(__map_capture_args --notnull)
   ans(__not_null)
   foreach(__map_capture_arg ${ARGN})
-    if("${__map_capture_arg}" MATCHES "(.+)[:=](.+)")
+    
+    if(__reassign AND "${__map_capture_arg}" MATCHES "(.+)[:=](.+)")
       set(__map_capture_arg_key ${CMAKE_MATCH_1})
       set(__map_capture_arg ${CMAKE_MATCH_2})
     else()

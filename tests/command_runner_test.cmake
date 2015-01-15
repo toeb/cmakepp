@@ -218,19 +218,6 @@ endfunction()
 
 
 
-  function(assert_equal expected)
-    assign(expected = ${expected})
-    assign(actual = ${ARGN})
-    map_match("${actual}" "${expected}")
-    ans(result)
-    if(NOT result)
-      echo_append("expected: ")
-      json_print(${expected})
-      echo_append("actual:")
-      json_print(${actual})
-      _message(FATAL_ERROR "values did not match")
-    endif()
-  endfunction()
 
 
   ## handler find test
@@ -242,7 +229,7 @@ endfunction()
 
   #assign(result = handler_find(handlers "{input:['cmd2','b','c']}"))
 
-  assert_equal("handlers[1]" handler_find(handlers "{input:['cmd2','b','c']}"))
+  assert_matches("handlers[1]" handler_find(handlers "{input:['cmd2','b','c']}"))
 
 
 
@@ -252,15 +239,15 @@ endfunction()
   endfunction()
 
   ## valid handler func
-  assert_equal("{output:'asdasdf',handler:{callable:'test_func'}}" handler_execute("{callable:'test_func'}" "{input:'asdf'}" "{output:'asd'}"))
+  assert_matches("{output:'asdasdf',handler:{callable:'test_func'}}" handler_execute("{callable:'test_func'}" "{input:'asdf'}" "{output:'asd'}"))
   ## invalid handler func
-  assert_equal("{output:'asd', error:'handler_invalid'}" handler_execute("{callable:'non_existent_func'}" "{input:'asdf'}" "{output:'asd'}"))
+  assert_matches("{output:'asd', error:'handler_invalid'}" handler_execute("{callable:'non_existent_func'}" "{input:'asdf'}" "{output:'asd'}"))
 
 
   ## on the fly handler
   handler_execute("(req res)-> map_set($res output yaaay)" "{}")
   ans(res)
-  assert_equal("{output:'yaaay'}" res)
+  assert_matches("{output:'yaaay'}" res)
 
 
 

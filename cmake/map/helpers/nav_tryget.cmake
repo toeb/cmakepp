@@ -1,5 +1,0 @@
-  function(nav_tryget base_value)
-    set(args ${ARGN})
-    nav_analyze("${base_value}" current_value ${ARGN})
-    return_ans()
-  endfunction()
