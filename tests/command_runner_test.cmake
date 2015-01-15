@@ -1,13 +1,5 @@
 function(test)
 
-  macro(return_nav)
-    assign(result = ${ARGN})
-    return_ref(result)
-  endmacro()
-  macro(return_data data)
-    data("${data}")
-    return_ans()
-  endmacro()
 
   function(command_runner)
     this_set(name "${ARGN}")
@@ -19,29 +11,24 @@ function(test)
       return_ans()
     endfunction()
 
-    ## executes the runner once
-    ## routing the values to the 
-    ## correct overload
     method(run)
     function(${run})
-      set(args ${ARGN})
-      assign(!context.input = args)
-      assign(handler = this.find_handler(${context}))
-      list(LENGTH handler handler_count)
-      print_vars(handler args context)
+      handler_request(${ARGN})
+      ans(request)
+      assign(handler = this.find_handler(${request}))
+      list(LENGTH handler handler_count)  
+
+
       if(${handler_count} GREATER 1)
-        return_data("{error:'ambiguous_handler',description:'multiple command handlers were found for the request',context:$context}" )
+        return_data("{error:'ambiguous_handler',description:'multiple command handlers were found for the request',request:$request}" )
       endif()
 
       if(NOT handler)
-        return_data("{error:'no_handler',description:'command runner could not find an appropriate handler for the specified arguments',context:$context}")
+        return_data("{error:'no_handler',description:'command runner could not find an appropriate handler for the specified arguments',request:$request}")
       endif() 
-
-      assign(result = this.execute_handler(${handler} ${context}))
-      if(NOT result)
-        data("{error:'execution_error',description:'failed to execute handler'}")
-        ans(result)
-      endif()
+      ## remove first item
+      assign(request.input[0] = '') 
+      assign(result = this.execute_handler(${handler} ${request}))
       return_ref(result)
 
     endfunction()
@@ -66,29 +53,30 @@ function(test)
     endfunction()
 
     ## compares the request to the handlers
-    ## returns the handlers which matches the handler
+    ## returns the handlers which matches the request
     ## can return multiple handlers
     method(find_handler)
-    function(${find_handler} context)
-      message("find handler")
-
-      json_print(${context})
-      assign(result = context.input)
-      print_vars(result)
-      assign(result = "{callable:$result}")
-      return_ref(result)
+    function(${find_handler})
+      handler_request("${ARGN}")
+      ans(request)
+      this_get(handlers)
+      handler_find(handlers "${request}")
+      ans(handler)
+      return_ref(handler)
     endfunction()
 
+    ## executes the specified handler 
+    ## the handler must not be part of this command runner
+    ## it takes a handler and a request and returns a response object
     method(execute_handler)
-    function(${execute_handler} handler context)
-      message("execute handler")
-      json_print("${context}")
-      json_print(${handler})
-      assign(data = context.input)
-      assign(callable = handler.callable)
-      print_vars(callable)
-      call(${callable}(${context}))
-      return_ans()
+    function(${execute_handler} handler)
+      handler_request(${ARGN})
+      ans(request)
+      map_set(${request} runner ${command_runner})
+      map_new()
+      ans(response)
+      handler_execute("${handler}" ${request} ${response})
+      return_ref(response)
     endfunction()
 
     ## adds a request handler to this command handler
@@ -96,174 +84,72 @@ function(test)
     ## or handler object
     method(add_handler)
     function(${add_handler})
-      set(name ${ARGN})
-
-      assign(handler = "{
-        id:$name,
-        display_name:$name,
-        callable:$name
-        args:''
-      }")
-
+      handler(${ARGN})
+      ans(handler)
+      if(NOT handler)
+        return()
+      endif()
       map_append(${this} handlers ${handler})
       
       return(${handler})
     endfunction()
 
+  ## property contains a managed list of handlers
   property(handlers)
+  ## setter
   function(${set_handlers} obj key new_handlers)
     map_tryget(${this} handlers)
     ans(old_handlers)
     if(old_handlers)
       list(REMOVE_ITEM new_handlers ${old_handlers})
     endif()
+
     set(result)
     foreach(handler ${new_handlers})
-      set_ans()
+      set_ans("")
       obj_member_call(${this} add_handler ${handler})
       ans(res)
       list(APPEND result ${res})
     endforeach()
     return_ref(result)
   endfunction()
-
+  ## getter
   function(${get_handlers})
     map_tryget(${this} handlers)
     return_ans()
   endfunction()
 
 
-
 endfunction()
 
 
 
-  function(handler handler)
-    data(${handler})
-    ans(handler)
-    map_isvalid(${handler})
-    ans(is_map)
-    if(is_map)  
-      map_tryget(${handler} callable)
-      ans(callable)
-      if(NOT COMMAND ${callable})
-        return()
-      endif()
-      return(${handler})
-    endif()
+  new(command_runner mycommandrunner)
+  ans(uut)
 
-    if(COMMAND "${handler}")
-      set(callable ${handler})
-    else()
-      function_new()
-      ans(callable)
-      function_import(${handler} as ${callable} REDEFINE)
-      set(callable ${callable})
-    endif()
-    map_capture_new(
-      callable
-    )
-    return_ans()
+
+  function(cmd1)
+    return(1 ${ARGN})
+  endfunction()
+  function(cmd2)
+    return(2)
+  endfunction()
+  function(cmd3)
+    return(3)
   endfunction()
 
-  ## add a callable object handler
+  assign(uut.handlers[] = 'cmd1')
+  assign(uut.handlers[] = 'cmd2')
+  assign(uut.handlers[] = 'cmd3')
+  assign(uut.handlers[] = "{callable:$uut, labels:'cmd4'}")
 
-  ## add a a handler object
-
-  ## executes a handler
-  function(handler_execute handler request)
-    handler(${handler})
-    ans(handler)
-    data(${request})
-    ans(request)
-    data(${ARGN})
-    ans(response)
-    if(NOT response)
-      data("{output:''}")
-      ans(reponse)
-    endif()
-    if(NOT handler)
-      assign(!response.error = 'handler_invalid')
-      assign(!response.message = "'handler was not valid'")
-    else()
-      assign(!response.handler = handler)
-      map_tryget(${handler} callable)
-      ans(callable)
-      call(${callable}(${request} ${response}))
-      ans(result)
-    endif()
-    return_ref(response)
-  endfunction()
+  assign(handlers = uut.handlers)
 
 
-  function(handler_match handler request)
-    map_tryget(${handler} labels)
-    ans(labels)
+  assign(handler = uut.find_handler(cmd1 asd bsd))
 
-    map_tryget(${request} input)
-    ans(input)
-
-    list_pop_front(input)
-    ans(cmd)
-
-    list_contains(labels "${cmd}")
-    ans(is_match)
-    return_ref(is_match)
-  endfunction()
-  
-  function(handler_find handler_lst request)
-    list_where(${handler_lst} "(handler)-> handler_match($handler ${request})")
-    return_ans()
-  endfunction()
-
-
-
-
-
-  ## handler find test
-  assign(handlers = "[
-{callable: 'test_func', display_name: 'command1', id:'1', labels:'cmd1'},
-{callable: 'test_func', display_name: 'command2', id:'2', labels:'cmd2'},
-{callable: 'test_func', display_name: 'command3', id:'3', labels:['cmd3','cmd_3']}
-    ]")
-
-  #assign(result = handler_find(handlers "{input:['cmd2','b','c']}"))
-
-  assert_matches("handlers[1]" handler_find(handlers "{input:['cmd2','b','c']}"))
-
-
-
-  ## handler execute test
-  function(test_func request response)
-    assign(response.output += request.input)
-  endfunction()
-
-  ## valid handler func
-  assert_matches("{output:'asdasdf',handler:{callable:'test_func'}}" handler_execute("{callable:'test_func'}" "{input:'asdf'}" "{output:'asd'}"))
-  ## invalid handler func
-  assert_matches("{output:'asd', error:'handler_invalid'}" handler_execute("{callable:'non_existent_func'}" "{input:'asdf'}" "{output:'asd'}"))
-
-
-  ## on the fly handler
-  handler_execute("(req res)-> map_set($res output yaaay)" "{}")
-  ans(res)
-  assert_matches("{output:'yaaay'}" res)
-
-
-
-  handler("(req res)-> map_set($res output yaaay)")
-  ans(handler)
-  assign(req = "{}")
-  assign(res = "{}")
-  foreach(i RANGE 100)
-  handler_execute("${handler}" "${req}" "${res}")
-
-  endforeach()
-
-
-  return()
-
-
+  assign(res1 = uut(cmd4 cmd1 asd asd))
+  json_print(${res})
 
 
 
