@@ -1,5 +1,13 @@
 function(test)
 
+
+  map_match_obj(
+    "{callable: 'test_func', display_name: 'command2', id:'2', labels:'cmd2'}"
+    "{callable: 'test_func', display_name: 'command3', id:'3', labels:['cmd3','cmd_3']}"
+  )
+  ans(res)
+  assert(NOT res)
+
   map_match_obj("{command:'a b',args:['c','d','e']}" "{command:'a b',args:['c','d','e']}")
   ans(res)
   assert(res)

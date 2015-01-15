@@ -4,8 +4,9 @@
   ## if structured data is not parsable returns the value passed
   function(data)
     set(result)
-    foreach(arg ${ARGN})
-      if("${arg}" MATCHES "^(\\[|{).*(\\]|})$")
+    set(args ${ARGN})
+    foreach(arg ${args})
+      if("_${arg}" MATCHES "^_(\\[|{).*(\\]|})$")
         script("${arg}")
         ans(val)
       else()

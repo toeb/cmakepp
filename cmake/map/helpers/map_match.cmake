@@ -1,5 +1,5 @@
 
-  ## checks if all fields specified in rhs are equal to the values in lhs
+  ## checks if all fields specified in actual rhs are equal to the values in expected lhs
   ## recursively checks submaps
   function(map_match lhs rhs)
     if("${lhs}_" STREQUAL "${rhs}_")

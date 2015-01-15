@@ -1,5 +1,12 @@
 function(test)
 
+
+  obj("{asd:123,bsd:323}")
+  ans(res)
+  assert(${res} MAP_MATCHES "{asd:123}")
+
+
+
 function(some_test)
   return(a b c)
 endfunction()
