@@ -1,30 +1,9 @@
 function(test)
 
-  function(test_uri uri expected )
-    set(args ${ARGN})
-    list_extract_flag(args --print)
-    ans(print)
-
-
-    uri_parse("${uri}" ${args})
-    ans(uut)
-    
-    if(print)
-      json_print(${uut})
-    endif()
-
-    obj("${expected}")
-    ans(expected)
-
-    map_iterator(${expected})
-    ans(iter)
-
-    while(true)
-      map_iterator_break(iter)
-      map_tryget(${uut} ${iter.key})
-      ans(value)
-      assert(EQUALS ${iter.value} ${value})
-    endwhile()
+  define_test_function(test_uut uri_parse uri)
+  ## helper because older tests are written with parameters in wrong order
+  function(test_uri uri expected)
+    test_uut("${expected}" "${uri}")
   endfunction()
 
 
@@ -35,43 +14,11 @@ function(test)
 
 
 
-
-return()
-  ## test query
-
-function(uri_parse_query uri)
-  map_tryget(${uri} query)
-  ans(query)
-
-  string(REPLACE "&" "\;" query_assignments "${query}")
-
-  map_new()
-  ans(query_data)
-  foreach(query_assignment ${query_assignments})
-    string(REPLACE "=" "\;"  value "${query_assignment}")
-    list_pop_front(value)
-    ans(key)
-    uri_decode(${value})
-    ans(value)
-    uri_decode(${key})
-    ans(key)
-    map_set(${query_data} "${key}" "${value}")
-  endforeach()
-
-
-  map_capture(${uri} query_assignments query_data)
-
-endfunction()
-
-
-  test_uri("?hello=asd" "{query:'hello=asd'}")
-  test_uri("?hello=asd" "{query_assignments:'hello=asd'}")
-  test_uri("?hello=asd&byby=bsd" "{query_assignments:['hello=asd','byby=bsd']}")
-  test_uri("?hello=asd&byby=asd" "{}" --print)
+  test_uut("{params:{hello:'asd'}}" "?hello=asd")
+  test_uut("{params:{hello:['asd','bsd']}}" "?hello[]=asd&hello[]=bsd")
 
 
 
-return()
 
 
 ## normalized path
@@ -165,6 +112,5 @@ test_uri("../asd/../../bsd/csd/dsd/../../esd/./fsd" "{normalized_segments:['..',
   test_uri("test.txt.xml" "{file:'test.txt.xml' , file_name:'test.txt', extension:'xml'}")
   test_uri("/" "{file:null,file_name:null,extension:null}")
 
-return()
 
 endfunction()

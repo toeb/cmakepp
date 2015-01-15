@@ -15,6 +15,13 @@ function(proto_declarefunction result)
 	set(${function_name} "${func}" PARENT_SCOPE)
 endfunction()
 
+
+## shorthand for proto_declarefunction
+macro(method result)
+  proto_declarefunction("${result}")
+endmacro()
+
+
 # causes the following code inside a constructor to only run once
 macro(begin_methods)
 

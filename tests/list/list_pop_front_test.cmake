@@ -13,7 +13,14 @@ function(test)
 
   # endwhile()
   # timer_print_elapsed(timer)
-
+  
+  set(lst "a;<>")
+  list_pop_front(lst)
+  ans(res)
+  assert(${res} EQUALS a)
+  list_pop_front(lst)
+  ans(res)
+  assert(${res} EQUALS "<>")
 
   set(lst 1 2 3 4 )
   list_pop_front( lst)

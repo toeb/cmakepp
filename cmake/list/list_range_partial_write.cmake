@@ -43,7 +43,15 @@
       set(insertion_index "${begin}")
     endif()
 
-    list(INSERT ${__lst} "${insertion_index}" ${ARGN})
+    list(LENGTH ${__lst} __len)
+    if("${insertion_index}" LESS ${__len})
+      list(INSERT ${__lst} "${insertion_index}" ${ARGN})
+    elseif("${insertion_index}" EQUAL ${__len})
+      list(APPEND ${__lst} ${ARGN})
+    else()
+      message(FATAL_ERROR "list_range_partial_write could not write to index ${insertion_index}")
+    endif()
+
 
     set(${__lst} ${${__lst}} PARENT_SCOPE)
     return()

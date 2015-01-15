@@ -1,10 +1,10 @@
-## returns true if lhs has all properties (and recursive properties)
-## that rhs has
-  function(map_match_obj lhs rhs)
-    obj("${lhs}")
-    ans(lhs)
-    obj("${rhs}")
-    ans(rhs)
-    map_match("${lhs}" "${rhs}")
+## returns true if actual has all properties (and recursive properties)
+## that expected has
+  function(map_match_obj actual expected)
+    obj("${actual}")
+    ans(actual)
+    obj("${expected}")
+    ans(expected)
+    map_match("${actual}" "${expected}")
     return_ans()
   endfunction()

@@ -1,5 +1,12 @@
 function(test)
 
+
+
+
+
+
+
+
   range_parse("1:8):3") # 1 4 7 => 3
   ans(res)
   assert(${res} EQUALS 1:8:3:true:false:3:false)
@@ -83,21 +90,21 @@ function(test)
   ans(res)
   assert("${res}" EQUALS n:n:1:true:true:1:false)
 
-  range_parse("(") # defaults to "(n)"
-  ans(res)
-  assert("${res}" EQUALS n:n:1:false:false:-1:false)
+  # range_parse("(") # defaults to "(n)"
+  # ans(res)
+  # assert("${res}" EQUALS n:n:1:false:false:-1:false)
  
-  range_parse(")") # defaults to [n)
-  ans(res)
-  assert("${res}" EQUALS n:n:1:true:false:0:false)
+  # range_parse(")") # defaults to [n)
+  # ans(res)
+  # assert("${res}" EQUALS n:n:1:true:false:0:false)
 
-  range_parse("[") # defaults to [n)
-  ans(res)
-  assert("${res}" EQUALS n:n:1:true:false:0:false)
+  # range_parse("[") # defaults to [n)
+  # ans(res)
+  # assert("${res}" EQUALS n:n:1:true:false:0:false)
 
-  range_parse("]") # defaults to [n]
-  ans(res)
-  assert("${res}" EQUALS n:n:1:true:true:1:false)
+  # range_parse("]") # defaults to [n]
+  # ans(res)
+  # assert("${res}" EQUALS n:n:1:true:true:1:false)
 
   range_parse("1:2:1:false:false")
   ans(res)

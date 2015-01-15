@@ -5,7 +5,7 @@
 # if --prepend is specified the padding is inserted into front of string
 function (string_pad str len)  
   set(delimiter ${ARGN})
-  message("delim ${delimiter}")
+#  message("delim ${delimiter}")
   list_extract_flag(delimiter --prepend)
   ans(prepend)
   if("${delimiter}_" STREQUAL "_")

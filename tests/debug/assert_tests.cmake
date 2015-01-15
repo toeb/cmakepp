@@ -1,5 +1,17 @@
 function(test)
 
+
+  obj("{asd:123,bsd:323}")
+  ans(res)
+  assert(${res} MAP_MATCHES "{asd:123}")
+
+
+
+function(some_test)
+  return(a b c)
+endfunction()
+assert(a b c EQUALS CALL some_test())
+
 # assert boolean value and continue 
 assert(false MESSAGE "should be true"  RESULT res)
 assert(NOT res)

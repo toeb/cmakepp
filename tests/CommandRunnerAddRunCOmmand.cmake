@@ -7,6 +7,8 @@ ans(uut)
 	function(myCommand)
 		return(muha)
 	endfunction()
+
+	
 	obj_member_call(${uut} AddCommandHandler test myCommand)
 
 	obj_member_call(${uut} Run test)
