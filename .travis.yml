@@ -20,6 +20,10 @@ before_install:
   - git config --global user.email "travis-ci@example.com"
   - git config --global user.name "Build Server"
 install:
+  # biicode initialization
+  - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh #
+  - bii setup:cpp
+
      # install cmake --
     #- wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
     #- tar xf "cmake-${CMAKE_VERSION}.tar.gz"
@@ -31,10 +35,25 @@ install:
     #- which cmake
     #- cmake --version    
     # -- end
-script: "cmake -P build/script.cmake"
+script: 
+ - bii init
+ - bii open toeb/oo-cmake
+ - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/oo-cmake
+ - cmake -P build/script.cmake
 after_success: "cmake -P build/after_success.cmake"
 after_failure: "cmake -P build/after_failure.cmake"
 after_script: "cmake -P build/after_script.cmake"
+
+deploy:
+ provider: biicode
+ user: toeb
+ password: 
+  secure: "FbBmlMqDcpJ0rJ12I/H8CWwPnVe44zsGuL+5h+16JjZBQU8+TUizaw/Wns3OnQXzvvdeyzUvypGrnq0g7t+MFareWZ+rYVHRNibjsx5OxubvcgM6+fbXAu8G2f4bXHZPun5IMf8+1OCg8ETEQ/kEHtDDVOFO24Gb49N9Td3chgQ="
+ skip_cleanup: true
+ on:
+  tags: true
+  branch: master
+
 
 # branches:
 #   only:
