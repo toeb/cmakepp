@@ -19,7 +19,7 @@
       assign(!response.handler = handler)
       map_tryget(${handler} callable)
       ans(callable)
-      call(${callable}(${request} ${response}))
+      call(${callable}("${request}" "${response}"))
       ans(result)
     endif()
     return_ref(response)
