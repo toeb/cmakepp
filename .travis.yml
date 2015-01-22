@@ -50,9 +50,7 @@ deploy:
  password: 
   secure: "FbBmlMqDcpJ0rJ12I/H8CWwPnVe44zsGuL+5h+16JjZBQU8+TUizaw/Wns3OnQXzvvdeyzUvypGrnq0g7t+MFareWZ+rYVHRNibjsx5OxubvcgM6+fbXAu8G2f4bXHZPun5IMf8+1OCg8ETEQ/kEHtDDVOFO24Gb49N9Td3chgQ="
  skip_cleanup: true
- on:
-  tags: true
-
+ 
 
 # branches:
 #   only:
