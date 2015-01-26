@@ -35,7 +35,7 @@
     set(args ${ARGN})
     set(replaced)
 
-    message(PUSH)
+    message_indent_push()
     foreach(i RANGE 0 ${replace_count})
       list(GET indices_to_replace ${i} index)
 
@@ -65,7 +65,7 @@
 
 
     endforeach()
-    message(POP)
+    message_indent_pop()
 
 
     message("lst '${lst}'")

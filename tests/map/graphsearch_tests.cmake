@@ -19,8 +19,8 @@ function(test)
   
   dfs_recurse("{
     expand:'(it)-> message(expand $it ) \n exp($it)',
-    enter:'(it)-> message(enter $it from $parent path $path successors $successors) \n message(PUSH)',
-    leave:'(it)-> message(POP) \n message(leave $it to $parent visited $visited)'
+    enter:'(it)-> message(enter $it from $parent path $path successors $successors) \n message_indent_push()',
+    leave:'(it)-> message_indent_pop() \n message(leave $it to $parent visited $visited)'
 
     }" 1)
 

@@ -28,6 +28,10 @@ function(read_line)
     string(REGEX REPLACE "(\n|\r\n)$" "" line "${line}")
   endif()
 
+  ## quick fix
+  if("${line}" STREQUAL "ECHO is off.")
+    set(line)
+  endif()
   # remove temp files
   file(REMOVE "${shell_script}")
   file(REMOVE "${value_file}")

@@ -31,9 +31,9 @@ function(compile files include_dirs)
         endforeach()
       #  message("required_files ${required_files}")
 
-      #  message(PUSH)
+      #  message_indent_push()
           _compile("${required_files}" "${include_dirs};${current_dir}" "${already_included}" "${compiled_result}")
-       # message(POP)
+       # message_indent_pop()
         ans(compiled)
       #  messagE("appending result: ${content}")
         ref_append_string(${compiled_result} "

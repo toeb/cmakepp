@@ -27,10 +27,16 @@ function(download url)
   endif()
 
 
-  file(DOWNLOAD "${url}" "${target_path}" STATUS status ${show_progress})
+  file(DOWNLOAD 
+    "${url}" "${target_path}" 
+    STATUS status 
+    ${show_progress}
+    TLS_VERIFY OFF 
+    ${args})
 
   list_extract(status code message)
   if(NOT "${code}" STREQUAL 0)    
+    message(WARNING "${message}")
     return()
   endif()
 

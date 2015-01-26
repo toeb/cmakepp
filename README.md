@@ -29,7 +29,7 @@ cmake -P build/script.cmake
 	* [eval](#eval) - evaluates cmake code and is the basis of many advanced features
 	* [shell](#shell) - "platform independent" shell script execution
 		* [aliases](#aliases) - platform independent shell aliases
-		* [console](#console) - functions for console input and output
+		* [console](#console) - functions for console input and outputf
 	* [filesystem](#filesystem) - directory and file functions with close relations to bash syntax
 		* [compression/decompression](#compression) - compressing and decompressing tgz and zip files
 	* [command execution](#execute) simplifying access to exectables using the shell tools.
@@ -441,11 +441,6 @@ ref_print(${themap})
 		"number":"99"
 	}
 }
-
-  map_set(${res} type "${func_type}")
-  map_set(${res} name "${func_name}")
-  map_set(${res} args "${all_args}")
-  map_set(${res} code "${function_string}")
 
 ```
 
@@ -1173,12 +1168,61 @@ popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
 
 Since I have been using cmake for what it has not been created (user interaction) I needed to enhance console output and "invent" console input.  using shell magic it became possible for me to read input from the shell during cmake execution.  You can see it in action in the interactive cmake shell `icmake` (start it by running cmake -P icmake.cmake) Also I was missing a way of writing to the shell without appending a linebreak - using `cmake -E echo_append` it was possibly for me to output data without ending the line.  
 
+### Enhanced `message` function
+
+When working with recursive calls and complex build processes it is sometimes useful to allow output to be indented which helps the user understand the output more easily.
+
+Therfore I extended the `message` function to allow some extra flags which control  indentation on the console. The indentation functionality can also be controlled using the `message_indent*` functions.  Take the following example:
+
+*Example*
+
+```
+function(add_some_lib)
+	message(PUSH_AFTER "adding somelib")
+	...
+	message(POP_AFTER "done")
+endfunction()
+function(add_my_target)
+  message(PUSH_AFTER "adding my target")
+  ...
+  message("gathering sources")
+  add_some_lib()
+  ...
+  message(POP_AFTER "complete")
+endfunction()
+
+message("condiguring")
+add_some_lib()
+add_my_target()
+message("finished")
+```
+
+*Output*:
+```
+adding somelib
+adding my target
+  gathering sources
+  adding somelib
+    done
+  complete
+finished
+
+```
 
 ### Functions
 
 * `read_line()-><string>` prompts the user to input text. waiting for a line break. the result is a string containing the line read from console
 * `echo_append([args ...])` appends the specifeid arguments to stdout without a new line at the end
 * `echo([args ...])` appends the specified arguments to stdout and adds a new line
+* `message`
+* `message(<flags?> <string> )` enhanced message function (with indentation)
+	- `PUSH` 
+* `print(str)` prints the specified string to console (default is stderr...) using `_message` 
+* `message_indent_level():<uint>` returns the level of indentation
+* `message_indent_get():<>` returns the indentation string `string_repeat("  " ${n})` (two spaces times the indentation level)
+* `message_indent_push(<level?:[+-]?<uint>>):<uint>`  pushes the specified level on to the indentation stack making it the current level. if the number is preceded by `+` or `-` the value is relative to the current indentation level.
+* `message_indent_pop():<uint>` removes the last level from the stack and returns the new current level
+* `message_indent(<string>)` writes the string to the console indenting it
  
 
 

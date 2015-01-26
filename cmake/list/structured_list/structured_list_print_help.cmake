@@ -39,9 +39,9 @@
       ans(res)
       message("${displayName}: ${res}")
       if(description)
-        message(PUSH)
+        message_indent_push()
         message("${description}")
-        message(POP)
+        message_indent_pop()
       endif()
 
     endforeach()

@@ -41,13 +41,13 @@
     map_new()
     ans(inputs)
     foreach(input ${required_inputs})
-        #message(PUSH)
+        #message_indent_push()
         #message("getting ${input} ${required_inputs}")
 
         lang("${input}" ${context})
         ans(res)
         #message("got ${res} for ${input}")
-        #message(POP)
+        #message_indent_pop()
         map_set(${inputs} "${input}" "${res}")
     endforeach()
 
