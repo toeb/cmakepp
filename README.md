@@ -9,6 +9,7 @@
 [![Project Stats](https://www.ohloh.net/p/cmakepp/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/cmakepp)
 
 objects, methods, functions, maps, inheritance, parsers, lists, process management,  ...
+
 # Installing
 
 Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
