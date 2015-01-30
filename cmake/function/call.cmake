@@ -11,36 +11,22 @@
   function(call __function_call_func __function_call_paren_open)
 
     return_reset()
-    # I used garbled variable names to keep from hiding parent scope varaibles
-   # message("wooooaoaat? ${ARGN}")
     set(__function_call_args ${ARGN})
 
-    #list_pop_front( __function_call_args)
-    #ans(__function_call_func)
-    #list_pop_front( __function_call_args)
-    #ans(__function_call_paren_open)
     list_pop_back( __function_call_args)
     ans(__function_call_paren_close)
     
     if(NOT "_${__function_call_paren_open}${__function_call_paren_close}" STREQUAL "_()")
       message(WARNING "expected opening and closing parentheses for function '${ARGN}'")
     endif()
-    #message("---${ARGN}===${__function_call_func}")
+
     if(COMMAND "${__function_call_func}")
-   #   message("function")
-     # set(__function_call_args2)
-     # foreach(__function_call_args_arg ${__function_call_args})
-     #   set(__function_call_args2 "${__function_call_args2} \"${__function_call_args_arg}\"")
-     # endforeach()
       set_ans("")
       eval("${__function_call_func}(\${__function_call_args})")
       return_ans()
-     # message("function returned '${res}'")
-    
     endif()
 
     if(DEFINED "${__function_call_func}")
-    # message("defined ${__function_call_func}")
       call("${${__function_call_func}}"(${__function_call_args}))
       return_ans()
     endif()
@@ -48,7 +34,6 @@
     ref_isvalid("${__function_call_func}")
     ans(isref)
     if(isref)
-  #    message("call for ${__function_call_func} ")
       obj_call("${__function_call_func}" ${__function_call_args})
       return_ans()
     endif()
@@ -70,7 +55,6 @@
     lambda_isvalid("${__function_call_func}")      
     ans(is_lambda)
     if(is_lambda)
-    #  message("lambda ${__function_call_func} args ${__function_call_args}")
       lambda_import("${__function_call_func}" __function_call_import)
       __function_call_import(${__function_call_args})
       return_ans()
@@ -85,7 +69,6 @@
 
     is_function(is_func "${__function_call_func}")
     if(is_func)
-   #   message("importing ${__function_call_func}(${__function_call_args})")
       function_import("${__function_call_func}" as __function_call_import REDEFINE)
       __function_call_import(${__function_call_args})
       return_ans()
@@ -109,11 +92,9 @@
 
     nav(__function_call_import = "${__function_call_func}")
     if(__function_call_import)
-     #message("nav ${__function_call_import} ${__function_call_func}")
          call("${__function_call_import}"(${__function_call_args}))
       return_ans()
     endif()
 
-   # message("nothin")
    message(FATAL_ERROR "tried to call a non-function:'${__function_call_func}'")
   endfunction()

@@ -1,5 +1,6 @@
 function(function_help result func)
-	get_function_lines(res "${func}")
+	function_lines_get( "${func}")
+	ans(res)
 	set(res)
 	foreach(line ${res})
 		string(STRIP "${line}" line)

@@ -13,6 +13,7 @@ function(cp)
   path("${target}")
   ans(target)
   # single move
+
   if(NOT IS_DIRECTORY "${target}" )
     if(NOT "${len}" EQUAL "1")
       message(FATAL_ERROR "wrong usage for cp() exactly one source file needs to be specified")
@@ -37,3 +38,5 @@ function(cp)
 
   return()
 endfunction()
+
+

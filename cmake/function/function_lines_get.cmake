@@ -2,8 +2,10 @@
 # cmake does nto support a list containing a strings which in return contain semicolon
 # the workaround is that all semicolons in the source are replaced by a separate line containsing the string ![[[SEMICOLON]]]
 # so the number of lines a function has is the number of lines minus the number of lines containsing only ![[[SEMICOLON]]]
-function(get_function_lines result func)
-	get_function_string(function_string "${func}")
+function(function_lines_get  func)
+	function_string_get( "${func}")
+	ans(function_string)
+	
 	string(REPLACE ";" "![[[SEMICOLON]]]"  function_string "${function_string}")
 	string(REPLACE "\n" ";" lines "${function_string}")
 	set(res)
@@ -21,5 +23,5 @@ function(get_function_lines result func)
 		endif()
 	endforeach()
 
-	set(${result} ${res} PARENT_SCOPE)
+	return_ref(res)
 endfunction()

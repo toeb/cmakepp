@@ -13,7 +13,7 @@
         set(res "${res}[${part}]")
       endforeach()
 
-      uri_encode(${node})
+      uri_encode("${node}")
       ans(node)
       set(res "${res}=${node}")
       map_append(${context} assignments ${res})

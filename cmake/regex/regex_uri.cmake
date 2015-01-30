@@ -1,6 +1,6 @@
 
 # contains common regular expression 
-macro(regex_table)
+macro(regex_uri)
 
     set(lowalpha "[a-z]")
     set(upalpha "[A-Z]")

@@ -1,10 +1,13 @@
 
 # injects code into  function (right after function is called) and returns result
-function(function_string_rename result input_function new_name) 
-	get_function_string(function_string "${input_function}")
+function(function_string_rename input_function new_name) 
+	function_string_get( "${input_function}")
+	ans(function_string)
 	function_signature_regex(regex)
 
-	get_function_lines(lines "${input_function}")
+	function_lines_get( "${input_function}")
+	ans(lines)
+	
 	foreach(line ${lines})
 		string(REGEX MATCH "${regex}" found "${line}")
 		if(found)
@@ -14,5 +17,5 @@ function(function_string_rename result input_function new_name)
 			break()
 		endif()
 	endforeach()
-	set("${result}" "${input_function}" PARENT_SCOPE)
+	return_ref(input_function)
 endfunction()

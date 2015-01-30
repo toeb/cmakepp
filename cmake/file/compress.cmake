@@ -1,23 +1,30 @@
-# compresses all files specified in glob expressions (relative to pwd) into ${target} tgz file
+# compresses all files specified in glob expressions (relative to pwd) into ${target_file} tgz file
 # usage: compress(<file> [<glob> ...]) - 
 # 
-function(compress target)
+function(compress target_file)
   set(args ${ARGN})
   
-  # target file
-  path("${target}")
-  ans(target)
+  list_extract_labelled_value(args --format)
+  ans(format)
 
-  # get current working dir
-  pwd()
-  ans(pwd)
+  ## try to resolve format by extension
+  if(format STREQUAL "")
+    get_filename_component(extension "${target_file}" EXT)    
+    mime_type_from_extension("${extension}")
+    ans(format)
+  endif()
 
-  # get all files to compress
-  file_glob("${pwd}" ${args} --relative)
-  ans(paths)
+  ## set default formt to application/x-gzip
+  if(format STREQUAL "")
+    set(format "application/x-gzip")
+  endif()
 
-  # compress all files into target using paths relative to pwd()
-  tar(cvzf "${target}" ${paths})
-  return_ans()
-
+  if(format STREQUAL "application/x-gzip")
+    compress_tgz("${target_file}" ${args})
+    return_ans()
+  else()
+    message(FATAL_ERROR "format not supported: ${format}")
+  endif()
 endfunction()
+
+

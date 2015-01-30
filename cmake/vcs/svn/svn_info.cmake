@@ -8,11 +8,12 @@
 ##    uuid:"uuid",
 ## }
 ## todo: cached?
-function(svn_info)
-    svn_uri("${ARGN}")
+function(svn_info uri)
+    svn_uri("${uri}")
     ans(uri)
 
-    svn(info ${uri} --result --xml)
+
+    svn(info ${uri} --result --xml ${ARGN})
     ans(res)
     map_tryget(${res} result)
     ans(error)
@@ -33,11 +34,15 @@ function(svn_info)
     ans(url)
     xml_parse_values("${xml}" root)
     ans(root)
+    xml_parse_values("${xml}" relative-url)
+    ans(relative_url)
+
+    string(REGEX REPLACE "^\\^/" "" relative_url "${relative_url}")
 
     xml_parse_values("${xml}" uuid)
     ans(uuid)
     map()
-      var(path revision kind url root uuid)
+      var(path revision kind url root uuid relative_url)
     end()
     ans(res)
     return_ref(res)
