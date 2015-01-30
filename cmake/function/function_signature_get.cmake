@@ -1,5 +1,5 @@
 #
-function(function_signature_get result func)
+function(function_signature_get func)
 	function_lines_get( "${func}")
   ans(lines)
 	#function_signature_regex(regex)
