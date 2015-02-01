@@ -7,11 +7,30 @@ function(mime_type file)
   if(NOT EXISTS "${file}")
     return(false)
   endif()
+
   if(IS_DIRECTORY "${file}")
     return(false)
   endif()
 
 
+  mime_type_from_file_content("${file}")
+  ans(mime_type)
+
+  if(mime_type)
+    return_ref(mime_type)
+  endif()
+
+  mime_type_from_filename("${file}")
+
+  return_ans()
+endfunction()
+
+
+function(mime_type_from_file_content file)
+  path_qualify(file)
+  if(NOT EXISTS "${file}")
+
+  endif()
 
   file_istarfile("${file}")
   ans(is_tar)
@@ -19,57 +38,26 @@ function(mime_type file)
     return("application/x-gzip")
   endif()
 
-  get_filename_component(extension "${file}" EXT)
-  mime_type_from_extension("${extension}")
 
-  return_ans()
-endfunction()
-
-function(mime_type_from_extension extension)
-
-  if("${extension}" MATCHES "tgz|tar\\.gz|gz")
-    return("application/x-gzip")
-  endif()
-
-  if(extension STREQUAL "zip")
-    return("application/zip")
-  endif()
-
-  if(extension STREQUAL "7z")
-    return("application/x-7z-compressed")
-  endif()
-
-  if(extension STREQUAL "txt" OR extension STREQUAL "asc")
-    return("text/plain")
-  endif()
-
-  if(extension STREQUAL "json")
-      return("application/json")
-  endif()
-
-  if(extension STREQUAL "qm")
-    return("application/x-quickmap" "text/plain")
-  endif()
-
-  if(extension STREQUAL "cmake")
-    return("application/x-cmake" "text.plain")
+  file_isqmfile("${file}")
+  ans(is_qm)
+  if(is_qm)
+    return("application/x-quickmap")
   endif()
 
   return()
 endfunction()
 
-function(mime_type_get_extension mime_type)
-  if(mime_type STREQUAL "application/cmake")
-    return("cmake")
-  elseif(mime_type STREQUAL "application/json")
-    return("json")
-  elseif(mime_type STREQUAL "application/x-quickmap")
-    return("qm")
-  elseif(mime_type STREQUAL "application/x-gzip")
-    return("tgz")
-  elseif(mime_type STREQUAL "text/plain")
-    return("txt")
+function(file_isqmfile file)
+    path_qualify(file)
+    if(NOT EXISTS "${file}" OR IS_DIRECTORY "${file}")
+      return(false)
+    endif()
+  file(READ "${file}" result LIMIT 3)
+  if(result STREQUAL "#qm")
+    return(true)
   endif()
 
-  return()
+  return(false)
+
 endfunction()

@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 2.8.7)
+## some globals...
+set(github_api_token "?client_id=$ENV{GITHUB_DEVEL_TOKEN_ID}&client_secret=$ENV{GITHUB_DEVEL_TOKEN_SECRET}")
+
+
 # this initialization script excpects configuration arguments in the var 
 # command_line_args.  when including it be sure to specifiy them as needed
 # like so: 
