@@ -1,37 +1,28 @@
-
-
+## mime_type_from_extension()->
+##
+## returns the mime type or types matching the specified file extension
+##
 function(mime_type_from_extension extension)
+
   if("${extension}" MATCHES "\\.(.*)")
     set(extension "${CMAKE_MATCH_1}")
   endif()
 
-  if("${extension}" MATCHES "tgz|tar\\.gz|gz")
-    return("application/x-gzip")
-  endif()
+  string(TOLOWER "${extension}" extension)
 
-  if(extension STREQUAL "zip")
-    return("application/zip")
-  endif()
+  mime_type_map()
+  ans(mime_types)
 
-  if(extension STREQUAL "7z")
-    return("application/x-7z-compressed")
-  endif()
+  map_tryget("${mime_types}" "${extension}")
+  ans(mime_types)
 
-  if(extension STREQUAL "txt" OR extension STREQUAL "asc")
-    return("text/plain")
-  endif()
+  set(mime_type_names)
+  foreach(mime_type ${mime_types})
+    map_tryget("${mime_type}" name)
+    ans(mime_type_name)
+    list(APPEND mime_type_names "${mime_type_name}")  
+  endforeach()
 
-  if(extension STREQUAL "json")
-      return("application/json")
-  endif()
-
-  if(extension STREQUAL "qm")
-    return("application/x-quickmap" "text/plain")
-  endif()
-
-  if(extension STREQUAL "cmake")
-    return("application/x-cmake" "text/plain")
-  endif()
-
-  return()
+  return_ref(mime_type_names)
 endfunction()
+
