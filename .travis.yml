@@ -1,6 +1,12 @@
 language: cpp
+os:
+ - linux
+ - osx
 compiler:
   - gcc
+matrix:
+  allow_failures:
+    - os: osx
 #env:
 # - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1"
 # - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
@@ -46,7 +52,6 @@ deploy:
  skip_cleanup: true
  on:
   tags: true
-  branch: master
 
 
 # branches:
