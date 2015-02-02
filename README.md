@@ -8,10 +8,12 @@
 [![biicode block](https://img.shields.io/badge/toeb%2Foo--cmake-DEV%3A0-yellow.svg)](https://www.biicode.com/toeb/oo-cmake)  
 [![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
 
-objects, methods, functions, maps, inheritance, parsers, lists, process management,  ...
 # Installing
 
-Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
+If you do not want to test - Download a release and include it in your cmake script file:
+
+
+Or download the repository and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
 be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7` 
 
 # Usage
@@ -31,6 +33,7 @@ cmake -P build/script.cmake
 * Features
 	* [interactive cmake console](#icmake) (`cmake -P icmake.cmake`)
 	* [lists](#lists) - common and usefull list and set operations.
+		- [ranges](#ranges) range based access to lists
 	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
 		* graph algorithms 
 		* serialization/deserialization
@@ -1846,6 +1849,23 @@ CMake's programming model is a bit ambigous but also very simple. Every variable
 * some list functions wrap default cmake behaviour. That means that they are slower.  So in some cases where you are doing alot of function calling you should use the default cmake functions to make everything faster.
 
 
+### Range based List access
+
+Ranges are an awesome way of accessing lists. Take for example the following task: `return the last element, the 3rd element and elements 8 to 7` using cmake this can become complicated:
+
+```
+```
+
+
+#### Functions and Datatypes
+
+* `list_range_get()`
+* `list_range_indices()`
+* `list_range_partial_write()`
+* `list_range_remove()`
+* `list_range_replace()`
+* `list_range_set()`
+* `list_range_try_get()`
 
 
 # <a href="packages"></a> Package Search and Retrieval
