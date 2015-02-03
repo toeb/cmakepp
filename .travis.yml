@@ -45,9 +45,9 @@ script:
  - cp ../install.sh .
  - chmod +x ./install.sh
  - ./install.sh #
- - ls 
  - cd cmakepp
- - cmake -P build/script.cmake
+ - cmakepp ls
+ #- cmake -P build/script.cmake
 
 after_success: "cmake -P build/after_success.cmake"
 after_failure: "cmake -P build/after_failure.cmake"
