@@ -40,11 +40,13 @@ script:
  #- bii open toeb/oo-cmake
  #- rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/oo-cmake
  #- cmake -P build/script.cmake
- - ls
- - chmod +x install.sh
  - mkdir install_dir
  - cd install_dir
- - ../install.sh #
+ - cp ../install.sh
+ - chmod +x ./install.sh
+ - ./install.sh #
+ - ls 
+ - cd cmakepp
  - cmake -P build/script.cmake
 
 after_success: "cmake -P build/after_success.cmake"
