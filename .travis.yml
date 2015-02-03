@@ -45,7 +45,7 @@ script:
  - cp ../install.sh .
  - chmod +x ./install.sh
  - ./install.sh #
- - cd cmakepp
+ - alias cmakepp='cmake -P $(pwd)/cmakepp/cmakepp_cli.cmake'
  - cmakepp ls
  #- cmake -P build/script.cmake
 
