@@ -1,4 +1,13 @@
-## package_source_pull(<~uri> <?target:<path>>)
+## package_source_pull(<~uri> <?target_dir:<path>>) -> <package handle>
+##
+## pulls the content of package specified by uri into the target_dir 
+## if the package_descriptor contains a content property it will interpreted
+## as a glob/ignore expression list when copy files (see cp_content(...)) 
+##
+## --reference flag indicates that nothing is to be copied but the source 
+##             directory will be used as content dir 
+##
+## 
 function(package_source_pull_path uri)
     set(args ${ARGN})
 
@@ -18,7 +27,6 @@ function(package_source_pull_path uri)
     list_extract_flag(args --reference)
     ans(reference)
 
-
     if(NOT reference)
         ## get and qualify target path
         list_pop_front(args)
@@ -27,9 +35,12 @@ function(package_source_pull_path uri)
 
         ## get local_ref which is were the package is stored locally in a path package source
         map_tryget("${package_handle}" "content_dir")
-        ans(source_path)
+        ans(source_dir)
 
-        package_content_copy("${package_descriptor}" "${source_path}" "${target_dir}" ${args})
+        ## copy content to target dir
+        map_tryget("${package_descriptor}" content)
+        ans(content_globbing_expression)
+        cp_content("${source_dir}" "${target_dir}" ${content_globbing_expression})
 
         ## replace content_dir with the new target path and return  package_handle
         map_set("${package_handle}" content_dir "${target_dir}")

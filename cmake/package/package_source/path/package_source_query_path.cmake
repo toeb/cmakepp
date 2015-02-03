@@ -23,15 +23,9 @@ function(package_source_query_path uri)
     return()
   endif()
 
-  ## todo: change?
-  if(NOT EXISTS "${path}/package.cmake")
-    return()
-  endif()
-
   ## create the valid result uri (file:///e/t/c)
   uri("${path}")
   ans(result)
-
 
   ## convert uri to string
   uri_format("${result}")

@@ -16,8 +16,11 @@ function(package_source_resolve_path uri)
     uri_to_localpath("${valid_uri}")
     ans(path)
 
-    ## read pacakge descriptor and set default values
-    json_read("${path}/package.cmake")
+    ## read package descriptor and set default values
+    package_handle("${path}")
+    ans(package_handle)
+
+    map_tryget("${package_handle}" package_descriptor)
     ans(package_descriptor)
 
     map_tryget(${valid_uri} last_segment)
@@ -28,10 +31,10 @@ function(package_source_resolve_path uri)
 
     ## response
     map_new()
-    ans(result)
-    map_set(${result} package_descriptor "${package_descriptor}")
-    map_set(${result} content_dir "${path}")
-    map_set(${result} uri "${valid_uri_string}")
+    ans(package_handle)
+    map_set(${package_handle} package_descriptor "${package_descriptor}")
+    map_set(${package_handle} content_dir "${path}")
+    map_set(${package_handle} uri "${valid_uri_string}")
 
-    return(${result})
+    return(${package_handle})
 endfunction()

@@ -26,8 +26,13 @@
 
     path_qualify(target_dir)
     
-    package_content_copy("${package_descriptor}" "${source_dir}" "${target_dir}" ${args})
-    ans(files)
+
+    ## copy content to target dir
+    map_tryget("${package_descriptor}" content)
+    ans(content_globbing_expression)
+    cp_content("${source_dir}" "${target_dir}" ${content_globbing_expression})
+    ans(result)
+
 
     ## return the valid target uri
     uri("${target_dir}")
