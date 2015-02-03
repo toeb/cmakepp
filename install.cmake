@@ -1,5 +1,5 @@
 ## todo
-message("installing cmakepp")
+message("installing cmakepp $ENV{TRAVIS_COMMIT}")
 # download a cmakepp release
 
 # download newest cmakepp release
