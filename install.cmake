@@ -1,6 +1,21 @@
 ## todo
-message("installing cmakepp $ENV{TRAVIS_COMMIT}")
+message("Installing CMake++")
+
 # download a cmakepp release
+set(cmakepp_uri "https://github.com/toeb/cmakepp/releases/download/v0.0.3/cmakepp-0.0.3.cmake")
+set(target_file "${CMAKE_CURRENT_BINARY_DIR}/__cmakepp.cmake")
+file(DOWNLOAD "${cmakepp_uri}" "${target_file}" STATUS status)
+if(NOT "${status}" MATCHES "0;")
+  message(FATAL_ERROR "failed to download cmakepp")
+endif()  
+
+include("${target_file}")
+file(REMOTE "${target_file}")
+
+
+ls()
+ans(res)
+json_print(${res})
 
 # download newest cmakepp release
 
