@@ -1,0 +1,4 @@
+Logo is a derivative of the CMake Logo which si under the creative commons license
+
+http://creativecommons.org/licenses/by/4.0/
+
