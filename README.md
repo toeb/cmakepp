@@ -116,7 +116,9 @@ rm install.cmake;
 ```
 
 
-# <a name="cmake_cli"></a>cmakepp console client
+# <a name="cmake_cli"></a>cmakepp Console Client
+
+
 
 
 # <a name="icmake"></a>Interactive CMake Shell
