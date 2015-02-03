@@ -13,7 +13,7 @@
 If you do not want to test - Download a release and include it in your cmake script file:
 
 
-Or download the repository and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
+Or download the repository and include `cmakepp.cmake` in your `CMakeLists.txt` (or other cmake script)
 be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7` 
 
 # Usage
@@ -307,7 +307,7 @@ c = 3
 
 ##  <a href="assign"></a> Easy map handling with `assign()`
 
-Using the map and list functions can be cumbersome. Therefore I have added a universial function called `assign()` It allows you to use statements known from other programming languages. 
+Using the map and list functions can be cumbersome. Therefore I have added a universal function called `assign()` It allows you to use statements known from other programming languages. 
 
 The easiest way to illustrate the usefullness is by example:
 
@@ -1107,7 +1107,7 @@ So alot of unecessary repeating code can be omitted.
 I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) and is compatible to CMake's understanding of paths. It is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
 
 ```
-# as soon as you include `oo-cmake.cmake` the current directory is set to 
+# as soon as you include `cmakepp.cmake` the current directory is set to 
 # "${CMAKE_SOURCE_DIR}" which is the directory from which you script file 
 # is called in script mode (`cmake -P`) or the directory of the root 
 # `CMakeLists.txt` file in configure and build steps.
@@ -1263,7 +1263,7 @@ Since I like to provide command line tools based on cmake (using cmake as a cros
 
 ```
 fwrite("datetimescript.cmake" "
-include(\${oocmake_base_dir}/oo-cmake.cmake)
+include(\${oocmake_base_dir}/cmakepp.cmake)
 datetime()
 ans(dt)
 json_print(${dt})
@@ -1524,7 +1524,7 @@ This example shows a more usefull case:  Downloading multiple 'large' files para
     foreach(url ${ARGN})
       ## start download by creating a cmake script
       process_start_script("
-        include(${oocmake_base_dir}/oo-cmake.cmake) # include oocmake
+        include(${oocmake_base_dir}/cmakepp.cmake) # include oocmake
         download(\"${url}\" \"${target_dir}\")
         ans(result_path)
         message(STATUS ${target_dir}/\${result_path})
@@ -1851,10 +1851,7 @@ CMake's programming model is a bit ambigous but also very simple. Every variable
 
 ### Range based List access
 
-Ranges are an awesome way of accessing lists. Take for example the following task: `return the last element, the 3rd element and elements 8 to 7` using cmake this can become complicated:
-
-```
-```
+Ranges are an awesome way of accessing lists. Take for example the following task: `return the last element, the 3rd element and elements 8 to 6` using cmake this can become complicated having to check list lengths and compiling the list of indices needed.  However it is easier if you write `list_range_get(mylist $,2,8:6:-1)`
 
 
 #### Functions and Datatypes

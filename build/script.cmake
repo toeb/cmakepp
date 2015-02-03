@@ -1,7 +1,7 @@
 message(STATUS "running test for cmake functions")
 
 # include oo-cmake
-include("${CMAKE_CURRENT_LIST_DIR}/../oo-cmake.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/../cmakepp.cmake")
 
 message("configuratiation")
 print_locals()

@@ -16,7 +16,7 @@ function(test)
     foreach(url ${ARGN})
       ## start download by creating a cmake script
       process_start_script("
-        include(${oocmake_base_dir}/oo-cmake.cmake) # include oocmake
+        include(${oocmake_base_dir}/cmakepp.cmake) # include oocmake
         download(\"${url}\" \"${target_dir}\")
         ans(result_path)
         message(STATUS ${target_dir}/\${result_path})

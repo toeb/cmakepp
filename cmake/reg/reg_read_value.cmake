@@ -5,5 +5,6 @@
     ans(res)
     map_tryget(${res} "${value_name}")
     ans(res)
+    
     return_ref(res)
   endfunction()

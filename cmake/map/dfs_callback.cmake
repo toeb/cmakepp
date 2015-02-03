@@ -29,8 +29,10 @@
 #   - content_length (accumulated length of list elements + semicolon separators)
 #   - list_element (contains current list element)
 #   - list_element_index (contains current index )
-# map_reference
+# visited_reference
 #   - node (contains ref to revisited map)
+# unvisited_reference
+#   - node (contains ref to unvisited map)
 # map_begin
 #   - node( contains ref to map)
 #   - map_keys (contains all keys of map)
@@ -83,8 +85,10 @@ function(dfs_callback callback)
     ans(was_visited)
 
     if(was_visited)
-      dfs_callback_emit("map_reference")
+      dfs_callback_emit("visited_reference")
       return()
+    else()
+      dfs_callback_emit("unvisited_reference")
     endif()
     map_set(${visited} "${node}" true)
 

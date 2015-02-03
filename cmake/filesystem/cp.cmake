@@ -38,5 +38,3 @@ function(cp)
 
   return()
 endfunction()
-
-

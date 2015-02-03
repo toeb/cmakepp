@@ -1,4 +1,6 @@
 function(script str)
+
+
   map_new()
   ans(expression_cache)
   map_set(global expression_cache ${expression_cache})
@@ -6,11 +8,15 @@ function(script str)
     language("oocmake")
     ans(lang)
     if(NOT lang)
-      oocmake_config(base_dir)
-      ans(base_dir)
+      #oocmake_config(base_dir)
+      #ans(base_dir)
 
-      language("${base_dir}/resources/expr.json")
+      #language("${base_dir}/resources/expr.json")
+      expr_definition()
       ans(lang)
+      language("${lang}")
+      ans(lang)
+
     endif()
     map_tryget("${lang}" md5)
     ans(language_hash)

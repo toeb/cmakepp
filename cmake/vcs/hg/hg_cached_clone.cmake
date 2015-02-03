@@ -11,7 +11,7 @@
       if(async)
         ## this actually works...
         set(script "
-          include(${oocmake_base_dir}/oo-cmake.cmake)
+          include(${oocmake_base_dir}/cmakepp.cmake)
           hg(clone ${remote_uri} ${target_dir})
           hg(update)
           set(ref ${ref})
