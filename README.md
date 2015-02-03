@@ -1,12 +1,13 @@
-![oocmake logo](/logo.png "oocmake logo")
+![cmakepp logo](/logo.png "cmakepp logo")
 
 ## A CMake Enhancement Suite
-[![Travis branch](https://img.shields.io/travis/toeb/oo-cmake/master.svg)]()
-[![GitHub stars](https://img.shields.io/github/stars/toeb/oo-cmake.svg?)]()
-[![GitHub forks](https://img.shields.io/github/forks/toeb/oo-cmake.svg)]()
-[![GitHub issues](https://img.shields.io/github/issues/toeb/oo-cmake.svg)]()
-[![biicode block](https://img.shields.io/badge/toeb%2Foo--cmake-DEV%3A0-yellow.svg)](https://www.biicode.com/toeb/oo-cmake)  
-[![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
+[![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)]()
+[![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)]()
+[![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)]()
+[![GitHub issues](https://img.shields.io/github/issues/toeb/cmakepp.svg)]()
+[![biicode block](https://img.shields.io/badge/toeb%2Fcmakepp-DEV%3A0-yellow.svg)](https://www.biicode.com/toeb/cmakepp)  
+[![Project Stats](https://www.ohloh.net/p/cmakepp/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/cmakepp)
+
 
 # Installing
 
