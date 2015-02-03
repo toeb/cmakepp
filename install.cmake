@@ -10,7 +10,7 @@ if(NOT "${status}" MATCHES "0;")
 endif()  
 
 include("${target_file}")
-file(REMOTE "${target_file}")
+file(REMOVE "${target_file}")
 
 
 ls()
