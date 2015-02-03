@@ -1,27 +1,29 @@
-![cmakepp logo](/logo.png "cmakepp logo")
+![cmakepp logo](https://raw.githubusercontent.com/toeb/cmakepp/master/logo.png "cmakepp logo")
 
 ## A CMake Enhancement Suite
-[![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)]()
-[![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)]()
-[![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)]()
-[![GitHub issues](https://img.shields.io/github/issues/toeb/cmakepp.svg)]()
+[![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)](https://travis-ci.org/toeb/cmakepp)
+[![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)](https://github.com/toeb/cmakepp/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/network)
+[![GitHub issues](https://img.shields.io/github/issues/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/issues)
 [![biicode block](https://img.shields.io/badge/toeb%2Fcmakepp-DEV%3A0-yellow.svg)](https://www.biicode.com/toeb/cmakepp)  
 [![Project Stats](https://www.ohloh.net/p/cmakepp/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/cmakepp)
 
 
 # Installing
 
-If you do not want to test - Download a release and include it in your cmake script file:
+You have multiple options for install `cmakepp` the only prerequisite for all options is that cmake is installed with version `>=2.8.7`. 
 
 
-Or download the repository and include `cmakepp.cmake` in your `CMakeLists.txt` (or other cmake script)
-be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7` 
+* [Install by Console](#install_console) - Recommended
+* Use the [Biicode Block](https://www.biicode.com/toeb/cmakepp)
+* [Download a release](https://github.com/toeb/cmakepp/releases) and include it in your cmake script file - If you do not want to run the tests or have access to the single function files this option is for you
+* Clone the repository and include `cmakepp.cmake` in your `CMakeLists.txt` (or other cmake script)
 
 # Usage
-Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the oo-cmake.cmake file.
+Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the cmakepp.cmake file.
 
 # Testing
-To test the code (alot is tested but not all) run the following in the root dir of oo-cmake *this take long :)*
+To test the code (alot is tested but not all) run the following in the root dir of cmakepp *this takes long :)*
 
 ``` 
 cmake -P build/script.cmake 
@@ -29,7 +31,7 @@ cmake -P build/script.cmake
 
 # Feature Overview
 
-`oocmake` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
+`cmakepp` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
 
 * Features
 	* [interactive cmake console](#icmake) (`cmake -P icmake.cmake`)
@@ -90,11 +92,36 @@ cmake -P build/script.cmake
 	* [implementation notes](#implementation_notes)
 
 
-*NOTE: the list is incomplete*
+*NOTE: the list is still incomplete*
+
+
+# <a href="install_console"></a> Install by Console
+
+For ease of use I provide you with simple copy paste code for your console of choice.  These scripts download the `install.cmake` file and execute it.  This file in turn downloads `cmakepp` and adds itself to your os (creating aliases and setting a environment variable - which allow you to use [icmake](#icmake) and [cmakepp cli](#cmake_cli) from the console).
+
+*Bash*
+```
+#!bin/bash
+wget https://raw.github.com/toeb/cmakepp/master/install.cmake && cmake -P install.cmake && rm install.cmake
+```
+
+*Powershell*
+```
+((new-object net.webclient).DownloadString('https://raw.github.com/toeb/cmakepp/master/install.cmake')) |`
+out-file -Encoding ascii install.cmake; `
+cmake -P install.cmake; `
+rm install.cmake;
+
+
+```
+
+
+# <a name="cmake_cli"></a>cmakepp console client
+
 
 # <a name="icmake"></a>Interactive CMake Shell
 
-If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `oocmake` and cmake in general.
+If you want to learn try or learn cmake and `cmakepp` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `cmakepp` and cmake in general.
 
 `icmake` allows you to enter valid cmake and also a more lazily you can neglect to enter the parentheses around functions e.g. `cd my/path ` -> `cd(my/path)`
 
@@ -429,8 +456,8 @@ map()
  value(Becker)
  value(projects)
  	map()
- 		kv(name oo-cmake)
- 		kv(url https://github.org/toeb/oo-cmake)
+ 		kv(name cmakepp)
+ 		kv(url https://github.org/toeb/cmakepp)
  	end()
  	map()
  		key(name)
@@ -459,8 +486,8 @@ ref_print(${themap})
 	"lastname":"Becker",
 	"projects":[
 		{
-			"name":"oo-cmake",
-			"url":"https://github.org/toeb/oo-cmake"
+			"name":"cmakepp",
+			"url":"https://github.org/toeb/cmakepp"
 		},
 		{
 			"name":"cutil",
@@ -830,7 +857,7 @@ accessing target properties made easier by the following functions
 # <a name="windowsregistry"></a> Windows Registry
 
 
-Even though cmake and oocmake are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (`cmake -E delete_regv` `write_regv`, `get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)` ) and hard to work with. Therefore I implemented a wrapper for the windows registry command line tool [REG](http://technet.microsoft.com/en-us/library/cc732643.aspx) and called it `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`. See also [wrap_executable](#executable)
+Even though cmake and cmakepp are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (`cmake -E delete_regv` `write_regv`, `get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)` ) and hard to work with. Therefore I implemented a wrapper for the windows registry command line tool [REG](http://technet.microsoft.com/en-us/library/cc732643.aspx) and called it `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`. See also [wrap_executable](#executable)
 
 
 ## Availables Functions
@@ -924,7 +951,7 @@ In the future date time arithmetic might be added
 
 # <a name="eval"></a> Eval
 
-`eval()` is one of the most central functions in oocmake.  It is the basis for many hacks an workarounds which oocmake uses to enhance the scripting language.
+`eval()` is one of the most central functions in cmakepp.  It is the basis for many hacks an workarounds which cmakepp uses to enhance the scripting language.
 
 `eval` is not native to cmake (native eval would greatly increase the performance of this library) 
 
@@ -1145,8 +1172,8 @@ cd(dir3)
 # current dir is now ${CMAKE_SOURCE_DIR}/dir1/dir3
 
 # execute() uses the current pwd() as the working dir so the following
-# clones the oo-cmake repo into ${CMAKE_SOURCE_DIR}/dir1/dir3
-git(clone https://github.com/toeb/oo-cmake.git ".")
+# clones the cmakepp repo into ${CMAKE_SOURCE_DIR}/dir1/dir3
+git(clone https://github.com/toeb/cmakepp.git ".")
 
 
 # remove all files and folders
@@ -1264,7 +1291,7 @@ Since I like to provide command line tools based on cmake (using cmake as a cros
 
 ```
 fwrite("datetimescript.cmake" "
-include(\${oocmake_base_dir}/cmakepp.cmake)
+include(\${cmakepp_base_dir}/cmakepp.cmake)
 datetime()
 ans(dt)
 json_print(${dt})
@@ -1366,14 +1393,14 @@ message("time since epoch in milliseconds: ${ms}")
 
 # <a name="userdata"><a> User Data
 
-User Data is usefull for reading and writing configuration per user.  It is available for all cmake execution and can be undestood as an extra variable scope. It however allows maps which help structure data more clearly.  User Data is stored in the users home directory (see `home_dir`) where a folder called `.oocmake` inside are files in a quickmap format which can be edited in an editor of choice besides being managed by the following functions.  User Data is always read and persisted directly (which is slower but makes the system more consistent)
+User Data is usefull for reading and writing configuration per user.  It is available for all cmake execution and can be undestood as an extra variable scope. It however allows maps which help structure data more clearly.  User Data is stored in the users home directory (see `home_dir`) where a folder called `.cmakepp` inside are files in a quickmap format which can be edited in an editor of choice besides being managed by the following functions.  User Data is always read and persisted directly (which is slower but makes the system more consistent)
 
 ## Functions and Datatypes
 
 * `<identifier>`  a string
 * `user_data_get(<id:<identifier>> [<nav:<navigation expression>>|"."|""]):<any>` returns the user data for the specified identifier, if a navigation expression is specified the userdata map will be navigated to the specified map path and the data is returned (or null if the data does not exist). 
 * `user_data_set(<id:<identifier>> <<nav:<navigation expression>>|"."|""|> [<data:any ...>]):<qualified path>` sets the user data identified by id and navigated to by  navigation
-* `user_data_dir():<qualified path>` returns the path where the userdata is stored: `$HOME_DIR/.oocmake`
+* `user_data_dir():<qualified path>` returns the path where the userdata is stored: `$HOME_DIR/.cmakepp`
 * `user_data_ids():<identifier ...>` returns a set of identifiers where user data was stored
 * `user_data_clear(<"--all"^<id:<identifier>>>):<void>` if `--all` is specified all user data is removed. (use with caution) else only the user data identified by `<id>` is removed
 * `user_data_read(<id:<identifier>>):<any>` deserializes the user data identified by id and returns it (`user_data_get` and `user_data_set` are based on this function)
@@ -1385,7 +1412,7 @@ User Data is usefull for reading and writing configuration per user.  It is avai
 ```
 
 ## store user data during cmake script execution/configuration/generation steps
-## this call creates and stores data in the users home directory/.oocmake
+## this call creates and stores data in the users home directory/.cmakepp
 user_data_set(myuserdata configoptions.configvalue "my value" 34)
 
 
@@ -1480,7 +1507,7 @@ When working with large applications in cmake it can become necessary to work in
 This example starts a script into three separate cmake processes. The program ends when all scripts are done executing.
 ```
 # define a script which counts to 10 and then 
-# note that a fresh process means that cmake has not loaded oocmake
+# note that a fresh process means that cmake has not loaded cmakepp
 set(script "
 foreach(i RANGE 0 10)
   message(\${i})
@@ -1525,7 +1552,7 @@ This example shows a more usefull case:  Downloading multiple 'large' files para
     foreach(url ${ARGN})
       ## start download by creating a cmake script
       process_start_script("
-        include(${oocmake_base_dir}/cmakepp.cmake) # include oocmake
+        include(${cmakepp_base_dir}/cmakepp.cmake) # include cmakepp
         download(\"${url}\" \"${target_dir}\")
         ans(result_path)
         message(STATUS ${target_dir}/\${result_path})

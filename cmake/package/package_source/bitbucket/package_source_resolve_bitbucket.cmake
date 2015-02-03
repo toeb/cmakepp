@@ -43,10 +43,11 @@
       set(ref "${main_branch}")  
     endif()
 
-    ## try to get an existing package descriptor
+    set(path package.cmake)
+
+    ## try to get an existing package descriptor by downloading from the raw uri
     set(raw_uri "https://bitbucket.org/${owner}/${repo}/raw/${ref}/${path}")
 
-    set(path package.cmake)
     http_get("${raw_uri}" "" --json)
     ans(package_descriptor)
 
