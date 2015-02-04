@@ -8,7 +8,7 @@
   function(assign __lvalue __operation __rvalue)    
     ## is a __value
 
-    if(NOT "${__operation}_" STREQUAL "=_" )
+    if(NOT "${__operation}" MATCHES "^(=|\\+=)$" )
       ## if no equals sign is present then interpret all
       ## args as a simple literal cmake value
       ## this allows the user to set an expression to 
