@@ -13,10 +13,10 @@ matrix:
 notifications:
   slack: fallto:MlnVOMNkx8YopsaSSxqh2Rcr
 before_install:
-  #- sudo apt-get install cmake
-  #- sudo apt-get install mercurial
-  #- sudo apt-get install git  
-  #- sudo apt-get install subversion
+  - sudo apt-get install cmake
+  - sudo apt-get install mercurial
+  - sudo apt-get install git  
+  - sudo apt-get install subversion
   - git config --global user.email "travis-ci@example.com"
   - git config --global user.name "Build Server"
 install:
