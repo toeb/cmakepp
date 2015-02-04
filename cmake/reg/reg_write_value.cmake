@@ -16,8 +16,3 @@
 
 
 
-
-function(reg_test_write)
-
-  reg_write_value("HKCU/testvalue" "valval" "asd;bsd;csd" )
-endfunction()
