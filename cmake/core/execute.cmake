@@ -43,7 +43,9 @@
     
     ## todo - test this
     string(REPLACE \\ \\\\ arg_string "${arg_string}")
-
+    string_semicolon_decode("${arg_string}")
+    ans(arg_string)
+    message("${arg_string}")
 
     set(execute_process_command "
         execute_process(
