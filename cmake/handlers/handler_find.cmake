@@ -1,5 +1,4 @@
-
-  
+# returns those handlers in handler_lst which match the specified request  
   function(handler_find handler_lst request)
     set(result)
     foreach(handler ${${handler_lst}})

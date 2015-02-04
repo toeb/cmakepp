@@ -1,13 +1,9 @@
-
 {
-	"id":"oo-cmake",
+	"id":"cmakepp",
 	"version":"0.0.0",
-	"description":"a library of cmake functions",
+	"description":"a cmake enhancement suite",
 	"license":"MIT",
-	"owner":"Tobias P. Becker",
-  "cmake_exports":[
-    "cmake/**.cmake"
-  ]
+	"author":"Tobias P. Becker"
 }
 
 

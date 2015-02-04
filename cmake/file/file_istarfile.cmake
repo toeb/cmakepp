@@ -1,17 +1,22 @@
-
-function(file_istarfile result file)
-	set(cmd  ${CMAKE_COMMAND} -E tar ztvf "${file}")
-	execute_process(
-		COMMAND ${cmd}
-		WORKING_DIRECTORY "${target}"		
-		OUTPUT_QUIET
-		ERROR_QUIET
-		RESULT_VARIABLE res
-	)		
-	if(${res} STREQUAL "0")
-		return_value(true)
-	else()
-		return_value(false)
+## returns true if the specified file is a tar archive 
+function(file_istarfile file)
+	path_qualify(file)
+	if(NOT EXISTS "${file}")
+		return(false)
+	endif()
+	if(IS_DIRECTORY "${file}")
+		return(false)
+	endif()
+	tar(ztvf "${file}" --return-code)
+	ans(res)
+	if(NOT res EQUAL 0)
+		return(false)
 	endif()
 
+	return(true)
+	
 endfunction()
+
+
+
+

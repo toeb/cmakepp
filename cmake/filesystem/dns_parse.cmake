@@ -1,7 +1,7 @@
 
 
   function(dns_parse input)
-    regex_table()
+    regex_uri()
 
     string_take_regex_replace(input "${dns_user_info_regex}" "\\1")
     ans(user_info)
@@ -63,12 +63,19 @@
 
     string_split_at_first(user_name password "${user_info}" ":")
 
+
+    set(normalized_host "${host}")
+    if("${normalized_host}_" STREQUAL "_" )
+      set(normalized_host localhost)
+    endif()
+
     map_capture_new(
       user_info
       user_name
       password
       host_port
       host
+      normalized_host
       labels
       top_label
       domain

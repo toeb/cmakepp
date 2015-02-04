@@ -1,5 +1,4 @@
 
-
   function(command_line_handler)
     this_set(name "${ARGN}")
 
@@ -9,7 +8,6 @@
 
       obj_member_call(${this} run ${ARGN})
       ans(res)
-      json_print(${res})
       return_ref(res)
     endfunction()
 

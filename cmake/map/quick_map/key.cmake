@@ -9,3 +9,28 @@ function(key key)
   stack_pop(:quick_map_key_stack)
   stack_push(:quick_map_key_stack "${key}")
 endfunction()
+
+
+## key() -> <void>
+##
+## starts a new property for a map - may only be called
+## after key or map
+## fails if current ref is not a map
+function(key key)
+  stack_pop(quickmap)
+  ans(current_key)
+
+  string_take_address(current_key)
+  ans(current_ref)
+ 
+  map_isvalid("${current_ref}")
+  ans(ismap)
+  if(NOT ismap)
+    message(FATAL_ERROR "expected a map before key() call")
+  endif()
+
+
+  map_set("${current_ref}" "${key}" "")
+  stack_push(quickmap "${current_ref}.${key}")
+  return()
+endfunction()

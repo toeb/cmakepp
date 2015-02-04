@@ -1,24 +1,29 @@
-![oocmake logo](/logo.png "oocmake logo")
+![cmakepp logo](https://raw.githubusercontent.com/toeb/cmakepp/master/logo.png "cmakepp logo")
 
 ## A CMake Enhancement Suite
-[![Travis branch](https://img.shields.io/travis/toeb/oo-cmake/master.svg)]()
-[![GitHub stars](https://img.shields.io/github/stars/toeb/oo-cmake.svg?)]()
-[![GitHub forks](https://img.shields.io/github/forks/toeb/oo-cmake.svg)]()
-[![GitHub issues](https://img.shields.io/github/issues/toeb/oo-cmake.svg)]()
-[![biicode block](https://img.shields.io/badge/toeb%2Foo--cmake-DEV%3A0-yellow.svg)](https://www.biicode.com/toeb/oo-cmake)  
-[![Project Stats](https://www.ohloh.net/p/oo-cmake/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/oo-cmake)
+[![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)](https://travis-ci.org/toeb/cmakepp)
+[![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)](https://github.com/toeb/cmakepp/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/network)
+[![GitHub issues](https://img.shields.io/github/issues/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/issues)
+[![biicode block](https://img.shields.io/badge/toeb%2Fcmakepp-DEV%3A0-yellow.svg)](https://www.biicode.com/toeb/cmakepp)  
+[![Project Stats](https://www.ohloh.net/p/cmakepp/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/cmakepp)
 
-objects, methods, functions, maps, inheritance, parsers, lists, process management,  ...
+
 # Installing
 
-Download the code and include `oo-cmake.cmake` in your `CMakeLists.txt` (or other cmake script)
-be sure to use an up to date version of cmake. `oo-cmake` requires cmake version `>=2.8.7` 
+You have multiple options for install `cmakepp` the only prerequisite for all options is that cmake is installed with version `>=2.8.7`. 
+
+
+* [Install by Console](#install_console) - Recommended
+* Use the [Biicode Block](https://www.biicode.com/toeb/cmakepp)
+* [Download a release](https://github.com/toeb/cmakepp/releases) and include it in your cmake script file - If you do not want to run the tests or have access to the single function files this option is for you
+* Clone the repository and include `cmakepp.cmake` in your `CMakeLists.txt` (or other cmake script)
 
 # Usage
-Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the oo-cmake.cmake file.
+Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the cmakepp.cmake file.
 
 # Testing
-To test the code (alot is tested but not all) run the following in the root dir of oo-cmake *this take long :)*
+To test the code (alot is tested but not all) run the following in the root dir of cmakepp *this takes long :)*
 
 ``` 
 cmake -P build/script.cmake 
@@ -26,15 +31,27 @@ cmake -P build/script.cmake
 
 # Feature Overview
 
-`oocmake` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
+`cmakepp` is a general purpose library for cmake.  It contains functionality that was missing in my opinion and also wraps some cmake functionality to fit to the style of this library.
 
 * Features
 	* [interactive cmake console](#icmake) (`cmake -P icmake.cmake`)
+	* [lists](#lists) - common and usefull list and set operations.
+		- [ranges](#ranges) range based access to lists
+	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
+		* graph algorithms 
+		* serialization/deserialization
+			* [json](#json)
+			* [quickmap format](#quickmap) (native to cmake)
+			* [xml](#xml)
+	* [assign](#assign) universal assign ease of use for maps and functions 
+	* [expression syntax](#expr).
+			* `obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}")` -> creates the specified object 
 	* [eval](#eval) - evaluates cmake code and is the basis of many advanced features
 	* [shell](#shell) - "platform independent" shell script execution
 		* [aliases](#aliases) - platform independent shell aliases
-		* [console](#console) - functions for console input and output
+		* [console](#console) - functions for console input and outputf
 	* [filesystem](#filesystem) - directory and file functions with close relations to bash syntax
+		* [mime types](#mimetypes) - mime type based file handling  
 		* [compression/decompression](#compression) - compressing and decompressing tgz and zip files
 	* [command execution](#execute) simplifying access to exectables using the shell tools.
 	* [cmake tool compilation](#tooling) simple c/c++ tools for cmake
@@ -46,6 +63,7 @@ cmake -P build/script.cmake
 		* `git()` convenience function for calling git vcs
 		* `svn()` convenience function for calling subversion vcs
 		* utility methods for working with the different systems
+	* [package search and retrieval](#packages) 
 	* [cmake](#cmake) calling cmake from cmake.
 	* [date/time](#datetime)
 	  * function for getting the correct date and time on all OSs
@@ -57,16 +75,7 @@ cmake -P build/script.cmake
 		* query registry keys for values
 	* [string functions](#stringfunctions) - advanced string manipulation	
 	* [URIs](#uris) - Uniform Resource Identifier parsing and formatting	
-	* [lists](#lists) - common and usefull list and set operations.
-	* [maps](#maps) - map functions and utility functions (nested data structures for cmake)
-		* graph algorithms 
-		* serialization/deserialization
-			* [json](#json)
-			* [quickmap format](#quickmap) (native to cmake)
-			* [xml](#xml)
 	* [user data](#userdata) - persists and retrieves data for the current user (e.g. allowing cross build/ script configuration)
-	* [expression syntax](#expr).
-			* `obj("{id:1,prop:{hello:3, other:[1,2,3,4]}}")` -> creates the specified object
 	* functions
 		* [returning values](#return)
 		* define dynamic functions (without cluttering the namespace)
@@ -83,11 +92,38 @@ cmake -P build/script.cmake
 	* [implementation notes](#implementation_notes)
 
 
-*NOTE: the list is incomplete*
+*NOTE: the list is still incomplete*
+
+
+# <a href="install_console"></a> Install by Console
+
+For ease of use I provide you with simple copy paste code for your console of choice.  These scripts download the `install.cmake` file and execute it.  This file in turn downloads `cmakepp` and adds itself to your os (creating aliases and setting a environment variable - which allow you to use [icmake](#icmake) and [cmakepp cli](#cmake_cli) from the console).
+
+*Bash*
+```
+#!bin/bash
+wget https://raw.github.com/toeb/cmakepp/master/install.cmake && cmake -P install.cmake && rm install.cmake
+```
+
+*Powershell*
+```
+((new-object net.webclient).DownloadString('https://raw.github.com/toeb/cmakepp/master/install.cmake')) |`
+out-file -Encoding ascii install.cmake; `
+cmake -P install.cmake; `
+rm install.cmake;
+
+
+```
+
+
+# <a name="cmake_cli"></a>cmakepp Console Client
+
+
+
 
 # <a name="icmake"></a>Interactive CMake Shell
 
-If you want to learn try or learn cmake and `oocmake` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `oocmake` and cmake in general.
+If you want to learn try or learn cmake and `cmakepp` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `cmakepp` and cmake in general.
 
 `icmake` allows you to enter valid cmake and also a more lazily you can neglect to enter the parentheses around functions e.g. `cd my/path ` -> `cd(my/path)`
 
@@ -299,40 +335,60 @@ c = 3
 * `map_iterator_current(<iterator ref>):<value>` also sets `<iterator ref>.key` and `<iterator ref>.value` 
 * `map_iterator_break(<iterator>)` only usable inside a loop (normally a while loop) it calls `break()` when the iterator has ended also sets `<iterator ref>.key` and `<iterator ref>.value` 
 
-## Easy map handling with `nav()`
+##  <a href="assign"></a> Easy map handling with `assign()`
 
-Using the functions metnioned before can be cumbersome. Therefore I have added a universial function called `nav()` It allows you to use statements known from other programming languages. 
+Using the map and list functions can be cumbersome. Therefore I have added a universal function called `assign()` It allows you to use statements known from other programming languages. 
 
+The easiest way to illustrate the usefullness is by example:
 
-### Example
-
-```
-set(myvar hello) # typical cmake assign statement
-nav(mymap.prop1 = myvar) # creates the variable mymap and sets its prop1 field to the value of myvar
-assert(DEREF {mymap.prop1} STREQUAL "hello") # assert allows map navigation replacing {<expr>} with the result of nav(<expr>)
-
-nav(mymap.prop2 myvar) # creates the property prop2 on mymap and assigns the value myvar
-assert(DEREF {mymap.prop2} STREQUAL "myvar")
-
-nav(res = mymap.prop1) # sets res to the value of mymap.prop1
-assert("${res}" STREQUAL "hello")
-
-nav(res FORMAT "{mymap.prop1}-{mymap.prop2}") #you can also format a string using the {} syntax
-assert("${res}" STREQUAL "hello-myvar") 
-
-nav(a.b.c.d.e 3) # 
-json(${a})
-ans(res)
-assert(${res} STREQUAL "{\"b\":{\"c\":{\"d\":{\"e\":3}}}}")
+*Examples*
 
 ```
+## assign the string value 3 to x  - single quotes indicate a value
+assign(x = '3') 
+assert("${x}" EQUAL 3)
 
-### Caveats 
-* objects are created on the fly
-* nav is slow because it uses a lot of regex and loops to parse the expressions
+## assign a string containing spaces to x
+assign(x = "'hello there!'") 
+assert("${x}" STREQUAL "hello there!" )
+
+## assign the result of a function call to x
+assign(x = string_length("abcde"))
+assert("${x}" EQUAL 5)
+
+## assign x the result of an expression
+assign(x = "{id:1}")  # the strign {id:1} is parsed into a map
+assertf("{x.id}" EQUAL 1)
+
+## append a value to x
+set(x)
+assign(x[] = '1')
+assign(x[] = '2')
+assign(x[] = '3')
+assign(x[] = '4')
+assert(${x} EQUALS 1 2 3 4)
+
+## reverse x
+set(x 1 2 3 4)
+assign(x = x[$:0:-1]) # read assign x at end to 0 in -1 increments to x
+assert(${x} EQUALS 4 3 2 1)
+
+## replace a range of x
+set(x 1 2 3 4)
+assign(x[1:2] = '5')
+assert(${x} EQUALS 1 5 4)
+
+## create a object path if it does not exist by prepending '!'
+set(x)
+assign(!x.y.z = '3')
+assert_matches("{y:{z:3}}" "${x}")
+
+...
+
+```
 
 
-## <a name="xml"></a> Naive Xml Deserialization
+## <a href="xml"></a> Naive Xml Deserialization
 
 Xml Deserialization is a complex subject in CMake.  I have currently implemented a single naive implementation based on regular expressions which *does not* allow recursive nodes (ie nodes with the same tag being child of one another).
 
@@ -402,8 +458,8 @@ map()
  value(Becker)
  value(projects)
  	map()
- 		kv(name oo-cmake)
- 		kv(url https://github.org/toeb/oo-cmake)
+ 		kv(name cmakepp)
+ 		kv(url https://github.org/toeb/cmakepp)
  	end()
  	map()
  		key(name)
@@ -432,8 +488,8 @@ ref_print(${themap})
 	"lastname":"Becker",
 	"projects":[
 		{
-			"name":"oo-cmake",
-			"url":"https://github.org/toeb/oo-cmake"
+			"name":"cmakepp",
+			"url":"https://github.org/toeb/cmakepp"
 		},
 		{
 			"name":"cutil",
@@ -445,11 +501,6 @@ ref_print(${themap})
 		"number":"99"
 	}
 }
-
-  map_set(${res} type "${func_type}")
-  map_set(${res} name "${func_name}")
-  map_set(${res} args "${all_args}")
-  map_set(${res} code "${function_string}")
 
 ```
 
@@ -808,7 +859,7 @@ accessing target properties made easier by the following functions
 # <a name="windowsregistry"></a> Windows Registry
 
 
-Even though cmake and oocmake are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (`cmake -E delete_regv` `write_regv`, `get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)` ) and hard to work with. Therefore I implemented a wrapper for the windows registry command line tool [REG](http://technet.microsoft.com/en-us/library/cc732643.aspx) and called it `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`. See also [wrap_executable](#executable)
+Even though cmake and cmakepp are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (`cmake -E delete_regv` `write_regv`, `get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)` ) and hard to work with. Therefore I implemented a wrapper for the windows registry command line tool [REG](http://technet.microsoft.com/en-us/library/cc732643.aspx) and called it `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`. See also [wrap_executable](#executable)
 
 
 ## Availables Functions
@@ -902,7 +953,7 @@ In the future date time arithmetic might be added
 
 # <a name="eval"></a> Eval
 
-`eval()` is one of the most central functions in oocmake.  It is the basis for many hacks an workarounds which oocmake uses to enhance the scripting language.
+`eval()` is one of the most central functions in cmakepp.  It is the basis for many hacks an workarounds which cmakepp uses to enhance the scripting language.
 
 `eval` is not native to cmake (native eval would greatly increase the performance of this library) 
 
@@ -1086,7 +1137,7 @@ So alot of unecessary repeating code can be omitted.
 I have always been a bit confused when working with cmake's file functions and the logic behind paths (sometimes they are found sometimes they are not...) For ease of use I reimplemented a own path managing system which behaves very similar to powershell and bash (see [ss64.com](http://ss64.com/bash/)) and is compatible to CMake's understanding of paths. It is based around a global path stack and path qualification. All of my functions which work with paths use this system. To better show you what I mean I created the following example:
 
 ```
-# as soon as you include `oo-cmake.cmake` the current directory is set to 
+# as soon as you include `cmakepp.cmake` the current directory is set to 
 # "${CMAKE_SOURCE_DIR}" which is the directory from which you script file 
 # is called in script mode (`cmake -P`) or the directory of the root 
 # `CMakeLists.txt` file in configure and build steps.
@@ -1123,8 +1174,8 @@ cd(dir3)
 # current dir is now ${CMAKE_SOURCE_DIR}/dir1/dir3
 
 # execute() uses the current pwd() as the working dir so the following
-# clones the oo-cmake repo into ${CMAKE_SOURCE_DIR}/dir1/dir3
-git(clone https://github.com/toeb/oo-cmake.git ".")
+# clones the cmakepp repo into ${CMAKE_SOURCE_DIR}/dir1/dir3
+git(clone https://github.com/toeb/cmakepp.git ".")
 
 
 # remove all files and folders
@@ -1142,8 +1193,9 @@ popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
 * `<file> ::= <path|qualifies to an existing file>`
 * `<windows path>`  a windows path possibly with and possibly with drive name `C:\Users\Tobi\README.md`
 * `<relative path>` a simple relative path '../dir2/./test.txt'
+* `<home path>` a path starting with a tilde `~` which is resolved to the users home directory (under windows and posix)
 * `<qualified path>` a fully qualified path depending on OS it only contains forward slashes and is cmake's `get_filename_component(result "${input} REAL_PATH)` returns. All symlinks are resolved. It is absolute
-* `<unqualified path> ::= <windows path>|<relative path>|<qualified path>` 
+* `<unqualified path> ::= <windows path>|<relative path>|<home path>|<qualified path>` 
 * `<path> ::= <unqualified path>`
 * `path(<unqualified path>)-><qualified path>` qualifies a path and returns it.  if path is relative (with no drive letter under windows or no initial / on unix) it will be qualified with the current directory `pwd()`
 * `pwd()-> <qualified path>` returns the top of the path stack. relative paths are relative to `pwd()`
@@ -1177,12 +1229,61 @@ popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
 
 Since I have been using cmake for what it has not been created (user interaction) I needed to enhance console output and "invent" console input.  using shell magic it became possible for me to read input from the shell during cmake execution.  You can see it in action in the interactive cmake shell `icmake` (start it by running cmake -P icmake.cmake) Also I was missing a way of writing to the shell without appending a linebreak - using `cmake -E echo_append` it was possibly for me to output data without ending the line.  
 
+### Enhanced `message` function
+
+When working with recursive calls and complex build processes it is sometimes useful to allow output to be indented which helps the user understand the output more easily.
+
+Therfore I extended the `message` function to allow some extra flags which control  indentation on the console. The indentation functionality can also be controlled using the `message_indent*` functions.  Take the following example:
+
+*Example*
+
+```
+function(add_some_lib)
+	message(PUSH_AFTER "adding somelib")
+	...
+	message(POP_AFTER "done")
+endfunction()
+function(add_my_target)
+  message(PUSH_AFTER "adding my target")
+  ...
+  message("gathering sources")
+  add_some_lib()
+  ...
+  message(POP_AFTER "complete")
+endfunction()
+
+message("condiguring")
+add_some_lib()
+add_my_target()
+message("finished")
+```
+
+*Output*:
+```
+adding somelib
+adding my target
+  gathering sources
+  adding somelib
+    done
+  complete
+finished
+
+```
 
 ### Functions
 
 * `read_line()-><string>` prompts the user to input text. waiting for a line break. the result is a string containing the line read from console
 * `echo_append([args ...])` appends the specifeid arguments to stdout without a new line at the end
 * `echo([args ...])` appends the specified arguments to stdout and adds a new line
+* `message`
+* `message(<flags?> <string> )` enhanced message function (with indentation)
+	- `PUSH` 
+* `print(str)` prints the specified string to console (default is stderr...) using `_message` 
+* `message_indent_level():<uint>` returns the level of indentation
+* `message_indent_get():<>` returns the indentation string `string_repeat("  " ${n})` (two spaces times the indentation level)
+* `message_indent_push(<level?:[+-]?<uint>>):<uint>`  pushes the specified level on to the indentation stack making it the current level. if the number is preceded by `+` or `-` the value is relative to the current indentation level.
+* `message_indent_pop():<uint>` removes the last level from the stack and returns the new current level
+* `message_indent(<string>)` writes the string to the console indenting it
  
 
 
@@ -1192,7 +1293,7 @@ Since I like to provide command line tools based on cmake (using cmake as a cros
 
 ```
 fwrite("datetimescript.cmake" "
-include(\${oocmake_base_dir}/oo-cmake.cmake)
+include(\${cmakepp_base_dir}/cmakepp.cmake)
 datetime()
 ans(dt)
 json_print(${dt})
@@ -1294,14 +1395,14 @@ message("time since epoch in milliseconds: ${ms}")
 
 # <a name="userdata"><a> User Data
 
-User Data is usefull for reading and writing configuration per user.  It is available for all cmake execution and can be undestood as an extra variable scope. It however allows maps which help structure data more clearly.  User Data is stored in the users home directory (see `home_dir`) where a folder called `.oocmake` inside are files in a quickmap format which can be edited in an editor of choice besides being managed by the following functions.  User Data is always read and persisted directly (which is slower but makes the system more consistent)
+User Data is usefull for reading and writing configuration per user.  It is available for all cmake execution and can be undestood as an extra variable scope. It however allows maps which help structure data more clearly.  User Data is stored in the users home directory (see `home_dir`) where a folder called `.cmakepp` inside are files in a quickmap format which can be edited in an editor of choice besides being managed by the following functions.  User Data is always read and persisted directly (which is slower but makes the system more consistent)
 
 ## Functions and Datatypes
 
 * `<identifier>`  a string
 * `user_data_get(<id:<identifier>> [<nav:<navigation expression>>|"."|""]):<any>` returns the user data for the specified identifier, if a navigation expression is specified the userdata map will be navigated to the specified map path and the data is returned (or null if the data does not exist). 
 * `user_data_set(<id:<identifier>> <<nav:<navigation expression>>|"."|""|> [<data:any ...>]):<qualified path>` sets the user data identified by id and navigated to by  navigation
-* `user_data_dir():<qualified path>` returns the path where the userdata is stored: `$HOME_DIR/.oocmake`
+* `user_data_dir():<qualified path>` returns the path where the userdata is stored: `$HOME_DIR/.cmakepp`
 * `user_data_ids():<identifier ...>` returns a set of identifiers where user data was stored
 * `user_data_clear(<"--all"^<id:<identifier>>>):<void>` if `--all` is specified all user data is removed. (use with caution) else only the user data identified by `<id>` is removed
 * `user_data_read(<id:<identifier>>):<any>` deserializes the user data identified by id and returns it (`user_data_get` and `user_data_set` are based on this function)
@@ -1313,7 +1414,7 @@ User Data is usefull for reading and writing configuration per user.  It is avai
 ```
 
 ## store user data during cmake script execution/configuration/generation steps
-## this call creates and stores data in the users home directory/.oocmake
+## this call creates and stores data in the users home directory/.cmakepp
 user_data_set(myuserdata configoptions.configvalue "my value" 34)
 
 
@@ -1408,7 +1509,7 @@ When working with large applications in cmake it can become necessary to work in
 This example starts a script into three separate cmake processes. The program ends when all scripts are done executing.
 ```
 # define a script which counts to 10 and then 
-# note that a fresh process means that cmake has not loaded oocmake
+# note that a fresh process means that cmake has not loaded cmakepp
 set(script "
 foreach(i RANGE 0 10)
   message(\${i})
@@ -1453,7 +1554,7 @@ This example shows a more usefull case:  Downloading multiple 'large' files para
     foreach(url ${ARGN})
       ## start download by creating a cmake script
       process_start_script("
-        include(${oocmake_base_dir}/oo-cmake.cmake) # include oocmake
+        include(${cmakepp_base_dir}/cmakepp.cmake) # include cmakepp
         download(\"${url}\" \"${target_dir}\")
         ans(result_path)
         message(STATUS ${target_dir}/\${result_path})
@@ -1776,6 +1877,299 @@ CMake's programming model is a bit ambigous but also very simple. Every variable
 ## Caveats
 
 * some list functions wrap default cmake behaviour. That means that they are slower.  So in some cases where you are doing alot of function calling you should use the default cmake functions to make everything faster.
+
+
+### Range based List access
+
+Ranges are an awesome way of accessing lists. Take for example the following task: `return the last element, the 3rd element and elements 8 to 6` using cmake this can become complicated having to check list lengths and compiling the list of indices needed.  However it is easier if you write `list_range_get(mylist $,2,8:6:-1)`
+
+
+#### Functions and Datatypes
+
+* `list_range_get()`
+* `list_range_indices()`
+* `list_range_partial_write()`
+* `list_range_remove()`
+* `list_range_replace()`
+* `list_range_set()`
+* `list_range_try_get()`
+
+
+# <a href="packages"></a> Package Search and Retrieval
+
+## Motivation
+
+A best practice for retrieving and using third party libraries with a platform independent build system (for c++) is currently not available.  So I have decided to throw my hat in the ring by adding package control to cmake.  I compete with other great solutions in this area:
+
+* [biicode]() a file based dependency management system depending on a central webservice. 
+* [hunter]() a decentralized package manager with a central repository for `hunter gates` 
+* [cpm]() a git, subversion and hg based package manager also indexes packages in a github repository
+
+I want to be able to use decentralized package sources (ie not a centralized server through which all requests go) and be easily extinsible to incoporate other package services with minimal overhead.
+
+I want package search and retrieval to be a very simple process so it can be applied generally. (no specialization on C++, no callbacks, installation, etc - these subjects are important and are adressed but not in respect to package search and retrieval) 
+
+Using package search and retrieval as a base I will extend it by [dependency management](#) and [cpp project generation](#). 
+
+## Implementation
+
+I chose a very simple interface to handle packages *note: these functions exist for every `package source` (not globally) - except pull which is only implemented by writable data sources*:  
+
+* `<package>` is an abstract term. It describes a set of files and meta information (`<package descriptor>`) which is identified by a `<package uri>`
+* `<package descriptor>` meta information on a package. No constraint on the data is made. There are however some properties which have special meaning and are listed here
+	* `id: <string>` the name of the `package` it should be uniqueish. At least in its usage context it should be unique.
+	* `version: <semver>` the version of the package  	  
+	* `...` other properties do not pertain to package search and retrieval but rather to project- and dependency-management these are described elsewhere.
+* `<package uri>` is a `<uri>` of an existing uniquely identified `<package>` this uri identifies a `<package>`'s contents and `package descriptor` the content and meta information of the package SHOULD BE immutable. This constraint is needed to allow for dependency management and guaranteeing a package's reliability. Every ``package source`` will tell you what kind of guarantee it gives your.  
+* `<package handle>`  a package handle is an object containing information on a package and has a unique key called `uri`.  The data varies for a package handle depending on the `package source` it stems from. Some sources might add more meta information than others. 
+	- properties   
+		* `uri :<package uri>` required. uniquely identifies this package
+		* `package_descriptor: <package_descriptor?>` required after resolve (may be null or generated.)
+		* `content_dir:<content dir>` required after successful pull 
+		* `...`
+* `query(<~uri> [--package-handle]) -> <package uri...>` takes a uri query and returns a list of unique unchanging `<package uri>` which will be valid now and generally in the future.  It is important to note the unchanging aspect as once a package is uniquely identified the user expects it only to change when he/she wants it to.
+	* `--package-handle` will return a `<package handle>` instead of a `<package uri>`
+	* `--refresh` will cause an update of any cache being used.  `package source`s which do not cache will silently ignore this flag. 	 
+* `resolve(<~uri> [--refresh]) -> <package handle?>` takes a uri and returns a `<package handle>`  if the uri uniquely identifies a package.  If the uri specified is not unique null is returned.
+	* `--refresh` will cause an update of any cache being used. `package source`s which do not cache will silently ignore this flag.	 
+* `pull(<~uri> <target_dir?> [--refresh] [--reference]) -> <package handle>` takes a uri which is resolved to a package.  The content of the package is then loaded into the specified target dir (relative to current `pwd`) The returned package handle will contain a property called `content_dir` which will normally but not necessarily be the same to `target_dir`
+	- `--refresh` will cause an update of any cache being used
+	- `--reference` will set the `content_dir` of the package handle to a local path which already contains the content associated with the `package uri` if the `package source` does not support the reference flag it ifnore the `--reference` flag
+* `push(<~package handle> ...) -> <package uri>` the implemenation of this function is not necessary and not available for all `package source`s - it allows upload of a package to a `package source`. After the successfull upload the `<package uri>` is returned. 
+	- `...` arguments dependening on the `package source` being used.
+
+The `package source`s described hitherto all have a constructor function which returns a `package source` object. The `pull`/`push`/`resolve`/`query` implementations have a longer function name and SHOULD NOT be used directly but by calling them on the `package source` object using `call(...)` or `assign(...)`.
+
+If your are just interested in pulling packages from a remote to a target directory you should use the [default package methods](#packages_default_methods): `pull_package`, `resolve_package`, `query_package`  which work globally and need no special `package source` object. 
+
+*Examples*
+
+```
+## create a github package source and use it to find all local repositories of a github user and print them to the console
+set(user "toeb")
+assign(source = github_package_source())
+assign(package_uris = source.query("${user}"))
+message("all packages for ${user}")
+foreach(package_uri ${package_uris})
+	message("  ${package_uri}")
+endforeach()
+```
+
+### <a href="packages_default_methods"></a> Default Package Source nad Default Package Functions
+
+The default package source combines access to github, bitbucket,webarchives, git, svn, hg, local archives and local dirs in a single package source. 
+
+It can be accessed conveniently by these global functions
+
+* `default_package_source() -> <default package source>`
+* `query_package(<~uri>):<package uri...>`
+* `resolve_package(<~uri>):<package handle?>`
+* `pull_package(<~uri> <target dir?>):<package handle>`
+
+*Examples*
+
+```
+
+## pull a github package to current user's home dir from github
+pull_package("toeb/cmakepp" "~/current_cmakepp")
+
+## pull a bitbucket package to pwd
+pull_package("eigen/eigen")
+
+## pull a package which exists in both bitbucket and github under the same user/name from github
+pull_package("github:toeb/test_repo")
+
+## find all packages from user toeb in bitbucket and github
+
+assign(package_uris = query_package(toeb))
+foreach(package_uri ${package_uris})
+	message("  ${package_uri}")
+endforeach()
+
+```
+
+### Package Sources
+
+A `package source` is a set of methods and possibly some implementation specific properties.  The interface for a `package source` was already described and consists of the methods.
+* `query`
+* `resolve`
+* `pull`
+* `push` *optional*
+
+In the following sections the package source implementations are briefly discussed. 
+
+#### github package source
+
+A package source which uses the github api to parse remote source packages. The idea is to use only the `<user>/<repo>` string to identify a source package.
+
+* `query uri format` a combination of `<github user>/<github repo?>/<branch/tag/release?>`. specifying only the user returns all its repositories specifying user and repository will return the current default repository. specifying a branch will also check the branch
+* `package uri format` a uri of the following format `github:<user>/<repo>/<ref?>`
+* Functions
+	- `github_package_source() -> <path package source>` returns a github package source object which the following implementations.  
+	- `query: package_source_query_github(...)->...`
+	- `resolve: package_source_resolve_github(...)-> <package handle?>` package handle contains a property called `repo_descriptor` which contains github specific data to the repository
+	- `pull: package_source_pull_github(...)->...`
+
+
+#### bitbucket package source
+
+A package source which uses the bitbucket api to parse remote source packages. 
+
+* `query uri format` a combination of `<bitbucket user>/<bitbucket repo?>/<branch/tag/release?>`. specifying only the user returns all its repositories specifying user and repository will return the current default repository. specifying a branch will also check the branch
+* `package uri format` a uri of the following format `bitbucket:<user>/<repo>/<ref?>`
+* Functions
+	- `bitbucket_package_source() -> <path package source>` returns a bitbucket package source object which contains the following methods.
+	- `package_source_query_bitbucket(...)->...`
+	- `package_source_resolve_bitbucket(...)-> <package handle?>` package handle contains a property called `repo_descriptor` which contains bitbucket specific data to the repository
+	- `package_source_pull_bitbucket(...)->...`
+
+
+#### path package source
+
+* `query uri format` - takes any local `<path>` (relative or absolute) or local path uri (`file://...`) that is points to an existing directory. (expects a `package descriptor file` in the local directory. 
+* `package uri format` - a file schemed uri with no query which contains the absolute path of the package (no relative paths allowed in *unique* resource identifier)
+* Functions
+	- `path_package_source() -> <path package source>` returns a path package source object which ontains the methods described above 
+	- `package_source_query_path(...)->...`
+	- `package_source_resolve_path(...)->...`
+	- `package_source_pull_path(...)->...`
+	- `package_source_push_path(...)->...`
+
+*Examples*
+
+* valid query uris
+	- `../pkg` relative path
+	- `C:\path\to\package` absolute windows path
+	- `pkg2` relative path
+	- `/home/path/pkg3` absolute posix path
+	- `~/pkgX` absolute home path 
+	- `file:///C:/users/tobi/packages/pkg1` valid file uri 
+	- `file://localhost/C:/users/tobi/packages/pkg1` valid file uri 
+* valid package uris
+	- `file:///usr/local/pkg1`
+	- `file://localhost/usr/local/pkg1`
+* valid local package dir
+	- contains `package.cmake` - a json file describing the package meta data
+
+#### archive package source
+
+*Note: Currently only application/x-gzip files are supported - the support for other formats is automatically extended when decompress/compress functions support new formats*
+
+* `query uri format` - takes any local `<path>`  (relative or absolute) or local path uri (`file://...`) that points to an existing archive file (see `compress`/`decompress` functions)
+* `package uri format` - a file schemed uri which contains the absolute path to a readable archive file.
+* Functions
+	- `archive_package_source() -> <archive package source>`
+	- `package_source_query_archive(...)->...`
+	- `package_source_resolve_archive(...)->...`
+	- `package_source_pull_archive(...)->...`
+	- `package_source_push_archive(...)->...`
+
+*Examples*
+
+* valid query uris
+	- `../pkg.tar.gz` relative path
+	- `C:\path\to\package.gz` absolute windows path to existing tgz file
+	- `pkg3.7z` (does not work until decompress works with 7z files however correct nonetheless)
+	- `~/pkg4.gz` home path
+	- `file:///path/to/tar/file.gz`
+* valid package uris
+	- `file:///user/local/pkg1.tar.gz`
+	- `file://localhost/usr/local/pkg1.tar.gz`
+
+#### web archive package source
+
+*Note: same as local archive*
+
+* `query uri format` - takes any uri which points to downloadable archive file. (including query) (normally the scheme would be `http` or `https` however only the protocol needs to be http as this package source sends a `HTTP GET` request to the specified uri.)  See `http_get` for more information on how to set up security tokens etc. 
+* `package uri format` - same as `query uri format`
+* Functions
+	- `webarchive_package_source() -> <webarchive package source>`
+	- `package_source_query_webarchive(...)->...`
+	- `package_source_resolve_webarchive(...)->...` tries to read the `package descriptor` inside the archive.  If that fails tries to parse the filename as a package descriptor. 
+	- `package_source_pull_webarchive(...)->...`
+	- NOT IMPLEMENTED YET `package_source_push_webarchive(<~package handle> <target: <~uri>>)->...` uses `http_put` to upload a package to the specified uri
+
+*Examples*
+
+* valid query uris
+	- `http://downloads.sourceforge.net/project/jsoncpp/jsoncpp/0.5.0/jsoncpp-src-0.5.0.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjsoncpp%2F&ts=1422460575&use_mirror=switch`
+	- `http://github.com/lloyd/yajl/tarball/2.1.0`
+
+#### git package source
+
+Uses the source code management sytem `git` to access a package.  A git repository is interpreted as a package with refs (tags/branches/hashes) being interpreted as different version.
+
+* `query uri format` - takes any uri which git can use (`https`, `ssh`, `git`, `user@host:repo.git`) internally `git ls-remote` is used to check if the uri points to a valid repository. You can specify a ref, branch or tag by appending a query to the uri e.g. `?tag=v0.0.1`
+* `package uri format` - same as `query uri format` but with the additional scheme `gitscm` added
+* Functions
+	- `git_package_source()`
+	- `package_source_query_hg(<~uri>) -> <package uri...>` 
+	- `package_source_resolve_hg(<~uri>) -> <package uri...>` 
+	- `package_source_pull_hg(<~uri>) -> <package uri...>` 
+
+#### mercurial package source
+
+Uses the source code management system `mercurial` to access packages. 
+
+* `query uri format` - any uri which the `hg` executable can use 
+* `package uri format` - same as `query uri format` but with the additional scheme `hgscm` added. The query only contains `?<ref type>=<ref>` if a specific revision is targeted
+* Functions
+	- `hg_package_source()-> <hg package source>`
+	- `package_source_query_hg(<~uri>) -> <package uri...>` 
+	- `package_source_resolve_hg(<~uri>) -> <package uri...>` 
+	- `package_source_pull_hg(<~uri>) -> <package uri...>` 
+
+#### subversion package source
+
+uses the source code management system `subversion` to access packages
+
+* Functions
+	- `svn_package_source()-> <hg package source>`
+	- `package_source_query_svn(<~uri>) -> <package uri...>` 
+	- `package_source_resolve_svn(<~uri>) -> <package uri...>` 
+	- `package_source_pull_svn(<~uri>) -> <package uri...>` 
+
+
+#### composite package source
+
+A composite package source manages a list of sub data sources and uses a rating algorithm to select the correct source.  If one of the schemes of an uri matches a `package sources`'s `source_name` it is selected. Else the `package source`'s `rate_uri(<uri>)-><int>` method is called which returns a value from `0` to `999` where `0` means package source cannot handle the uri and `999` means package source is the only one which can handle the uri. The sources are ordered by the rating and queried in order.
+
+* `query uri format`
+* `<package handle>` contains the property `rating` which contains the rating of the uri and `package_source` which contains the package source which handles the `uri`
+* 
+ 
+#### cached package source
+
+The cache package source caches the package query and resolve requests so that accessing them is quick.  
+
+* Functions
+	- `cache_package_source(<inner: <package source>>) -> <cached package source>`
+	- `package_source_query_cached(...)->...`
+	- `package_source_resolve_cached(...)->...`
+	- `package_source_pull_cached(...)->...`
+
+
+#### directory package source 
+
+The directory package source has a `source_name` and a `directory` associated with it. It treets every `subdirectory` as a possible package and allows query, resolve and pull operations on them.  The `package descriptor` is sought for in the `subdirectory`s `package descriptor file`  The content is copied as is described by the `path package source`
+
+* Functions
+	- `<directory package source> ::= { source_name:<string>, directory:<path>, query:<function>, resolve:<function>, pull:<function>  }`
+	- `directory_package_source(<source_name> <directory: <path>>) -> <directory package source>`
+	- 
+
+#### managed package source
+
+A managed package source has a `source_name` and a `directory` which it manages.  The managed package source should be considered as a black box and should only be accessed via its (push, pull, query and resolve) methods.
+
+* `query uri format`
+* `package uri format` `<source_name>:<package hash>`
+* `<package handle>` the package handle contains extra fields
+
+
+
+
+## Datatypes and Functions
 
 # <a name="shell"></a> Shell Functions
 

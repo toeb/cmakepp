@@ -7,8 +7,6 @@ function(map_defaults map defaults)
     message(FATAL_ERROR "No defaults specified")
   endif()
 
-
-
   if(NOT map)
     map_new()
     ans(map)

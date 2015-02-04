@@ -6,7 +6,6 @@ function(uri_to_localpath uri)
   map_tryget("${uri}" normalized_segments)
   ans(segments)
 
-
   map_tryget(${uri} leading_slash)
   ans(rooted)
 
@@ -19,7 +18,9 @@ function(uri_to_localpath uri)
   string_combine("/" ${segments})
   ans(path)
 
-  if(rooted AND NOT windows_absolute_path)
+  if(WIN32 AND "${path}" MATCHES "^[a-zA-Z]:")
+    # do nothing
+  elseif(rooted AND NOT windows_absolute_path)
     set(path "/${path}")
   endif()
   set(path "${path}${trailing_slash}")

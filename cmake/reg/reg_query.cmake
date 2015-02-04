@@ -24,7 +24,7 @@
 
     set(entries)
     foreach(line ${lines})
-      reg_entry_parse(${key} ${line})
+      reg_entry_parse("${key}" "${line}")
       ans(res)
       if(res)
         list(APPEND entries ${res})

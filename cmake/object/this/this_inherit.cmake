@@ -21,3 +21,8 @@ function(this_inherit baseType)
 	endif()
 endfunction()
 
+
+## todo
+function(obj_inherit)
+
+endfunction()

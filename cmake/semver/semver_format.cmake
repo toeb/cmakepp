@@ -1,6 +1,7 @@
  function(semver_format version)
-  semver_normalize(${version})
+  semver_normalize("${version}")
   ans(version)
+
   #map_format("{version.major}.{version.minor}.{version.patch}")
   #ans(res)
   map_tryget(${version} major)

@@ -3,13 +3,15 @@
   # and curry(funcA(/2 33 /1 44) as funcB)
   # funcB(22 55) -> 55332244   
   function(curry func)
-    cmake_parse_arguments("" "" "as" "" ${ARGN})
-    if(NOT _as)
+    set(args ${ARGN})
+    list_extract_labelled_value(args as)
+    ans(curried_function_name)
+
+    if(NOT curried_function_name)
       function_new()
-      ans(_as)
+      ans(curried_function_name)
     endif()
 
-    set(args ${_UNPARSED_ARGUMENTS})
     # remove parentheses
     list_pop_front( args)
     ans(paren_open)
@@ -29,9 +31,9 @@
     set(indices)
     foreach(arg ${args})
     
-      if("${arg}" MATCHES "^/[0-9]+$")
+      if("${arg}" MATCHES "^/([0-9]+)$")
         # reorder argument
-        string(SUBSTRING "${arg}" 1 -1 arg)
+        set(arg "${CMAKE_MATCH_1}")
         list(APPEND indices "${arg}")
         set(arg_name "__arg_${arg}")
         set(call_string "${call_string} \"\${__arg_${arg}}\"")  
@@ -66,7 +68,7 @@
     endif()
 
     set(evaluate
-"function(${_as} ${arguments_string})${bound_args}
+"function(${curried_function_name} ${arguments_string})${bound_args}
   ${original_func}(${call_string} \${ARGN})
   return_ans()
 endfunction()")
@@ -76,5 +78,5 @@ endfunction()")
    #message("curry: ${evaluate}")
     set_ans("")
     eval("${evaluate}")
-    return_ref(_as)
+    return_ref(curried_function_name)
   endfunction()

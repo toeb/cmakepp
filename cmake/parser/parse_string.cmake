@@ -17,10 +17,10 @@
     
     #
     #message(FORMAT "${parser_id} parser parsing ${definition_id}..")
-    #message(PUSH)
+    #message_indent_push()
     __call_string_parser("${parser_id}" "${rstring}")
     ans(res)
-    #message(POP)
+    #message_indent_pop()
     #message(FORMAT "${parser_id} parser returned: ${res} rest is ")
    #list(LENGTH res len)
  #  if(len)

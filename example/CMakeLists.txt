@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 # include standalone version of oo-cmake
 # when not using cutil this  includes the function files as well as
 # the dependent functions
-include("../oo-cmake.cmake")
+include("../cmakepp.cmake")
 
 message("creating a simple inheritance example")
 
@@ -20,33 +20,33 @@ obj_setfunction(
 
 
 # create mamal object
-obj_new()
+new()
 ans(mamal)
 obj_setprototype(${mamal} ${animal})
 
 #create bird object
-obj_create()					#create instance
+new()					#create instance
 ans(bird)
 obj_setprototype(${bird} ${animal})	#set prototype animal
 obj_set(${bird} food Birdfood)		#set bird's food property to "Birdfood"
 
 #create dog object
-obj_create()						#create instance
+new()						#create instance
 ans(dog)
 obj_setprototype(${dog} ${mamal})	#set prototype mamal
 obj_set(${dog} food Dogfood)		#set dogs food property to "Dogfood"
 
 #create cat object
-obj_create()						#create instance
+new()						#create instance
 ans(cat)
 obj_setprototype(${cat} ${mamal})	#set prototype mamal
 obj_set(${cat} food Catfood)		#set cat's food property to "Catfood"
 
 
 # call eat function for different objects
-obj_member_call(${bird} eat) 
-obj_member_call(${dog} eat)
-obj_member_call(${cat} eat)
+call(bird.eat())
+call(dog.eat())
+call(cat.eat())
 
 #output should be
 #I am eating Birdfood

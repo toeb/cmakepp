@@ -31,3 +31,20 @@ function(map)
 
   return_ref(new_map)
 endfunction()
+
+
+
+## map() -> <address>
+## 
+## begins a new map returning its address
+## map needs to be ended via end()
+function(map)
+  if(NOT ARGN STREQUAL "")
+    key("${ARGN}")
+  endif()
+  map_new()
+  ans(ref)
+  val(${ref})
+  stack_push(quickmap ${ref})
+  return_ref(ref)
+endfunction()
