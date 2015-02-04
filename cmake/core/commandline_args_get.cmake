@@ -11,7 +11,7 @@
 ## commandline_args_get(--no-script) -> a;s;d
 
 function(commandline_args_get)
-  set(args)
+  set(args ${ARGN})
   list_extract_flag(args --no-script)
   ans(no_script)
   commandline_get()
@@ -19,9 +19,7 @@ function(commandline_args_get)
   # remove executable
   list_pop_front(args)
   if(no_script)
-    list_pop_front(args)
-    list_pop_front(args)
-    #list_extract_labelled_value(args -P)
+    list_extract_labelled_value(args -P)
   endif()
   return_ref(args)
 endfunction()
