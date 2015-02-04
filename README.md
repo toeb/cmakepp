@@ -17,6 +17,7 @@ You have multiple options for install `cmakepp` the only prerequisite for all op
 * [Install by Console](#install_console) - Recommended
 * Use the [Biicode Block](https://www.biicode.com/toeb/cmakepp)
 * [Download a release](https://github.com/toeb/cmakepp/releases) and include it in your cmake script file - If you do not want to run the tests or have access to the single function files this option is for you
+	- [Manually setup aliases](#install_aliases)
 * Clone the repository and include `cmakepp.cmake` in your `CMakeLists.txt` (or other cmake script)
 
 # Usage
@@ -114,6 +115,10 @@ rm install.cmake;
 
 
 ```
+
+
+# <a href="install_aliases"></a> Manually setting up aliases
+
 
 
 # <a name="cmake_cli"></a>cmakepp Console Client
@@ -351,6 +356,10 @@ assert("${x}" EQUAL 3)
 ## assign a string containing spaces to x
 assign(x = "'hello there!'") 
 assert("${x}" STREQUAL "hello there!" )
+
+## assign a literal to x - simplification of the above
+assign(x "hello world" "how are you") # notice missing '='
+assert("${x}" EQUALS "hello world" "how are you")
 
 ## assign the result of a function call to x
 assign(x = string_length("abcde"))

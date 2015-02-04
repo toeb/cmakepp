@@ -60,6 +60,7 @@
       map_new()
       ans(package_handle)
       assign(package_handle.uri = result)
+      assign(!package_handle.scm_descriptor.scm = 'hg')
       return_ref(package_handle)
     endif()
     return_ref(result)

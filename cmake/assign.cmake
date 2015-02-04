@@ -1,7 +1,21 @@
-
+## assign([!]<expr> <value>|("="|"+=" <expr><call>)) -> <any>
+##
+## the assign function allows the user to perform some nonetrivial 
+## operations that other programming languages allow 
+##
+## Examples
+## 
   function(assign __lvalue __operation __rvalue)    
     ## is a __value
-    if("${__rvalue}" MATCHES "^'.*'$")
+
+    if(NOT "${__operation}_" STREQUAL "=_" )
+      ## if no equals sign is present then interpret all
+      ## args as a simple literal cmake value
+      ## this allows the user to set an expression to 
+      ## a complicated string with spaces without needing
+      ## to single quote it
+      set(__value ${__operation} ${__rvalue} ${ARGN})
+    elseif("${__rvalue}" MATCHES "^'.*'$")
       string_decode_delimited("${__rvalue}" ')
       ans(__value)
     elseif("${__rvalue}" MATCHES "(^{.*}$)|(^\\[.*\\]$)")

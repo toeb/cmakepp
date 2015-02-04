@@ -1,7 +1,9 @@
 function(ref_get ref )
-	set(ref_value)
 	get_property(ref_value GLOBAL PROPERTY "${ref}")
- # message("getting ${ref} = ${ref_value}")
-	#set(${result} "${ref_value}" PARENT_SCOPE)
   return_ref(ref_value)
 endfunction()
+
+# optimized version
+macro(ref_get ref)
+  get_property(__ans GLOBAL PROPERTY "${ref}")
+endmacro()
