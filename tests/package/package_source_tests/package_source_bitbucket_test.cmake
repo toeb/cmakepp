@@ -1,6 +1,10 @@
 function(test)
 
-
+  find_package(Hg)
+  if(NOT HG_FOUND)
+    message("Test incoclusive - mercurial required")
+    return()
+  endif()
 
 
   set(bitbucket_devel_token "")
