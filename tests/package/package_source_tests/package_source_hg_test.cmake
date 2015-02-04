@@ -1,4 +1,10 @@
 function(test)
+  find_package(Hg)
+  if(NOT HG_FOUND)
+    message("test inconclusive - mercurial not found")
+    return()
+  endif()
+
 
   package_source_pull_hg("https://bitbucket.org/tutorials/hgsplitpractice" "clone1")
   ans(res)
