@@ -36,18 +36,17 @@ install:
     #- cmake --version    
     # -- end
 script: 
- #- bii init
- #- bii open toeb/oo-cmake
- #- rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/oo-cmake
- #- cmake -P build/script.cmake
- - mkdir install_dir
- - cd install_dir
- - cp ../install.sh .
- - chmod +x ./install.sh
- - ./install.sh #
- - alias cmakepp='cmake -P $(pwd)/cmakepp/cmakepp_cli.cmake'
- - cmakepp ls
- #- cmake -P build/script.cmake
+ - bii init  # init bii in reposiotry
+ - bii open toeb/oo-cmake # open block fr current repository
+ - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/oo-cmake # copy all new files to bii
+ - cmake -P build/script.cmake
+ #- mkdir install_dir
+ #- cd install_dir
+ #- cp ../install.sh .
+ #- chmod +x ./install.sh
+ #- ./install.sh #
+ #- alias cmakepp='cmake -P $(pwd)/cmakepp/cmakepp_cli.cmake'
+ #- cmakepp ls
 
 after_success: "cmake -P build/after_success.cmake"
 after_failure: "cmake -P build/after_failure.cmake"
@@ -59,6 +58,17 @@ deploy:
     password: 
      secure: "FbBmlMqDcpJ0rJ12I/H8CWwPnVe44zsGuL+5h+16JjZBQU8+TUizaw/Wns3OnQXzvvdeyzUvypGrnq0g7t+MFareWZ+rYVHRNibjsx5OxubvcgM6+fbXAu8G2f4bXHZPun5IMf8+1OCg8ETEQ/kEHtDDVOFO24Gb49N9Td3chgQ="
     skip_cleanup: true
+    on:
+      tags:true
+      all_branches: true
+  - provider: releases
+    api_key:
+      secure: Y8fO6kLjCkPHi7qa1tkv9kVKvoEe/VsRO9gY8LFFsBliKFD1DC/+Sf1l5ij3SGawFduzCWWk4O62lEVawEnUhOqHFb+D6+SExVzF5QvkgSvnp6BkpyosvCn0/FXBy4tt4KZyLSJ3CzqLvDnD99d7vouHyxiLZy4JSTjmlnklkAo=
+    file: release/cmakepp.cmake
+    skip_cleanup: true
+    on:
+      tags:true
+      all_branches: true
   # - provider: releases
   #   api-key: "GITHUB OAUTH TOKEN"
   #   file: "FILE TO UPLOAD"
