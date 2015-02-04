@@ -3,8 +3,8 @@ message(STATUS "running test for cmake functions")
 # include oo-cmake
 include("${CMAKE_CURRENT_LIST_DIR}/../cmakepp.cmake")
 
-message("configuratiation")
-print_locals()
+#message("configuratiation")
+#print_locals()
 
 # glob tets
 file(GLOB_RECURSE tests  "${CMAKE_CURRENT_LIST_DIR}/../tests/**.cmake")
