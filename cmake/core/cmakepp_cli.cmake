@@ -1,29 +1,24 @@
 
 function(cmakepp_cli)
   ## get command line args and remove executable -P and script file
-  commandline_get()
-  ans(commands)
-  list_pop_front(commands)
-  list_pop_front(commands)
-  list_pop_front(commands)
-
-
+  commandline_args_get(--no-script)
+  ans(args)
 
   ## get format
-  list_extract_flag(commands --json)
+  list_extract_flag(args --json)
   ans(json)
-  list_extract_flag(commands --qm)
+  list_extract_flag(args --qm)
   ans(qm)
-  list_extract_flag(commands --table)
+  list_extract_flag(args --table)
   ans(table)
-  list_extract_flag(commands --csv)
+  list_extract_flag(args --csv)
   ans(table)
-  list_extract_flag(commands --xml)
+  list_extract_flag(args --xml)
   ans(xml)
-  list_extract_flag(commands --string)
+  list_extract_flag(args --string)
   ans(string)
 
-  string_combine(" " ${commands})
+  string_combine(" " ${args})
   ans(lazy_cmake_code)
 
   lazy_cmake("${lazy_cmake_code}")

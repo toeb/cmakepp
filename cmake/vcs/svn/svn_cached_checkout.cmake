@@ -1,4 +1,4 @@
-
+## svn_cached_checkout()
 function(svn_cached_checkout uri)
   set(args ${ARGN})
   path_qualify(target_dir)
