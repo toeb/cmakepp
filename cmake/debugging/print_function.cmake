@@ -1,6 +1,7 @@
 
 function(print_function func)
-	get_function_lines(lines "${func}")
+	function_lines_get( "${func}")
+  ans(lines)
 	set(i "0")
 	foreach(line ${lines})		
 		message(STATUS "LINE ${i}: ${line}")

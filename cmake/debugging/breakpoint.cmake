@@ -13,6 +13,8 @@ function(breakpoint file line)
       message("continuing execution")
       break()
     endif()
+
+    
     if("${cmd}" MATCHES "^\\$.*")
       string(SUBSTRING "${cmd}" 1 -1 var)
       
@@ -26,7 +28,7 @@ function(breakpoint file line)
       endforeach()
 
     endif()
-
+    
 
 
 

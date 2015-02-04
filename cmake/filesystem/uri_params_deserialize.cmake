@@ -20,7 +20,7 @@
 
       uri_decode("${path}")
       ans(path)
-      uri_decode(${value})
+      uri_decode("${value}")
       ans(value)  
 
 

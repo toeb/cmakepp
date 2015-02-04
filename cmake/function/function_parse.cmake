@@ -4,13 +4,16 @@ function(function_parse function_ish)
   if(NOT function_type)
     return()
   endif()
-  get_function_string(function_string "${function_ish}")
+  function_string_get( "${function_ish}")
+  ans(function_string)
+  
   if(NOT function_string)
     return()
   endif()
 
   function_signature_regex(regex)
-  get_function_signature(signature "${function_string}")
+  function_signature_get( "${function_string}")
+  ans(signature)
 
   string(REGEX REPLACE ${regex} "\\1" func_type "${signature}" )
   string(REGEX REPLACE ${regex} "\\2" func_name "${signature}" )

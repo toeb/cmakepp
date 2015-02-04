@@ -18,3 +18,7 @@ function(map_select  query)
 	return_ref(_result_list)
 
 endfunction()
+
+function(map_select_property)
+
+	endfunction()

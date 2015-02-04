@@ -16,3 +16,4 @@ set("evl" "function(${function_name} switch)\n${ifs}\nreturn()\nendfunction()")
    
     eval("${evl}")
 endfunction()
+

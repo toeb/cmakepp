@@ -1,5 +1,15 @@
 function(language name)
-  map_isvalid(${name})
+  map_new()
+  ans(language_map)
+  ref_set(language_map "${language_map}")
+
+
+function(language name)
+  ## get cached language
+  ref_get(language_map)
+  ans(language_map)
+
+  map_isvalid("${name}")
   ans(ismp)
   if(ismp)
     map_tryget(${name}  initialized)
@@ -7,21 +17,20 @@ function(language name)
     if(NOT initialized)
       language_initialize(${name})
     endif()
+    map_tryget(${name} name)
+    ans(lang_name)
+    map_tryget(${language_map} ${lang_name})
+    ans(existing_lang)
+    if(NOT existing_lang)
+      map_set(${language_map} ${lang_name} ${name})
+    endif()
     return_ref(name)
-  endif()
-
-  ref_get(language_map )
-  ans(language_map)
-  if(NOT language_map)
-    map_new()
-    ans(language_map)
-    ref_set(language_map "${language_map}")
   endif()
 
   map_tryget(${language_map}  "${name}")
   ans(language)
-  #message("language ${language}")
-  #map_print(${language_map})
+
+
   if(NOT language)
     language_load(${name})
     ans(language)
@@ -49,4 +58,9 @@ function(language name)
     endfunction()")
   endif()
   return_ref(language)
+endfunction()
+
+language("${name}" ${ARGN})
+return_ans()
+
 endfunction()

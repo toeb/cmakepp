@@ -3,8 +3,10 @@
 function(git_remote_exists uri)
   git_uri("${uri}")
   ans(uri)
+
   git(ls-remote "${uri}" --return-code)
   ans(res)
+  
   if("${res}" EQUAL 0)
     return(true)
   endif()
