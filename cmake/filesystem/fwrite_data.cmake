@@ -46,7 +46,7 @@
 
     ## serialize data
     if("${mime_types}" MATCHES "application/json")
-      json_serialize("${data}")
+      json_indented("${data}")
       ans(serialized)
     elseif("${mime_types}" MATCHES "application/x-quickmap")
       qm_serialize("${data}")

@@ -1,4 +1,6 @@
 function(json_serialize value)
+
+	message(WARNING "deprecated function")
 	set(recursive_args)
 	# indent
 	if(ARGN)

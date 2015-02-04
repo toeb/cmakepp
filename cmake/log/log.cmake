@@ -1,4 +1,6 @@
-
+function(error)
+  log(--error ${ARGN})  
+endfunction()
   ## log function
   ##  --error    flag indicates that errors occured
   ##  --warning  flag indicates warnings

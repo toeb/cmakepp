@@ -57,7 +57,8 @@ function(project_load)
   assign(this.dependency_source = dependency_source)
 
   ## load all installed packages
-  project_load_packages()  
+  ## including this project
+  project_load_installed_packages()  
 
   ## emit loaded event
   event_emit(project_on_load ${this})  

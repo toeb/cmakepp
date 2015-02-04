@@ -9,7 +9,7 @@
     set(__str)
     foreach(arg ${ARGN})
       assign(____cur = ${arg})
-      json_serialize("${____cur}")
+      json("${____cur}")
       ans(____cur)
       string_shorten("${____cur}" "300")
       ans(____cur)

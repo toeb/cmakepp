@@ -1,6 +1,6 @@
 function(test)
 
-    fwrite(pr0 hell)
+    fwrite(pr0 "hello")
     ## pr1
     mkdir(pr2)
     fwrite(pr3/hello.txt "hello")

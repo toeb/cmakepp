@@ -5,7 +5,7 @@ function(test)
   ans(context)
   event_addhandler(on_event "(name)->map_append(${context} events_emitted $name)")
 
-  ### load defualt non existing project
+  ### load default non existing project
 
   ## arrange
   project_new()

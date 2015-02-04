@@ -90,6 +90,17 @@ cd("${CMAKE_SOURCE_DIR}")
 # setup config_function for oocmake
 config_setup("oocmake_config" ${oocmake_config_definition})
 
+cmakepp_after_initialize()
+
+
+## check if in script mode and script file is equal to this file
+## then invoke either cli mode
+cmake_entry_point()
+ans(entry_point)
+if("${CMAKE_CURRENT_LIST_FILE}" STREQUAL "${entry_point}")
+  cmakepp_cli()
+endif()
+
 
 
 ## variables expected by cmake's find_package method

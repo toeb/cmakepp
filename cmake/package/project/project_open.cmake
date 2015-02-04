@@ -18,7 +18,7 @@
 
 
     if(NOT EXISTS "${path}")
-      log(--error "could not find project configuration at {path}")
+      error("could not find project configuration at {path}")
       return()
     endif()
 
