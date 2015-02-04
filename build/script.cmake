@@ -16,7 +16,7 @@ ans(temp_dir)
 set(test_dir "${temp_dir}/test_dir")
 
 
-set(OOCMAKE_DEBUG_EXECUTE true)
+#set(OOCMAKE_DEBUG_EXECUTE true)
 
 foreach(test ${tests})
   get_filename_component(test "${test}" REALPATH)
