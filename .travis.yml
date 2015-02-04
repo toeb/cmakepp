@@ -23,7 +23,6 @@ install:
   # biicode initialization
   #- wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh #
   #- bii setup:cpp
-
      # install cmake --
     #- wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
     #- tar xf "cmake-${CMAKE_VERSION}.tar.gz"
@@ -36,9 +35,9 @@ install:
     #- cmake --version    
     # -- end
 script: 
- - bii init  # init bii in reposiotry
- - bii open toeb/oo-cmake # open block fr current repository
- - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/oo-cmake # copy all new files to bii
+ - bii init
+ #- bii open toeb/cmakepp
+ #- rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
  - cmake -P build/script.cmake
  #- mkdir install_dir
  #- cd install_dir
@@ -59,7 +58,7 @@ deploy:
      secure: "FbBmlMqDcpJ0rJ12I/H8CWwPnVe44zsGuL+5h+16JjZBQU8+TUizaw/Wns3OnQXzvvdeyzUvypGrnq0g7t+MFareWZ+rYVHRNibjsx5OxubvcgM6+fbXAu8G2f4bXHZPun5IMf8+1OCg8ETEQ/kEHtDDVOFO24Gb49N9Td3chgQ="
     skip_cleanup: true
     on:
-      tags:true
+      tags: true
       all_branches: true
   - provider: releases
     api_key:
@@ -67,19 +66,5 @@ deploy:
     file: release/cmakepp.cmake
     skip_cleanup: true
     on:
-      tags:true
+      tags: true
       all_branches: true
-  # - provider: releases
-  #   api-key: "GITHUB OAUTH TOKEN"
-  #   file: "FILE TO UPLOAD"
-  #   skip_cleanup: true
-  #   on: 
-  #     tags:true
-  #     all_branches: true
-
-
-
-# branches:
-#   only:
-#     - master
-#     - devel
