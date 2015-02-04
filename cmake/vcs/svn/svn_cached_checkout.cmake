@@ -56,6 +56,7 @@ function(svn_cached_checkout uri)
   set(checkout_uri "${base_uri}/${ref_type}/${ref}@${revision}")
   svn_remote_exists("${checkout_uri}")
   ans(remote_exists)
+  
   if(NOT remote_exists)
     return()
   endif()

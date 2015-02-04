@@ -3,7 +3,7 @@
     macro(list_extract_labelled_keyvalue __lst label)
       list_extract_labelled_value(${__lst} "${label}")
       ans(__lbl_value)
-      if(NOT __lbl_value STREQUAL "")
+      if(NOT "${__lbl_value}_" STREQUAL "_")
         set_ans("${label};${__lbl_value}")
       else()
         set_ans("")
