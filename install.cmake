@@ -3,7 +3,7 @@
 # download a cmakepp release
 set(git_uri "https://github.com/toeb/cmakepp")
 set(installation_dir "${CMAKE_CURRENT_BINARY_DIR}/cmakepp")
-set(cmakepp_uri "${git_uri}/releases/download/v0.0.3/cmakepp-0.0.3.cmake")
+set(cmakepp_uri "${git_uri}/releases/download/v0.0.3/cmakepp.cmake")
 set(target_file "${CMAKE_CURRENT_BINARY_DIR}/__cmakepp.cmake")
 
 message(STATUS "Installing CMake++")
