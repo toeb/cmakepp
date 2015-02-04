@@ -36,6 +36,8 @@ install:
     # -- end
 script: 
  - bii init
+ - /usr/bin/svn ls https://github.com/toeb/test_repo/trunk/@HEAD --depth empty
+
  #- bii open toeb/cmakepp
  #- rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
  - cmake -P build/script.cmake
