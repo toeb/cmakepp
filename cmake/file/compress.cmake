@@ -8,7 +8,7 @@ function(compress target_file)
   ans(format)
 
   ## try to resolve format by extension
-  if(format STREQUAL "")
+  if("${format}_" STREQUAL "_")
     get_filename_component(extension "${target_file}" EXT)    
     mime_type_from_extension("${extension}")
     ans(format)
