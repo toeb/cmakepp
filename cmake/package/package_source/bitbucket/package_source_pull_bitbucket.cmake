@@ -53,15 +53,15 @@
       message(FATAL_ERROR "scm not supported: ${scm}")
     endif()
 
-    map_tryget(${scm_package_handle} package_descriptor)
+    map_tryget("${scm_package_handle}" package_descriptor)
     ans(scm_package_descriptor)
 
-    map_tryget(${scm_package_handle} content_dir)
+    map_tryget("${scm_package_handle}" content_dir)
     ans(scm_content_dir)
       
     map_defaults("${package_descriptor}" "${scm_package_descriptor}")
 
-    map_set(${package_handle} content_dir "${scm_content_dir}")
+    map_set("${package_handle}" content_dir "${scm_content_dir}")
 
     return_ref(package_handle)
   endfunction()
