@@ -1,5 +1,10 @@
+## package_source_query_hg(<~uri>) -> <uri>|<package handle>
 
   function(package_source_query_hg uri)
+    set(args ${ARGN})
+    list_extract_flag(args --package-handle)
+    ans(return_package_handle)
+
     uri("${uri}")
     ans(uri)
 
@@ -40,10 +45,10 @@
     list_pop_front(ref)
     ans(ref)
 
-    if(NOT ref STREQUAL "")
+    if(NOT "${ref}_" STREQUAL "_")
       ## need to checkout
 
-      if(ref STREQUAL "*")
+      if("${ref}" STREQUAL "*")
         message(FATAL_ERROR "ref query currently not allowed for hg")
       endif()
       set(result "hgscm+${remote_uri}?ref=${ref}")
@@ -51,5 +56,11 @@
       set(result "hgscm+${remote_uri}")
     endif()
 
+    if(return_package_handle)
+      map_new()
+      ans(package_handle)
+      assign(package_handle.uri = result)
+      return_ref(package_handle)
+    endif()
     return_ref(result)
   endfunction() 

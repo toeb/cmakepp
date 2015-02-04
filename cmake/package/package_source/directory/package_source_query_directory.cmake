@@ -10,11 +10,10 @@
     map_tryget(${uri} scheme)
     ans(scheme)
 
-    
-    if(NOT scheme STREQUAL "" AND NOT scheme STREQUAL "${source_name}")
+      
+    if(NOT "${scheme}_" STREQUAL "_" AND NOT "${scheme}_" STREQUAL "${source_name}_")
       return()
     endif()
-
 
     map_tryget(${uri} segments)
     ans(segments)

@@ -15,6 +15,30 @@ function(test)
   map_set(${this} source_name "mysource")
 
 
+
+  package_source_query_directory("")
+  ans(res)
+  assert(NOT res)
+
+  package_source_query_directory("?*")
+  ans(res)
+  assert(${res} CONTAINS "mysource:pkg1")
+  assert(${res} CONTAINS "mysource:pkg2")
+  assert(${res} CONTAINS "mysource:pkg3")
+  assert(${res} CONTAINS "mysource:pkg4")
+
+
+  package_source_query_directory("pkg1")
+  ans(res)
+  assert(res)
+  assert(res STREQUAL "mysource:pkg1")
+
+  package_source_query_directory("othersource:pkg1")
+  ans(res)
+  assert(NOT res)
+
+
+
   uri("mysource:pkg1")
   ans(uri)
   package_source_resolve_directory("${uri}")
@@ -53,26 +77,6 @@ function(test)
   assertf("{res.uri}" STREQUAL "mysource:pkg1")
 
 
-  package_source_query_directory("")
-  ans(res)
-  assert(NOT res)
-
-  package_source_query_directory("?*")
-  ans(res)
-  assert(${res} CONTAINS "mysource:pkg1")
-  assert(${res} CONTAINS "mysource:pkg2")
-  assert(${res} CONTAINS "mysource:pkg3")
-  assert(${res} CONTAINS "mysource:pkg4")
-
-
-  package_source_query_directory("pkg1")
-  ans(res)
-  assert(res)
-  assert(res STREQUAL "mysource:pkg1")
-
-  package_source_query_directory("othersource:pkg1")
-  ans(res)
-  assert(NOT res)
 
 
 

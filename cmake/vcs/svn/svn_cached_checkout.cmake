@@ -38,11 +38,11 @@ function(svn_cached_checkout uri)
     set(ref_type tags)
   endif()
   
-  oocmake_config(temp_dir)
-  ans(temp_dir)
+  oocmake_config(cache_dir)
+  ans(cache_dir)
 
   string(MD5 cache_key "${base_uri}@${revision}@${ref_type}@${ref}")
-  set(cached_path "${temp_dir}/svn_cache/${cache_key}")
+  set(cached_path "${cache_dir}/svn_cache/${cache_key}")
   
   if(EXISTS "${cached_path}" AND NOT refresh)
     if(readonly)
@@ -68,7 +68,7 @@ function(svn_cached_checkout uri)
   mkdir("${cached_path}")
 
 
-  svn(checkout "${checkout_uri}" "${cached_path}" --return-code)
+  svn(checkout "${checkout_uri}" "${cached_path}" --non-interactive  --return-code)
   ans(error)
 
   if(error)

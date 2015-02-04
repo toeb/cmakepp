@@ -1,5 +1,15 @@
-
-
+  ## svn_uri_analyze(<input:<?uri>> [--revision <rev>] [--branch <branch>] [--tag <tag>])-> 
+  ## {
+  ##   input: <string>
+  ##   uri: <uri string>
+  ##   base_uri: <uri string>
+  ##   relative_uri: <path>
+  ##   ref_type: "branch"|"tag"|"trunk"
+  ##   ref: <string>
+  ##   revision: <rev>
+  ## }
+  ##
+  ## 
   function(svn_uri_analyze input)
     set(args ${ARGN})
 
@@ -69,15 +79,6 @@
     ans(revision)
 
 
-    if(args_branch)
-      set(ref_type branch)
-      set(ref ${args_branch})
-    endif()
-
-    if(args_tag)
-      set(ref_type tag)
-      set(ref ${args_tag})
-    endif()
 
     if(uri_ref_type STREQUAL "trunk")
       set(ref_type trunk)
@@ -92,6 +93,17 @@
     if(uri_ref_type STREQUAL "tags")
       set(ref_type tag)
       set(ref ${uri_ref})
+    endif()
+
+    
+    if(args_branch)
+      set(ref_type branch)
+      set(ref ${args_branch})
+    endif()
+
+    if(args_tag)
+      set(ref_type tag)
+      set(ref ${args_tag})
     endif()
 
     if("${ref_type}_" STREQUAL "_")

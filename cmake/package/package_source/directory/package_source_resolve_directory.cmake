@@ -14,7 +14,7 @@
     ## if uri contains query return
     map_tryget(${uri} query)
     ans(query)
-    if(NOT query STREQUAL "")
+    if(NOT "${query}_" STREQUAL "_")
       return()
     endif()
 

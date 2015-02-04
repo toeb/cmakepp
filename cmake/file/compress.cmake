@@ -9,13 +9,12 @@ function(compress target_file)
 
   ## try to resolve format by extension
   if("${format}_" STREQUAL "_")
-    get_filename_component(extension "${target_file}" EXT)    
-    mime_type_from_extension("${extension}")
+    mime_type_from_filename("${target_file}")
     ans(format)
   endif()
 
   ## set default formt to application/x-gzip
-  if(format STREQUAL "")
+  if("${format}_" STREQUAL "_")
     set(format "application/x-gzip")
   endif()
 
@@ -23,7 +22,7 @@ function(compress target_file)
     compress_tgz("${target_file}" ${args})
     return_ans()
   else()
-    message(FATAL_ERROR "format not supported: ${format}")
+    message(FATAL_ERROR "format not supported: ${format}, target_file: ${target_file}")
   endif()
 endfunction()
 
