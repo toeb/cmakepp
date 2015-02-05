@@ -79,4 +79,7 @@ function(test)
   assertf({context.events_emitted} CONTAINS project_on_begin_load)
   assertf({context.events_emitted} CONTAINS project_on_load)
   assertf({context.events_emitted} CONTAINS project_on_package_load)
+  assertf({context.events_emitted} CONTAINS project_on_packages_loaded)
+  assertf({context.events_emitted} CONTAINS project_on_load)  
+
 endfunction()

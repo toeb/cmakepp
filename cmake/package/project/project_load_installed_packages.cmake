@@ -4,7 +4,7 @@
 ## and then loads the project itself
 ##
 ## events:
-##   on_packages_loaded(<project handle>)
+##   project_on_packages_loaded(<project handle>)
   function(project_load_installed_packages)
     ## load all packages
     assign(installed_package_uris = this.dependency_source.query("?*"))
@@ -20,7 +20,7 @@
     ## this ensures that all dependency files
     assign(success = project_load_installed_package(${this}))
 
-    event_emit(on_packages_loaded ${this} ${package_handles})
+    event_emit(project_on_packages_loaded ${this} ${package_handles})
     
     return()
   endfunction()

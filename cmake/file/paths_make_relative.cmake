@@ -4,7 +4,7 @@ function(paths_make_relative base_dir)
   get_filename_component(base_dir "${base_dir}" REALPATH)
 
   foreach(path ${ARGN})
-    get_filename_component(path "${path}" REALPATH)
+    path_qualify(path)
     file(RELATIVE_PATH path "${base_dir}" "${path}")
     list(APPEND res "${path}")
   endforeach()

@@ -1922,7 +1922,7 @@ Package management depends on package search and retrieval.  The other way aroun
 				* `package_descriptor.cmakepp.export :<glob ignore>` all files specifed by globbing expression are loaded in the order specified.
 				* `package_descriptor.cmakepp.hooks.on_load:<callable<` hook is invoked if it exists
 				* event `on_package_load(<project handle> <package handle>)` is emitted
-	- event `on_packages_loaded(<project handle> <package handle...>)` is emitted 
+	- event `project_on_packages_loaded(<project handle> <package handle...>)` is emitted 
 	- event `project_on_load(<project handle>)` is emitted
 * `project_install(<package uri> [--reference]) ->`	
 	- `package content and package handle is pulled and pushed into managed package source which is based in dependency_dir`
