@@ -17,7 +17,7 @@ function(test)
   map_set(${this} directory "${test_dir}/packages")
   map_set(${this} source_name "mysource")
 
-  
+    
 
   package_source_push_managed("pkg1")
   ans(res)

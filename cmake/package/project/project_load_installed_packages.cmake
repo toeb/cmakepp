@@ -13,12 +13,12 @@
     foreach(installed_package_uri ${installed_package_uris})
       assign(package_handle = this.dependency_source.resolve("${installed_package_uri}"))
       list(APPEND package_handles ${package_handle})
-      assign(success = project_load_installed_package(${package_handle}))
+      assign(success = project_load_installed_package(${this} ${package_handle}))
     endforeach()
 
     ## lastly load the current project
     ## this ensures that all dependency files
-    assign(success = project_load_installed_package(${this}))
+    assign(success = project_load_installed_package(${this} ${this}))
 
     event_emit(project_on_packages_loaded ${this} ${package_handles})
     

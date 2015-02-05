@@ -35,6 +35,11 @@
 
     assign(installed_package_handle = this.dependency_source.resolve("${package_uri}"))
 
+
+    if(NOT installed_package_handle)
+      print_vars(package_uri)
+      message(FATAL_ERROR "nononono")
+    endif()
     ## project install is executed before load
     project_install_package("${installed_package_handle}")
 
