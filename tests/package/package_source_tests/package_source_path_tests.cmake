@@ -12,6 +12,27 @@ function(test)
   fwrite("test/p5/hello.txt" "hello")
   fwrite("test/p5/hello2.txt" "hello")
 
+  package_source_pull_path("test/p4" pull_dir_1)
+  ans(res)
+  assert(res)
+
+
+  package_source_resolve_path("test/p4")
+  ans(res)
+  assert(res)
+
+  package_source_query_path("test/asdasd4" --package-handle)
+  ans(res)
+  assert(res)
+  assertf({res.query_uri} STREQUAL "test/asdasd4")
+  
+
+  package_source_query_path("test/p5" --package-handle)
+  ans(res)
+  assert(res)
+  assertf({res.query_uri} STREQUAL "test/p5")
+  # this checksum_ functions change
+  assertf({res.directory_descriptor.hash} STREQUAL "e796461f286636e4b12bb12ffafb605a")
 
 
   ## test wether content flag is respected and ignored files are not copied

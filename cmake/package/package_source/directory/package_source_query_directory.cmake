@@ -1,19 +1,21 @@
   ## package_source_query_directory(<~uri>) -> <uri string>
   function(package_source_query_directory uri)
+    set(args ${ARGN})
+
+    list_extract_flag(args --package-handle)
+    ans(return_package_handle)
+
     this_get(directory)
     this_get(source_name)
 
     uri("${uri}")
     ans(uri)
 
-    ## return if scheme is either empty or equal to source_name
-    map_tryget(${uri} scheme)
-    ans(scheme)
-
-      
-    if(NOT "${scheme}_" STREQUAL "_" AND NOT "${scheme}_" STREQUAL "${source_name}_")
+    ## return if scheme is either empty or equal to source_name       
+    assign(scheme = uri.scheme)
+    if(NOT "${scheme}" MATCHES "(^$)|(^${source_name}$)")
       return()
-    endif()
+    endif() 
 
     map_tryget(${uri} segments)
     ans(segments)
@@ -65,6 +67,16 @@
       endif()
     endif()
 
+    if(return_package_handle)
+      set(package_handles)
+      foreach(item ${result})
+        set(package_handle)
+        assign(!package_handle.uri = item)
+        assign(!package_handle.query_uri = uri.uri)
+        list(APPEND package_handles ${result})
+      endforeach()
+      set(result ${package_handles})
+    endif()
 
     return_ref(result)
 

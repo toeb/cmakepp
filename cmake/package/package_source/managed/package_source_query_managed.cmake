@@ -9,8 +9,10 @@
     uri("${uri}")
     ans(uri)
 
-
-
+    assign(scheme = uri.scheme)
+    if(NOT "${scheme}" MATCHES "(^$)|(^${source_name}$)")
+      return()
+    endif() 
 
     map_tryget(${uri} segments)
     ans(segments)

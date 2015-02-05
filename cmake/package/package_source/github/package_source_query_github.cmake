@@ -10,6 +10,13 @@ function(package_source_query_github uri)
   uri("${uri}")
   ans(uri)
 
+
+  assign(scheme = uri.scheme)
+  if(NOT "${scheme}" MATCHES "(^$)|(^github$)")
+    return()
+  endif()
+
+
   assign(segments = uri.normalized_segments)
   list_extract(segments user repo)
   if(NOT user)

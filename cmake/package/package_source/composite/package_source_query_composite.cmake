@@ -13,12 +13,14 @@
     set(args ${ARGN})
 
     list_extract_flag(args --package-handle)
-    ans(package_handle)
+    ans(return_package_handle)
 
     ## rate and sort sources for uri    
     this_get(children)
     rated_package_source_sort("${uri}" ${children})
     ans(rated_children)
+
+
 
     ## loop through every source and query it for uri
     ## append results to result. 
@@ -53,7 +55,7 @@
 
       ## if package_handles should be returned 
       ## create the objects and replace current result with it
-      if(package_handle)
+      if(return_package_handle)
         set(package_handles)
         foreach(uri ${current_result})
           map_new()

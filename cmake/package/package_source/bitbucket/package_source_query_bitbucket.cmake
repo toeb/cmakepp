@@ -3,6 +3,11 @@
     uri("${uri}")
     ans(uri)
 
+    assign(scheme = uri.scheme)
+    if(NOT "${scheme}" MATCHES "(^$)|(^bitbucket$)")
+      return()
+    endif()
+
     assign(segments = uri.normalized_segments)
     list_extract(segments owner repo)
 

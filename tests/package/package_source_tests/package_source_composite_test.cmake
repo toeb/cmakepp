@@ -27,10 +27,6 @@ function(test)
   ans(uut)
 
 
-
-
-
-
-
+  assign(res = uut.query("dir1:pkg3"))
 
 endfunction()

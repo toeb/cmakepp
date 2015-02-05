@@ -1,5 +1,21 @@
 ## returns a pacakge descriptor if the uri identifies a unique package
 function(package_source_resolve_path uri)
+    uri("${uri}")
+    ans(uri)
+
+    package_source_query_path("${uri}" --package-handle)
+    ans(package_handle)
+
+    list(LENGTH package_handle count)
+    if(NOT "${count}" EQUAL 1)
+        error("could not find a unique immutbale uri for {uri.uri}")
+        return()
+    endif()
+
+
+    return_ref(package_handle)
+
+
     ## get valid uris by querying ensure that only a single uri is found
     package_source_query_path("${uri}")
     ans(valid_uri_string)
