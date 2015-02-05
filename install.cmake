@@ -18,9 +18,9 @@ message(STATUS "\n installation_dir: ${installation_dir}")
 
 
 git(clone "${git_uri}.git" "${installation_dir}")
-alias_create("icmake" "cmake -P ${installation_dir}/cmakepp.cmake -icmake")
-alias_create("cmakepp" "cmake -P ${installation_dir}/cmakepp.cmake")
+pushd("${installation_dir}")
+  cmake(-P cmakepp.cmake cmakepp_setup_environment)
+popd()
 
-shell_env_set(CMAKEPP_PATH "${installation_dir}")
 
 message(STATUS "Install Complete - re-login for changes to take effect")

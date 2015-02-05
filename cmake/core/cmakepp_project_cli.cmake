@@ -1,3 +1,6 @@
+## 
+##
+## invokes the cmakepp project command line interface
 function(cmakepp_project_cli)
   #commandline_args_get(--no-script)
   #ans(args)
@@ -35,7 +38,7 @@ function(cmakepp_project_cli)
     assign("!project.${path}" = "'${args}'")
     set(save true)
     assign(res = "project.${path}")
-    
+
   elseif("${cmd}" STREQUAL "run")
     package_handle_invoke_hook("${project}" cmakepp.hooks.run "${project}" "${project}")
     ans(res)
