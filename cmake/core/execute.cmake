@@ -31,7 +31,6 @@
     map_clone_deep(${processStart})
     ans(processResult)
 
-
     scope_import_map(${processStart})
 
     set(timeout TIMEOUT ${timeout})
@@ -43,7 +42,6 @@
     
     ## todo - test this
     string(REPLACE \\ \\\\ arg_string "${arg_string}")
-
 
     set(execute_process_command "
         execute_process(

@@ -2,6 +2,8 @@
 function(command_line_args_escape) 
   set(whitespace_regex "( )")
   set(result)
+  
+  string(ASCII  31 us)
 
   foreach(arg ${ARGN})
     string(REGEX MATCH "[\r\n]" m "${arg}")
@@ -13,7 +15,11 @@ function(command_line_args_escape)
     if("${arg}" MATCHES "${whitespace_regex}|\"")
       string(REPLACE "\"" "\\\"" arg "${arg}")
       set(arg "\"${arg}\"")
+    elseif("${arg}" MATCHES "${us}")
+      set(arg "\"${arg}\"")
     endif()
+
+
 
 
     list(APPEND result "${arg}")

@@ -4,5 +4,8 @@
     ans(args)
     string_combine(" " ${args})
     ans(res)
+    string_semicolon_decode("${res}")
+    ans(res)
+    
     return_ref(res)
   endfunction()

@@ -54,12 +54,10 @@
           message(WARNING "failed to query host ${next_uri} ${error}")
           return()
         endif()
+      endwhile()   
+      list_remove_duplicates(repos)
+      list_remove(repos ssh https)# hack: these are different name properties
 
-
-      endwhile()      
-
-      list(REMOVE_DUPLICATES repos)
-      list(REMOVE_ITEM repos ssh https) # hack: these are different names
       set(result)
       ## possibly this should recursively check if the repo really exists
       foreach(repo ${repos})

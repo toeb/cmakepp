@@ -13,6 +13,8 @@
       endif()
     endforeach()
 
+    string_semicolon_decode("${values}")
+    ans(values)
     reg_write_value("${key}" "${value_name}" "${values}")
     return_ref(added_values)
   endfunction()
