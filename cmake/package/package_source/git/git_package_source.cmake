@@ -1,6 +1,5 @@
 
 
-
   function(git_package_source)
     obj("{
       source_name:'gitscm',

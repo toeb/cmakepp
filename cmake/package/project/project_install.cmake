@@ -38,9 +38,8 @@
     ## project install is executed before load
     project_install_package("${installed_package_handle}")
 
-    ## 
+    ## project is loaded
     project_load_installed_package("${installed_package_handle}")
-
 
 
     return_ref(package_uri)
