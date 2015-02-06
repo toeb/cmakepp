@@ -25,7 +25,7 @@ install:
   - bii setup:cpp
   - bii init
   - bii open toeb/cmakepp
-  - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
+  - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp > /dev/null
   - sudo apt-get install cmake
   - cmake --version
  
