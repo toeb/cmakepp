@@ -23,32 +23,13 @@ before_install:
   - git config --global user.name "Build Server"
 install:
   - cmake --version
-  # biicode initialization
   - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh #
   - bii setup:cpp
-     # install cmake --
-    #- wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
-    #- tar xf "cmake-${CMAKE_VERSION}.tar.gz"
-    #- cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
-    #- cmake --build _builds --target install
-    #- export PATH="`pwd`/_install/bin:${PATH}"
-    # -- end
-    # verify installed cmake --
-    #- which cmake
-    #- cmake --version    
-    # -- end
 script: 
  - bii init
  - bii open toeb/cmakepp
  - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
  - cmake -P build/script.cmake
- #- mkdir install_dir
- #- cd install_dir
- #- cp ../install.sh .
- #- chmod +x ./install.sh
- #- ./install.sh #
- #- alias cmakepp='cmake -P $(pwd)/cmakepp/cmakepp_cli.cmake'
- #- cmakepp ls
 
 after_success: "cmake -P build/after_success.cmake"
 after_failure: "cmake -P build/after_failure.cmake"
