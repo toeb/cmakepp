@@ -2,6 +2,11 @@
 ## or a specific repository by owner/reponame
 ## returns a list of valid package uris
 function(package_source_query_github uri)
+  set(args ${ARGN})
+
+  list_extract_flag(args --package-handle)
+  ans(return_package_handle)
+
   set(github_api_token "?client_id=$ENV{GITHUB_DEVEL_TOKEN_ID}&client_secret=$ENV{GITHUB_DEVEL_TOKEN_SECRET}")
 
   set(api_uri "https://api.github.com")
@@ -56,6 +61,16 @@ function(package_source_query_github uri)
     endforeach() 
 
 
+    if(return_package_handle)
+      set(package_handles)
+      foreach(github_url ${github_urls})
+        set(package_handle)
+        assign(!package_handle.uri = github_url)
+        assign(!package_handle.query_uri = uri.uri)
+        list(APPEND package_handles ${package_handle})
+      endforeach()
+      return_ref(package_handles)
+    endif()
     return_ref(github_urls)
   endif()
 endfunction()

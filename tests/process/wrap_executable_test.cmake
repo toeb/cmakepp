@@ -1,5 +1,20 @@
 function(test)
 
+  fwrite("myscript.cmake" "
+    set(asd 0)
+
+     while(asd LESS 100) 
+      message(STATUS waht) 
+      math(EXPR asd \"\${asd}+1\")
+     endwhile()
+     ")
+  ans(path)
+  wrap_executable(cmake_script_test "${CMAKE_COMMAND}" -P "${path}")
+
+
+  cmake_script_test(--async-wait --result)
+  ans(res)
+  assertf({res.pid} MATCHES "[1-9][0-9]*")
 
 
   #set(OOCMAKE_DEBUG_EXECUTE true)
