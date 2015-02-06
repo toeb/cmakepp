@@ -19,7 +19,7 @@ function(package_source_resolve_archive uri)
     assign(archive_path = package_handle.archive_descriptor.path)
 
     ## search for the first package.cmake file in the archive 
-    archive_match_files("${archive_path}" "(^|\\/)package\\.cmake" --single)
+    archive_match_files("${archive_path}" "(^|/)package\\.cmake"  --single)
     ans(package_descriptor_path)    
 
     if(package_descriptor_path)

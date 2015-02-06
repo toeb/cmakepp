@@ -8,10 +8,22 @@ function(archive_ls archive)
 
   if("${types}" MATCHES "application/x-gzip")
     tar(tf "${archive}")
-    ans(res)
+    ans(files)
 
-    string(REGEX REPLACE "(\r\n)|(\n)" ";" res "${res}")
-    return_ref(res)
+    tar(tf "${archive}" --result)
+    ans(result)
+
+    assign(error = result.error)
+    if(error)
+      error("tar exited with {result.error}")
+      return()
+    endif()
+
+    assign(files = result.stdout)
+
+    string(REGEX MATCHALL "(^|\n)([^\n]+)(\n|$)" files "${files}")
+    string(REGEX REPLACE "(\r|\n)" "" files "${files}")
+    return_ref(files)
 
   else()
     message(FATAL_ERROR "${archive} unsupported compression: '${types}'")

@@ -27,6 +27,18 @@ function(test)
   ans(expected_checksum_3)
 
 
+
+
+  package_source_resolve_archive("${test_dir}/archive3.tgz")
+  ans(res)
+  assert(res)
+  assertf("{res.package_descriptor.id}" STREQUAL "mymy")
+  assertf("{res.package_descriptor.version}" STREQUAL "1.2.3")
+  assertf("{res.uri}" MATCHES "^file:///")
+
+  
+
+
   package_source_resolve_archive("archive2-3.2.1.tgz")
   ans(res)
   assert(res) 
@@ -108,12 +120,7 @@ function(test)
   assertf("{res.package_descriptor.version}" STREQUAL "3.2.1")
   assertf("{res.uri}" MATCHES "^file:///")
 
-  package_source_resolve_archive("${test_dir}/archive3.tgz")
-  ans(res)
-  assert(res)
-  assertf("{res.package_descriptor.id}" STREQUAL "mymy")
-  assertf("{res.package_descriptor.version}" STREQUAL "1.2.3")
-  assertf("{res.uri}" MATCHES "^file:///")
+  
 
 
   package_source_query_archive("lalala")

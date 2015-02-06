@@ -14,18 +14,13 @@ function(archive_match_files archive regex)
 
 
   if("${types}" MATCHES "application/x-gzip")
-    tar(tf "${archive}" --result)
-    ans(result)
 
-    assign(error = result.error)
-    if(error)
-      json_print(${result})
-    endif()
+    archive_ls("${archive}")
+    ans(files)
 
-    assign(files = result.stdout)
+    list_regex_match(files "${regex}")
+    ans(files)
 
-    string(REGEX MATCHALL "[^\n]+/package.cmake(\n|$)" files "${files}")
-    string(REGEX REPLACE "(\r|\n)" "" files "${files}" )
 
   else()
     message(FATAL_ERROR "${archive} unsupported compression: '${types}'")
