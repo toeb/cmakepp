@@ -28,7 +28,7 @@ install:
 script: 
  - bii init
  - bii open toeb/cmakepp
- - rsync -av --exclude="blocks" --exclude="bii_install" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
+ - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
  - cmake -P build/script.cmake
 
 after_success: "cmake -P build/after_success.cmake"
