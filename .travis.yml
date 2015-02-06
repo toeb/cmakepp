@@ -23,11 +23,7 @@ before_install:
   - git config --global user.name "Build Server"
 install:
   - cmake --version
-  - mkdir ../bii_install
-  - pushd ../bii_install
   - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh
-  - popd
-  - ls
   - bii setup:cpp
 script: 
  - bii init
