@@ -23,12 +23,7 @@ before_install:
   - git config --global user.name "Build Server"
 install:
   - cmake --version
-  # change directory because bii's install.sh conflicts with my install.sh
-  - mkdir bii_install
-  - cd bii_install
-  - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh #
-  - cd ..
-  ## bii install finished
+  - wget -o bii_install.sh http://apt.biicode.com/install.sh && chmod +x bii_install.sh && ./bii_install.sh #
   - bii setup:cpp
 script: 
  - bii init
