@@ -24,6 +24,7 @@ function(test)
   package_source_query_path("test/asdasd4" --package-handle)
   ans(res)
   assert(res)
+  json_print(${res})
   assertf({res.query_uri} STREQUAL "test/asdasd4")
   
 
