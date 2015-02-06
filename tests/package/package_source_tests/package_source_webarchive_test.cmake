@@ -25,6 +25,8 @@ function(test)
 
   package_source_resolve_webarchive("https://github.com/toeb/cmakepp/archive/v0.0.3.tar.gz")
   ans(res)
+  json_print(res)
+  assert(res)
   assertf({res.package_descriptor.id} STREQUAL "oo-cmake")
   assertf({res.package_descriptor.license} STREQUAL "MIT")
   assertf({res.archive_descriptor.package_descriptor_path} STREQUAL "cmakepp-0.0.3/package.cmake")
