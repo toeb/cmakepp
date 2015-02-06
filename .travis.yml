@@ -22,9 +22,10 @@ before_install:
   - git config --global user.email "travis-ci@example.com"
   - git config --global user.name "Build Server"
 install:
+  - cmake --version
   # biicode initialization
-  #- wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh #
-  #- bii setup:cpp
+  - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh #
+  - bii setup:cpp
      # install cmake --
     #- wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
     #- tar xf "cmake-${CMAKE_VERSION}.tar.gz"
@@ -37,10 +38,9 @@ install:
     #- cmake --version    
     # -- end
 script: 
- - cmake --version
- # - bii init
- #- bii open toeb/cmakepp
- #- rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
+ - bii init
+ - bii open toeb/cmakepp
+ - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
  - cmake -P build/script.cmake
  #- mkdir install_dir
  #- cd install_dir
