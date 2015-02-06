@@ -1,50 +1,48 @@
-
+## package_source_resolve_archive(<~uri>)-> <package handle>
+## 
+## resolves the specified uri to a unqiue immutable package handle 
 function(package_source_resolve_archive uri)
-    ## query for uri and return if no single uri is found
-    package_source_query_archive("${uri}")
-    ans(valid_uri)
+    uri("${uri}")
+    ans(uri)
 
-    list(LENGTH valid_uri uri_count)
+    ## query for uri and return if no single uri is found
+    package_source_query_archive("${uri}" --package-handle)
+    ans(package_handle)
+
+    list(LENGTH package_handle uri_count)
     if(NOT uri_count EQUAL 1)
+      error("archive package source could not resolve a single immutable package for {uri.uri}")
       return()
     endif()
 
+    ## uncompress package descriptor
+    assign(archive_path = package_handle.archive_descriptor.path)
 
-    uri("${valid_uri}")
-    ans(uri)
+    ## search for the first package.cmake file in the archive 
+    archive_match_files("${archive_path}" "\\/package\\.cmake" --single)
+    ans(package_descriptor_path)    
 
-    ## read the package_descriptor file from the archive
-    ## if it exists
-    uri_to_localpath("${uri}")
-    ans(archive_path)
-
-    file_tempdir()
-    ans(temp_dir)
-
-    uncompress_file("${temp_dir}" "${archive_path}" "package.cmake")
-    package_handle("${temp_dir}")
-    ans(package_handle)
-    rm("${temp_dir}")
-
-    map_tryget("${package_handle}" package_descriptor)
+    if(package_descriptor_path)
+        archive_read_file("${archive_path}" "${package_descriptor_path}")
+        ans(package_descriptor_content)
+    endif()
+    
+    json_deserialize("${package_descriptor_content}")
     ans(package_descriptor)
 
-    ## get default values for package_descriptor by parsing
-    ## the file name
-    map_tryget(${uri} file_name)
-    ans(file_name)
 
+    ## set package descriptor defaults
+    assign(file_name = uri.file_name)
     package_descriptor_parse_filename("${file_name}")
-    ans(defaults)
+    ans(default_package_descriptor)
 
-    map_defaults("${package_descriptor}" "${defaults}")
+    map_defaults("${package_descriptor}" "${default_package_descriptor}")
     ans(package_descriptor)
 
-    ## response 
-    map_new()
-    ans(result)
-    map_set(${result} package_descriptor "${package_descriptor}")    
-    map_set(${result} uri "${valid_uri}")    
 
-    return_ref(result)
+    ## update package handle
+    assign(package_handle.package_descriptor = package_descriptor)
+    assign(package_handle.archive_descriptor.package_descriptor_path = package_descriptor_path)
+
+    return_ref(package_handle)
 endfunction()

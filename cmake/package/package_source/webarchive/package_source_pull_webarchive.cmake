@@ -7,7 +7,20 @@
 
     list_pop_front(args)
     ans(target_dir)
+
     path_qualify(target_dir)
+
+    package_source_resolve_webarchive("${uri}")
+    ans(package_handle)
+
+    assign(archive_path = package_handle.archive_descriptor.path)
+
+    package_source_pull_archive("${archive_path}" ${target_dir})
+
+    map_set(${package_handle} content_dir ${target_dir})
+    
+
+    return_ref(package_handle)
 
     package_source_query_webarchive("${uri}" ${refresh})
     ans(package_uri)

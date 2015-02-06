@@ -7,18 +7,6 @@ function(test)
     fwrite("package.cmake" "{\"id\":\"pkg\", \"include\":\"**\"}")
   popd()
 
-
-  package_source_push_archive(p1 "test.tgz")
-  ans(res)
-  assert(res)
-  assert("${res}" MATCHES "^file:///.*test.tgz")
-  assert(EXISTS "${test_dir}/test.tgz")
-  uncompress_file("." "test.tgz" README.md)
-  fread("README.md")
-  ans(data)
-  assert("${data}" STREQUAL "hello")
-
-
   pushd(tmpdir --create)
     fwrite(README.md "hello")
     compress("../archive1.tgz" "**")
@@ -34,6 +22,44 @@ function(test)
     fwrite(package.cmake "{\"id\":\"mymy\", \"version\":\"1.2.3\"}")
     compress("../archive3.tgz" "**")
   popd()
+
+  checksum_file("archive3.tgz")
+  ans(expected_checksum_3)
+
+
+  package_source_resolve_archive("archive2-3.2.1.tgz")
+  ans(res)
+  assert(res) 
+
+
+
+
+  package_source_query_archive("archive3.tgz" --package-handle)
+  ans(package_handle)
+  assertf({package_handle.query_uri} STREQUAL "archive3.tgz" )
+  assertf({package_handle.archive_descriptor.hash} STREQUAL "${expected_checksum_3}")
+
+  package_source_query_archive("archive3.tgz?hash=${expected_checksum_3}")
+  ans(res)
+  assert(res)
+
+  package_source_query_archive("archive3.tgz?hash=1231adad")
+  ans(res)
+  assert(NOT res)
+
+
+
+  package_source_push_archive(p1 "test.tgz")
+  ans(res)
+  assert(res)
+  assert("${res}" MATCHES "^file:///.*test.tgz")
+  assert(EXISTS "${test_dir}/test.tgz")
+  uncompress_file("." "test.tgz" README.md)
+  fread("README.md")
+  ans(data)
+  assert("${data}" STREQUAL "hello")
+
+
 
 
   package_source_pull_archive("lalala" "pull/p1")

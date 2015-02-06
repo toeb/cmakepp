@@ -1,12 +1,20 @@
-
+## package_source_query_bitbucket(<~uri> [--package-handle])->
   function(package_source_query_bitbucket uri)
+    set(args ${ARGN})
+
+    list_extract_flag(args --package-handle)
+    ans(return_package_handle)
+
+
     uri("${uri}")
     ans(uri)
 
+    ## scheme needs to be empty or match bitbuckt
     assign(scheme = uri.scheme)
-    if(NOT "${scheme}" MATCHES "(^$)|(^bitbucket$)")
+    if(NOT "${scheme}_" STREQUAL "_" AND NOT  "${scheme}" STREQUAL "bitbucket")
       return()
     endif()
+
 
     assign(segments = uri.normalized_segments)
     list_extract(segments owner repo)
