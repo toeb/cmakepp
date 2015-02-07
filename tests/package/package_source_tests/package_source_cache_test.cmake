@@ -117,12 +117,15 @@ function(test)
   function(indexed_store_find_keys)
 
   endfunction()
+ 
   function(indexed_store_save)
 
   endfunction()
+ 
   function(indexed_store_index_list)
-  
+    return_ref(indices)
   endfunction()
+
   function(indexed_store_index_add index)
     obj("${index}")
     ans(index)
@@ -131,18 +134,24 @@ function(test)
     indexed_store_index_rebuild(${index})
     return()
   endfunction()
+
   function(indexed_store_index_remove)
   
   endfunction()
   
-  endfunction()
   function(indexed_store_index_rebuild index)
-    this_get()
+    #this_get()
     return()
   endfunction()
 
 
 
+  indexed_store("index_store")
+  ans(uut)
+
+  json_print(${uut})
+
+  assign(idx = uut.index_add("{name:'idx1'}"))
 
   return()
   function(cached_package_source inner)
