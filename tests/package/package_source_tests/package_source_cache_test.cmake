@@ -1,4 +1,260 @@
 function(test)
+
+  function(key_value_store)
+    set(args ${ARGN})
+    list_pop_front(args)
+    ans(store_dir)
+
+    path_qualify(store_dir)
+
+    map_new()
+    ans(this)
+
+    assign(this.store_dir = store_dir)
+    assign(this.save = 'key_value_store_save')
+    assign(this.load = 'key_value_store_load')
+    assign(this.list = 'key_value_store_list')
+    assign(this.keys = 'key_value_store_keys')
+    assign(this.key = '')
+    return(${this})
+  endfunction()
+  function(key_value_store_save)
+    this_get(store_dir)
+    assign(key = this.key(${ARGN}))
+    qm_write("${store_dir}/${key}" ${ARGN})    
+    return_ref(key)
+  endfunction()
+  function(key_value_store_load key)
+    this_get(store_dir)
+    if(NOT EXISTS "${store_dir}/${key}")
+      return()
+    endif()
+    qm_read("${store_dir}/${key}")
+    return_ans()
+  endfunction()
+
+  function(key_value_store_keys)
+    this_get(store_dir)
+    file(GLOB keys RELATIVE "${store_dir}" "${store_dir}/*")
+    return_ref(keys)
+  endfunction()
+
+  function(key_value_store_list)
+    key_value_store_keys()
+    ans(keys)
+    set(values)
+    foreach(key ${keys})
+      key_value_store_load("${key}")
+      ans_append(values)
+    endforeach()  
+    return_ref(values)
+  endfunction()
+
+
+  key_value_store("kv1")
+  ans(store)
+
+  assign(store.key = 'checksum_string')
+
+  assign(allkeys = store.keys())
+  assert(NOT allkeys)
+
+  assign(key = store.save("hello world!"))
+  assert(key)
+
+  assign(value = store.load("${key}"))
+  assert("${value}" STREQUAL "hello world!")
+
+  assign(allkeys = store.keys())
+  assert(allkeys)
+
+  assert("${allkeys}" STREQUAL "${key}")
+
+  
+
+  function(indexed_store)
+    map_new()
+    ans(this)
+    return(${this})
+  endfunction()
+
+
+
+
+  return()
+  function(cached_package_source inner)
+    set(args ${ARGN})
+    list_pop_front(args)
+    ans(cache_dir)
+
+    if(NOT cache_dir)
+      oocmake_config(cache_dir)
+      ans(cache_dir)
+      set(cache_dir "${cache_dir}/package_cache")
+    endif()
+
+    path_qualify(cache_dir)
+
+    set(this)
+    assign(!this.cache_dir = cache_dir)
+    assign(!this.inner = inner)
+
+    assign(!this.query = 'package_source_query_cache')
+    assign(!this.resolve = 'package_source_resolve_cache')
+    assign(!this.pull = 'package_source_pull_cache')
+
+    return_ref(this)
+  endfunction()
+
+
+  function(cache_create)
+    map_new()
+    ans(this)
+    
+    set(args ${ARGN})
+    list_pop_front(args)
+    ans(cache_dir)
+    path_qualify(cache_dir)
+
+    assign(this.cache_dir = cache_dir)
+
+    assign(this.value_indices = 'cache_value_indices')
+    assign(this.hash_value = 'cache_value_hash')
+    assign(this.register_value = 'cache_value_register')
+    assign(this.register_values = 'cache_values_register')
+    assign(this.save_value = 'cache_value_save')
+    assign(this.load_value = 'cache_value_load')
+    return_ref(this)
+  endfunction()
+
+  function(cache_value_save key value)
+    this_get(cache_dir)
+    qm_write("${cache_dir}/values/${key}.qm" "${value}")    
+    return(true)
+  endfunction()
+  function(cache_value_load key)
+    this_get(cache_dir)
+    qm_read("${cache_dir}/values/${key}.qm")
+    return_ans()    
+  endfunction()
+
+  function(cache_value_register value)
+    assign(hash = this.hash_value(${value}))
+
+
+    set(value_container)
+    assign(!value_container.value = value)
+
+    # create indices
+    assign(success = register_value_indices(${hash} ${value_container}))
+
+    assign(success = this.save_value("${hash}" "${value_container}"))
+
+    return_ref(hash)
+  endfunction()
+
+
+  function(cache_values_register)
+    set(result)
+    foreach(value ${ARGN})
+      assign(result[] = this.register_value(${value}))
+    endforeach()
+    return_ref(result)
+  endfunction()
+
+  function(cache_values_register_indices key value_container)
+    assign(value = value_container.value)
+    assign(indices = this.value_indices(${value}))
+
+    assign(success = this.save_indices(${indices}))
+  endfunction()
+
+  function(cache_indices_save)
+
+
+  endfunction()
+
+  function(cache_value_indices value)
+    return()
+  endfunction()
+  function(cache_value_hash value)
+    assign(hash = value.uri)
+    assign(hash = string_normalize(${hash}))
+    return_ref(hash)
+  endfunction()
+
+
+  cache_create(".")
+  ans(uut)
+
+  package_source_query_github("toeb/cmakepp" --package-handle)
+  ans(handles)
+  print_vars(handles)
+  assign(hashes = uut.register_values(${handles}))
+
+
+return()
+  map_new()
+  ans(cache_data)
+
+
+
+  function(cache_register_value query value)
+    uri("${query}")
+    ans(uri)
+
+
+
+
+  endfunction()
+
+  function(cache_register_values query)
+    set(values ${ARGN})
+    foreach(value ${values})
+      cache_register_value("${query}" "${value}")
+    endforeach()
+    return()
+  endfunction()
+
+
+
+
+
+
+  function(package_source_query_cache uri)
+    set(args ${ARGN})
+
+    uri("${uri}")
+    ans(uri)
+
+    list_extract_flag(args --package-handle)
+    ans(return_package_handle)
+
+
+    list_extract_flag(args --refresh)
+    ans(return_package_handle)
+
+    this_get(cache_dir)
+
+
+
+    assign(package_handles = inner.query(${uri} --package-handle))
+
+    cache_register(${uri} ${package_handles})
+
+    return_ref(package_handles)
+
+  endfunction()
+
+  github_package_source()
+  ans(inner)
+  cached_package_source(${inner})
+  ans(uut)
+
+  assign(result = uut.query("toeb"))
+
+  print_vars(result)
+
 return()
   function(index_write index index_dir index_value)
       map_iterator(${index})

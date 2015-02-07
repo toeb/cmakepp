@@ -11,7 +11,7 @@
 
     list(LENGTH package_handle count)
     if(NOT count EQUAL 1)
-      error("could not resolve {uri.uri} matches {count} packages - needs to be unqiue")
+      error("could not resolve {uri.uri} matches {count} packages - needs to be unqiue" --aftereffect)
       return()
     endif()
 
