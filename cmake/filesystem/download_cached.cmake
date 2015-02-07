@@ -20,7 +20,7 @@
       if(readonly)
         file_glob("${cached_path}" "**")
         ans(file_path)
-        if(NOT EXISTS file_path)
+        if(NOT EXISTS "${file_path}")
           message(FATAL_ERROR "expected a file to exist in cached dir for ${uri}")
         endif()
         return_ref(file_path)

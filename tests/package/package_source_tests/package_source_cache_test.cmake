@@ -140,8 +140,29 @@ function(test)
   endfunction()
   
   function(indexed_store_index_rebuild index)
-    #this_get()
+    this_get(lookup_dir)
+    assign(index_name = index.name)
+    rm("${lookup_dir}/${index_name}")
+    key_value_store_list()
+    ans(values)
+    foreach(value ${values})
+      indexed_store_index_build("${index}" "${value}")
+    endforeach()
     return()
+  endfunction()
+
+  function(indexed_store_index_build index value)
+    map_new()
+    ans(index_entry)
+
+    this_get(lookup_dir)
+
+    assign(index_name = index.name)
+    set(index_lookup_dir "${lookup_dir}/${index_name}")
+
+    qm_write("${index_lookup_dir}/" "${index_entry}")
+
+    return_ref(index_entry)
   endfunction()
 
 
