@@ -172,6 +172,14 @@ function(assert)
 
 	# print message if assertion failed, SILENT is not specified or message type is FATAL_ERROR
 	if(NOT result)
+		if(_MESSAGE_TYPE STREQUAL "FATAL_ERROR")
+			message("'${_MESSAGE}'")
+			message(PUSH "log:")
+			log_print(10)
+			message(POP)
+			message(FATAL_ERROR " ")
+		endif()
+
 		if(NOT _SILENT OR _MESSAGE_TYPE STREQUAL "FATAL_ERROR")
 			message(${_MESSAGE_TYPE} "'${_MESSAGE}'")
 		endif()

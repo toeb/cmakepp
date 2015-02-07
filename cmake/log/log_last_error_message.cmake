@@ -12,4 +12,3 @@
 
     return_ref(message)
   endfunction()
-
