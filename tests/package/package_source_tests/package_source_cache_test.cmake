@@ -73,9 +73,72 @@ function(test)
   
 
   function(indexed_store)
-    map_new()
+    key_value_store(${ARGN})
     ans(this)
+    assign(this.find = 'indexed_store_find')
+    assign(this.find_keys = 'indexed_store_find_keys')
+    assign(this.save = 'indexed_store_save')
+    assign(this.index_list = 'indexed_store_index_list')
+    assign(this.index_add = 'indexed_store_index_add')
+    assign(this.index_rebuild = 'indexed_store_index_add')
+
+    assign(store_dir = this.store_dir)
+    set(value_dir "${store_dir}/value")
+    set(index_dir "${store_dir}/index")
+    set(lookup_dir "${store_dir}/lookup" )
+    key_value_store("${index_dir}")
+    ans(index_store)
+    assign(this.index_store = index_store)
+    assign(this.store_dir = value_dir)
+    assign(this.lookup_dir = lookup_dir)
+    assign(this.index_store.key = 'indexed_store_index_key')
+
+    assign(indices = index_store.list())
     return(${this})
+  endfunction()
+
+  function(indexed_store_index_key index)
+    map_tryget(${index} name)
+    return_ans()
+  endfunction()
+
+
+  function(indexed_store_find)
+    indexed_store_find_keys(${ARGN})
+    ans(keys)
+    set(values)
+    foreach(key ${keys})
+      key_value_store_load("${key}")
+      ans_append(values)
+    endforeach()
+    return_ref(values)
+  endfunction()
+
+  function(indexed_store_find_keys)
+
+  endfunction()
+  function(indexed_store_save)
+
+  endfunction()
+  function(indexed_store_index_list)
+  
+  endfunction()
+  function(indexed_store_index_add index)
+    obj("${index}")
+    ans(index)
+    assign(success = this.index_store.save(${index}))
+    assign(!this.indices[] = index)
+    indexed_store_index_rebuild(${index})
+    return()
+  endfunction()
+  function(indexed_store_index_remove)
+  
+  endfunction()
+  
+  endfunction()
+  function(indexed_store_index_rebuild index)
+    this_get()
+    return()
   endfunction()
 
 

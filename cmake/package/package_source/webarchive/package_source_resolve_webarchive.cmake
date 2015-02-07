@@ -22,7 +22,7 @@
 
    
     if(NOT cached_archive_path)
-        error("could not download {resource_uri}")
+        error("could not download {resource_uri}" --aftereffect)
         return()
     endif()
 
