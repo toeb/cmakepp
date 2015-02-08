@@ -6,22 +6,25 @@ function(test)
   # ans(res)
   # assert(NOT res)
 
-
-  set(github_api_token "?client_id=$ENV{GITHUB_DEVEL_TOKEN_ID}&client_secret=$ENV{GITHUB_DEVEL_TOKEN_SECRET}")
-  http_get("https://api.github.com/repos/toeb/cmakepp${github_api_token}")
+  http_get("http://httpbin.org/get")
   ans(content)
   assert(content)
 
-  http_get("https://api.github.com/repos/toeb/cmakepp${github_api_token}" --json)
+  http_get("http://httpbin.org/get?return_value=lalala" --json)
   ans(content)
   assert(content)
-  assertf("{content.full_name}" STREQUAL "toeb/cmakepp")
+  assertf("{content.args.return_value}" STREQUAL "lalala")
+
+
+  http_get("http://httpbin.org/get" "{val1:1,val2:2}" --json)
+  ans(content)
+  assertf("{content.args.val1}" EQUAL 1)
+  assertf("{content.args.val2}" EQUAL 2)
+
 
   http_get("http://notahost.tld" --silent-fail)
   ans(res)
   assert(NOT res)
-
-
 
   http_get("http://notahost.tld" --response)
   ans(res)
@@ -37,30 +40,18 @@ function(test)
   assert( error)
 
 
-  http_get("http://google.de" --response)
+  http_get("http://httpbin.org/get" --response)
   ans(res)
 
   assert(res)
   assertf("{res.client_status}" EQUAL 0)
-  assertf("{res.request_url}" STREQUAL "http://google.de")
+  assertf("{res.request_url}" STREQUAL "http://httpbin.org/get")
   assertf("{res.http_status_code}" STREQUAL "200")
   assertf("{res.http_reason_phrase}" STREQUAL "OK")
-  assertf(NOT "{res.http_headers.Date}_" STREQUAL "_")
 
-  http_get("http://google.de" --return-code)
+  http_get("http://httpbin.org/get" --return-code)
   ans(error)
   assert(NOT error)
-
-
-  http_get("http://google.de")
-  ans(content)
-  assert(content)
-
-
-  http_get("http://google.de")
-  ans(content)
-  assert(content)
-
 
 
 endfunction()

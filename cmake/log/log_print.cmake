@@ -1,5 +1,5 @@
 
-function(log_print limit)
+function(log_print)
   set(limit ${ARGN})
 
   ref_get(log_record)

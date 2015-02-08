@@ -76,6 +76,7 @@ cmake -P build/script.cmake
 		* query registry keys for values
 	* [string functions](#stringfunctions) - advanced string manipulation	
 	* [URIs](#uris) - Uniform Resource Identifier parsing and formatting	
+	* [HTTP client](#http_client) - Perform HTTP/GET  HTTP/PUT request with pure cmake.
 	* [user data](#userdata) - persists and retrieves data for the current user (e.g. allowing cross build/ script configuration)
 	* functions
 		* [returning values](#return)
@@ -1819,7 +1820,6 @@ json_print(${res})
 }
 ```
 
-
 ## DataTypes and Functions
 
 * `<uri> ::= `
@@ -1849,7 +1849,22 @@ json_print(${res})
 ## Future Work
 
 * allow more options for parsing
-* option for quick parse or slow parse 
+* option for quick parse or slow parse
+
+
+# <a href="http_client"><a> HTTP Client
+
+`CMake` has a built in `cUrl` module which it exposes over its `file` function - more precise: `file(DOWNLOAD)` and `file(UPLOAD)`.  These functions actually perform a `GET` resp. `PUT` request on the designated uri.  I used these capabilities to create a  `http_get` and `http_put` function which works like one might expect a http client to work.
+
+*Example*
+```
+```
+
+## Functions and Datatypes
+
+* `http_post()-> `
+* `http_get()-> `
+* 
 
 # <a name="string_functions"></a> String Functions
 

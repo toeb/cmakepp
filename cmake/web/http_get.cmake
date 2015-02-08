@@ -3,7 +3,7 @@
 ##
 ## flags: 
 ##   --json         flag deserializes the content and returns it 
-##   --progress     flag prints the progress of the download to the console
+##   --show-progress     flag prints the progress of the download to the console
 ##   --response     flag
 ##   --return-code  flag
 ##   --silent-fail  flag
@@ -12,7 +12,7 @@ function(http_get uri)
   set(args ${ARGN})
   list_extract_flag(args --json)
   ans(return_json)
-  list_extract_flag(args --progress)
+  list_extract_flag(args --show-progress)
   ans(show_progress)
   list_extract_flag(args --response)
   ans(return_response)
@@ -63,7 +63,7 @@ function(http_get uri)
     TLS_VERIFY OFF 
     ${args}
   )
-  
+
   # split status into client_status and client_message
   list_extract(status client_status client_message)
 

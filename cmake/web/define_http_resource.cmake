@@ -1,5 +1,5 @@
 
-  function(define_http_resource function method uri_string)
+  function(define_http_resource function uri_string)
     uri("${uri_string}")
     ans(uri)
 
@@ -23,49 +23,16 @@
     set(code "
       function(${function}${function_args})
         set(args \${ARGN})
-
-        list_extract_flag(args --response)
-        ans(return_response)
-
-        list_extract_flag(args --json)        
-        ans(return_json)
-
-        list_extract_flag(args --silent-fail)
-        ans(silent_fail)
-
-
-        list_extract_flag(args --return-code)
-        ans(return_return_code)
-
+        list_extract_flag(args --put)
+        ans(put)
         set(resource_uri \"${uri_string}\")
 
-        http_${method}(\"\${resource_uri}\" \${args})
-        ans(response)
-
-        if(return_response)
-          return_ref(response)
+        if(put)
+          http_put(\"\${resource_uri}\" \${args})
+        else()
+          http_get(\"\${resource_uri}\" \${args})
         endif()
-
-        assign(error = res.client_status)
-
-        if(return_return_code)
-          return_ref(error)
-        endif()
-        if(error)
-            error(\"failed to perform http request. client error: \${error}\")
-          if(NOT silent_fail)
-            message(FATAL_ERROR \"failed to perform http request. client error: \${error}\")
-          endif()
-          return()
-        endif()
-
-        assign(content = res.content)
-
-        if(return_json)
-          json_deserialize(\"\${content}\")
-          ans(content)
-        endif()
-        return_ref(content)
+        return_ans()
       endfunction()
     ")
     eval("${code}")

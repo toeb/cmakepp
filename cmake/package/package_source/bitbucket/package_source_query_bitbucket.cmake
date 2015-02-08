@@ -31,9 +31,7 @@
       set(request_uri "${api_uri}/repositories/${owner}/${repo}")
     endif() 
     
-    http_get("${request_uri}" "")
-    ans(response)
-    map_tryget(${response} client_status)
+    http_get("${request_uri}" --return-code)
     ans(error)
     if(error)
       return()
@@ -59,7 +57,7 @@
           break()
         endif()
 
-        http_get("${next_uri}" "")
+        http_get("${next_uri}" --response)
         ans(response)
         map_tryget(${response} client_status)
         ans(error)
