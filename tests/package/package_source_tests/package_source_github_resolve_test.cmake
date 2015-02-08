@@ -1,6 +1,5 @@
 function(test)
 
-
   # resolve tests
   package_source_resolve_github("toeb/cmakepp")
   ans(res)

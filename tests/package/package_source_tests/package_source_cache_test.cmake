@@ -119,7 +119,11 @@ function(test)
   endfunction()
  
   function(indexed_store_save)
+    key_value_store_save("${ARGN}")
+    ans(key)
 
+    indexed_store_index_build("${key}" "${value}")
+    return_ref(key)
   endfunction()
  
   function(indexed_store_index_list)
@@ -143,24 +147,37 @@ function(test)
     this_get(lookup_dir)
     assign(index_name = index.name)
     rm("${lookup_dir}/${index_name}")
-    key_value_store_list()
-    ans(values)
-    foreach(value ${values})
+    key_value_store_keys()
+    ans(keys)
+    foreach(key ${keys})
+      indexed_store_index_build("${index}" "${key}")
+    endforeach()
+    return()
+  endfunction()
+
+  function(indexed_store_index_value value)
+    this_get(indices)
+    ans(indices)
+
+    foreach(index ${indices})
       indexed_store_index_build("${index}" "${value}")
     endforeach()
     return()
   endfunction()
 
-  function(indexed_store_index_build index value)
+  function(indexed_store_index_build index key)
     map_new()
     ans(index_entry)
 
+    
     this_get(lookup_dir)
+
+    assign(value = this.load("${key}"))
 
     assign(index_name = index.name)
     set(index_lookup_dir "${lookup_dir}/${index_name}")
 
-    qm_write("${index_lookup_dir}/" "${index_entry}")
+    qm_write("${index_lookup_dir}/${key}" "${index_entry}")
 
     return_ref(index_entry)
   endfunction()
@@ -170,9 +187,24 @@ function(test)
   indexed_store("index_store")
   ans(uut)
 
-  json_print(${uut})
 
-  assign(idx = uut.index_add("{name:'idx1'}"))
+
+
+  assign(uut.key = "'(a)-> map_tryget($a id)'")
+  #json_print(${uut})
+
+
+
+  assign(idx = uut.index_add("{id:'idx1',value:'gagagaga'}"))
+
+
+
+  assign(key = uut.save("{id:'abc'}"))
+
+
+
+
+
 
   return()
   function(cached_package_source inner)
