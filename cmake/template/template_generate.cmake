@@ -41,18 +41,18 @@
         set(result "${result}\n${code}")
 
         if(do_output)
-          set(result "${result}\nset(output \"\${output}\${__ans}\")")
+          set(result "${result}\nref_append_string(\${output} \"\${__ans}\")")
         endif()
       else()
         cmake_string_escape("${fragment}")
         ans(fragment)
-        set(result "${result}\nset(output \"\${output}${fragment}\")")
+        set(result "${result}\nref_append_string(\${output} \"${fragment}\")")
       endif()
 
     endforeach()
-    set(result "
-      
-      set(output)${result}
-      set_ans(\${output})")
+    set(result "ref_new()
+      ans(output)${result}
+      ref_get(\${output})")
+
     return_ref(result)  
   endfunction()

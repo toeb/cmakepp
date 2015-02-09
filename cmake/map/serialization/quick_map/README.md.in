@@ -1,0 +1,14 @@
+## Quickmap - A `CMake` based Serialization Format
+<%
+    assign(function_files = glob("**.cmake" --relative))
+%>
+
+
+### Function List
+
+<%= template_cmakepp_function_list(${function_files}) %>
+
+### Function Descriptions
+
+<%= template_cmakepp_function_descriptions(${function_files}) %>
+

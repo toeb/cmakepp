@@ -9,6 +9,9 @@ So I have created somewhat alot of functions which does things that you might ne
 ### Function List
 
 
+* [ascii_char](#ascii_char)
+* [ascii_code](#ascii_code)
+* [ascii_generate_table](#ascii_generate_table)
 * [delimiters](#delimiters)
 * [format](#format)
 * [regex_search](#regex_search)
@@ -65,6 +68,25 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ### Function Descriptions
 
+## <a name="ascii_char"></a> `ascii_char`
+
+
+
+
+
+## <a name="ascii_code"></a> `ascii_code`
+
+
+
+
+
+## <a name="ascii_generate_table"></a> `ascii_generate_table`
+
+ generates the ascii table and stores it in the global ascii_table variable  
+
+
+
+
 ## <a name="delimiters"></a> `delimiters`
 
  **`delimiters()->[delimiter_begin, delimiter_end]`**
@@ -91,10 +113,10 @@ So I have created somewhat alot of functions which does things that you might ne
  ans(data)
  ## use format to print navigated expressiosn:
  format("{data.a} + {data.c.d} = {data.b[2]}") => "1 + 3 = 4"
- format("some numbers: {data.b[2:$]}") =>  "some numbers: 4;5;6"
+ format("some numbers: {data.b[2:$]}") =>  "some numbers: 4\;5\;6"
  ...
  ```
- *Note:* You may not use ASSCI-29 since it is used interally in this function. If you don't know what this means - don't worry
+ *Note:* You may not use ASCII-29 since it is used interally in this function. If you don't know what this means - don't worry
  
 
 
