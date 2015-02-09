@@ -60,10 +60,13 @@ This is why I started to write log functions which do not output anything.  You 
 
  *Examples*
  ```
- log("this is a simple error" --error) => <% 
-   log("this is a simple error" --error) 
-   template_write_data("${__ans}")
- %>
+ log("this is a simple error" --error) => {
+ "message":"this is a simple error",
+ "args":"this",
+ "function":null,
+ "error_code":null,
+ "type":"error"
+}
  ```
 
 

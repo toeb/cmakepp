@@ -79,7 +79,7 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="format"></a> `format`
 
- **`format(<template string>)-><string>`**
+ [**`format(<template string>)-><string>`**](format.cmake)
 
  this function utilizes [`assign(...)`](#assign) to evaluate expressions which are enclosed in handlebars: `{` `}`
  

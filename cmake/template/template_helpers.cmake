@@ -23,6 +23,7 @@
         get_filename_component(template_dir "${template_path}" PATH)
         pushd("${template_dir}")
           template_eval("${comments}")
+          ans(comments)
         popd()
         set(res "${res}## <a name=\"${function_name}\"></a> `${function_name}`\n\n${comments}\n\n\n\n")
     endforeach()

@@ -1,4 +1,4 @@
-## **`format(<template string>)-><string>`**
+## [**`format(<template string>)-><string>`**](<%="${template_path}"%>)
 ##
 ## this function utilizes [`assign(...)`](#assign) to evaluate expressions which are enclosed in handlebars: `{` `}`
 ## 
