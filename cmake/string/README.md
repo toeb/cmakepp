@@ -115,6 +115,17 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_char_at"></a> `string_char_at`
 
+ [**`string_char_at(<index:int> <input:string>)-><char>`**](string_char_at.cmake)
+
+ returns the character at the position specified. strings are indexed 0 based
+ indices less than -1 are translated into length - |index|
+
+ *Examples*
+ ```cmake
+ string_char_at(3 "abcdefg")  # => "d"
+ string_char_at(-3 "abcdefg") # => "f"
+ ```
+
 
 
 
