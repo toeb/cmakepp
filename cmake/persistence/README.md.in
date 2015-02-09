@@ -1,4 +1,4 @@
-## <a name="userdata"><a> User Data
+## User Data
 
 User Data is usefull for reading and writing configuration per user.  It is available for all cmake execution and can be undestood as an extra variable scope. It however allows maps which help structure data more clearly.  User Data is stored in the users home directory (see `home_dir`) where a folder called `.cmakepp` inside are files in a quickmap format which can be edited in an editor of choice besides being managed by the following functions.  User Data is always read and persisted directly (which is slower but makes the system more consistent)
 

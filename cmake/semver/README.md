@@ -1,4 +1,4 @@
-## <a name="semver"></a>Parsing and handling semantic versions
+## Parsing and handling semantic versions
 
 
 A `semantic version` gives a specific meaning to it components. It allows software engineers to quickly determine weather versioned components of their software can be updated or if breaking changes could occur.  

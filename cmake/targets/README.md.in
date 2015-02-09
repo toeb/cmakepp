@@ -1,4 +1,4 @@
-## <a name="targets"></a> Targets
+## Targets
 
 ## target_list and project_list
 

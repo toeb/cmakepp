@@ -2,9 +2,6 @@
 
 
 
-
-# <a name="process_management"><a> Process Management
-
 This section how to manage processes and external programs.  Besides replacements for cmake's `execute_process` function this section defines a control system for parallel processes controlled from any cmake.  
 
 ## Common Definitions

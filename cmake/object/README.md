@@ -1,4 +1,4 @@
-## <a name="objects"></a>Objects 
+## Objects 
 
 Objects are an extension of the maps. They add inheritance, member calls and custom member operations to the concept of maps. I split up maps and objects because objects are a lot slower (something like 2x-3x slower) and if you do not need objects you should not use them (handling 1000s of maps is already slow enough). The reason for the performance loss is the number of function calls needed to get the correct virtual function/property value.
 

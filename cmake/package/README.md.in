@@ -1,4 +1,4 @@
-## <a href="project_management"> Package Management
+## Package Management
 
 Package management depends on package search and retrieval.  The other way around there are no dependencies. This clean cut is and will stay important
 

@@ -1,4 +1,4 @@
-## <a name="windowsregistry"></a> Windows Registry
+## Windows Registry
 
 
 Even though cmake and cmakepp are platform independent working with the windows registry is sometimes import/ e.g. setting environment variables. The cmake interface for manipulating registry values is not very nice (`cmake -E delete_regv` `write_regv`, `get_filename_component(result [HKEY_CURRENT_USER/Environment/Path] ABSOLUTE CACHE)` ) and hard to work with. Therefore I implemented a wrapper for the windows registry command line tool [REG](http://technet.microsoft.com/en-us/library/cc732643.aspx) and called it `reg()` it has the same call signature as `REG` with a minor difference: what is `reg add HKCU/Environment /v MyVar /f /d myval` is written `reg(add HKCU/Environment /v /MyVar /f /d myval)`. See also [wrap_executable](#executable)

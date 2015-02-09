@@ -1,4 +1,4 @@
-## <a name="uris"></a> Uniform Resource Identifiers (URIs)
+## Uniform Resource Identifiers (URIs)
 
 Uniform Resource Identifiers are often used for more than just internet addresses.  They are able to identify any type of resource and are truly cross platform.  Even something as simple as parsing a path can take on complex forms in edge cases.  My motivation for writing an URI parser was that I needed a sure way to identify a path in a command line call. 
 
