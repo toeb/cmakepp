@@ -43,6 +43,8 @@ string(REPLACE "//" "/" readmes "${readmes}")
 <% foreach(readme ${readmes})
   fread_lines("${readme}" --limit-count 1 --regex "#+ .*")
   ans(title)
+  string(REPLACE "/README.md" "" folder "${readme}") 
+
   string(REGEX REPLACE "#+ *(.*)" "\\1" title "${title}")
-%>* [<%=${title}%>](<%=${readme}%>)
+%>* [<%=${title}%>](<%=${folder}%>)
 <% endforeach() %>
