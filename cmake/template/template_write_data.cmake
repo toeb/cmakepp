@@ -1,0 +1,6 @@
+function(template_write_data)
+      json_indented(${ARGN})
+      ans(res)
+      set(output "${output}${res}" PARENT_SCOPE)
+      return()
+endfunction()

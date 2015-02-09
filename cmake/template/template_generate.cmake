@@ -51,9 +51,7 @@
 
     endforeach()
     set(result "
-      function(template_write)
-        set(output \"\${output}\${ARGN}\" PARENT_SCOPE)
-      endfunction()
+      
       set(output)${result}
       set_ans(\${output})")
     return_ref(result)  

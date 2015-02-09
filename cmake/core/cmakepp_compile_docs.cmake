@@ -1,6 +1,3 @@
-function(test)
-
-
 
 function(cmakepp_compile_docs)
   oocmake_config(base_dir)
@@ -15,7 +12,4 @@ function(cmakepp_compile_docs)
       fwrite("${output_file}" "${generated_content}")
   endforeach()
 
-endfunction()
-
-cmakepp_compile_docs()
 endfunction()

@@ -1,4 +1,4 @@
-# Logging Functions
+## Logging Functions
 <%
     assign(function_files = glob("**.cmake" --relative))
 
@@ -18,7 +18,7 @@ foreach(function_file ${function_files})
 <% endforeach() %>
 
 
-## Functions And Datatypes
+### Functions And Datatypes
 
 <% foreach(function_file ${function_files})
 assign(file_content = fread(${function_file}))
@@ -26,5 +26,10 @@ cmake_script_comment_header("${file_content}")
 ans(function_comments)
 cmake_script_parse("${file_content}" --first-function-header)
 ans(function_def)
-%>### `<%={function_def.function_args[0]}%>`
-<%=${function_comments}%><% endforeach() %>
+template_eval("${function_comments}")
+ans(function_comments)
+assign(function_name = function_def.function_args[0])
+%>## <a href="<%=${function_name}%>"></a>`<%=${function_name}%>`
+<%=${function_comments}%>
+
+<% endforeach() %>
