@@ -1,72 +1,74 @@
+    function(github_get_file user repo ref path)
+        set(raw_uri "https://raw.githubusercontent.com/")
+        set(path_uri "${raw_uri}/${user}/${repo}/${ref}/${path}" )
+        http_get("${path_uri}" ${ARGN})
+        return_ans()
+    endfunction()
 
+  ## package_source_resolve_github() -> <package handle> {}
+  ##
   ## resolves the specifie package uri 
   ## and if uniquely identifies a package 
   ## returns its pacakge descriptor
   function(package_source_resolve_github uri)  
-    set(github_api_token "?client_id=$ENV{GITHUB_DEVEL_TOKEN_ID}&client_secret=$ENV{GITHUB_DEVEL_TOKEN_SECRET}")
+    uri("${uri}")
+    ans(uri)
 
-    ## get a single valid github package source uri
-    ## or return
-    package_source_query_github("${uri}")
-    ans(valid_uri_string)
+    package_source_query_github("${uri}" --package-handle)
+    ans(package_handle)
 
-    list(LENGTH valid_uri_string uri_count)
-    if(NOT ${uri_count} EQUAL 1)
-      return()
+    list(LENGTH package_handle count)
+    if(NOT "${count}" EQUAL 1)
+        error("could not result {uri.uri} to a unique package")
+        return()
+    endif() 
+
+    assign(package_uri = package_handle.uri)
+    uri("${package_uri}")
+    ans(package_uri)
+    assign(hash = package_uri.params.hash)
+    if(NOT hash)
+        error("package uri is not unique. requires a hash param: {uri.uri}")
+        return()
+    endif()
+
+    assign(user = package_uri.normalized_segments[0])
+    assign(repo = package_uri.normalized_segments[1])
+    assign(ref_type = package_uri.normalized_segments[2])
+    assign(ref_name = package_uri.normalized_segments[3])
+
+
+    ## get the repository descriptor
+    github_api("repos/${user}/${repo}" --json)
+    ans(repo_descriptor)
+    if(NOT repo_descriptor)
+        error("could not resolve repository descriptor")
+        return()
     endif()
 
 
 
-    uri("${valid_uri_string}")
-    ans(valid_uri)
-
-    ## get owner and repository and use it to format url
-    assign(owner = valid_uri.normalized_segments[0])
-    assign(repo = valid_uri.normalized_segments[1])
-
-    set(api_uri "https://api.github.com")
-    set(repo_uri "${api_uri}/repos/${owner}/${repo}${github_api_token}")
-
-    ## get the repository descriptor
-    http_get("${repo_uri}" "")
-    ans(res)
-    assign(content = res.content)
-    json_deserialize("${content}")
-    ans(repo_descriptor)
-
-
     ## try to get the package descriptor remotely
-    set(ref master)
-    set(path package.cmake)
-    set(raw_uri "https://raw.githubusercontent.com/")
-    set(package_descriptor_uri "${raw_uri}/${owner}/${repo}/${ref}/${path}" )
-
-    http_get("${package_descriptor_uri}" "")
-    ans(package_descriptor_response)
-
-    assign(package_descriptor_content = package_descriptor_response.content)
-
-    json_deserialize("${package_descriptor_content}")
+    github_get_file("${user}" "${repo}" "${hash}" "package.cmake" --silent-fail)
+    ans(content)
+    json_deserialize("${content}")
     ans(package_descriptor)
 
 
     ## map default values on the packge descriptor 
     ## using the information from repo_descriptor
-    assign(description = repo_descriptor.description)
+    assign(default_description = repo_descriptor.description)
 
     map_defaults("${package_descriptor}" "{
       id:$repo,
       version:'0.0.0',
-      description:$description
+      description:$default_description
     }")
     ans(package_descriptor)
     
     ## response
-    map_new()
-    ans(result)
-    map_set(${result} package_descriptor "${package_descriptor}")
-    map_set(${result} uri "${valid_uri_string}")
-    map_set(${result} repo_descriptor "${repo_descriptor}")
+    map_set(${package_handle} package_descriptor "${package_descriptor}")
+    map_set(${package_handle} repo_descriptor "${repo_descriptor}")
 
-    return_ref(result)
+    return_ref(package_handle)
   endfunction()

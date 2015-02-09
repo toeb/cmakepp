@@ -47,7 +47,7 @@ function(assert)
 
 
 
-	# if continue is set set the mesype to statussage t
+	# if continue is set: set the mesype to statussage t
 	if(_RESULT AND _MESSAGE_TYPE STREQUAL FATAL_ERROR)
 		set(_MESSAGE_TYPE STATUS)
 	endif()
@@ -98,7 +98,10 @@ function(assert)
 		if(NOT _MESSAGE)
 			set(_MESSAGE "assertion failed: input does not match '${_MATCH}'")
 		endif()
-		if("${_UNPARSED_ARGUMENTS}" MATCHES "${_MATCH}")
+		list_extract_flag_name(_UNPARSED_ARGUMENTS NOT)
+		ans(not)
+
+		if(${not} "${_UNPARSED_ARGUMENTS}" MATCHES "${_MATCH}")
 			set(result true)
 		else()
 			set(result false)

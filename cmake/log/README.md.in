@@ -1,0 +1,30 @@
+# Logging Functions
+<%
+    assign(function_files = glob("**.cmake" --relative))
+
+%>
+
+`CMake`'s logging is restricted to using the built in `message()` function. It writes the messages to `stdout` and `stderr` depending on the given tag present (`STATUS`, `ERROR`, `FATAL_ERROR`,`WARNING`, `<none>`).  This is sometimes not enough - especially when the output of your `CMake` script should be very controlled (ie. it is important that no debug or status messages are ouput when users expect the output to adher to a certain format)
+
+This is why I started to write log functions which do not output anything.  You can listen to log messages using the `event` system - the `on_log_message` is called for every log message that is output.
+
+The functions which are to be used are the following
+
+<% 
+foreach(function_file ${function_files})
+  assign(function_def = cmake_script_parse_file(${function_file} --first-function-header))
+  assign(function_name = function_def.function_args[0])
+%> * [<%=${function_name}%>](#<%=${function_name}%>)
+<% endforeach() %>
+
+
+## Functions And Datatypes
+
+<% foreach(function_file ${function_files})
+assign(file_content = fread(${function_file}))
+cmake_script_comment_header("${file_content}")
+ans(function_comments)
+cmake_script_parse("${file_content}" --first-function-header)
+ans(function_def)
+%>### `<%={function_def.function_args[0]}%>`
+<%=${function_comments}%><% endforeach() %>
