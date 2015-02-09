@@ -70,7 +70,7 @@
           if("${CMAKE_MATCH_3}" MATCHES "^[ ]*#(.*)[ ]*$")
             map_set(${current} comment "${CMAKE_MATCH_1}")
           endif()
-          if(return_first_function_header AND "${function_name}" STREQUAL "function")
+          if(return_first_function_header AND ( "${function_name}" STREQUAL "function" OR "${function_name}" STREQUAL "macro"))
             return(${current})
           endif()
         endif()

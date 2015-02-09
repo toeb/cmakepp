@@ -5,21 +5,22 @@
 
 This is why I started to write log functions which do not output anything.  You can listen to log messages using the `event` system - the `on_log_message` is called for every log message that is output.
 
-The functions which are to be used are the following
 
- * [error](#error)
- * [log](#log)
- * [log_record_clear](#log_record_clear)
- * [log_last_error_entry](#log_last_error_entry)
- * [log_last_error_message](#log_last_error_message)
- * [log_last_error_print](#log_last_error_print)
- * [log_print](#log_print)
+### Function List
 
 
+* [error](#error)
+* [log](#log)
+* [log_record_clear](#log_record_clear)
+* [log_last_error_entry](#log_last_error_entry)
+* [log_last_error_message](#log_last_error_message)
+* [log_last_error_print](#log_last_error_print)
+* [log_print](#log_print)
 
-### Functions And Datatypes
+### Function Descriptions
 
-## <a href="error"></a>`error`
+## <a name="error"></a> `error`
+
  `error(...)-><log entry>`
 
  Shorthand function for `log(<message> <refs...> --error)
@@ -28,7 +29,10 @@ The functions which are to be used are the following
 
 
 
-## <a href="log"></a>`log`
+
+
+## <a name="log"></a> `log`
+
  `log(<message:<string>> <refs...> [--error]|[--warning]|[--info]|[--debug]) -> <void>`
 
  This is the base function on which all of the logging depends. It transforms
@@ -56,11 +60,17 @@ The functions which are to be used are the following
 
  *Examples*
  ```
- log("this is a simple error" --error) => 
+ log("this is a simple error" --error) => <% 
+   log("this is a simple error" --error) 
+   template_write_data("${__ans}")
+ %>
  ```
 
 
-## <a href="log_record_clear"></a>`log_record_clear`
+
+
+## <a name="log_record_clear"></a> `log_record_clear`
+
  `log_record_clear()-><void>`
  
  removes all messages from the log record
@@ -68,29 +78,44 @@ The functions which are to be used are the following
 
 
 
-## <a href="log_last_error_entry"></a>`log_last_error_entry`
+
+
+## <a name="log_last_error_entry"></a> `log_last_error_entry`
+
  `log_last_error_entry()-><log entry>`
 
  returns the last log entry which is an error
  
 
 
-## <a href="log_last_error_message"></a>`log_last_error_message`
+
+
+## <a name="log_last_error_message"></a> `log_last_error_message`
+
  `log_last_error_message()-><string>`
 
  returns the last logged error message
 
 
 
-## <a href="log_last_error_print"></a>`log_last_error_print`
+
+
+## <a name="log_last_error_print"></a> `log_last_error_print`
+
  `log_last_error_print()-><void>`
 
  prints the last error message to the console  
 
 
 
-## <a href="log_print"></a>`log_print`
+
+
+## <a name="log_print"></a> `log_print`
+
  `log_print`
+
+
+
 
 
 
