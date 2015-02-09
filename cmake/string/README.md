@@ -85,7 +85,7 @@ So I have created somewhat alot of functions which does things that you might ne
  
 
  *Examples*
- ```
+ ```cmake
  # create a object
  obj("{a:1,b:[2,3,4,5,6],c:{d:3}}")
  ans(data)
@@ -94,7 +94,7 @@ So I have created somewhat alot of functions which does things that you might ne
  format("some numbers: {data.b[2:$]}") =>  "some numbers: 4;5;6"
  ...
  ```
- *Note:* You may not use ASCCI-29 since it is used interally in this function. If you don't know what this means - don't worry
+ *Note:* You may not use ASSCI-29 since it is used interally in this function. If you don't know what this means - don't worry
  
 
 
