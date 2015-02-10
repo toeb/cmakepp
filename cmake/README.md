@@ -17,7 +17,7 @@ C:/Users/Tobi/Documents/projects/cmakepp/cmake
 * [Package Management](package/README.md)
 * [User Data](persistence/README.md)
 * [Process Management](process/README.md)
-* [<a name="quickmap"></a>Quick Map Syntax](quickmap/README.md)
+* [Quick Map Syntax](quickmap/README.md)
 * [Reference Values](ref/README.md)
 * [Windows Registry](reg/README.md)
 * [Parsing and handling semantic versions](semver/README.md)

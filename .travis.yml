@@ -7,9 +7,9 @@ compiler:
 matrix:
   allow_failures:
     - os: osx
-#env:
-# - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1"
-# - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
+env:
+ - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1"
+ - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
 notifications:
   slack: fallto:MlnVOMNkx8YopsaSSxqh2Rcr
 before_install:
@@ -26,8 +26,19 @@ install:
   - bii init
   - bii open toeb/cmakepp
   - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp > /dev/null
-  - sudo apt-get install cmake
-  - cmake --version
+  #- sudo apt-get install cmake
+  #- cmake --version
+  # install cmake --
+  - wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
+  - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
+  - cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
+  - cmake --build _builds --target install
+  - export PATH="`pwd`/_install/bin:${PATH}"
+  # -- end
+  # verify installed cmake --
+  - which cmake
+  - cmake --version    
+  #-- end
  
 script: 
  - cmake -P build/script.cmake

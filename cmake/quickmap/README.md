@@ -1,4 +1,4 @@
-## <a name="quickmap"></a>Quick Map Syntax
+## Quick Map Syntax
 
 
 
