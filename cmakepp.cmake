@@ -20,8 +20,9 @@ set_property(GLOBAL PROPERTY oocmake_include_guard true)
 
 cmake_policy(SET CMP0007 NEW)
 cmake_policy(SET CMP0012 NEW)
-cmake_policy(SET CMP0054 NEW)
- 
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
+endif()
 # installation dir of oocmake
 set(oocmake_base_dir "${CMAKE_CURRENT_LIST_DIR}")
 
