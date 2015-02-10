@@ -32,7 +32,7 @@ cmake
 * [Package Management](cmake/package/README.md)
 * [User Data](cmake/persistence/README.md)
 * [Process Management](cmake/process/README.md)
-* [<a name="quickmap"></a>Quick Map Syntax](cmake/quickmap/README.md)
+* [Quick Map Syntax](cmake/quickmap/README.md)
 * [Reference Values](cmake/ref/README.md)
 * [Windows Registry](cmake/reg/README.md)
 * [Parsing and handling semantic versions](cmake/semver/README.md)
