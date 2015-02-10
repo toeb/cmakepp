@@ -1,16 +1,30 @@
 function(test)
-	element(MAP)
-		value(KEY k1 1)
-		value(KEY k2 2)
-		element(k3 MAP)
-			value(KEY k1 "a")
-			element(k2 LIST)
-				value(I)
-				value(II)
-				value(III)
-			element(END)
-		element(END)
-	element(END uut)
+	# element(MAP)
+	# 	value(KEY k1 1)
+	# 	value(KEY k2 2)
+	# 	element(k3 MAP)
+	# 		value(KEY k1 "a")
+	# 		element(k2 LIST)
+	# 			value(I)
+	# 			value(II)
+	# 			value(III)
+	# 		element(END)
+	# 	element(END)
+	# element(END uut)
+
+	script("{
+		k1:1,
+		k2:2,
+		k3:{
+		  k1:'a',
+		  k2:[
+		  	'I',
+		  	'II',
+		  	'III'
+		  ]
+		}
+	}")
+	ans(uut)
 
 
 	# a missing variable

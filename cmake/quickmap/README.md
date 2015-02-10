@@ -1,9 +1,7 @@
 ## <a name="quickmap"></a>Quick Map Syntax
 
 
-<%
-    assign(function_files = glob("**.cmake" --relative))
-%>
+
 
 To quickly define a map in cmake I introduce the quick map syntax which revolves around these 5 functions and is quite intuitive to understand:
 ```
@@ -20,26 +18,26 @@ Here is an example how to use this syntax
 # define the map
 map()
  key(firstname)
- value(Tobias)
+ val(Tobias)
  key(lastname)
- value(Becker)
- value(projects)
+ val(Becker)
+ val(projects)
   map()
     kv(name cmakepp)
     kv(url https://github.org/toeb/cmakepp)
   end()
   map()
     key(name)
-    value(cutil)
+    val(cutil)
     key(url)
-    value(https://github.org/toeb/cutil)
+    val(https://github.org/toeb/cutil)
   end()
  end()
  map(address)
   key(street)
-  value(Musterstrasse)
+  val(Musterstrasse)
   key(number)
-  value(99)
+  val(99)
  end()
 end()
 # get the result
@@ -74,9 +72,63 @@ ref_print(${themap})
 
 ### Function List
 
-<%= markdown_template_function_list(${function_files}) %>
+
+* [end](#end)
+* [key](#key)
+* [kv](#kv)
+* [map](#map)
+* [ref](#ref)
+* [val](#val)
+* [var](#var)
 
 ### Function Descriptions
 
-<%= markdown_template_function_descriptions(${function_files}) %>
+## <a name="end"></a> `end`
+
+
+
+
+
+## <a name="key"></a> `key`
+
+
+
+
+
+## <a name="kv"></a> `kv`
+
+
+
+
+
+## <a name="map"></a> `map`
+
+
+
+
+
+## <a name="ref"></a> `ref`
+
+ ref() -> <address> 
+ 
+ begins a new reference value and returns its address
+ ref needs to be ended via end() call
+
+
+
+
+## <a name="val"></a> `val`
+
+
+
+
+
+## <a name="var"></a> `var`
+
+ captures a list of variable as a key value pair
+
+
+
+
+
 

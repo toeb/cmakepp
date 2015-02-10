@@ -1,7 +1,7 @@
 ## Maps - Structured Data in CMake
 
 <%
-    assign(function_files = glob("**.cmake" --relative))
+    assign(function_files = glob("**.cmake" --relative --recurse))
 %>
 
 Maps are very versatile and are missing dearly from CMake in my opinion. Maps are references as is standard in many languages. They are signified by having properties which are adressed by keys and can take any value.

@@ -1,7 +1,7 @@
 
 # Feature Overview
 
-`cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections.
+`cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
 <%=${root_template_dir}%>
 <%=${parent_template_dir}%>
 <%=${template_dir}%>
