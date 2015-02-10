@@ -37,7 +37,7 @@ install:
   # install cmake --
   - wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
   - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
-  - cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
+  - cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_USE_OPENSSL=ON -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
   - cmake --build _builds --target install
   - export PATH="`pwd`/_install/bin:${PATH}"
   # -- end
