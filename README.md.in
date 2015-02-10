@@ -16,7 +16,7 @@ Look through the files in the package.  Most functions will be commented and the
 <%=template_run("cmake/README.md.in")%>
 
 
-# Installation
+# Installation 
 
 You have multiple options to install `cmakepp` the only prerequisite for all options is that cmake is installed with version `>=2.8.7` - I recommend `>=2.8.23`. You will be notified if a function only works with a more current version of cmake. 
 

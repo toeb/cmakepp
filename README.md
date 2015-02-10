@@ -16,8 +16,8 @@ Look through the files in the package.  Most functions will be commented and the
 
 # Feature Overview
 
-`cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections.
-C:/Users/Tobi/Documents/projects/cutil/dependencies/oocmake
+`cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
+C:/Users/Tobi/Documents/projects/cmakepp
 cmake
 cmake
 
@@ -32,6 +32,7 @@ cmake
 * [Package Management](cmake/package/README.md)
 * [User Data](cmake/persistence/README.md)
 * [Process Management](cmake/process/README.md)
+* [<a name="quickmap"></a>Quick Map Syntax](cmake/quickmap/README.md)
 * [Reference Values](cmake/ref/README.md)
 * [Windows Registry](cmake/reg/README.md)
 * [Parsing and handling semantic versions](cmake/semver/README.md)
@@ -43,7 +44,7 @@ cmake
 
 
 
-# Installation
+# Installation 
 
 You have multiple options to install `cmakepp` the only prerequisite for all options is that cmake is installed with version `>=2.8.7` - I recommend `>=2.8.23`. You will be notified if a function only works with a more current version of cmake. 
 
@@ -188,8 +189,8 @@ This is possible by overwriting CMakes default return() function with a macro. I
 
 `cmakepp` can be used as a platform independent console application. When you start `cmakepp.cmake` in script mode it parse the passed command line arguments and execute the specified `cmakepp` function returning the value in a serialization format. When you install `cmakepp` it will create an alias for `cmake -P /path/to/cmakepp.cmake` called `cmakepp`.
 
-```
-## return content of this directory
+```bash
+## return content of this directory using the cmakepp.cmake file
 > cmake -P /path/to/cmakepp.cmake glob *.cmake --relative
 [
  "cmakepp.cmake",
@@ -198,7 +199,7 @@ This is possible by overwriting CMakes default return() function with a macro. I
  "package.cmake"
 ]
 
-## perform a http GET request  
+## perform a http GET request using the cmakepp alias
 > cmakepp http_get http://httpbin.org/get?key=value --json
 {
  "args":{
@@ -213,8 +214,8 @@ This is possible by overwriting CMakes default return() function with a macro. I
  "url":"http://httpbin.org/get?key=value"
 }
 
-## parse an uri
-> cmakepp uri http+https://toeb:pass@www.example.com/path/to/file.ext?key=value&key2.subkey=value2 --select --select "scheme: @scheme key2.subkey: @params.key2.subkey"
+## parse an uri using the cmakepp alias
+> cmakepp uri http+https://toeb:pass@www.example.com/path/to/file.ext?key=value&key2.subkey=value2 --select "scheme: @scheme key2.subkey: @params.key2.subkey"
 "scheme: http+https key2.subkey: value2"
 ```
 

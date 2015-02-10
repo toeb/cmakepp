@@ -1,0 +1,54 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"tab_size": 2,
+		"translate_tabs_to_spaces": true
+	},
+  "build_systems":[
+    {
+      "name": "cmakepp run test file",
+      "file_regex": "([^ ]+):([0-9][0-9]*):[0-9][0-9]*|",
+      "linux":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute",  "$file" ]
+      },
+      "windows":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute",  "$file" ],
+        "encoding": "cp1252"
+      }
+    },
+    {
+      "name": "cmakepp run all tests",
+      "file_regex": "([^ ]+):([0-9][0-9]*):[0-9][0-9]*|",
+      "linux":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "tests/**.cmake", "--recurse" ]
+      },
+      "windows":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "tests/**.cmake", "--recurse" ],
+        "encoding": "cp1252"
+      }
+    },
+    {
+      "name": "cmakepp template run",
+      "linux":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_compile_to", "$file"]
+      },
+      "windows":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_compile_to", "$file"],
+        "encoding": "cp1252"
+      }
+    }
+  ]
+}
