@@ -1,5 +1,67 @@
 
   function(package_source_resolve_bitbucket uri)
+    uri_coerce(uri)
+
+    package_source_query_bitbucket("${uri}" --package-handle)
+    ans(package_handle)
+
+    list(LENGTH package_handle count)
+    if(NOT "${count}" EQUAL 1)
+      error("could not resolve {uri.uri} to a single package handle (got {count}) ")
+      return()
+    endif()
+
+    assign(user = package_handle.bitbucket_descriptor.remote_ref.user)
+    assign(repo = package_handle.bitbucket_descriptor.remote_ref.repo)
+    assign(hash = package_handle.bitbucket_descriptor.remote_ref.commit)
+
+    if(NOT hash)
+      error("could not resolve {uri.uri} to a immutable package")
+      return()
+    endif()
+
+
+    bitbucket_api("repositories/${user}/${repo}" --json --silent-fail)
+    ans(repository)
+    if(NOT repository)
+      error("could not get information on the bitbucket repository")
+      return()
+    endif()
+
+    map_set(${package_handle} repository ${repository})
+
+
+    function(bitbucket_read_file user repo ref path)
+      set(raw_uri "https://bitbucket.org/${user}/${repo}/raw/${ref}/${path}")
+      http_get("${raw_uri}" "" --silent-fail)
+      return_ans()
+    endfunction()
+
+    bitbucket_read_file("${user}" "${repo}" "${hash}" "package.cmake")
+    ans(package_descriptor_content)
+    set(package_descriptor)
+    if(package_descriptor_content)
+      json("${package_descriptor_content}")
+      ans(package_descriptor)
+    endif()
+
+    print_vars(package_descriptor.id)
+
+    map_defaults("${package_descriptor}" "{
+      id:$repository.full_name,
+      version:$hash,
+      description:$repository.description,
+      owner:$repository.owner.display_name
+    }")
+    ans(package_descriptor)
+    print_vars(package_descriptor.owner)
+
+
+    map_set(${package_handle} package_descriptor ${package_descriptor})
+
+    return_ref(package_handle)
+
+    return()
     uri("${uri}")
     ans(uri)
     

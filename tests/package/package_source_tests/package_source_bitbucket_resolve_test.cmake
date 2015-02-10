@@ -1,5 +1,17 @@
 function(test)
+  package_source_resolve_bitbucket("toeb")
+  ans(res)
+  assert(NOT res)
+  log_last_error_print()
 
+
+  package_source_resolve_bitbucket("toeb/test_repo_hg")
+  ans(res)
+  assert(res)
+  json_print(${res})
+
+
+  return()
 
 
   package_source_resolve_bitbucket("tutorials/tutorials.bitbucket.org")

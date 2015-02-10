@@ -1,4 +1,9 @@
-
+## `(<file path>)-><file path>`
+##
+## compiles the specified file (which is expected to end with `.in`) to the same path without the `.in`
+## Uses `template_run` internally.
+## returns the path to which it was compiled
+##
 function(template_compile_to template_path)
   if(NOT "${template_path}" MATCHES "\\.in$")
     message(FATAL_ERROR "expected a '.in' file")
@@ -12,5 +17,5 @@ function(template_compile_to template_path)
   ans(generated_content)
   fwrite("${output_file}" "${generated_content}")
 
-  return()
+  return("${output_file}")
 endfunction()

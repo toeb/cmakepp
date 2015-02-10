@@ -1,80 +1,124 @@
-## package_source_query_bitbucket(<~uri> [--package-handle])->
-  function(package_source_query_bitbucket uri)
-    set(args ${ARGN})
 
-    list_extract_flag(args --package-handle)
-    ans(return_package_handle)
+## `(<~uri> [--package-handle])->`
+## 
+##
+## 
+function(package_source_query_bitbucket uri)
+  set(args ${ARGN})
+
+  list_extract_flag(args --package-handle)
+  ans(return_package_handle)
+
+  uri_coerce(uri)
+
+  uri_check_scheme(${uri} "bitbucket?")
+  ans(scheme_ok)
+  if(NOT scheme_ok)
+    error("scheme {uri.scheme} is not supported - only bitbucket: or empty scheme allowed")
+    return()
+  endif()
 
 
-    uri("${uri}")
-    ans(uri)
+  assign(segments = uri.normalized_segments)
+  list_extract(segments user repo ref_type ref)
+  assign(hash = uri.params.hash)
 
-    ## scheme needs to be empty or match bitbuckt
-    assign(scheme = uri.scheme)
-    if(NOT "${scheme}_" STREQUAL "_" AND NOT  "${scheme}" STREQUAL "bitbucket")
-      return()
-    endif()
+  if(NOT repo)
+    set(repo *)
+  endif()
+  set(default false)
+  if(NOT ref AND NOT ref_type)
+    set(default true)
+  endif()
+  if(NOT ref AND NOT "${ref_type}" MATCHES "^(branches)|(tags)$")
+    set(ref "${ref_type}")
+    set(ref_type *)
+  endif()
+  if(NOT ref)
+    set(ref "*")
+  endif()
 
 
-    assign(segments = uri.normalized_segments)
-    list_extract(segments owner repo)
+  if(hash)
+    return(true)
+  endif()
+  map_new()
+  ans(package_handles)
 
-    set(api_uri "https://api.bitbucket.org/2.0")
+  if(hash)
+    bitbucket_remote_ref("${user}" "${repo}" "commits" "${hash}")
+    ans(ref)
 
-    if("${owner}_" STREQUAL "_")
-      return()
-    endif()
+  elseif(user)
+    if("${repo}" STREQUAL "*")
+      ## get all repositories of user - no hash
+      bitbucket_repositories("${user}")
+      ans(names)
 
-    if("${repo}_" STREQUAL "_")
-      set(request_uri "${api_uri}/repositories/${owner}")
-    else()
-      set(request_uri "${api_uri}/repositories/${owner}/${repo}")
-    endif() 
-    
-    http_get("${request_uri}" --return-code)
-    ans(error)
-    if(error)
-      return()
-    endif()
-
-    if(NOT "${repo}_" STREQUAL "_")
-      set(result "bitbucket:${owner}/${repo}")
-    else()
-      set(repos)
-      while(true)
-        map_tryget(${response} content)
-        ans(content)
-        
-        json_extract_string_value(next "${content}")
-        ans(next_uri)
-      
-        json_extract_string_value("name" "${content}")
-        ans(names)
-
-        list(APPEND repos ${names})
-
-        if(NOT next_uri)
-          break()
-        endif()
-
-        http_get("${next_uri}" --response)
-        ans(response)
-        map_tryget(${response} client_status)
-        ans(error)
-        if(error)
-          message(WARNING "failed to query host ${next_uri} ${error}")
-          return()
-        endif()
-      endwhile()   
-      list_remove_duplicates(repos)
-      list_remove(repos ssh https)# hack: these are different name properties
-
-      set(result)
-      ## possibly this should recursively check if the repo really exists
-      foreach(repo ${repos})
-        list(APPEND result "bitbucket:${owner}/${repo}")
+      foreach(name ${names})
+        map_set(${package_handles} "bitbucket:${user}/${name}")
       endforeach()
-    endif()  
+    else()
+      if(default)
+        bitbucket_default_branch("${user}" "${repo}")
+        ans(default_branch)
+        if(default_branch)
+          bitbucket_remote_ref("${user}" "${repo}" "branches" "${default_branch}")
+          ans(ref)
+          if(ref)
+            map_tryget("${ref}" commit)
+            ans(hash)
+            set(uri "bitbucket:${user}/${repo}/branches/${default_branch}?hash=${hash}")
+            map_set(${package_handles} "bitbucket:${user}/${repo}/branches/${default_branch}?hash=${hash}" ${ref})
+          endif()
+        endif()
+      elseif("${ref}" STREQUAL "*")
+        ## get all refs of the specified ref_type(s)
+        bitbucket_remote_refs("${user}" "${repo}" "${ref_type}" "${ref}")
+        ans(refs)
 
-    return_ref(result)
-  endfunction()
+        foreach(ref ${refs})
+          map_tryget(${ref} commit)
+          ans(commit)
+          map_tryget(${ref} ref_type)
+          ans(ref_type)
+          map_tryget(${ref} ref)
+          ans(ref)
+
+          map_set(${package_handles} "bitbucket:${user}/${repo}/${ref_type}/${ref}?hash=${commit}" ${ref})
+
+        endforeach()
+
+      else()
+
+      endif()
+    endif()
+  else()
+    error("you need to at least specify a bitbucket user")
+    return()
+  endif()
+
+
+  ## create package handles if necessary
+
+  map_keys(${package_handles})
+  ans(keys)
+  if(return_package_handle)
+    set(map ${package_handles})
+    set(package_handles)
+    foreach(key ${keys})
+      map_tryget(${map} ${key})
+      ans(ref)
+      set(package_handle)
+      
+      assign(!package_handle.uri = key)
+      assign(!package_handle.query_uri = uri.uri)
+      assign(!package_handle.bitbucket_descriptor.remote_ref = ref)
+      list(APPEND package_handles ${package_handle})
+    endforeach()
+
+  else()
+    set(package_handles ${keys})
+  endif()
+  return_ref(package_handles)
+endfunction()

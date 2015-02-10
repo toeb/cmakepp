@@ -109,12 +109,19 @@ I would be very happy If you choose to contribute to `cmakepp`. You can open any
 
 If you want to change something you may send pull requests through github. Normally I will check them quickly and `travis-ci` will build them.  I suggest you run all tests using the sublime project before you create a pull request to see if anything breaks.  (the master branch will have to pass the tests)  
 
-I don't have many rules or guidelines yet but might develope them if need arises.  Just use common sense and choose names wisely. Look at other functions in `cmakepp` to get a sense of how things are done.
 
 # Developer Guidlines
 
-Currently there is only one rule:
+I am a bit a hypocrit. I am trying to adhere to these rules though:
+
 * **DO NOT USE SHOUTY SYNTAX**  
+* test your code. A single test file will suffice it should cover normal use cases and edge cases.  I use tests for documentation.
+* One file per function. 
+* Create a comment header with markdown above the function(with 2 # ).
+* put the function in the most suitable folder. 
+* name the function in a none colliding way
+  - `CMake` only has a global scope for functions. Therefore be sure to name them in a way that they do not collide with existing functions and will not in the future.
+* use `snake_case` for function names.  `CMake`'s functions are case independent so I discourage using `camelcase` 
 
 
 # Implementation Notes

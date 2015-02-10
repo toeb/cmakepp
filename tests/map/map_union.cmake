@@ -2,14 +2,14 @@ function(test)
 	# creates two maps and merges them
 	# create two maps
 	 map()
-	 	kv(k1 VALUE 1)
-	 	kv(k2 VALUE 1)
+	 	kv(k1 1)
+	 	kv(k2 1)
 	 end()
 	 ans(uut1)
 
 	 map()
-	 	kv(k2 VALUE 2)
-	 	kv(k3 VALUE 2)
+	 	kv(k2 2)
+	 	kv(k3 2)
 	 end()
 	 ans(uut2)
 

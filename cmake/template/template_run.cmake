@@ -8,8 +8,8 @@
 ##    * `${template_dir}` is set to the directory of the current template
 ##    * `${root_template_dir}` is set to the directory of the first template run
 ##    * `${root_template_path}` is set to the path of the first template run
-##    * `${parent_template_dir}`
-##    * `${parent_template_path}` 
+##    * `${parent_template_dir}` is set to the calling templates dir 
+##    * `${parent_template_path}`  is set to the calling templates path
 ## 
 ## 
 function(template_run template_path)

@@ -5,30 +5,14 @@ obj("{
 	k2:'v2',
 	k3:'v3',
 	k4:[1,2,3],
-	k4:{
+	k5:{
 		k1:'va',
 		k2:'vb',
-		k3:'vc',
-	},
+		k3:'vc'
+	}
 }")
 ans(uut)
 
-
-# element(MAP)
-# 	value(KEY k1 v1)
-# 	value(KEY k2 v2)
-# 	value(KEY k3 v3)
-# 	element(k4 LIST)
-# 		value(1)
-# 		value(2)
-# 		value(3)
-# 	element(END)
-# 	element(k5 MAP)
-# 		value(KEY k1 va)
-# 		value(KEY k2 vb)
-# 		value(KEY k3 vc)
-# 	element(END)
-# element(END uut)
 
 
 
