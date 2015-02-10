@@ -6,9 +6,9 @@
 
 ### Function List
 
-<%= template_cmakepp_function_list(${function_files}) %>
+<%= markdown_template_function_list(${function_files}) %>
 
 ### Function Descriptions
 
-<%= template_cmakepp_function_descriptions(${function_files}) %>
+<%= markdown_template_function_descriptions(${function_files}) %>
 

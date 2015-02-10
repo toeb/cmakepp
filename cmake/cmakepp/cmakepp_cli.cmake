@@ -1,8 +1,16 @@
 
 function(cmakepp_cli)
-  ## get command line args and remove executable -P and script file
-  commandline_args_get(--no-script)
-  ans(args)
+  set(args ${ARGN})
+  if(NOT args)
+    ## get command line args and remove executable -P and script file
+    commandline_args_get(--no-script)
+    ans(args)
+  endif()
+
+  list_extract_flag(args --silent)
+  ans(silent)
+  list_extract_labelled_value(args --select)
+  ans(select)
 
   ## get format
   list_extract_flag(args --json)
@@ -30,6 +38,14 @@ function(cmakepp_cli)
   set_ans("")
   eval("${cmake_code}")
   ans(result)
+
+
+  if(select)
+    string(REGEX REPLACE "@([^ ]*)" "{result.\\1}" select "${select}")
+    format("${select}")
+    ans(result)
+   # assign(result = "result${select}")
+  endif()
 
 
   ## serialize code
@@ -61,7 +77,10 @@ function(cmakepp_cli)
 
 
   ## print code
-  echo("${result}")
+  if(NOT silent)
+    echo("${result}")
+  endif()
+  return_ref(result)
 endfunction()
 
 

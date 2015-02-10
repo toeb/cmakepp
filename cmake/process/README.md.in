@@ -224,9 +224,9 @@ To communicate with you processes you can use any of the following well known me
 
 ### Function List
 
-<%= template_cmakepp_function_list(${function_files}) %>
+<%= markdown_template_function_list(${function_files}) %>
 
 ### Function Descriptions
 
-<%= template_cmakepp_function_descriptions(${function_files}) %>
+<%= markdown_template_function_descriptions(${function_files}) %>
 

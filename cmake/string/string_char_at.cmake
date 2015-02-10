@@ -1,4 +1,4 @@
-## <%=template_cmakepp_function_header("(<index:int> <input:string>)-><char>")%>
+## <%=markdown_template_function_header("(<index:int> <input:string>)-><char>")%>
 ##
 ## returns the character at the position specified. strings are indexed 0 based
 ## indices less than -1 are translated into length - |index|

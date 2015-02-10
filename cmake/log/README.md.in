@@ -10,9 +10,9 @@ This is why I started to write log functions which do not output anything.  You 
 
 ### Function List
 
-<%= template_cmakepp_function_list(${function_files}) %>
+<%= markdown_template_function_list(${function_files}) %>
 
 ### Function Descriptions
 
-<%= template_cmakepp_function_descriptions(${function_files}) %>
+<%= markdown_template_function_descriptions(${function_files}) %>
 
