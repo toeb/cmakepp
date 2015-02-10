@@ -84,7 +84,37 @@ To test the code (alot is tested but not all) run the following in the root dir 
 cmake -P build/script.cmake 
 ```
 
+# Developing
 
+If you want to help to develope `cmakepp` or want to develope `CMake` scripts which use `cmakepp` you can do the following:
+
+* Install Sublime Text 3
+* Be sure you have the `cmakepp` repository checked out
+* open the `cmakepp.sublime-project` project in sublime text
+* (add the folder in which you are developing your scripts)
+* select the correct build system
+  * `cmakepp run test` will run the current script open in SublimeText file as a test. It does not matter were this file resides. It expects a single function to exist inside this file - the name does not matter as it will be imported.  Inside the test function you will be provided with the following (also see [test_execute]():  
+    * all `cmakepp` functions will be loaded from your current version of cmakepp.
+    * a timer will run and report the time in milliseconds that your test took **NOTE** this is not very exact but sufficient in most cases
+    * `${test_dir}` contains the the path of an empty directory which will remain the same for that specific test. It is cleared before the test is run so you can write anything to it and do not have to care about housekeeping.
+    * the `<pwd>` will be set to `${test_dir}` allowing you to start using all `cmakepp` file/process functions relative to the test directory
+    * `${test_name}` will contain the name chosen for this test (filename w/o extension)
+  * `cmakepp run all tests` will run each test in `cmakepp` 
+  * `cmakepp template run` will execute a `cmakepp` template file of which the filename ends with `.in` (see [templating](#))
+  * you can open the `cmakepp.sublime-project` and modify the build system.
+    
+# Contributing
+
+I would be very happy If you choose to contribute to `cmakepp`. You can open any issue on github and I will try to reply as soon as possible. I care about any feature you want implemented, bug you want squashed, or modification.
+
+If you want to change something you may send pull requests through github. Normally I will check them quickly and `travis-ci` will build them.  I suggest you run all tests using the sublime project before you create a pull request to see if anything breaks.  (the master branch will have to pass the tests)  
+
+I don't have many rules or guidelines yet but might develope them if need arises.  Just use common sense and choose names wisely. Look at other functions in `cmakepp` to get a sense of how things are done.
+
+# Developer Guidlines
+
+Currently there is only one rule:
+* **DO NOT USE SHOUTY SYNTAX**  
 
 
 # Implementation Notes

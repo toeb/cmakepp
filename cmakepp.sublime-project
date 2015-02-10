@@ -30,11 +30,11 @@
       "file_regex": "([^ ]+):([0-9][0-9]*):[0-9][0-9]*|",
       "linux":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "tests/**.cmake", "--recurse" ]
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${project_path}/tests/**.cmake", "--recurse" ]
       },
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "tests/**.cmake", "--recurse" ],
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${project_path}/tests/**.cmake", "--recurse" ],
         "encoding": "cp1252"
       }
     },

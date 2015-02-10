@@ -8,11 +8,12 @@ function(test)
       k5:'v5',
       k6:{
         k7:'v7',
-        k8:'v8',
+        k8:'v8'
       }
     }
   }")
   ans(uut)
+
   # element(MAP)
   #   value(KEY "k1" "v1")
   #   value(KEY "k2" "v2")
