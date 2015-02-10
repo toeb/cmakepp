@@ -62,6 +62,7 @@ function(http_put uri)
 	ans(temp_file)
 
 	if(put_file)
+		path_qualify(put_file)
 		set(content_file "${put_file}")
 		if(NOT EXISTS "${content_file}")
 			error("http_put - file does not exists ${content_file}")
