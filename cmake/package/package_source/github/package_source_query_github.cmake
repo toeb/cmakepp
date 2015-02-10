@@ -12,6 +12,8 @@
 function(package_source_query_github uri)
   set(args ${ARGN})
 
+  message(WARNING "has a problem with ?hash=ref")
+
   list_extract_flag(args --package-handle)
   ans(return_package_handle)
 

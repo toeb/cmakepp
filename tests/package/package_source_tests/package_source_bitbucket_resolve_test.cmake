@@ -23,7 +23,7 @@ function(test)
   assert(res)
   assertf("{res.package_descriptor.id}" STREQUAL "tutorials/tutorials.bitbucket.org")
   assertf("{res.package_descriptor.description}" STREQUAL "Site for tutorial101 files")
-  assertf("{res.uri}" STREQUAL "bitbucket:tutorials/tutorials.bitbucket.org")
+  assertf("{res.uri}" MATCHES "bitbucket:tutorials\\/tutorials\\/.bitbucket\\/.org\\/?hash=")
 
 
   package_source_resolve_bitbucket("")
