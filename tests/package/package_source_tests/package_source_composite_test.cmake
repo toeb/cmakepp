@@ -22,7 +22,6 @@ function(test)
   ans(ps4)
 
 
-
   composite_package_source("mysource" ${ps1} ${ps2} ${ps3} ${ps4})
   ans(uut)
 
