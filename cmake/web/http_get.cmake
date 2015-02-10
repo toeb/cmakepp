@@ -81,6 +81,12 @@ function(http_get uri)
     error("http_get failed: ${client_message}")
     if(NOT silent_fail AND NOT return_response)
       rm("${target_path}")
+      if("$ENV{TRAVIS}")
+        ## do not show the query if travis build because it could contain sensitive
+        ## data
+        uri_format("${uri}" --no-query)
+        ans(uri)
+      endif()
       message(FATAL_ERROR "http_get failed for '${uri}': ${client_message}")
     elseif(silent_fail AND NOT return_response)
       rm("${target_path}")
