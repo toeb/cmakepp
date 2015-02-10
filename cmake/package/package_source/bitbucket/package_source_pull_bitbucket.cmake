@@ -2,6 +2,8 @@
   function(package_source_pull_bitbucket uri)
     set(args ${ARGN})
 
+    uri_coerce(uri)
+
     list_extract_flag(args --use-ssh)
     ans(use_ssh)
 
@@ -18,8 +20,7 @@
     map_tryget(${package_handle} package_descriptor)
     ans(package_descriptor)
 
-    map_tryget(${package_handle} repo_descriptor)
-    ans(repo_descriptor)
+    assign(repo_descriptor = package_handle.bitbucket_descriptor.repository)
 
     map_tryget(${repo_descriptor} scm)
     ans(scm)
@@ -52,6 +53,8 @@
     else()
       message(FATAL_ERROR "scm not supported: ${scm}")
     endif()
+
+    assign(package_handle.repo_descriptor = scm_package_handle.repo_descriptor)
 
     map_tryget("${scm_package_handle}" package_descriptor)
     ans(scm_package_descriptor)

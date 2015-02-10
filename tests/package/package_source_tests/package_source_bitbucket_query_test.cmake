@@ -8,6 +8,12 @@ function(test)
   ## <user>/<repo>/tags ->
   ## <user>/<repo>/<name> -> <user>/<repo>/*/<name>
   ## <user>/<repo>/*/<name> -> bitbucket:<user>/<repo>/"branches"|"tags"/<name>?hash=<commit>
+  package_source_query_bitbucket("eigen/eigen/3.0.0" --package-handle)
+  ans(res)
+  assert(res)
+  assertf({res.bitbucket_descriptor.remote_ref.ref} STREQUAL "3.0.0")
+
+
 
   package_source_query_bitbucket("toeb/test_repo_hg" --package-handle)
   ans(res)

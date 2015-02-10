@@ -9,6 +9,7 @@ function(test)
   assertf("{res.package_descriptor.id}" STREQUAL "toeb/test_repo_hg")
   assertf("{res.package_descriptor.custom_property}" STREQUAL "custom_value")
 
+
   package_source_pull_bitbucket(toeb/test_repo_git "pull/test_git1")
   ans(res)
   assert(res)
