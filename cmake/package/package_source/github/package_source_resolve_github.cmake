@@ -68,7 +68,7 @@
     
     ## response
     map_set(${package_handle} package_descriptor "${package_descriptor}")
-    map_set(${package_handle} repo_descriptor "${repo_descriptor}")
+    map_set(${package_handle} github_descriptor "${repo_descriptor}")
 
     return_ref(package_handle)
   endfunction()

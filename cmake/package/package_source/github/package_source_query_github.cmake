@@ -17,8 +17,7 @@ function(package_source_query_github uri)
 
 
   ## parse uri and extract the two first segments 
-  uri("${uri}")
-  ans(uri)
+  uri_coerce(uri)
 
 
   assign(scheme = uri.scheme)
@@ -57,8 +56,11 @@ function(package_source_query_github uri)
     assign(default_branch = repository.default_branch)
     github_remote_refs("${user}" "${repo}" "branches" "${default_branch}")
     ans(ref)
-    map_format("github:{repository.full_name}/branches/{repository.default_branch}?hash={ref.commit}")
-    ans(package_handles)
+    if(ref)
+      map_format("github:{repository.full_name}/branches/{repository.default_branch}?hash={ref.commit}")
+      ans(package_handles)
+    endif()
+    
   elseif(user)
     ## only  user results in non unique ids which have to be quried again
     github_repository_list("${user}")
