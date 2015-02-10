@@ -94,11 +94,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_select](#map_select)
 * [map_transform](#map_transform)
 * [map_where](#map_where)
-* [map_navigate](#map_navigate)
-* [map_navigate_set](#map_navigate_set)
-* [map_navigate_set_if_missing](#map_navigate_set_if_missing)
-* [nav](#nav)
-* [set_at](#set_at)
 * [map_clone](#map_clone)
 * [map_clone_deep](#map_clone_deep)
 * [map_clone_shallow](#map_clone_shallow)
@@ -658,36 +653,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 ## <a name="map_where"></a> `map_where`
-
-
-
-
-
-## <a name="map_navigate"></a> `map_navigate`
-
-
-
-
-
-## <a name="map_navigate_set"></a> `map_navigate_set`
-
-
-
-
-
-## <a name="map_navigate_set_if_missing"></a> `map_navigate_set_if_missing`
-
-
-
-
-
-## <a name="nav"></a> `nav`
-
-
-
-
-
-## <a name="set_at"></a> `set_at`
 
 
 

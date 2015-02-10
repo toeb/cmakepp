@@ -12,6 +12,8 @@ So I have created somewhat alot of functions which does things that you might ne
 * [ascii_char](#ascii_char)
 * [ascii_code](#ascii_code)
 * [ascii_generate_table](#ascii_generate_table)
+* [cmake_string_escape](#cmake_string_escape)
+* [cmake_string_unescape](#cmake_string_unescape)
 * [delimiters](#delimiters)
 * [format](#format)
 * [regex_search](#regex_search)
@@ -83,6 +85,18 @@ So I have created somewhat alot of functions which does things that you might ne
 ## <a name="ascii_generate_table"></a> `ascii_generate_table`
 
  generates the ascii table and stores it in the global ascii_table variable  
+
+
+
+
+## <a name="cmake_string_escape"></a> `cmake_string_escape`
+
+
+
+
+
+## <a name="cmake_string_unescape"></a> `cmake_string_unescape`
+
 
 
 

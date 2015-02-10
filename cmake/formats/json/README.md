@@ -43,6 +43,7 @@ This is done by creating a hash from the input string and using it as a cache ke
 
 * [json](#json)
 * [json2](#json2)
+* [json2_definition](#json2_definition)
 * [json_deserialize](#json_deserialize)
 * [json_escape](#json_escape)
 * [json_extract_string_value](#json_extract_string_value)
@@ -64,6 +65,12 @@ This is done by creating a hash from the input string and using it as a cache ke
 
 
 ## <a name="json2"></a> `json2`
+
+
+
+
+
+## <a name="json2_definition"></a> `json2_definition`
 
 
 

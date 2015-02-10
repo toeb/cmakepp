@@ -6,7 +6,7 @@
 function(template_write)
   template_guard()
   ans(ref)
-  ref_append_string("${ARGN}")
+  ref_append_string(${ref} "${ARGN}")
   return()
 endfunction()
  

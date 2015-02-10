@@ -6,13 +6,6 @@ function(test)
   assert(res)
   assert(EXISTS "${test_dir}/test/README.md")
   
-  # query tests
-  package_source_query_github("toeb")
-  ans(res)
-  assert(${res} CONTAINS "github:toeb/cmakepp")
-  assert(${res} CONTAINS "github:toeb/cutil")
-
-
 
 
 endfunction()

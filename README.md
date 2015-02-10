@@ -22,9 +22,9 @@ cmake
 cmake
 
 * [Collections](cmake/collections/README.md)
-* [<a name="datetime"></a> Date/Time](cmake/datetime/README.md)
-* [<a name="events"></a> Events](cmake/events/README.md)
-* [<a name="filesystem"></a> Filesystem](cmake/filesystem/README.md)
+* [Date/Time](cmake/datetime/README.md)
+* [Events](cmake/events/README.md)
+* [Filesystem](cmake/filesystem/README.md)
 * [Functions](cmake/function/README.md)
 * [Logging Functions](cmake/log/README.md)
 * [Maps - Structured Data in CMake](cmake/map/README.md)
@@ -38,6 +38,7 @@ cmake
 * [Parsing and handling semantic versions](cmake/semver/README.md)
 * [String Functions](cmake/string/README.md)
 * [Targets](cmake/targets/README.md)
+* [Templating ](cmake/template/README.md)
 * [Uniform Resource Identifiers (URIs)](cmake/uri/README.md)
 * [HTTP Client](cmake/web/README.md)
 
@@ -108,7 +109,44 @@ To test the code (alot is tested but not all) run the following in the root dir 
 cmake -P build/script.cmake 
 ```
 
+# Developing
 
+If you want to help to develope `cmakepp` or want to develope `CMake` scripts which use `cmakepp` you can do the following:
+
+* Install Sublime Text 3
+* Be sure you have the `cmakepp` repository checked out
+* open the `cmakepp.sublime-project` project in sublime text
+* (add the folder in which you are developing your scripts)
+* select the correct build system
+  * `cmakepp run test` will run the current script open in SublimeText file as a test. It does not matter were this file resides. It expects a single function to exist inside this file - the name does not matter as it will be imported.  Inside the test function you will be provided with the following (also see [test_execute]():  
+    * all `cmakepp` functions will be loaded from your current version of cmakepp.
+    * a timer will run and report the time in milliseconds that your test took **NOTE** this is not very exact but sufficient in most cases
+    * `${test_dir}` contains the the path of an empty directory which will remain the same for that specific test. It is cleared before the test is run so you can write anything to it and do not have to care about housekeeping.
+    * the `<pwd>` will be set to `${test_dir}` allowing you to start using all `cmakepp` file/process functions relative to the test directory
+    * `${test_name}` will contain the name chosen for this test (filename w/o extension)
+  * `cmakepp run all tests` will run each test in `cmakepp` 
+  * `cmakepp template run` will execute a `cmakepp` template file of which the filename ends with `.in` (see [templating](#))
+  * you can open the `cmakepp.sublime-project` and modify the build system.
+    
+# Contributing
+
+I would be very happy If you choose to contribute to `cmakepp`. You can open any issue on github and I will try to reply as soon as possible. I care about any feature you want implemented, bug you want squashed, or modification.
+
+If you want to change something you may send pull requests through github. Normally I will check them quickly and `travis-ci` will build them.  I suggest you run all tests using the sublime project before you create a pull request to see if anything breaks.  (the master branch will have to pass the tests)  
+
+
+# Developer Guidlines
+
+I am a bit a hypocrit. I am trying to adhere to these rules though:
+
+* **DO NOT USE SHOUTY SYNTAX**  
+* test your code. A single test file will suffice it should cover normal use cases and edge cases.  I use tests for documentation.
+* One file per function. 
+* Create a comment header with markdown above the function(with 2 # ).
+* put the function in the most suitable folder. 
+* name the function in a none colliding way
+  - `CMake` only has a global scope for functions. Therefore be sure to name them in a way that they do not collide with existing functions and will not in the future.
+* use `snake_case` for function names.  `CMake`'s functions are case independent so I discourage using `camelcase` 
 
 
 # Implementation Notes
@@ -210,7 +248,7 @@ This is possible by overwriting CMakes default return() function with a macro. I
   "Host":"httpbin.org",
   "User-Agent":"curl/7.16.1"
  },
- "origin":"85.180.184.251",
+ "origin":"87.157.198.225",
  "url":"http://httpbin.org/get?key=value"
 }
 

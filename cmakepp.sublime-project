@@ -49,6 +49,18 @@
         "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_compile_to", "$file"],
         "encoding": "cp1252"
       }
+    },
+    {
+      "name": "cmakepp build docs",
+      "linux":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_compile_docs"]
+      },
+      "windows":
+      {
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_compile_docs"],
+        "encoding": "cp1252"
+      }
     }
   ]
 }

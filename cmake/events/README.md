@@ -1,4 +1,4 @@
-## <a name="events"></a> Events
+## Events
 
 Events are often usefull when working with modules. CMake of course has no need for events generally. Some of my projects (cutil/cps) needed them however. For example the package manager cps uses them to allow hooks on package install/uninstall/load events which the packages can register.
 

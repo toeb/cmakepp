@@ -1,4 +1,4 @@
-## <a name="datetime"></a> Date/Time
+##  Date/Time
 
 I have provided you with a functions which returns a datetime object to get the current date and time on all OSs including windows. It uses file(TIMESTAMP) internally so the resolution is 1s.  It would be possible to enhance this functionality to included milliseconds however that is more system dependent and therefore a decieded against it.  
 

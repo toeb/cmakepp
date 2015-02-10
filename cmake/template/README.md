@@ -2,7 +2,7 @@
 
 
 
-`cmakepp`'s  templates allow you to generate content by mixing text with cmake code and executing it. There are many content generators out there for a host of different languages but none for `CMake`. I needed this functionality to generate the documentation for `cmakepp`. This tool is very simple but very mighty and can easily be used for generating source code files as the template syntax is compatible - as in 'does not interfere' - with `c++`, `cmake script`, `etc`. it is based around using `<%` and `%>` to indicate `CMake` script sections inside of a text file.
+`cmakepp`'s  templates allow you to generate content by mixing text with `CMake` code and executing it. There are many content generators out there for a host of different languages but none for `CMake`. I needed this functionality to generate the documentation for `cmakepp`. This tool is very simple but very mighty and can easily be used for generating source code files as the template syntax is compatible - as in 'does not interfere' - with `c++`, `cmake script`, `etc`. it is based around using `<%` and `%>` to indicate `CMake` script sections inside of a text file.
 
 
 ### Function List
