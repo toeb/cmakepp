@@ -12,7 +12,6 @@
 function(package_source_query_github uri)
   set(args ${ARGN})
 
-  message(WARNING "has a problem with ?hash=ref")
 
   list_extract_flag(args --package-handle)
   ans(return_package_handle)
@@ -57,9 +56,9 @@ function(package_source_query_github uri)
     ans(repository)
     assign(default_branch = repository.default_branch)
     github_remote_refs("${user}" "${repo}" "branches" "${default_branch}")
-    ans(ref)
-    if(ref)
-      map_format("github:{repository.full_name}/branches/{repository.default_branch}?hash={ref.commit}")
+    ans(remote_ref)
+    if(remote_ref)
+      map_format("github:{repository.full_name}/branches/{repository.default_branch}?hash={remote_ref.commit}")
       ans(package_handles)
     endif()
     

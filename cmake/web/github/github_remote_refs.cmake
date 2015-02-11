@@ -55,6 +55,5 @@ function(github_remote_refs user repo ref_query)
     endforeach()
     set(refs ${result})
   endif()
-
   return_ref(refs)
 endfunction()

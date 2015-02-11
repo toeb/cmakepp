@@ -8,12 +8,15 @@
     this_get(directory)
     this_get(source_name)
 
-    uri("${uri}")
-    ans(uri)
+    uri_coerce(uri)
 
     ## return if scheme is either empty or equal to source_name       
     assign(scheme = uri.scheme)
-    if(NOT "${scheme}" MATCHES "(^$)|(^${source_name}$)")
+
+    uri_check_scheme("${uri}" "${source_name}?")
+    ans(scheme_ok)
+    if(NOT scheme_ok)
+      error("expected either ${source_name} or nothing as scheme. {uri.uri}")
       return()
     endif() 
 
