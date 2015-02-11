@@ -45,6 +45,28 @@ cmake
 
 
 
+# Samples 
+
+I have developed some samples to show off `cmakepp`'s capabilities. Here you can find an overview of these samples
+
+
+
+
+
+
+
+* [Including `cmakepp` and pulling `eigen` library ](samples/01-include-cmakepp-pull-eigen/README.md)
+* [Including `cmakepp` in `CMakeLists.txt`](samples/02-include-cmakepp-in-CMakeLists/README.md)
+* [Downloading and Including `cmakepp` in a `CMakeLists.txt`](samples/03-download-include-cmakepp-in-CMakeLists/README.md)
+* [Creating a Compressed Package](samples/04-create-simple-compressed-package/README.md)
+* [Creating and Installing a Package with an Install Hook](samples/05-create-install-simple-package-with-install-script/README.md)
+* [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
+
+
+
+
+
+
 # Installation 
 
 You have multiple options to install `cmakepp` the only prerequisite for all options is that cmake is installed with version `>=2.8.7` - I recommend `>=2.8.23`. You will be notified if a function only works with a more current version of cmake. 
@@ -232,7 +254,6 @@ This is possible by overwriting CMakes default return() function with a macro. I
 > cmake -P /path/to/cmakepp.cmake glob *.cmake --relative
 [
  "cmakepp.cmake",
- "cmakepp_setup_environment.cmake",
  "install.cmake",
  "package.cmake"
 ]
@@ -248,7 +269,7 @@ This is possible by overwriting CMakes default return() function with a macro. I
   "Host":"httpbin.org",
   "User-Agent":"curl/7.16.1"
  },
- "origin":"87.157.198.225",
+ "origin":"85.180.184.251",
  "url":"http://httpbin.org/get?key=value"
 }
 
