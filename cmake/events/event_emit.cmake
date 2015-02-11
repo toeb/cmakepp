@@ -1,5 +1,10 @@
-# emits the specified event 
-# calls all registered event handlers for event '<name>'
+## event_emit
+##
+## emits the specified event 
+## calls all registered event handlers for event '<name>'
+## if event handlers are added during an event they will be called as well
+## if a event calls event_cancel() 
+## all further event handlers are disregarded
 function(event_emit event_name)
   event_get("${event_name}")
   ans(event)
@@ -7,8 +12,13 @@ function(event_emit event_name)
 
   if(event)    
     set(previous_handlers)
-    # loop solang as new event handlers are appearing
+    # loop aslong as new event handlers are appearing
+    # 
+    ref_new()
+    ans(__current_event_cancel)
+    ref_set(${__current_event_cancel} false)
     while(true)
+      ## 
       map_tryget(${event} handlers)
       ans(handlers)
       list(REMOVE_ITEM handlers ${previous_handlers} "")
@@ -23,8 +33,13 @@ function(event_emit event_name)
       foreach(handler ${handlers})
         rcall(success = "${handler}"(${ARGN}))
         list(APPEND result "${success}")
+        ## check if cancel is requested
+        ref_get(${__current_event_cancel})
+        ans(break)
+        if(break)
+          return_ref(result)
+        endif()
       endforeach()
-
     endwhile()
   endif()
 
@@ -35,3 +50,4 @@ function(event_emit event_name)
 
   return_ref(result)
 endfunction() 
+

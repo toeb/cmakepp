@@ -33,6 +33,8 @@
     cp_content("${source_dir}" "${target_dir}" ${content_globbing_expression})
     ans(result)
 
+    json_write("${target_dir}/package.cmake" "${package_descriptor}")
+
 
     ## return the valid target uri
     uri("${target_dir}")

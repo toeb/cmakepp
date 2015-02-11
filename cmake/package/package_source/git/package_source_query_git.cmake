@@ -1,28 +1,21 @@
 ## returns a list of valid package uris which contain the scheme gitscm
 ## you can specify a query for ref/branch/tag by adding ?ref=* or ?ref=name
 ## only ?ref=* returns multiple uris
-  function(package_source_query_git uri_string)
+  function(package_source_query_git uri)
     set(args ${ARGN})
 
     list_extract_flag(args --package-handle)
     ans(return_package_handle)
 
-    uri("${uri_string}")
+    uri("${uri}")
     ans(uri)
 
-    map_tryget("${uri}" schemes)
-    ans(scheme)
-
-    list_extract_flag(scheme gitscm)
-    ans(is_gitscm)
-
-    map_set(${uri} scheme "${scheme}")
 
 
     uri_qualify_local_path("${uri}")
     ans(uri)
 
-    uri_format("${uri}" --no-query --remove-scheme gitscm)
+    uri_format("${uri}" --no-query)
     ans(remote_uri)
 
     ## check if remote exists
@@ -45,115 +38,62 @@
     list_pop_front(ref)
     ans(ref)
 
+    set(remote_refs)
     if(NOT "${rev}_" STREQUAL "_")
-      ## todo validate rev?
+      ## todo validate rev furhter??
       if(NOT "${rev}" MATCHES "^[a-fA-F0-9]+$")
         return()
       endif()
 
-      set(result "gitscm+${remote_uri}?rev=${rev}")
-      if(return_package_handle)
-        map_new()
-        ans(package_handle)
+      obj("{
+        revision:$rev,
+        type:'rev',
+        name:$rev,
+        uri:$remote_uri  
+      }")
 
-        assign(!package_handle.uri = result)
-        assign(!package_handle.query_uri = uri_string)
-        assign(!package_handle.scm_descriptor.scm = 'git')
-        assign(!package_handle.scm_descriptor.ref.revision = rev)
-        assign(!package_handle.scm_descriptor.ref.type = '')
-        assign(!package_handle.scm_descriptor.ref.name = '')
-        set(result ${package_handle})
-      endif()
+      ans(remote_refs)
     elseif("${ref}_" STREQUAL "*_")
       ## get all remote refs and format a uri for every found tag/branch
       git_remote_refs("${remote_uri}")
       ans(refs)
-      set(result)
+
       foreach(ref ${refs})
-        map_tryget(${ref} name)
-        ans(ref_name)
         map_tryget(${ref} type)
         ans(ref_type)
-        map_tryget(${ref} revision)
-        ans(revision)
-        if("${ref_type}" STREQUAL "tags" OR "${ref_type}" STREQUAL "heads")
-          if("${ref_type}" STREQUAL "tags")
-            set(ref_type tag)
-          elseif("${ref_type}" STREQUAL "heads")
-            set(ref_type branch)
-          else()
-            set(ref_type ref)
-          endif()
-          set(current_uri "gitscm+${remote_uri}?rev=${revision}")
-          #list(APPEND result "gitscm+${remote_uri}?${ref_type}=${ref_name}")
-          if(return_package_handle)
-            map_new()
-            ans(package_handle)
-
-            assign(!package_handle.uri = current_uri)
-            assign(!package_handle.query_uri = uri_string)
-            assign(!package_handle.scm_descriptor.scm = 'git')
-            assign(!package_handle.scm_descriptor.ref = ref)
-            list(APPEND result ${package_handle})
-          else()
-            list(APPEND result "${current_uri}")
-          endif()
+        if("${ref_type}" MATCHES "(tags|heads)")
+          list(APPEND remote_refs ${ref})
         endif()
       endforeach()
     elseif(NOT "${ref}_" STREQUAL "_")
       ## ensure that the specified ref exists and return a valid uri if it does
       git_remote_ref("${remote_uri}" "${ref}" "*")
-      ans(ref)
-      if(NOT ref)
-        return()
-      endif()
-      map_tryget(${ref} type)
-      ans(ref_type)
-
-      map_tryget(${ref} revision)
-      ans(revision)
-      if("${ref_type}" STREQUAL "heads")
-        set(ref_type branch)
-      elseif("${ref_type}" STREQUAL "tags")
-        set(ref_type tag)
-      else()
-        set(ref_type ref)
-      endif()
-      map_tryget(${ref} name)
-      ans(ref_name)
-
-      #set(result "gitscm+${remote_uri}?${ref_type}=${ref_name}")
-      set(result "gitscm+${remote_uri}?rev=${revision}")
-      if(return_package_handle)
-        map_new()
-        ans(package_handle)
-        assign(!package_handle.uri = result)
-        assign(!package_handle.query_uri = uri_string)
-        assign(!package_handle.scm_descriptor.scm = 'git')
-        assign(!package_handle.scm_descriptor.ref = ref)
-
-        set(result ${package_handle})
-      endif()
+      ans(remote_refs)
     else()
-      git_remote_ref("${remote_uri}" "HEAD" "*")
-      ans(tip)
-      map_tryget("${tip}" revision)
-      ans(revision)
-      ## use the default (no ref)
-      set(result "gitscm+${remote_uri}?rev=${revision}")
 
-      if(return_package_handle)
-        map_new()
-        ans(package_handle)
-        assign(!package_handle.uri = result)
-        assign(!package_handle.query_uri = uri_string)
-        assign(!package_handle.scm_descriptor.scm = 'git')
-        assign(!package_handle.scm_descriptor.ref = tip)
-        set(result ${package_handle})
-      endif()
+      git_remote_ref("${remote_uri}" "HEAD" "*")
+      ans(remote_refs)
     endif()
 
 
+    ## generate result from the scm descriptors
+    set(results)
+    foreach(remote_ref ${remote_refs})
+      git_scm_descriptor("${remote_ref}")
+      ans(scm_descriptor)
+      assign(rev = scm_descriptor.ref.revision)
+      set(result "${remote_uri}?rev=${rev}")
+      if(return_package_handle)
+        set(package_handle)
+        assign(!package_handle.uri = result)
+        assign(!package_handle.scm_descriptor = scm_descriptor)
+        assign(!package_handle.query_uri = uri.uri)
+        set(result ${package_handle})
+      endif()
+      list(APPEND results ${result})
+    endforeach()
+
+
     
-    return_ref(result)
+    return_ref(results)
   endfunction()

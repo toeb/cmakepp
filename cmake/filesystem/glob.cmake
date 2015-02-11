@@ -33,6 +33,7 @@
     set(paths)
     if(globs)
       file(${glob_command} paths ${relative} ${globs})
+      list_remove_duplicates(paths)
     endif()
     return_ref(paths)
  endfunction()

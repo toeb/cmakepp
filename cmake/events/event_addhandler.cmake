@@ -1,16 +1,17 @@
-# adds an event handler to the event specified by name
+## event_addhandler()
+##
+## adds an event handler to the event specified by name
+##
 function(event_addhandler name handler)
   event("${name}")
   ans(event)
-  
-  map_tryget("${event}" handlers)
-  ans(handlers)
 
-  set(handlers ${handlers} "${handler}")
-  map_append("${event}" handlers "${handler}")
-  list_unique(handlers)
-  ans(handlers)
-  map_set("${event}" handlers "${handlers}")
-
-  return()
+  ## todo - maybe escape handler string semicolon?
+  ## todo import handler function and create  a mapping from handler->fuction
+  ## then only append function 
+  map_append_unique("${event}" handlers "${handler}")
+ 
+  return()  
 endfunction()
+
+

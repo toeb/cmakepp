@@ -20,7 +20,9 @@ set_property(GLOBAL PROPERTY oocmake_include_guard true)
 
 cmake_policy(SET CMP0007 NEW)
 cmake_policy(SET CMP0012 NEW)
-
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 OLD)
+endif()
 # installation dir of oocmake
 set(oocmake_base_dir "${CMAKE_CURRENT_LIST_DIR}")
 
@@ -89,6 +91,17 @@ ans(oocmake_config_definition)
 cd("${CMAKE_SOURCE_DIR}")
 # setup config_function for oocmake
 config_setup("oocmake_config" ${oocmake_config_definition})
+
+cmakepp_after_initialize()
+
+
+## check if in script mode and script file is equal to this file
+## then invoke either cli mode
+cmake_entry_point()
+ans(entry_point)
+if("${CMAKE_CURRENT_LIST_FILE}" STREQUAL "${entry_point}")
+  cmakepp_cli()
+endif()
 
 
 

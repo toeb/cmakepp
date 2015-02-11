@@ -7,48 +7,51 @@ compiler:
 matrix:
   allow_failures:
     - os: osx
-#env:
-# - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1"
-# - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
+env:
+  global:
+    # github api token and secret
+    secure: "fWQnD0UqfX9SfctAu7lAnUJ4V5brp8UqdmPxQ67MlbmR5GAXQK9yezeQEsOnDCbihM6H/WTkonR920+B14fOb1NO0RSY39yHzjZG6B4tM6ZJwRW0CAlgFzlCqdwyL//7EhfKnxmWqflsA8oY+ihuZsj8P9ZtQSpNWENlu0Cl324="
+    secure: "i9rwJYZa6VDCpjXFaJoUggdn12mC1WB2zb9zaFP57VocTyL37Kpt3btXb9De5VQEJbyVKG2b9zlts20dEqvvruXBBuhWi+15VICT1yqq3zDQt25EPPDXw+AcB58dG+0icY1VKklWXR2Qxms4x/EZSN4TDNUp6LZgh+ACWlE1SRU="
+  matrix:
+    - CMAKE_DIR="v3.1" CMAKE_VERSION="3.1.2" 
+    - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1" 
+    - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
+    - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.7"
+matrix:
+  allow_failures:
+    - env: CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.7"
 notifications:
   slack: fallto:MlnVOMNkx8YopsaSSxqh2Rcr
 before_install:
   - sudo add-apt-repository --yes ppa:kalakris/cmake
   - sudo apt-get update -qq
-  - sudo apt-get install cmake
   - sudo apt-get install mercurial
   - sudo apt-get install git  
   - sudo apt-get install subversion
   - git config --global user.email "travis-ci@example.com"
   - git config --global user.name "Build Server"
 install:
-  # biicode initialization
-  #- wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh #
-  #- bii setup:cpp
-     # install cmake --
-    #- wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
-    #- tar xf "cmake-${CMAKE_VERSION}.tar.gz"
-    #- cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
-    #- cmake --build _builds --target install
-    #- export PATH="`pwd`/_install/bin:${PATH}"
-    # -- end
-    # verify installed cmake --
-    #- which cmake
-    #- cmake --version    
-    # -- end
+  - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh
+  - bii setup:cpp
+  - bii init
+  - bii open toeb/cmakepp
+  - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp > /dev/null
+  #- sudo apt-get install cmake
+  #- cmake --version
+  # install cmake --
+  - wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
+  - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
+  - cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_USE_OPENSSL=ON -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
+  - cmake --build _builds --target install
+  - export PATH="`pwd`/_install/bin:${PATH}"
+  # -- end
+  # verify installed cmake --
+  - which cmake
+  - cmake --version    
+  #-- end
+ 
 script: 
- - cmake --version
- # - bii init
- #- bii open toeb/cmakepp
- #- rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp
  - cmake -P build/script.cmake
- #- mkdir install_dir
- #- cd install_dir
- #- cp ../install.sh .
- #- chmod +x ./install.sh
- #- ./install.sh #
- #- alias cmakepp='cmake -P $(pwd)/cmakepp/cmakepp_cli.cmake'
- #- cmakepp ls
 
 after_success: "cmake -P build/after_success.cmake"
 after_failure: "cmake -P build/after_failure.cmake"

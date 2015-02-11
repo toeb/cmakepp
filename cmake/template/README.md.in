@@ -1,0 +1,24 @@
+# Templating 
+
+<%
+set(delimiter_start "<" "%")
+set(delimiter_end "%" ">")
+string_combine("" ${delimiter_start})
+ans(delimiter_start)
+string_combine("" ${delimiter_end})
+ans(delimiter_end)
+
+assign(function_files = glob("**.cmake" --relative))
+%>
+
+`cmakepp`'s  templates allow you to generate content by mixing text with `CMake` code and executing it. There are many content generators out there for a host of different languages but none for `CMake`. I needed this functionality to generate the documentation for `cmakepp`. This tool is very simple but very mighty and can easily be used for generating source code files as the template syntax is compatible - as in 'does not interfere' - with `c++`, `cmake script`, `etc`. it is based around using `<%=${delimiter_start}%>` and `<%=${delimiter_end}%>` to indicate `CMake` script sections inside of a text file.
+
+
+### Function List
+
+<%= markdown_template_function_list(${function_files}) %>
+
+### Function Descriptions
+
+<%= markdown_template_function_descriptions(${function_files}) %>
+

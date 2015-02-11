@@ -10,7 +10,7 @@
     assign(installed_package = this.dependency_source.resolve("${uri}"))
 
     if(NOT installed_package)
-      log(--error "package '{uri.input}' does not exist in project")
+      error("package '{uri.input}' does not exist in project")
       return()
     endif()
 

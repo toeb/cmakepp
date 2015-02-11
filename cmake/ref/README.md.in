@@ -1,0 +1,59 @@
+# Reference Values
+<%
+    # get a list of files in the current directory (the directory of this file)
+    assign(function_files = glob("**.cmake" --relative))
+%>
+
+CMake has a couple of scopes every file has its own scope, every function has its own scope and you can only have write access to your `PARENT_SCOPE`.  So I searched for  simpler way to pass data throughout all scopes.  My solution is to use CMake's `get_property` and `set_property` functions.  They allow me to store and retrieve data in the `GLOBAL` scope - which is unique per execution of CMake. It is my RAM for cmake - It is cleared after the programm shuts down.
+
+I wrapped the get_property and set_property commands in these shorter and simple functions:
+
+
+### Function List
+
+<%= markdown_template_function_list(${function_files}) %>
+
+### Function Descriptions
+
+<%= markdown_template_function_descriptions(${function_files}) %>
+
+
+
+```
+ref_new()   # returns a unique refernce (you can also choose any string)
+ref_set(ref [args ...]) # sets the reference to the list of arguments
+ref_get(ref) # returns the data stored in <ref> 
+
+# some more specialized functions
+# which might be faster in special cases
+ref_setnew([args ...])    # creates, returns a <ref> which is set to <args>
+ref_print(<ref>)      # prints the ref
+ref_isvalid(<ref>)      # returns true iff the ref is valid
+ref_istype(<ref> <type>)  # returns true iff ref is type
+ref_gettype(<ref>)      # returns the (if any) of the ref       
+ref_delete(<ref>)     # later: frees the specified ref
+ref_append(<ref> [args ...])# appends the specified args to the <ref>'s value
+ref_append_string(<ref> <string>) # appends <string> to <ref>'s value
+```
+
+*Example*:
+```
+ # create a ref
+ ref_new()
+ ans(ref)
+ assert(ref)
+ 
+ # set the value of a ref
+ ref_set(${ref} "hello world")
+
+# retrieve a value by dereferencing
+ref_get(${ref})
+ans(val)
+assert(${val} STREQUAL "hello world")
+
+# without generating the ref:  
+ref_set("my_ref_name" "hello world")
+ref_get("my_ref_name")
+ans(val)
+assert(${val} STREQUAL "hello world")
+```

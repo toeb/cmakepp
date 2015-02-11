@@ -11,18 +11,19 @@
 function(package_source_pull_path uri)
     set(args ${ARGN})
 
+    uri("${uri}")
+    ans(uri)
 
     ## get package descriptor for requested uri
     package_source_resolve_path("${uri}")
     ans(package_handle)
 
     if(NOT package_handle)
+        error("could not resolve {uri.uri} to a unique package")
       return()
     endif()
 
 
-    map_tryget(${package_handle} package_descriptor)
-    ans(package_descriptor)
 
     list_extract_flag(args --reference)
     ans(reference)
@@ -33,17 +34,18 @@ function(package_source_pull_path uri)
         ans(target_dir)
         path_qualify(target_dir)
 
-        ## get local_ref which is were the package is stored locally in a path package source
-        map_tryget("${package_handle}" "content_dir")
-        ans(source_dir)
+
+        assign(source_dir = package_handle.directory_descriptor.path)
 
         ## copy content to target dir
-        map_tryget("${package_descriptor}" content)
-        ans(content_globbing_expression)
+        assign(content_globbing_expression = package_handle.package_descriptor.content)
+
         cp_content("${source_dir}" "${target_dir}" ${content_globbing_expression})
 
         ## replace content_dir with the new target path and return  package_handle
         map_set("${package_handle}" content_dir "${target_dir}")
+    else()
+        assign(package_handle.content_dir = package_handle.directory_descriptor.path)
     endif()
 
     return_ref(package_handle)

@@ -13,7 +13,8 @@
 *.a
 
 
-# oocmake temp dir
+# oocmake ignores
 tmp
 bin
 release
+cmakepp.sublime-workspace

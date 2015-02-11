@@ -1,16 +1,17 @@
 function(test)
 	# creates two maps and merges them
 	# create two maps
-	 element(uut1)
-	 	value(KEY k1 VALUE 1)
-	 	value(KEY k2 VALUE 1)
-	 element(END)
+	 map()
+	 	kv(k1 1)
+	 	kv(k2 1)
+	 end()
+	 ans(uut1)
 
-	 element(uut2)
-	 	value(KEY k2 VALUE 2)
-	 	value(KEY k3 VALUE 2)
-	 element(END)
-
+	 map()
+	 	kv(k2 2)
+	 	kv(k3 2)
+	 end()
+	 ans(uut2)
 
 	#merge by overwriting map2 with map1
 	map_new()
@@ -50,16 +51,12 @@ function(test)
 	assert(${val} STREQUAL 2)
 
 	# check if deep elements are merged
-	element(MAP)
-		element(MAP elem1)
-			value(KEY k1 v1)
-		element(END)
-	element(END m1)
-	element(MAP)
-		element(MAP elem1)
-			value(KEY k2 v2)
-		element(END)
-	element(END m2)
+	obj("{elem1:{k1:'v1'}}")
+	ans(m1)
+
+	obj("{elem1:{k2:'v2'}}")
+	ans(m2)
+
 
 	set(res)
 	map_merge( ${m1} ${m2})

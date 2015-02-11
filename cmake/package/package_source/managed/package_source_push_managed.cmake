@@ -54,7 +54,7 @@
 
     set(index)
     
-    # create a file contains all searchable data
+    # create a index file which contains all searchable data
     assign(!index.hash = hash)
     assign(!index.id = package_handle.package_descriptor.id)
     assign(!index.version = package_handle.package_descriptor.id)
@@ -62,12 +62,14 @@
     assign(!index.tags[] = package_handle.package_descriptor.id)
     assign(!index.local_uri = local_uri)
     assign(!index.remote_uri = package_handle.uri)
+    assign(!index.remote_query_uri = package_handle.query_uri)
     assign(!index.content_dir = content_dir)
     assign(!index.source_content_dir = source_content_dir)
-    assign(package_descriptor = package_handle.package_descriptor)
-
-    qm_write("${location}/package.cmake" "${package_descriptor}")
     qm_write("${location}/index.cmake" "${index}")
+
+    assign(package_descriptor = package_handle.package_descriptor)
+    qm_write("${location}/package.cmake" "${package_descriptor}")
+
 
     return_ref(local_uri)
   endfunction()

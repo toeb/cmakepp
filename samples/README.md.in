@@ -1,0 +1,20 @@
+# Samples 
+
+I have developed some samples to show off `cmakepp`'s capabilities. Here you can find an overview of these samples
+
+
+<%
+
+  assign(readmes = glob(*/README.md --relative))
+
+
+%>
+
+
+
+
+<% foreach(readme ${readmes})%>* <%=markdown_template_link(${readme})%>
+<% endforeach() %>
+
+
+

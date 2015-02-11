@@ -1,11 +1,9 @@
-
-#pads the specified string to be as long as specified
-# if the string is longer then nothing is padded
-# if no delimiter is specified than " " (space) is used
-# if --prepend is specified the padding is inserted into front of string
-function (string_pad str len)  
+## pads the specified string to be as long as specified
+## if the string is longer then nothing is padded
+## if no delimiter is specified than " " (space) is used
+## if --prepend is specified the padding is inserted into front of string
+function(string_pad str len)  
   set(delimiter ${ARGN})
-#  message("delim ${delimiter}")
   list_extract_flag(delimiter --prepend)
   ans(prepend)
   if("${delimiter}_" STREQUAL "_")

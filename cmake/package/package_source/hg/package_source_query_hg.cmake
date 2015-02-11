@@ -8,36 +8,22 @@
     uri("${uri}")
     ans(uri)
 
-    map_tryget("${uri}" schemes)
-    ans(scheme)
-
-    list_extract_flag(scheme hgscm)
-    ans(is_hgscm)
-
-    map_set(${uri} scheme "${scheme}")
-
-    list(LENGTH scheme scheme_count)
-    if(scheme_count GREATER 1)
-      ## only one scheme is allowed
-      return()
-    endif()
-
     uri_qualify_local_path("${uri}")
     ans(uri)
 
-    uri_format("${uri}" --no-query --remove-scheme hgscm)
+   # uri_format("${uri}" --no-query --remove-scheme hgscm)
+    uri_format("${uri}" --no-query)
     ans(remote_uri)
 
     ## check if remote exists
     hg_remote_exists("${remote_uri}")
     ans(remote_exists)
-
-
     if(NOT remote_exists)
       return()
     endif()
 
     ## get ref 
+    assign(rev = uri.params.rev)
     assign(ref = uri.params.ref)
     assign(branch = uri.params.branch)
     assign(tag = uri.params.tag)
@@ -45,23 +31,60 @@
     list_pop_front(ref)
     ans(ref)
 
-    if(NOT "${ref}_" STREQUAL "_")
-      ## need to checkout
+    hg_cached_clone("${remote_uri}" --readonly)
+    ans(repo_dir)
 
-      if("${ref}" STREQUAL "*")
-        message(FATAL_ERROR "ref query currently not allowed for hg")
-      endif()
-      set(result "hgscm+${remote_uri}?ref=${ref}")
-    else()
-      set(result "hgscm+${remote_uri}")
+
+    if(NOT ref AND NOT rev)
+      set(ref "tip")
     endif()
 
-    if(return_package_handle)
+    pushd("${repo_dir}")
+    set(refs)
+    if("${rev}" MATCHES "[0-9A-Fa-f]+" )
       map_new()
-      ans(package_handle)
-      assign(package_handle.uri = result)
-      assign(!package_handle.scm_descriptor.scm = 'hg')
-      return_ref(package_handle)
+      ans(refs)
+      map_set(${refs} inactive false)
+      map_set(${refs} name ${rev})
+      map_set(${refs} number 0)
+      map_set(${refs} hash ${rev})
+      map_set(${refs} type "rev")
+    elseif(NOT "${ref}_" STREQUAL "_")
+      hg_get_refs()
+      ans(refs)
+      if(NOT "${ref}" STREQUAL "*")
+        set(selected_refs)
+        foreach(current_ref ${refs})
+          map_tryget(${current_ref} name)
+          ans(name)
+          if("${name}" STREQUAL "${ref}")
+            list(APPEND selected_refs ${current_ref})
+          endif()
+        endforeach()
+        set(refs ${selected_refs})
+      endif()
     endif()
+
+    popd()    
+
+    set(result)
+    foreach(ref ${refs})
+      map_tryget(${ref} hash)
+      ans(hash)
+      set(immutable_uri "${remote_uri}?rev=${hash}")
+      if(return_package_handle)
+        set(package_handle)
+        assign(!package_handle.uri = immutable_uri)
+        assign(!package_handle.scm_descriptor.scm = 'hg')
+        assign(!ref.uri = remote_uri)
+        assign(!package_handle.scm_descriptor.ref =  ref)
+        assign(!package_handle.query_uri = uri.uri)
+
+        list(APPEND result ${package_handle})
+      else()
+        list(APPEND result ${immutable_uri})
+      endif()
+
+    endforeach()
     return_ref(result)
   endfunction() 

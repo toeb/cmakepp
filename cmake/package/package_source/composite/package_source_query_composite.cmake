@@ -12,13 +12,16 @@
 
     set(args ${ARGN})
 
-    list_extract_flag(args --package-handle)
-    ans(package_handle)
+    list_contains(args --package-handle)
+    ans(return_package_handle)
+
+    
 
     ## rate and sort sources for uri    
     this_get(children)
     rated_package_source_sort("${uri}" ${children})
     ans(rated_children)
+
 
     ## loop through every source and query it for uri
     ## append results to result. 
@@ -48,22 +51,11 @@
       ans(source)
 
       ## query the source
+      ## args (especially --package-handle will be passed along)
       rcall(current_result = source.query("${uri}" ${args}))
 
-
-      ## if package_handles should be returned 
-      ## create the objects and replace current result with it
-      if(package_handle)
-        set(package_handles)
-        foreach(uri ${current_result})
-          map_new()
-          ans(package_handle)
-          map_set(${package_handle} uri ${uri})
-          map_set(${package_handle} package_source ${source})
-          map_set(${package_handle} rating ${rating})
-          list(APPEND package_handles ${package_handle})
-        endforeach()
-        set(current_result ${package_handles})
+      if(return_package_handle)
+        map_set(${current_result} package_source ${source})
       endif()
 
       ## append to result

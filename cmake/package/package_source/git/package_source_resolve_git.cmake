@@ -3,15 +3,37 @@
 function(package_source_resolve_git uri_string)
   set(args ${ARGN})
 
-  file_tempdir()
-  ans(temp_dir)
+  uri("${uri_string}")
+  ans(uri)
 
-  package_source_pull_git("${uri_string}" "${temp_dir}")
-  ans(res)
+  package_source_query_git("${uri}" --package-handle)
+  ans(package_handle)
 
-  if(NOT res)
-    return()
-  endif() 
+  list(LENGTH package_handle count)
   
-  return_ref(res)
+  if(NOT "${count}" EQUAL 1)
+    return()
+  endif()
+
+  assign(remote_uri = package_handle.scm_descriptor.ref.uri)
+  assign(rev = package_handle.scm_descriptor.ref.revision)
+
+  git_cached_clone("${remote_uri}" --ref ${rev} --read package.cmake)
+  ans(package_descriptor_content)
+
+  json_deserialize("${package_descriptor_content}")
+  ans(package_descriptor)
+
+  map_tryget(${uri} file_name)
+  ans(default_id)
+
+  map_defaults("${package_descriptor}" "{
+    id:$default_id,
+    version:'0.0.0'
+  }")
+  ans(package_descriptor)
+
+  map_set(${package_handle} package_descriptor ${package_descriptor})
+
+  return_ref(package_handle)
 endfunction()

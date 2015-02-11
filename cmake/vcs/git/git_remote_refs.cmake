@@ -27,6 +27,8 @@ function(git_remote_refs uri)
       list_extract(parts revision ref)
       git_ref_parse("${ref}")
       ans(ref_map)
+      
+      map_set("${ref_map}" uri "${uri}")
       if(ref_map)
         map_set(${ref_map} revision ${revision})
         set(res ${res} ${ref_map})

@@ -1,4 +1,6 @@
 function(test)
+  
+
 
 
   pushd(packages --create)
@@ -14,6 +16,13 @@ function(test)
   map_set(${this} directory "${test_dir}/packages")
   map_set(${this} source_name "mysource")
 
+
+
+
+  package_source_query_directory("mysource:pkg1" --package-handle)
+  ans(res)
+  assertf({res.uri} STREQUAL "mysource:pkg1")
+  assertf({res.query_uri} STREQUAL "mysource:pkg1")
 
 
   package_source_query_directory("")

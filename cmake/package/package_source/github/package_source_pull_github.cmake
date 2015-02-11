@@ -16,7 +16,7 @@ function(package_source_pull_github uri)
 
   ## retreive the hidden/special repo_descriptor
   ## to gain access to the clone url
-  map_tryget(${package_handle} repo_descriptor)
+  map_tryget(${package_handle} github_descriptor)
   ans(repo_descriptor)
 
   map_tryget(${package_handle} package_descriptor)
@@ -36,6 +36,8 @@ function(package_source_pull_github uri)
 
   map_tryget("${scm_package_handle}" package_descriptor)
   ans(scm_package_descriptor)
+
+  assign(package_handle.repo_descriptor = scm_package_handle.repo_descriptor)
 
   map_defaults("${package_descriptor}" "${scm_package_descriptor}")
 

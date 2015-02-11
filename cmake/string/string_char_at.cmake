@@ -1,5 +1,14 @@
-# returns the character @ index of input string
-# negative values less than -1 are translated into length - |index|
+## <%=markdown_template_function_header("(<index:int> <input:string>)-><char>")%>
+##
+## returns the character at the position specified. strings are indexed 0 based
+## indices less than -1 are translated into length - |index|
+##
+## *Examples*
+## ```cmake
+## string_char_at(3 "abcdefg")  # => "d"
+## string_char_at(-3 "abcdefg") # => "f"
+## ```
+##
 function(string_char_at index input)
   string(LENGTH "${input}" len)
   string_normalize_index("${input}" ${index})

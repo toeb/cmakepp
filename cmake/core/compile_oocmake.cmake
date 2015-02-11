@@ -29,13 +29,3 @@ function(compile_oocmake source_dir target)
   endforeach()
 endfunction()
 
-
-
-function(___compile_expr_json)
-  fread_data("${oocmake_base_dir}/resources/expr.json")
-  ans(data)
-  qm_serialize("${data}")
-  ans(qm_data)
-  
-  return_ref(qm_data)
-endfunction()

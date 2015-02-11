@@ -1,5 +1,0 @@
-include("${CMAKE_CURRENT_LIST_DIR}/cmakepp.cmake")
-message("starting interactive cmake shell (type quit or exit to exit)")
-cd("${CMAKE_CURRENT_BINARY_DIR}")
-icmake()
-message("quitting icmake")

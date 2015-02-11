@@ -42,7 +42,7 @@ function(download uri)
 
   list_extract(status code message)
   if(NOT "${code}" STREQUAL 0)    
-    #message(WARNING "${message}")
+    error("failed to download: {message} (code {code})")
     rm("${target_path}")
     return()
   endif()
