@@ -23,11 +23,12 @@ function(test)
 
   uri("")
   ans(uri)
-  assign(res = uut.query(${uri}))
+  assign(res = uut.resolve(${uri}))
   assert(NOT res)
 
 
-  assign(res = uut.query("?*"))
+  return()
+  assign(res = uut.query("pkg1"))
   ans(res)
   assert("${res}" MATCH "source1:pkg1")
   assert("${res}" MATCH "source2:pkg2")
@@ -42,13 +43,7 @@ function(test)
   assert("${res}" MATCH "source5:pkg6")
   assert(${res} COUNT 2)
 
-
-  assign(res = uut.query("source1:pkg1" --package-handle))
-  ans(res)
-  assert(res)
-  assertf("{res.package_source}" STREQUAL "${source1}")
-
-
+  
 
 
 

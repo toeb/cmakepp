@@ -76,7 +76,7 @@
         set(package_handle)
         assign(!package_handle.uri = item)
         assign(!package_handle.query_uri = uri.uri)
-        list(APPEND package_handles ${result})
+        list(APPEND package_handles ${package_handle})
       endforeach()
       set(result ${package_handles})
     endif()

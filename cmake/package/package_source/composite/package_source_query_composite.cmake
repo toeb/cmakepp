@@ -12,6 +12,11 @@
 
     set(args ${ARGN})
 
+    list_contains(args --package-handle)
+    ans(return_package_handle)
+
+    
+
     ## rate and sort sources for uri    
     this_get(children)
     rated_package_source_sort("${uri}" ${children})
@@ -49,6 +54,9 @@
       ## args (especially --package-handle will be passed along)
       rcall(current_result = source.query("${uri}" ${args}))
 
+      if(return_package_handle)
+        map_set(${current_result} package_source ${source})
+      endif()
 
       ## append to result
       list(APPEND result ${current_result})
