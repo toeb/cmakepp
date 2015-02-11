@@ -2,9 +2,7 @@
 # Feature Overview
 
 `cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
-C:/Users/Tobi/Documents/projects/cmakepp/cmake
-C:/Users/Tobi/Documents/projects/cmakepp/cmake
-C:/Users/Tobi/Documents/projects/cmakepp/cmake
+
 
 * [Collections](collections/README.md)
 * [Date/Time](datetime/README.md)
@@ -23,7 +21,7 @@ C:/Users/Tobi/Documents/projects/cmakepp/cmake
 * [Parsing and handling semantic versions](semver/README.md)
 * [String Functions](string/README.md)
 * [Targets](targets/README.md)
-* [Templating ](template/README.md)
+* [Templating ](templating/README.md)
 * [Uniform Resource Identifiers (URIs)](uri/README.md)
 * [HTTP Client](web/README.md)
 

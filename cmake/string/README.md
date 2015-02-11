@@ -244,7 +244,7 @@ So I have created somewhat alot of functions which does things that you might ne
 
  evaluates the string <str> in the current scope
  this is done by macro variable expansion
- evaluates both ${} and @@ style variables
+ evaluates both ${} and @ style variables
 
 
 

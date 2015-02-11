@@ -1,5 +1,8 @@
+##
+## `(<template_path:<file path>>)-><generated content:string>`
 ##  
 ## opens the specified template and runs it in its directory
+## keeps track of recursive template calling
 ## * returns 
 ##    * the output of the template
 ## * scope
@@ -12,8 +15,8 @@
 ##    * `${parent_template_path}`  is set to the calling templates path
 ## 
 ## 
-function(template_run template_path)
-  template_read("${template_path}")
+function(template_run_file template_path)
+  template_compile_file("${template_path}")
   ans(template)
 
   get_filename_component(template_dir "${template_path}" PATH)

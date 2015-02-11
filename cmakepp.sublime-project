@@ -42,11 +42,11 @@
       "name": "cmakepp template run",
       "linux":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_compile_to", "$file"]
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_execute", "$file"]
       },
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_compile_to", "$file"],
+        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_execute", "$file"],
         "encoding": "cp1252"
       }
     },

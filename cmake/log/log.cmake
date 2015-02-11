@@ -27,7 +27,7 @@
 ## ```
 ## log("this is a simple error" --error) => <% 
 ##   log("this is a simple error" --error) 
-##   template_write_data("${__ans}")
+##   template_out_json("${__ans}")
 ## %>
 ## ```
 function(log)
