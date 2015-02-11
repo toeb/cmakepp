@@ -4,14 +4,22 @@
     set(args ${ARGN})
     list_extract_labelled_keyvalue(args --algorithm)
     ans(algorithm)
-    glob_ignore(${args} --relative --recurse ${algorithm})
+    glob_ignore(${args} --recurse ${algorithm})
     ans(files)
-
 
 
     pwd()
     ans(pwd)
+    set(normalized_files)
+    foreach(file ${files})
+        path_qualify(file)
+        path_relative("${pwd}" "${file}")
+        ans(file)
+        list(APPEND normalized_files ${file})      
+    endforeach()
 
-    checksum_files("${pwd}" ${files})
+
+
+    checksum_files("${pwd}" ${normalized_files})
     return_ans()
   endfunction()

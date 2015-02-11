@@ -17,7 +17,6 @@ function(test)
   package_source_query_path("test/asdasd4" --package-handle)
   ans(res)
   assert(res)
-  json_print(${res})
   assertf({res.query_uri} STREQUAL "test/asdasd4")
   
 
@@ -26,7 +25,7 @@ function(test)
   assert(res)
   assertf({res.query_uri} STREQUAL "test/p5")
   # this checksum_ functions change
-  assertf({res.directory_descriptor.hash} STREQUAL "e796461f286636e4b12bb12ffafb605a")
+  assertf({res.directory_descriptor.hash} MATCHES "[a-fA-F0-9]+")
 
 
 
