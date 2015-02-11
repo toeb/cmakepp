@@ -17,9 +17,7 @@ Look through the files in the package.  Most functions will be commented and the
 # Feature Overview
 
 `cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
-C:/Users/Tobi/Documents/projects/cmakepp
-cmake
-cmake
+
 
 * [Collections](cmake/collections/README.md)
 * [Date/Time](cmake/datetime/README.md)
@@ -38,7 +36,7 @@ cmake
 * [Parsing and handling semantic versions](cmake/semver/README.md)
 * [String Functions](cmake/string/README.md)
 * [Targets](cmake/targets/README.md)
-* [Templating ](cmake/template/README.md)
+* [Templating ](cmake/templating/README.md)
 * [Uniform Resource Identifiers (URIs)](cmake/uri/README.md)
 * [HTTP Client](cmake/web/README.md)
 
@@ -67,9 +65,9 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 
 
 
-# Installation 
+# Getting `cmakepp` 
 
-You have multiple options to install `cmakepp` the only prerequisite for all options is that cmake is installed with version `>=2.8.7` - I recommend `>=2.8.23`. You will be notified if a function only works with a more current version of cmake. 
+You have multiple options to install `cmakepp` the only prerequisite for all options is that [`CMake`](http://www.cmake.org) is installed with a version `>=2.8.12`.  `cmakepp` will also work with version less than `2.8.12` however some functions might fail.
 
 
 * [Install by Console](#install_console) - Recommended

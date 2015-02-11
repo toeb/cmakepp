@@ -30,16 +30,13 @@ As is possible in JavaScript an Python I let you override default object operati
   * `__get_keys__ : (<this>):<member ...>` override the operation which returns the list of available keys.  It is expected that all keys returned will are valid properties (they exist).
   * `__has__ : (<this> <member>):<bool>` overrides the has operation. MUST return true iff the object has a property called `<member>`
   * `__member_call__ : (<this> <member> <args:<any...>>):<return value:<any>>` this operation is invoked when `obj_member_call(...)` is called (and thus also when `call, rcall, etc` is called) overriding this function allows you to dispatch a call operation to the object member identified by `<member>` with the specified `args` it should return the result of the specified operation. The `this` variable is always set to the object instance current instance.
-  * `__cast__` @todo
-* helper functions
+  * `__cast__`  helper functions
   * `obj_declare_getter()`
   * `obj_declare_setter()`
   * `obj_declare_call()`
   * `obj_declare_member_call()`  
   * `obj_declare_get_keys()`
-  * `obj_declare_has_key()` @todo
-  * `obj_declare_cast()` @todo
-  
+  * `obj_declare_has_key()`   * `obj_declare_cast()`   
 
 ```
 new([Constructor]) returns a ref to a object
