@@ -16,6 +16,10 @@ env:
     - CMAKE_DIR="v3.1" CMAKE_VERSION="3.1.2" 
     - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1" 
     - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"
+    - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.7"
+matrix:
+  allow_failures:
+    - env: CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.7"
 notifications:
   slack: fallto:MlnVOMNkx8YopsaSSxqh2Rcr
 before_install:
