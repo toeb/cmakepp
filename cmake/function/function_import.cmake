@@ -11,23 +11,27 @@ function(function_import callable)
     message(FATAL_ERROR "no callable specified")
   endif()
 
-  if(COMMAND "${function_name}" AND function_name AND "${function_name}" STREQUAL "${callable}")
-    return_ref(function_name)
+  if(COMMAND "${callable}")
+    if("${function_name}_" STREQUAL "_" OR "${callable}_" STREQUAL "${function_name}_")
+      return_ref(callable)
+    endif()
   endif()
+
 
   function_string_get("${callable}")
   ans(function_string)
 
-  ## return the callables functions name  if it is a command
-  ## and  if no newname was specified
-  if(NOT function_name AND COMMAND "${callable}")
-    return_ref(callable)
-  endif()
+
 
   if(NOT function_name)
-    function_new()
-    ans(function_name)
-    set(redefine true)
+    if(COMMAND "${callable}")
+      set(function_name "${callable}")
+      return_ref(function_name)
+    else()
+      function_new()
+      ans(function_name)
+      set(redefine true)
+    endif()
   endif()
 
 
@@ -37,7 +41,6 @@ function(function_import callable)
     endif()
     message(FATAL_ERROR "cannot import '${callable}' as '${function_name}' because it already exists")
   endif()
-
   function_string_rename("${function_string}" "${function_name}")
   ans(function_string)
   function_string_import("${function_string}")

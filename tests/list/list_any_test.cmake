@@ -15,13 +15,12 @@ function(test)
     ")
 
   ans(res)
-
-
-
   assert(res)
 
-  list_any(range "
-    function(func i)
+
+
+
+  list_any(range "function(func i)
       if(\${i} EQUAL 98)
         return(true)
       endif()
@@ -30,7 +29,6 @@ function(test)
     ")
 
   ans(res)
-
   assert(NOT res)
 
 
