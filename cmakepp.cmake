@@ -43,6 +43,17 @@ function(oocmake_config key)
 	return("${oocmake_tmp_dir}")
 endfunction()
 
+## create invoke later functions 
+function(task_enqueue callable)
+  ## semicolon encode before string_semicolon_encode exists
+  string(ASCII  31 us)
+  string(REPLACE ";" "${us}" callable "${callable}")
+  set_property(GLOBAL APPEND PROPERTY __initial_invoke_later_list "${callable}") 
+  return()
+endfunction()
+
+
+
 ## includes all cmake files of oocmake 
 include("${oocmake_base_dir}/cmake/core/require.cmake")
 
@@ -92,8 +103,9 @@ cd("${CMAKE_SOURCE_DIR}")
 # setup config_function for oocmake
 config_setup("oocmake_config" ${oocmake_config_definition})
 
-cmakepp_after_initialize()
 
+## run all currently enqueued tasks
+task_run_all()
 
 ## check if in script mode and script file is equal to this file
 ## then invoke either cli mode

@@ -1,5 +1,38 @@
 function(test)
 
+
+  script("{a:{b:{c:3}}}")
+  ans(obj)
+
+  timer_start(t1)
+  foreach(i RANGE 1 1000)
+    ref_nav_get("${obj}" a b c)
+  endforeach()
+  timer_print_elapsed(t1)
+
+  timer_start(t2)
+  foreach(i RANGE 1 1000)
+    map_navigate(res "obj.a.b.c")
+  endforeach()
+  timer_print_elapsed(t2)
+
+
+#return()
+
+  script("{a:{b:{c:3}}}")
+  ans(obj)
+  assign(res = obj.a.b.c.d)
+  assert(NOT res)
+
+  assign(res = obj.a.b.c)
+  assert("${res}" STREQUAL "3")
+
+  assign(res = obj.a.b.c.d)
+  assert(NOT res)
+
+  assign(res = obj.a.b.c)
+  assert("${res}" STREQUAL "3")
+
   ## some data structures for testing
 
   function(some_class)

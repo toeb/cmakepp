@@ -12,13 +12,13 @@
     this_get(directory)
     this_get(source_name)
 
-    uri("${uri}")
-    ans(uri)
+    uri_coerce(uri)
 
-    assign(scheme = uri.scheme)
-    if(NOT "${scheme}_" STREQUAL "_" AND NOT "${scheme}" STREQUAL "${source_name}")
+    uri_check_scheme("${uri}" "${source_name}?")
+    ans(scheme_ok)
+    if(NOT scheme_ok)
       return()
-    endif() 
+    endif()
 
     map_tryget(${uri} segments)
     ans(segments)

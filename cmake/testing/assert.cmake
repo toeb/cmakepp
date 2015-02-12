@@ -20,13 +20,6 @@
 # todo: using the variable result as a boolean check fails because
 # the name is used inside assert
 
-
-function(assertf)
-	set(args ${ARGN})
-	list_extract_flag(args DEREF)
-	assert(${args} DEREF)
-	return()
-endfunction()
 function(assert)
 	# parse arguments
 	set(options EQUALS AREEQUAL ARE_EQUAL ACCU SILENT DEREF INCONCLUSIVE ISNULL ISNOTNULL)
@@ -53,7 +46,8 @@ function(assert)
 	endif()
 
 	if(_DEREF)
-		map_format( "${_UNPARSED_ARGUMENTS}")
+		#map_format( "${_UNPARSED_ARGUMENTS}")
+		format("${_UNPARSED_ARGUMENTS}")
 		ans(_UNPARSED_ARGUMENTS)
 	endif()
 

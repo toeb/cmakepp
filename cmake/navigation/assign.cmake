@@ -1,4 +1,4 @@
-## assign([!]<expr> <value>|("="|"+=" <expr><call>)) -> <any>
+## `([!]<expr> <value>|("="|"+=" <expr><call>)) -> <any>`
 ##
 ## the assign function allows the user to perform some nonetrivial 
 ## operations that other programming languages allow 

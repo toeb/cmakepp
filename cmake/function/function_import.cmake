@@ -11,19 +11,25 @@ function(function_import callable)
     message(FATAL_ERROR "no callable specified")
   endif()
 
-  if(COMMAND "${function_name}" AND function_name AND function_name STREQUAL "${callable}")
-    message(DEBUG LEVEL 6 "function '${function_name}' should be imported as '${target_name}' ... returning without operation")
-    return()
+  if(COMMAND "${function_name}" AND function_name AND "${function_name}" STREQUAL "${callable}")
+    return_ref(function_name)
   endif()
 
   function_string_get("${callable}")
   ans(function_string)
+
+  ## return the callables functions name  if it is a command
+  ## and  if no newname was specified
+  if(NOT function_name AND COMMAND "${callable}")
+    return_ref(callable)
+  endif()
 
   if(NOT function_name)
     function_new()
     ans(function_name)
     set(redefine true)
   endif()
+
 
   if(COMMAND "${function_name}" AND NOT redefine)
     if(once)

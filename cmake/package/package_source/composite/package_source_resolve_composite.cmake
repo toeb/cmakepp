@@ -30,7 +30,7 @@
       map_tryget(${package_handle} uri)
       ans(uri)
       
-      rcall(package_handle = package_source.resolve("${uri}"))
+      assign(package_handle = package_source.resolve("${uri}"))
 
       if(package_handle)
         ## copy over package source to new package handle

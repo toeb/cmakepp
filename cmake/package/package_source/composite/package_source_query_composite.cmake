@@ -52,7 +52,7 @@
 
       ## query the source
       ## args (especially --package-handle will be passed along)
-      rcall(current_result = source.query("${uri}" ${args}))
+      assign(current_result = source.query("${uri}" ${args}))
 
       if(return_package_handle)
         map_set(${current_result} package_source ${source})

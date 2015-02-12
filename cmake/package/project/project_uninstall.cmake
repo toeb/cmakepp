@@ -4,8 +4,7 @@
   ## events:
   ##   project_on_package_uninstall(<project package> <package handle>)
   function(project_uninstall uri)
-    uri("${uri}")
-    ans(uri)
+    uri_coerce(uri)
 
     assign(installed_package = this.dependency_source.resolve("${uri}"))
 
@@ -16,8 +15,9 @@
 
     event_emit(project_on_package_uninstall ${this} ${installed_package})
 
-    map_import_properties(${installed_package} managed_dir)
-    rm("${managed_dir}")
 
-    return(true)
+    assign(success = this.dependency_source.delete("${uri}"))
+
+
+    return(${success})
   endfunction()

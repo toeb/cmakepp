@@ -5,7 +5,7 @@ function(map_capture map )
   ans(__reassign)
   list_extract_flag(__map_capture_args --notnull)
   ans(__not_null)
-  foreach(__map_capture_arg ${ARGN})
+  foreach(__map_capture_arg ${__map_capture_args})
     
     if(__reassign AND "${__map_capture_arg}" MATCHES "(.+)[:=](.+)")
       set(__map_capture_arg_key ${CMAKE_MATCH_1})

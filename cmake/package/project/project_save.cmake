@@ -23,6 +23,8 @@ function(project_save)
   endif()
 
 
+  project_save_installed_packages()
+
   ## save package descriptor
   assign(package_descriptor_file = this.configuration.package_descriptor_file)
   path_qualify_from("${project_dir}" "${package_descriptor_file}")

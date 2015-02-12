@@ -65,6 +65,7 @@
     assign(!index.remote_query_uri = package_handle.query_uri)
     assign(!index.content_dir = content_dir)
     assign(!index.source_content_dir = source_content_dir)
+    assign(!index.location = location)
     qm_write("${location}/index.cmake" "${index}")
 
     assign(package_descriptor = package_handle.package_descriptor)

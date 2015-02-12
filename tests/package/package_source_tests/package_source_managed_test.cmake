@@ -64,6 +64,9 @@ function(test)
   ans(res)
   assert(NOT res)
 
+  package_source_query_managed("mypkg_0_0_0" --package-handle)
+  ans(res)
+
   package_source_resolve_managed("mypkg_0_0_0")
   ans(res)
   assert(res)

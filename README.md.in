@@ -111,6 +111,7 @@ I would be very happy If you choose to contribute to `cmakepp`. You can open any
 
 If you want to change something you may send pull requests through github. Normally I will check them quickly and `travis-ci` will build them.  I suggest you run all tests using the sublime project before you create a pull request to see if anything breaks.  (the master branch will have to pass the tests)  
 
+Also if you want to support me financially for all the hardwork - consider donating a couple of $ <a href='https://pledgie.com/campaigns/28347'><img alt='Click here to lend your support to: cmakepp  and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/28347.png?skin_name=chrome' border='0' ></a>
 
 # Developer Guidlines
 

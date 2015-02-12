@@ -11,8 +11,7 @@
       error("no uri was specified to install")
     endif()
 
-    uri("${uri}")
-    ans(uri)
+    uri_coerce(uri)
 
     ## pull package from remote source to temp directory
     ## then push it into dependency_source from there
@@ -40,12 +39,12 @@
       print_vars(package_uri)
       message(FATAL_ERROR "nononono")
     endif()
+
     ## project install is executed before load
     project_install_package("${installed_package_handle}")
 
     ## project is loaded
     project_load_installed_package("${installed_package_handle}")
-
 
     return_ref(package_uri)
   endfunction()
