@@ -50,7 +50,6 @@
 
     assign(package_handle = source.pull(${source_args} "${target_dir}"))
 
-
     assign(!package_handle.managed_descriptor.hash = hash)
     assign(!package_handle.managed_descriptor.managed_dir = location)
     assign(!package_handle.managed_descriptor.source_name = source_name)
@@ -61,27 +60,6 @@
 
     return_ref(package_handle)
 
-    set(index)
-    
-    # create a index file which contains all searchable data
-    assign(!index.hash = hash)
-    assign(!index.id = package_handle.package_descriptor.id)
-    assign(!index.version = package_handle.package_descriptor.id)
-    assign(!index.tags = package_handle.package_descriptor.tags)
-    assign(!index.tags[] = package_handle.package_descriptor.id)
-    assign(!index.local_uri = local_uri)
-    assign(!index.remote_uri = package_handle.uri)
-    assign(!index.remote_query_uri = package_handle.query_uri)
-    assign(!index.content_dir = target_dir)
-    assign(!index.source_content_dir = source_content_dir)
-    assign(!index.location = location)
-    qm_write("${location}/index.cmake" "${index}")
-
-    assign(package_descriptor = package_handle.package_descriptor)
-    qm_write("${location}/package.cmake" "${package_descriptor}")
-
-    package_source_resolve_managed("${hash}")
-    return_ans()
 
   endfunction()
 

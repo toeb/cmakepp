@@ -27,8 +27,8 @@ function(test)
   assertf({context.events_emitted} CONTAINS project_on_package_install)
   assertf({context.events_emitted} CONTAINS project_on_package_load)
   assign(installed_packages = proj.local.query("?*"))
-  assert(${installed_packages} CONTAINS "${success}" )
 
+  assert(installed_packages)
 
 
  

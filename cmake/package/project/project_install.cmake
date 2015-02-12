@@ -22,15 +22,13 @@
     assign(remote = this.remote)
     assign(local = this.local)
 
-    package_source_transfer(${remote} ${uri} ${args} => ${local})
-    ans(package_uri)
 
+
+    assign(installed_package_handle = local.push(${remote} ${uri}))
     
-    assign(installed_package_handle = this.local.resolve("${package_uri}"))
 
 
     if(NOT installed_package_handle)
-      print_vars(package_uri)
       message(FATAL_ERROR "nononono")
     endif()
 
@@ -40,5 +38,5 @@
     ## project is loaded
     project_load_installed_package("${installed_package_handle}")
 
-    return_ref(package_uri)
+    return_ref(installed_package_handle)
   endfunction()
