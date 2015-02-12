@@ -35,10 +35,10 @@ function(test)
   ans(res)
   assert(res)
 
-  package_source_query_managed("${pkg1_uri}")
+  package_source_resolve_managed("${pkg1_uri}")
   ans(res)
   assert(res)
-  assertf("{res.uri}" STREQUAL "mysource:mypkg_0_0_0")
+  assertf("{res.uri}" MATCHES "pkg1")
 
 
 

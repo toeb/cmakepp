@@ -18,7 +18,7 @@ function(archive_match_files archive regex)
 
     archive_ls("${archive}")
     ans(files)
-    string(REGEX MATCHALL "(^|;)(${regex})($|;)" files "${files}")
+    string(REGEX MATCHALL "(^|;)(${regex})(;|$)" files "${files}")
     set(files ${files}) # necessary because of leading and trailing ;
   else()
     message(FATAL_ERROR "${archive} unsupported compression: '${types}'")
