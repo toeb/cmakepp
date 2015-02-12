@@ -1,5 +1,8 @@
 function(test)
   
+  path_package_source()
+  ans(path_source)
+
   ## event handler protocols all events fired
   map_new()
   ans(context)
@@ -60,7 +63,7 @@ function(test)
   managed_package_source("project" "${test_dir}/pr2/packages")
   ans(managed_source)
 
-  assign(success = managed_source.push(pkg1))
+  assign(success = managed_source.push(${path_source} pkg1))
   project_new()
   ans(project)
 
