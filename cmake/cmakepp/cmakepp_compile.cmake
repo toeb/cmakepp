@@ -5,15 +5,15 @@
 function(cmakepp_compile target_file)
   path_qualify(target_file)
 
-  oocmake_config(base_dir)
+  cmakepp_config(base_dir)
   ans(base_dir)
 
   file(STRINGS "${base_dir}/cmakepp.cmake" oocmake_file)
 
   foreach(line ${oocmake_file})
-    if("_${line}" STREQUAL "_include(\"\${oocmake_base_dir}/cmake/core/require.cmake\")")
+    if("_${line}" STREQUAL "_include(\"\${cmakepp_base_dir}/cmake/core/require.cmake\")")
 
-    elseif("_${line}" STREQUAL "_require(\"\${oocmake_base_dir}/cmake/*.cmake\")")
+    elseif("_${line}" STREQUAL "_require(\"\${cmakepp_base_dir}/cmake/*.cmake\")")
 
       file(GLOB_RECURSE files "${base_dir}/cmake/**.cmake")
 

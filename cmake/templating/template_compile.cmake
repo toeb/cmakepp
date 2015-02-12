@@ -15,7 +15,7 @@
 ## * assume `add(lhs rhs) => {lhs+rhs}`
 ## * assume `data = {a:1,b:[2,3,4],c:{d:5,b:[6,7,8]}}`
 ## * assume `data2 = "hello!"`
-## * `@@@@` => `@`
+## * `@@@@` => `@@`
 ## * `<%%%` => `<%%`
 ## * `%%%>` => `%%>`
 ## * `@@data2` => `hello!`
@@ -73,7 +73,7 @@ function(template_compile input)
     "${input}"
   )
   string(REGEX REPLACE 
-    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}]+)"
+    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\r\n]+)"
     "${delimiter_code}=\"{\\1}\"${delimiter_code}"
     input
     "${input}"

@@ -4,7 +4,7 @@ function(path_temp)
   set(args ${ARGN})
 
   if("${args}_" STREQUAL "_")
-    oocmake_config(temp_dir)
+    cmakepp_config(temp_dir)
     ans(tmp_dir)
     set(args "${tmp_dir}")
   else()

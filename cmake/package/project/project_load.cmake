@@ -53,8 +53,8 @@ function(project_load)
 
   ## create package source for project
   managed_package_source("project" "${dependency_dir}")
-  ans(dependency_source)
-  assign(this.dependency_source = dependency_source)
+  ans(local)
+  assign(this.local = local)
 
   ## load all installed packages
   ## including this project

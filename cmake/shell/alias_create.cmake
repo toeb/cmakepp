@@ -4,7 +4,7 @@ function(alias_create name command_string)
 
 
   if(WIN32)      
-    oocmake_config(bin_dir)
+    cmakepp_config(bin_dir)
     ans(bin_dir)
     set(path "${bin_dir}/${name}.bat")
     file_write("${path}" "@echo off\r\n${command_string} %*")

@@ -1,6 +1,6 @@
 # creates a temporary directory and returns its path
 function(file_tempdir )
-	oocmake_config(temp_dir)
+	cmakepp_config(temp_dir)
 	ans(temp_dir)
 	#string(MAKE_C_IDENTIFIER id "${ARGN}")
 	string_normalize( "${ARGN}")

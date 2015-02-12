@@ -11,11 +11,11 @@
 
 cmake_minimum_required(VERSION 2.8.7)
 
-get_property(is_included GLOBAL PROPERTY oocmake_include_guard)
+get_property(is_included GLOBAL PROPERTY cmakepp_include_guard)
 if(is_included)
   _return()
 endif()
-set_property(GLOBAL PROPERTY oocmake_include_guard true)
+set_property(GLOBAL PROPERTY cmakepp_include_guard true)
 
 
 cmake_policy(SET CMP0007 NEW)
@@ -24,23 +24,23 @@ if(POLICY CMP0054)
   cmake_policy(SET CMP0054 OLD)
 endif()
 # installation dir of oocmake
-set(oocmake_base_dir "${CMAKE_CURRENT_LIST_DIR}")
+set(cmakepp_base_dir "${CMAKE_CURRENT_LIST_DIR}")
 
 # include functions needed for initializing oocmake
 include(CMakeParseArguments)
 
 
 # get temp dir which is needed by a couple of functions in oocmake
-set(oocmake_tmp_dir "$ENV{TMP}")
-if(NOT oocmake_tmp_dir)
-	set(oocmake_tmp_dir "${CMAKE_CURRENT_LIST_DIR}/tmp")
+set(cmakepp_tmp_dir "$ENV{TMP}")
+if(NOT cmakepp_tmp_dir)
+	set(cmakepp_tmp_dir "${CMAKE_CURRENT_LIST_DIR}/tmp")
 endif()
-file(TO_CMAKE_PATH "${oocmake_tmp_dir}" oocmake_tmp_dir)
+file(TO_CMAKE_PATH "${cmakepp_tmp_dir}" cmakepp_tmp_dir)
 
 
 # dummy function which is overwritten and in this form just returns the temp_dir
-function(oocmake_config key)
-	return("${oocmake_tmp_dir}")
+function(cmakepp_config key)
+	return("${cmakepp_tmp_dir}")
 endfunction()
 
 ## create invoke later functions 
@@ -55,9 +55,9 @@ endfunction()
 
 
 ## includes all cmake files of oocmake 
-include("${oocmake_base_dir}/cmake/core/require.cmake")
+include("${cmakepp_base_dir}/cmake/core/require.cmake")
 
-require("${oocmake_base_dir}/cmake/*.cmake")
+require("${cmakepp_base_dir}/cmake/*.cmake")
 
 
 ## setup global variables to contain command_line_args
@@ -82,13 +82,13 @@ map()
   	LABELS --temp-dir
   	MIN 1 MAX 1
   	DESCRIPTION "the directory used for temporary files"
-  	DEFAULT "${oocmake_tmp_dir}/cutil/temp"
+  	DEFAULT "${cmakepp_tmp_dir}/cutil/temp"
   	)
   kv(cache_dir
   	LABELS --cache-dir
   	MIN 1 MAX 1
   	DESCRIPTION "the directory used for caching data"
-  	DEFAULT "${oocmake_tmp_dir}/cutil/cache"
+  	DEFAULT "${cmakepp_tmp_dir}/cutil/cache"
   	)
   kv(bin_dir
     LABELS --bin-dir
@@ -97,11 +97,11 @@ map()
     )
 
 end()
-ans(oocmake_config_definition)
+ans(cmakepp_config_definition)
 
 cd("${CMAKE_SOURCE_DIR}")
 # setup config_function for oocmake
-config_setup("oocmake_config" ${oocmake_config_definition})
+config_setup("cmakepp_config" ${cmakepp_config_definition})
 
 
 ## run all currently enqueued tasks
@@ -118,12 +118,18 @@ endif()
 
 
 ## variables expected by cmake's find_package method
+
+
 set(CMAKEPP_FOUND true)
 
 set(CMAKEPP_VERSION_MAJOR "0")
 set(CMAKEPP_VERSION_MINOR "0")
 set(CMAKEPP_VERSION_PATCH "0")
 set(CMAKEPP_VERSION "${CMAKEPP_VERSION_MAJOR}.${CMAKEPP_VERSION_MINOR}.${CMAKEPP_VERSION_PATCH}")
-set(CMAKEPP_BASE_DIR "${oocmake_base_dir}")
-set(CMAKEPP_BIN_DIR "${oocmake_base_dir}/bin")
-set(CMAKEPP_TMP_DIR "${oocmake_tmp_dir}")
+set(CMAKEPP_BASE_DIR "${cmakepp_base_dir}")
+set(CMAKEPP_BIN_DIR "${cmakepp_base_dir}/bin")
+set(CMAKEPP_TMP_DIR "${cmakepp_tmp_dir}")
+
+
+## setup file
+set(ENV{CMAKEPP_PATH} "${CMAKE_CURRENT_LIST_FILE}")

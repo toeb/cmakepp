@@ -3,6 +3,9 @@
   ## --reference returns the package with the content still pointing to the original content dir
   function(package_source_pull_managed uri)
     set(args ${ARGN})
+
+    uri_coerce(uri)
+
     package_source_resolve_managed("${uri}")
     ans(package_handle)
     if(NOT package_handle)
@@ -11,9 +14,6 @@
 
     list_extract_flag(args --reference)
     ans(reference)
-
-    ## remove index field as it is not of interest to the client
-    map_remove(${package_handle} index)
 
 
     ## if in reference mode copy package_handle content and set new content_dir

@@ -1,4 +1,5 @@
-
+## returns all files which match the specified regex
+## the regex must match the whole filename
 function(archive_match_files archive regex)
   set(args ${ARGN})
 
@@ -17,11 +18,8 @@ function(archive_match_files archive regex)
 
     archive_ls("${archive}")
     ans(files)
-
-    list_regex_match(files "${regex}")
-    ans(files)
-
-
+    string(REGEX MATCHALL "(^|;)(${regex})($|;)" files "${files}")
+    set(files ${files}) # necessary because of leading and trailing ;
   else()
     message(FATAL_ERROR "${archive} unsupported compression: '${types}'")
   endif()
@@ -37,7 +35,6 @@ function(archive_match_files archive regex)
     list_pop_front(files)
     ans(files)
   endif()
-
 
   return_ref(files)
 endfunction()

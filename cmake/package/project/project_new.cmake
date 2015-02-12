@@ -5,7 +5,7 @@
   ## packages
   ## 
   ## it has a remote package source which is queried to install packages
-  ## and a local managed package source (dependency_source) which manages
+  ## and a local managed package source (local) which manages
   ## installed packages
   ##
   function(project_new)

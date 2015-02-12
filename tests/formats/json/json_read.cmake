@@ -1,7 +1,7 @@
 function(test)
 
   return()
-  oocmake_config(base_dir)
+  cmakepp_config(base_dir)
   ans(dir)
 message("tick")
   json3file("${dir}/resources/json.json")

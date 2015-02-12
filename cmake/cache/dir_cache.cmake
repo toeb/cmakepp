@@ -14,7 +14,7 @@
       ans(cache_key)
     endif()
     
-    oocmake_config(temp_dir)
+    cmakepp_config(temp_dir)
     ans(temp_dir)
 
     set(cache_dir "${temp_dir}/dir_cache/${cache_key}")

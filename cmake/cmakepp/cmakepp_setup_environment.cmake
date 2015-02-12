@@ -4,7 +4,7 @@
 ##    cmakepp - commandline interface to cmakepp 
 ##    pkg - package manager command line interface
 function(cmakepp_setup_environment)
-  oocmake_config(base_dir)
+  cmakepp_config(base_dir)
   ans(base_dir)
   
   message(STATUS "creating alias `icmake`")  
@@ -13,8 +13,8 @@ function(cmakepp_setup_environment)
   alias_create("cmakepp" "cmake -P ${base_dir}/cmakepp.cmake")
   message(STATUS "creating alias `pkg`")  
   alias_create("pkg" "cmake -P ${base_dir}/cmakepp.cmake cmakepp_project_cli")
-  message(STATUS "setting CMAKEPP_PATH to ${base_dir} ")
-  shell_env_set(CMAKEPP_PATH "${base_dir}")
+  message(STATUS "setting CMAKEPP_PATH to ${base_dir}/cmakepp.cmake ")
+  shell_env_set(CMAKEPP_PATH "${base_dir}/cmakepp.cmake")
 
 
 endfunction()

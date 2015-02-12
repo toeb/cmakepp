@@ -1,47 +1,39 @@
-## package_source_push_path(<installed package> <~uri> <package_content_copy_args:<args...>?>)
-  function(package_source_push_path package_handle uri)
-    set(args ${ARGN})
-    
-    ## resolve installed package
-    package_handle("${package_handle}")
-    ans(package_handle)
+## (<installed package> <~uri> [--reference] [--consume] <package_content_copy_args:<args...>?>)
+##
+function(package_source_push_path)
+    if("${ARGN}" MATCHES "(.*);=>;?(.*)")
+        set(source_args "${CMAKE_MATCH_1}")
+        set(args "${CMAKE_MATCH_2}")
+    else()
+        set(source_args ${ARGN})
+        set(args)
+    endif()
+    list_pop_front(source_args)
+    ans(source)
+        
 
-    if(NOT package_handle)
-      return()
+    ## get target dir
+    list_pop_front(args)
+    ans(target_dir)
+    if(NOT target_dir)
+        pwd()
+        ans(target_dir)        
     endif()
 
-    ## get package_descriptor and source_dir from package_handle
-    map_tryget(${package_handle} package_descriptor)
-    ans(package_descriptor)
-
-    map_tryget(${package_handle} content_dir)
-    ans(source_dir)
-
-    ## get target_dir
-    uri("${uri}")
-    ans(uri)
-
-    uri_to_localpath("${uri}")
-    ans(target_dir)
-
     path_qualify(target_dir)
-    
 
-    ## copy content to target dir
-    map_tryget("${package_descriptor}" content)
-    ans(content_globbing_expression)
-    cp_content("${source_dir}" "${target_dir}" ${content_globbing_expression})
-    ans(result)
-
-    json_write("${target_dir}/package.cmake" "${package_descriptor}")
+    assign(package_handle = source.pull(${source_args} "${target_dir}"))
 
 
-    ## return the valid target uri
-    uri("${target_dir}")
-    ans(target_uri)
+    if(NOT package_handle)
+        error("could not pull `${source_args}` ")
+        return()
+    endif()
 
-    uri_format(${target_uri})
-    ans(target_uri)
+    if(NOT EXISTS "${target_dir}/package.cmake")
+        assign(package_descriptor = package_handle.package_descriptor)
+        json_write("${target_dir}/package.cmake" "${package_descriptor}")
+    endif()
 
-    return_ref(target_uri)
-  endfunction()
+    return_ref(package_handle)
+endfunction()

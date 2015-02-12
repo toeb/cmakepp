@@ -8,7 +8,7 @@
       ans(target_dir)
       ## copy sample to test dir 
       ## and compile cmakepp to test dir
-      oocmake_config(base_dir)  
+      cmakepp_config(base_dir)  
       ans(base_dir)
       
       glob("${base_dir}/samples/${sample}*")

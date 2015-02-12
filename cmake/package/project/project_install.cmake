@@ -9,30 +9,24 @@
     ans(uri)
     if(NOT uri)
       error("no uri was specified to install")
+      return()
     endif()
 
     uri_coerce(uri)
 
-    ## pull package from remote source to temp directory
-    ## then push it into dependency_source from there
-    ## return if anything did not work
-    path_temp()
-    ans(temp_dir)
-    assign(project_dir = this.project_dir)
-    assign(remote_package = this.remote.pull("${uri}" "${temp_dir}" ${args}))
-    if(NOT remote_package)
-      rm("${temp_dir}")
-      error("remote package could not be pulled: '{uri.input}'" uri temp_dir)
-      return()
-    endif()
-    assign(package_uri = this.dependency_source.push("${remote_package}" ${args}))
-    rm("${temp_dir}")
-    if(NOT package_uri)
-      error("remote package could not pushed into project: '{uri.input}'" uri remote_package)
-      return()
-    endif()
 
-    assign(installed_package_handle = this.dependency_source.resolve("${package_uri}"))
+    ## pull package from remote source to temp directory
+    ## then push it into local from there
+    ## return if anything did not work
+
+    assign(remote = this.remote)
+    assign(local = this.local)
+
+    package_source_transfer(${remote} ${uri} ${args} => ${local})
+    ans(package_uri)
+
+    
+    assign(installed_package_handle = this.local.resolve("${package_uri}"))
 
 
     if(NOT installed_package_handle)

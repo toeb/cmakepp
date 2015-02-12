@@ -8,7 +8,7 @@ function(compile_tool name src)
   checksum_string("${src}")
   ans(chksum)
 
-  oocmake_config(temp_dir)
+  cmakepp_config(temp_dir)
   ans(tempdir)
 
 

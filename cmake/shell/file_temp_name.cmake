@@ -8,7 +8,7 @@
 # id will be varied untikl a file is found which does not exist
 # the complete path will be returned
 function(file_temp_name template)
-  oocmake_config(temp_dir)
+  cmakepp_config(temp_dir)
   ans(temp_dir)
   file_random( "${temp_dir}/${template}")
   ans(rnd)

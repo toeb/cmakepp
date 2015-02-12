@@ -27,7 +27,7 @@ function(test)
 
   ## assert
 
-  assign(installed_packages = project.dependency_source.query(?*))
+  assign(installed_packages = project.local.query(?*))
   assert(NOT installed_packages)
 
 

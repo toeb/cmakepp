@@ -19,6 +19,9 @@
   #
   #
   function(execute)
+    #set(args ${ARGN})
+    # todo - --result --return-code --async --async-wait --show-output
+
     process_start_info(${ARGN})
     ans(processStart)
 

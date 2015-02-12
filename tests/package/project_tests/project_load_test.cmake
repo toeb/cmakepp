@@ -47,7 +47,7 @@ function(test)
   assertf({project.dependency_dir} STREQUAL "${test_dir}/pr1/custom_package_dir")
   assertf({project.config_dir} STREQUAL "${test_dir}/pr1/custom_config_dir")
   assertf({project.content_dir} STREQUAL "${test_dir}/pr1/custom_content_dir")
-  assertf({project.dependency_source.directory} STREQUAL "${test_dir}/pr1/custom_package_dir")
+  assertf({project.local.directory} STREQUAL "${test_dir}/pr1/custom_package_dir")
 
   assertf({context.events_emitted} CONTAINS project_on_begin_load)
   assertf({context.events_emitted} CONTAINS project_on_load)
@@ -73,7 +73,7 @@ function(test)
   ## assert
   assert(success)
   assertf({project.project_dir} STREQUAL "${test_dir}/pr2")
-  assertf({project.dependency_source.directory} STREQUAL "${test_dir}/pr2/packages")
+  assertf({project.local.directory} STREQUAL "${test_dir}/pr2/packages")
 
 
   assertf({context.events_emitted} CONTAINS project_on_begin_load)

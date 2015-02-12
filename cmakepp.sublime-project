@@ -87,6 +87,18 @@
         "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_compile_docs"],
         "encoding": "cp1252"
       }
+    },
+    {
+      "name": "cmake -P",
+      "linux":
+      {
+        "cmd": ["cmake","-P","$file"]
+      },
+      "windows":
+      {
+        "cmd": ["cmake","-P", "$file"],
+        "encoding": "cp1252"
+      }
     }
   ]
 }
