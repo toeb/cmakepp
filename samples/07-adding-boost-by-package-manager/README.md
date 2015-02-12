@@ -4,23 +4,6 @@
 
 
 
-C:/temp/cutil/temp/mktempmXsps/boost;C:/temp/cutil/temp/mktempmXsps/CMakeLists.txt;C:/temp/cutil/temp/mktempmXsps/main.cpp;C:/temp/cutil/temp/mktempmXsps/README.md;C:/temp/cutil/temp/mktempmXsps/README.md.in
-
-
-*CMakeLists.txt*: 
-```cmake
-cmake_minimum_required(VERSION 2.8.12)
-
-include("$ENV{CMAKEPP_PATH}")
-
-
-project(MyProject)
-project_open(. --force)
-
-
-add_executable(myexe main.cpp)
-
-```
 
 
 ```
@@ -44,7 +27,7 @@ add_executable(myexe main.cpp)
 -- Found Subversion: C:/Program Files (x86)/Subversion/bin/svn.exe (found version "1.8.11") 
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktempmXsps/build
+-- Build files have been written to: C:/temp/cutil/temp/mktempitNNL/build
 
 ./build/> cmake --build .
  ...

@@ -26,6 +26,7 @@ Look through the files in the package.  Most functions will be commented and the
 * [Functions](cmake/function/README.md)
 * [Logging Functions](cmake/log/README.md)
 * [Maps - Structured Data in CMake](cmake/map/README.md)
+* [Navigation Functions](cmake/navigation/README.md)
 * [Objects ](cmake/object/README.md)
 * [Package Management](cmake/package/README.md)
 * [User Data](cmake/persistence/README.md)
@@ -59,6 +60,7 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 * [Creating a Compressed Package](samples/04-create-simple-compressed-package/README.md)
 * [Creating and Installing a Package with an Install Hook](samples/05-create-install-simple-package-with-install-script/README.md)
 * [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
+* [Adding Boost to you `CMake` project](samples/07-adding-boost-by-package-manager/README.md)
 
 
 
@@ -154,6 +156,7 @@ I would be very happy If you choose to contribute to `cmakepp`. You can open any
 
 If you want to change something you may send pull requests through github. Normally I will check them quickly and `travis-ci` will build them.  I suggest you run all tests using the sublime project before you create a pull request to see if anything breaks.  (the master branch will have to pass the tests)  
 
+Also if you want to support me financially for all the hardwork - consider donating a couple of $ <a href='https://pledgie.com/campaigns/28347'><img alt='Click here to lend your support to: cmakepp  and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/28347.png?skin_name=chrome' border='0' ></a>
 
 # Developer Guidlines
 
@@ -267,7 +270,7 @@ This is possible by overwriting CMakes default return() function with a macro. I
   "Host":"httpbin.org",
   "User-Agent":"curl/7.16.1"
  },
- "origin":"85.180.184.251",
+ "origin":"87.157.216.75",
  "url":"http://httpbin.org/get?key=value"
 }
 
