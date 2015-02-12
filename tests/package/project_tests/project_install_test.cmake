@@ -29,6 +29,7 @@ function(test)
   assign(installed_packages = proj.local.query("?*"))
 
   assert(installed_packages)
+  
 
 
  

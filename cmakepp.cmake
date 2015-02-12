@@ -52,13 +52,15 @@ function(task_enqueue callable)
   return()
 endfunction()
 
-
+  
 
 ## includes all cmake files of oocmake 
 include("${cmakepp_base_dir}/cmake/core/require.cmake")
 
 require("${cmakepp_base_dir}/cmake/*.cmake")
 
+## include task_enqueue last
+include("${cmakepp_base_dir}/cmake/task/task_enqueue")
 
 ## setup global variables to contain command_line_args
 parse_command_line(command_line_args "${command_line_args}") # parses quoted command line args
