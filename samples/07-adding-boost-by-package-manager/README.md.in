@@ -13,9 +13,8 @@ sample_copy(07)
 
 
 
+
 ```
-./> pkg install ./boost
-@@cmakepp(cmakepp_project_cli install ./boost)
 ./> <% cd(build --create) %>
 ./build/> cmake .. 
 @cmake(..  -Wno-dev -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin)

@@ -15,8 +15,8 @@
 
     event_emit(project_on_package_uninstall ${this} ${installed_package})
 
-
-    assign(success = this.local.delete("${uri}"))
+    assign(package_uri = installed_package.uri)
+    assign(success = this.local.delete("${package_uri}"))
 
 
     return(${success})

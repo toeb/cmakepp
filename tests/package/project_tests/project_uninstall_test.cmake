@@ -23,7 +23,7 @@ function(test)
 
 
   ## act
-  assign(success = project.uninstall(mypkg_0_0_0))
+  assign(success = project.uninstall(?id=mypkg))
 
   ## assert
 

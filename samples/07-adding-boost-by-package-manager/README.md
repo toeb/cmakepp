@@ -7,8 +7,6 @@
 
 
 ```
-./> pkg install ./boost
-@cmakepp(cmakepp_project_cli install ./boost)
 ./> 
 ./build/> cmake .. 
 -- Building for: Visual Studio 12 2013
@@ -27,7 +25,7 @@
 -- Found Subversion: C:/Program Files (x86)/Subversion/bin/svn.exe (found version "1.8.11") 
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktempitNNL/build
+-- Build files have been written to: C:/temp/cutil/temp/mktemplXypC/build
 
 ./build/> cmake --build .
  ...
