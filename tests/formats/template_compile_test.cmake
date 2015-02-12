@@ -1,13 +1,31 @@
 function(test)
 
+  ## this test shows a problem with cmake and template syntax 
+  ## @<identifier>@ is replaced by the variable during string evalutation
+  set(val1 abc)
+  template_run("@set(val1 def)@val1@")
+  ans(res)
+  assert("${res}" STREQUAL "abc")
+  ## however escaping the @ will alleviate the problem
+  set(val1 abc)
+  template_run("@set(val1 def)\@val1@")
+  ans(res)
+  assert("${res}" STREQUAL "def@")
+
+  template_run("@")
+  ans(res)
+  assert("${res}" STREQUAL "@")
+
+
+  set(i 123)
+  template_run("@foreach(i RANGE 1 3)\@i\@endforeach()")
+  ans(res)
+  assert("${res}" STREQUAL 123)
   ## allow storage of code fragment in variable with '<%><varname> ' (space is importand)
   template_run("<%>hello_you template_out(\${hello_you})%>")
   ans(res)
   assert("${res}" STREQUAL "template_out(\${hello_you})")
 
-  template_run("@foreach(i RANGE 1 3)@i@endforeach()")
-  ans(res)
-  assert("${res}" STREQUAL 123)
 
   template_run("@@")
   ans(res)

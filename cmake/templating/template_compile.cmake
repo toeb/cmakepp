@@ -87,8 +87,9 @@ function(template_compile input)
   string(REPLACE "${delimiter_start_escape_code}" "${delimiter_start}"  fragments "${fragments}")
   string(REPLACE "${delimiter_end_escape_code}" "${delimiter_end}"  fragments "${fragments}")
   string(REPLACE "${shorthand_indicator_escape_code}" "${shorthand_indicator}"  fragments "${fragments}")
-
-
+  string(REPLACE "${shorthand_indicator_code}" "${shorthand_indicator}" fragments "${fragments}")
+  
+  
   ref_new()
   ans(result)
   ref_append_string("${result}" "template_begin()")
