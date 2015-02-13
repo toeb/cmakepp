@@ -20,7 +20,6 @@ assert(DEREF "{res.exclude}" STREQUAL "asd")
   assert(DEREF "{res.y}" STREQUAL asd)
   assert(DEREF "{res.z}" STREQUAL bsd)
 
-   #language("${package_dir}/resources/json-language.json")
 
   message("${lang}:'${package_dir}/resources/expr.json'")
   

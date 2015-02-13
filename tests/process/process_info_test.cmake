@@ -8,5 +8,6 @@ function(test)
   process_info(${p})
   ans(info)
 
+
   assert(DEREF {info.pid} STREQUAL {p.pid})
 endfunction()

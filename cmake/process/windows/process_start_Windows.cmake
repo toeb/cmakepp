@@ -103,29 +103,3 @@
   endfunction()
 
 
-## old implementation with wmic
-## does nto handle output and 
-# function(process_start_Windows)
-#   process_start_info(${ARGN})
-#   ans(process_start_info)
-
-#   if(NOT process_start_info)
-#     return()
-#   endif()
-
-#   command_line_to_string(${process_start_info})
-#   ans(command_line)
-  
-#   win32_fork(-exec "${command_line}" -workdir "${cwd}" --result)
-#   ans(exec_result)
-#   scope_import_map(${exec_result})
-#   if(return_code)
-#     json_print(${exec_result})
-#     message(FATAL_ERROR "failed to fork process.  returned code was ${return_code} message:\n ${stdout}  ")
-#   endif()
-
-#   string(REGEX MATCH "[1-9][0-9]*" pid "${stdout}")
-#   set(status running)
-#   map_capture_new(pid process_start_info status)
-#   return_ans()  
-# endfunction()

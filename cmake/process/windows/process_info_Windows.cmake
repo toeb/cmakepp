@@ -24,7 +24,6 @@ function(process_info_Windows handlish)
   ans(res)
 
   map_rename(${res} PID pid)
-
   return_ref(res)
 endfunction()
 
