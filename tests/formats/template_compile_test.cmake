@@ -1,4 +1,7 @@
 function(test)
+
+  obj("{id:1,b:{c:3}}")
+  ans(data)
   template_run("[<%={data.id}%>](<%={data.id}%>)")
   ans(res)
   assert("${res}" STREQUAL "[1](1)")
@@ -54,8 +57,6 @@ function(test)
   ans(res)
   assert("${res}" STREQUAL "<% %>")
 
-  obj("{id:1,b:{c:3}}")
-  ans(data)
 
 
   template_run("

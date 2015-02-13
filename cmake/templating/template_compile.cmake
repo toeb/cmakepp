@@ -99,10 +99,8 @@ function(template_compile input)
     #message("${fragment}")
     # decode brackets and semicolon in fragment
     # now the fragment input is exactly the same as it was in input
-    message("${fragment}")
     string_decode_bracket("${fragment}")
     ans(fragment)
-    message("${fragment}")
 
     string_semicolon_decode("${fragment}")
     ans(fragment)
@@ -146,6 +144,5 @@ function(template_compile input)
 
   ref_get(${result})
   ans(res)
-  message("${res}")
   return_ref(res)
 endfunction()
