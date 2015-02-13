@@ -33,7 +33,6 @@
     map_tryget(${lambda} signature)
     ans(signature) 
     set(source "function(${function_name} ${signature})${capture_code}\n${cmake_source}\nendfunction()")
-    message("${source}")
     eval("${source}")
     map_set(${lambda} cmake_function "${source}")
     map_set(__lambdas_lookup "${hash}" "${lambda}")

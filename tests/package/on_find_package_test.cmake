@@ -7,7 +7,7 @@ function(test)
 
 
 
-  event_addhandler(on_find_package "(a)-> map_append(${context} find_package $a)")
+  event_addhandler(on_find_package "[](a) map_append(${context} find_package {{a}})")
 
   function(test_handler_findpackage)
     if("${ARGN}_" STREQUAL "asdasd_")
@@ -22,7 +22,7 @@ function(test)
   endfunction()
 
   event_addhandler(on_find_package "test_handler_findpackage")
-  event_addhandler(on_find_package "(a)-> map_append(${context} find_package_after $a)")
+  event_addhandler(on_find_package "[](a) map_append(${context} find_package_after {{a}})")
 
 
   ## default handler

@@ -62,7 +62,7 @@ function(test)
   curry3([a;b;c] string_length(/c /b /a) => myfunc(a b c))
   ans(res)
 
-  curry3([a;b;c] "(a)->message($a)" (/c /b /a) => myfunc(a b c))
+  curry3([a;b;c] "[](a)message({{a}})" (/c /b /a) => myfunc(a b c))
   ans(res)
 
   curry3(string_length("a;b;c;d") => myfunc(a b c))

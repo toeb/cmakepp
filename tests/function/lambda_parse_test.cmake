@@ -1,7 +1,7 @@
 function(test)
   message("obsolete")
   return()
-  lambda_parse("(test)->return('{test.lol} {test.lol2}')")
+  lambda_parse("[](test) format('{test.lol} {test.lol2}')")
   ans(res)
   message("${res}")
   function_import("${res}" as mylambda REDEFINE)

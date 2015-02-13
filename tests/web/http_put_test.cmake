@@ -7,7 +7,7 @@ function(http_put_test)
   compress("test.tgz" "myfile.txt")
   http_put("http://httpbin.org/put" --file test.tgz --json)
   ans(res)
-  map_tryget(${res} data)
+  map_tryget(${res} dat
   ans(data)
   fwrite("result.tgz" "${data}")
   ## - does not work because of encoding

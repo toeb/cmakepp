@@ -128,7 +128,7 @@ function(test)
   assign(res = uut1.mymethod(876))
   assert(${res} EQUALS 123 321 876)
 
-  assign(res = "()->return(100)"())
+  assign(res = "[]()return(100)"())
   assert(${res} EQUALS 100)
 
   assign(res = uut2.func())
