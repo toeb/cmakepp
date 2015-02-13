@@ -8,7 +8,7 @@ function(alias_list)
   file_extended_glob("${path}" "*.bat" "!cps.*" "!cutil.*")
   ans(cmds)
   set(theRegex "([^\\/])+\\.bat")
-  list_select(cmds "(it)-> regex_search($it $theRegex 1)")
+  list_select(cmds "[](it)regex_search({{it}} {{theRegex}})")
   ans(cmds)
   string(REPLACE ".bat" "" cmds "${cmds}")
 

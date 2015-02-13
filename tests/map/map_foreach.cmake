@@ -13,13 +13,13 @@ function(test)
 
   ref_new()
   ans(myref)
-  map_foreach("${map}" "(key val)->ref_append($myref $key $val)")
+  map_foreach("${map}" "[](key val)ref_append({{myref}} {{key}} {{val}})")
   ref_get(${myref})
   ans(vals)
 
   assert(EQUALS ${vals} a 1 b 2 c 3)
 
-  map_foreach("" "(k v)-> ")
+  map_foreach("" "[]() ")
 
   
 

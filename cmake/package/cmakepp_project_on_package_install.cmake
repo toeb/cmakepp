@@ -13,5 +13,5 @@ endfunction()
 ## register listener for the project_on_package_install event 
 ## which directly after a package is installed in a project
 ## this code is executed as soon as cmakepp has finisehd loading
-task_enqueue("()->event_addhandler(project_on_package_install cmakepp_project_on_package_install)")
+task_enqueue("[]()event_addhandler(project_on_package_install cmakepp_project_on_package_install)")
 

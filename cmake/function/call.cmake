@@ -50,6 +50,12 @@
 
     endif()
 
+    lambda2_tryimport("${__function_call_func}" __function_call_import)
+    ans(success)
+    if(success)
+      __function_call_import(${__function_call_args})
+      return_ans()
+    endif()
 
 
     lambda_isvalid("${__function_call_func}")      

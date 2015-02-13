@@ -10,8 +10,6 @@ function(list_remove_at __list_remove_at_lst)
       ans(res)
       list(APPEND args ${res})
   endforeach()
-  #list_select("${__list_remove_at_lst}" "(idx)->list_normalize_index($__list_remove_at_lst $idx)")
-  #ans(args)
 
 
 

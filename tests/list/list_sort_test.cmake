@@ -4,16 +4,16 @@ function(test)
   set(lstC)
 
 
-  list_sort(lstA "(lhs rhs)-> return_math(\"$lhs - $rhs\")")
+  list_sort(lstA "[](lhs rhs)return_math('{{lhs}} - {{rhs}}')")
   ans(res)
   assert(${res} EQUALS 9 8 7 6 5 4 3 2 1)
 
-  list_sort(lstB "(lhs rhs)-> return_math(\"$lhs - $rhs\")")
+  list_sort(lstB "[](lhs rhs)return_math('{{lhs}} - {{rhs}}')")
   ans(res)
   assert(${res} EQUALS 1)
 
 
-  list_sort(lstC "(lhs rhs)-> return_math(\"$lhs - $rhs\")")
+  list_sort(lstC "[](lhs rhs)return_math('{{lhs}} - {{rhs}}')")
   ans(res)
   assert(${res} ISNULL)
 

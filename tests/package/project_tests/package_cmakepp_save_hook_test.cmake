@@ -4,7 +4,7 @@ function(test)
   map_new()
   ans(context)
   
-  set(on_save_hook "(a b)->map_append(${context} hook_called $a $b)")
+  set(on_save_hook "[](a b)map_append(${context} hook_called {{a}} {{b}})")
 
   fwrite_data("pkg1/package.cmake" "{
     cmakepp:{
@@ -35,7 +35,7 @@ function(test)
   map_new()
   ans(context)
   
-  set(on_save_hook "(a b)->map_append(${context} hook_called $a $b)")
+  set(on_save_hook "[](a b)map_append(${context} hook_called {{a}} {{b}})")
 
   fwrite_data("pkg1/package.cmake" "{
     cmakepp:{

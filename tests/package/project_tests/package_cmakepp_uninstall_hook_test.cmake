@@ -2,7 +2,7 @@ function(test)
   map_new()
   ans(map)
 
-  set(hook_callback "(a b)->map_append(${map} called $a $b)")
+  set(hook_callback "[](a b)map_append(${map} called {{a}} {{b}})")
   ## create a package with an uninstall hook that registers
   fwrite_data("pkg1/package.cmake" "{cmakepp:{hooks:{on_uninstall:$hook_callback}}}" --json)
 

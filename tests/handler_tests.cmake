@@ -36,7 +36,7 @@ function(test)
 
 
   ## on the fly handler
-  handler_execute("(req res)-> map_set($res output yaaay)" "{}")
+  handler_execute("[](req res)map_set({{res}} output yaaay)" "{}")
   ans(res)
   assert_matches("{output:'yaaay'}" res)
 

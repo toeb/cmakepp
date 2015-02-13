@@ -19,4 +19,4 @@ endfunction()
 
 ## register listener for the project_on_package_load event 
 ## as soon as cmakepp loads
-task_enqueue("()->event_addhandler(project_on_package_save cmakepp_project_on_package_save)")
+task_enqueue("[]()event_addhandler(project_on_package_save cmakepp_project_on_package_save)")

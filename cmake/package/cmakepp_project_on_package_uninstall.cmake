@@ -12,4 +12,4 @@ endfunction()
 
 
 ## register listener for the project_on_package_uninstall event 
-task_enqueue("()->event_addhandler(project_on_package_uninstall cmakepp_project_on_package_uninstall)")
+task_enqueue("[]()event_addhandler(project_on_package_uninstall cmakepp_project_on_package_uninstall)")

@@ -82,15 +82,15 @@ function(test)
   assert("${res}" STREQUAL "abab")
 
   # lambda function
-  call("()->message(hello)"())
+  call("[]()message(hello)"())
 
   # 
-  call("()->return(muuu)"())
+  call("[]()return(muuu)"())
   ans(res)
   assert("${res}" STREQUAL "muuu")
 
   # 
-  set(myfuncyvar "()->return(mewto)")
+  set(myfuncyvar "[]()return(mewto)")
   call(myfuncyvar())
   ans(res)
   assert("${res}" STREQUAL "mewto")
@@ -107,7 +107,7 @@ function(test)
 
 
 
-  nav(my.test.object "()->return(mewfour)")
+  nav(my.test.object "[]()return(mewfour)")
   call(my.test.object())
   ans(res)
   assert("${res}" STREQUAL "mewfour")
