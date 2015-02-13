@@ -6,7 +6,7 @@ function(test)
   ## event handler protocols all events fired
   map_new()
   ans(context)
-  event_addhandler(on_event "(name)->map_append(${context} events_emitted $name)")
+  event_addhandler(on_event "[](name) map_append(${context} events_emitted {{name}})")
 
   ### load default non existing project
 

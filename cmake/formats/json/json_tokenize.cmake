@@ -1,6 +1,8 @@
 function(json_tokenize result json)
+
 	set(regex "(\\{|\\}|:|,|\\[|\\]|\"(\\\\.|[^\"])*\")")
 	string(REGEX MATCHALL "${regex}" matches "${json}")
+
 
 	# replace brackets with angular brackets because
 	# normal brackes are not handled properly by cmake

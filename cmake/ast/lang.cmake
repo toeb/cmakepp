@@ -77,7 +77,8 @@
     # call curried function - note that context is available to be modified
     set(func_call "${func}(${arguments_string})")
  
-   # message("lang: target '${target}'  func call ${func_call}")
+    #message("lang: target '${target}'  func call ${func_call}")
+
    set_ans("")
     eval("${func_call}")
     ans(res)    

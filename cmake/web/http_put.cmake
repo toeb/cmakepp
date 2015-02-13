@@ -112,7 +112,6 @@ function(http_put uri)
 	)
 	## parse http client status
 	list_extract(client_result client_status client_message)
-
 	if(EXISTS "${temp_file}")
 		rm("${temp_file}")
 	endif()

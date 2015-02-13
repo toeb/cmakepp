@@ -1,10 +1,10 @@
-#‡†
+#‡${semicolon_code}
   function(expr_assign_lvalue lvalue rvalue scope)
     message("assigning ${lvalue} = ${rvalue}")
 
     set(regex_identifier "[a-zA-Z0-9-_]+")
-
-    string(REPLACE ";" "†" lvalue "${lvalue}")
+    string_codes()
+    string(REPLACE ";" "${semicolon_code}" lvalue "${lvalue}")
     
 
     if(NOT "${first_char}"  STREQUAL "[")
@@ -29,7 +29,7 @@
       list(APPEND lvalue "${split}")
     endforeach()
     string(REPLACE ";" "" lvalue "${lvalue}")
-    string(REPLACE "†" ";" lvalue "${lvalue}")
+    string(REPLACE "${semicolon_code}" ";" lvalue "${lvalue}")
     string(REPLACE "." ";" lvalue "${lvalue}")
     string(REPLACE "[" ";" lvalue "${lvalue}")
     string(REPLACE "]" "" lvalue "${lvalue}") 

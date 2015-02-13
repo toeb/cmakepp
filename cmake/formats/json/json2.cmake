@@ -8,10 +8,8 @@ function(json2 input)
     checksum_string("${input}")   
     ans(ck)
     file_cache_return_hit("${ck}")
-
     ref_get(json2_language_definition)
     ans(lang)
-
     map_new()
     ans(ctx)
     map_set(${ctx} input "${input}")
@@ -19,6 +17,7 @@ function(json2 input)
     obj_setprototype(${ctx} "${lang}")
 
     #lang2(output json2 input "${input}" def "json")
+
     lang(output ${ctx})
     ans(res)
     file_cache_update("${ck}" ${res})
