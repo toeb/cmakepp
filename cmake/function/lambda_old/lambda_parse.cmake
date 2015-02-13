@@ -6,6 +6,7 @@
 # instead of ${var} syntax use $var for variables
 # use {expr} for evaluating expressions
 function(lambda_parse code)
+  message(WARNING "old lambda is deprecated ")
   string(REPLACE "'" "\"" code "${code}")
   string(REPLACE ");" ")\n" code "${code}")
 

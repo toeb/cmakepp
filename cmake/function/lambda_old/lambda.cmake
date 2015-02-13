@@ -2,6 +2,7 @@
 
 #converts a lambda expression into a valid function string
 function(lambda result expression)
+	
 	string(FIND "${expression}" "function" isfunc)
 	
 	if("${isfunc}" GREATER "-1")

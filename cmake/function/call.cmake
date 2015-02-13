@@ -13,11 +13,12 @@
     return_reset()
     set(__function_call_args ${ARGN})
 
-    list_pop_back( __function_call_args)
+    list_pop_back(__function_call_args)
     ans(__function_call_paren_close)
     
     if(NOT "_${__function_call_paren_open}${__function_call_paren_close}" STREQUAL "_()")
-      message(WARNING "expected opening and closing parentheses for function '${ARGN}'")
+      message("open ${__function_call_paren_open} close ${__function_call_paren_close}")
+      message(WARNING "expected opening and closing parentheses for function '${__function_call_func}' '${ARGN}' '${__function_call_args}'")
     endif()
 
     if(COMMAND "${__function_call_func}")

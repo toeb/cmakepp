@@ -1,5 +1,18 @@
 function(test)
 
+  call("[](it)return({{it}})"(3))
+  ans(res)
+  assert("${res}" STREQUAL "3")
+
+  call("[](it)set(abc {{it}});return({{abc}})"(3))
+  ans(res)
+  assert("${res}" STREQUAL "3")
+
+  rcall(res2 = "[](it)set(abc {{it}});return({{abc}})"(3))
+  assert("${res2}" STREQUAL "3")
+
+
+return()
   function_import("[]()return(3)" as asdldigger)
 
   asdldigger()

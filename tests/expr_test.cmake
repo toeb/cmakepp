@@ -109,7 +109,7 @@ assert(DEREF "{res.exclude}" STREQUAL "asd")
 
 
   # complicated sample
-  script(" {a:{b:{c:'()->return($this)',d:'hello'}}}.a.b.c().d")
+  script(" {a:{b:{c:'[]()return({{this}})',d:'hello'}}}.a.b.c().d")
   ans(res)
   assert("${res}" STREQUAL "hello")
 
@@ -179,7 +179,7 @@ assert(DEREF "{res.exclude}" STREQUAL "asd")
   assert("${res}" STREQUAL "9876")
 
   # call
-  set(callable " (a b)->return('$a$b')")
+  set(callable "[](a b)return('{{a}}{{b}}')")
   script(" $callable(1,2)")
   ans(res)
   assert("${res}" STREQUAL "12")

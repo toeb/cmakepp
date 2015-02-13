@@ -18,16 +18,15 @@ function(test)
   assert(${res} ISNULL)
 
 
-   # foreach(i RANGE 1 100)
-   #   string(RANDOM LENGTH 3 ALPHABET "1234567890" r)
-   #   list(APPEND lstA ${r})
-   # endforeach()
+    foreach(i RANGE 1 100)
+      string(RANDOM LENGTH 3 ALPHABET "1234567890" r)
+      list(APPEND lstA ${r})
+    endforeach()
 
-
-   # timer_start(timer)
-   # list_sort(lstA "(lhs rhs)-> return_math(\"$rhs - $lhs\")")
-   # ans(res)
-   # timer_print_elapsed(timer)
+    timer_start(timer)
+    list_sort(lstA "[](lhs rhs)return_math('{{rhs}} - {{lhs}}')")
+    ans(res)
+    timer_print_elapsed(timer)
 
 
 

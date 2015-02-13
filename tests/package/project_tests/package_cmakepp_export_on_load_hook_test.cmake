@@ -10,7 +10,7 @@ function(test)
     cmakepp:{
       export:['cmake/**.cmake', '!cmake/pkg1_func3.cmake'],
       hooks:{
-        on_load:'(a1 a2)-> map_set(${context} on_load_called true $a1 $a2)'
+        on_load:'[](a1 a2) map_set(${context} on_load_called true {{a1}} {{a2}})'
       }
     }
   }" --json)
