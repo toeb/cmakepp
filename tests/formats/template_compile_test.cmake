@@ -1,4 +1,9 @@
 function(test)
+  template_run("[<%={data.id}%>](<%={data.id}%>)")
+  ans(res)
+  assert("${res}" STREQUAL "[1](1)")
+
+
 
   ## this test shows a problem with cmake and template syntax 
   ## @<identifier>@ is replaced by the variable during string evalutation
@@ -52,9 +57,6 @@ function(test)
   obj("{id:1,b:{c:3}}")
   ans(data)
 
-  template_run("[<%={data.id}%>](<%={data.id}%>)")
-  ans(res)
-  assert("${res}" STREQUAL "[1](1)")
 
   template_run("
     Hello My Friend
