@@ -26,7 +26,7 @@ function(test)
 
   string_encode_list("a")
   ans(res)
-  assert(COUNT 1 ${res})
+  assert(COUNT 1 ${res}) 
 
   string_decode_list("${res}")
   ans(res)
