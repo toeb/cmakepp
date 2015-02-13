@@ -15,7 +15,7 @@
 function(string_decode_list str)
   string_codes()
   eval("
-    function(string_decode_list str)
+  function(string_decode_list str)
     string(REPLACE \"${bracket_open_code}\" \"[\"  str \"\${str}\")
     string(REPLACE \"${bracket_close_code}\" \"]\"  str \"\${str}\")
     string(REPLACE \"${semicolon_code}\" \";\"  str \"\${str}\")
