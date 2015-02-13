@@ -9,10 +9,8 @@
     set(host_port "${input}")
 
 
-
     string_take_regex_replace(input "${dns_host_regex}" "\\1")
     ans(host)
-
 
     string_take_regex(input "${dns_port_regex}")
     ans(port)

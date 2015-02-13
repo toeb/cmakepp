@@ -30,15 +30,16 @@ endfunction()
 
 
 ## fasterversion
-function(string_take_regex str_name regex)
-  if("${${str_name}}" MATCHES "^(${regex})")
-    set(__ans "${CMAKE_MATCH_1}" PARENT_SCOPE)
-    string(REGEX REPLACE "^(${regex})" "" "${str_name}" "${${str_name}}")
-    set(${str_name} "${${str_name}}" PARENT_SCOPE)    
-  else()
-    set(__ans PARENT_SCOPE)
-  endif()
-endfunction()
+## also does not work.... 
+# function(string_take_regex str_name regex)
+#   if("${${str_name}}" MATCHES "^(${regex})")
+#     set(__ans "${CMAKE_MATCH_1}" PARENT_SCOPE)
+#     string(REGEX REPLACE "^(${regex})" "" "${str_name}" "${${str_name}}")
+#     set(${str_name} "${${str_name}}" PARENT_SCOPE)    
+#   else()
+#     set(__ans PARENT_SCOPE)
+#   endif()
+# endfunction()
 
 
 

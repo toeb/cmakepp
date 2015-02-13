@@ -38,7 +38,7 @@ test_uri("../asd/../../bsd/csd/dsd/../../esd/./fsd" "{normalized_segments:['..',
   ## test dns fields
 
   test_uri("//becker.tobi:asdasd@192.168.0.1:2313/path/to/nirvana" "{password:'asdasd', user_name:'becker.tobi', ip:'192.168.0.1', port:'2313'}") 
-
+  
 
   ## test authority
   test_uri("test" "{authority:null}")
