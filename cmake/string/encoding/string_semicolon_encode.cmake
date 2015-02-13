@@ -16,7 +16,7 @@
     string_codes()
     eval("
       function(string_semicolon_encode str)
-        string(REPLACE \"\;\" \"${semicolon_code}\" str \"\${str}\" )
+        string(REPLACE \";\" \"${semicolon_code}\" str \"\${str}\" )
         set(__ans \"\${str}\" PARENT_SCOPE)
       endfunction()
     ")
