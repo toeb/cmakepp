@@ -43,6 +43,7 @@ function(function_string_get func)
 	is_function_cmake(is_cmake_func "${func}")
 
 	if(is_cmake_func)
+		## todo: just return nothing as func is already correctly defined...
 		set(source "macro(${func})\n ${func}(\${ARGN})\nendmacro()")
 		return_ref(source)		
 		return()

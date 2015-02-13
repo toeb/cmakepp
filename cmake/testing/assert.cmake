@@ -22,7 +22,7 @@
 
 function(assert)
 	# parse arguments
-	set(options EQUALS AREEQUAL ARE_EQUAL ACCU SILENT DEREF INCONCLUSIVE ISNULL ISNOTNULL)
+	set(options == EQUALS AREEQUAL ARE_EQUAL ACCU SILENT DEREF INCONCLUSIVE ISNULL ISNOTNULL)
 	set(oneValueArgs  COUNT MESSAGE RESULT MESSAGE_TYPE CONTAINS MISSING MATCH MAP_MATCHES FILE_CONTAINS)
 	set(multiValueArgs CALL PREDICATE )
 	set(prefix)
@@ -88,6 +88,7 @@ function(assert)
 			set(_MESSAGE "assertion inconclusive")
 		endif()
 		set(result true)
+
 	elseif(_MATCH)
 		if(NOT _MESSAGE)
 			set(_MESSAGE "assertion failed: input does not match '${_MATCH}'")

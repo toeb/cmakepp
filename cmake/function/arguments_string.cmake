@@ -1,0 +1,18 @@
+
+  macro(arguments_string __arg_count)
+    set(__arg_res)   
+    if(${__arg_count} GREATER 0)
+      math(EXPR __last_arg_index "${__arg_count} - 1")
+      foreach(i RANGE 0 ${__last_arg_index})
+        set(__current "${ARGV${i}}")
+        if("${__current}_" MATCHES "(^_$)|(;)|(\\\")")
+          set(__current "\"${__current}\"")
+        endif()
+        set(__arg_res "${__arg_res} ${__current}")
+      endforeach()
+      string(SUBSTRING "${__arg_res}" "1" "-1" __ans)  
+    else()
+      set(__ans)
+    endif()
+  endmacro()
+  

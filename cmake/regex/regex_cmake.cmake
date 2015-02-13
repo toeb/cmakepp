@@ -1,20 +1,46 @@
 macro(regex_cmake)
+#http://www.cmake.org/cmake/help/v3.0/manual/cmake-language.7.html#grammar-token-regex_cmake_escape_sequence
+  set(regex_cmake_newline "\n")
+  set(regex_cmake_space_chars " \t")
+  set(regex_cmake_space "[${regex_cmake_space_chars}]+")
+  set(regex_cmake_line_comment "#([^${regex_cmake_newline}]*)")
+  set(regex_cmake_line_comment.comment CMAKE_MATCH_1)
 
-  # set(newline "\n")
-  # set(space "[ \t]+")
-  # set(line_comment "")
+  set(regex_cmake_line_ending "(${regex_cmake_line_comment})?(${regex_cmake_newline})")
 
-  # set(line_ending "(${line_comment})?(${newline})")
+  set(regex_cmake_separation "(${regex_cmake_space})|(${regex_cmake_line_ending})")
 
-  # set(separation "(${space})|(${line_ending})")
+  set(regex_cmake_identifier "[A-Za-z_][A-Za-z0-9_]*")
 
-  # set(identifier "[A-Za-z_][A-Za-z0-9_]*")
-  # set(argument)
-  # set(separated_arguments "((${separation})+(${argument})?)|")
-  # set(arguments "(${argument})?(${separated_arguments})*")
-  # set(command_invocation "(${space})*(${identifier})(${space})*\\((${arguments})\\)")
-  # set(separated_arguments)
-  # set(file_element "(${command_invocation}${line_ending})|((${bracket_comment}|${space})*|(${line_ending}))")
-  # set(file = "(${file_element})*")
+  set(regex_cmake_bracket_open "[(=+)[")
+  set(regex_cmake_bracket_close "](=+)]")
+  set(regex_cmake_bracket_content ".*")
+  set(regex_cmake_bracket_argument "${regex_cmake_bracket_open}${regex_cmake_bracket_content}${regex_cmake_bracket_close}")
+  
+
+
+  set(regex_cmake_backslash "\\\\")
+
+  #set(escape_identity "(\\\\()|\\\\)|\\\\#|\\\\\"|\\\\ |)
+  #set(escape_encoded "\\\\t|\\\\r|\\\\n")
+  set(regex_cmake_escape_semicolon "\\\;")
+  set(regex_cmake_escape_sequence "(${escape_identity})|(${escape_encoded})|(${regex_cmake_escape_semicolon})")
+  set(regex_cmake_quoted_continuation "\\\\\n")
+  set(regex_cmake_quoted_element "([^\"${regex_cmake_backslash}])|(${regex_cmake_escape_sequence})|(${regex_cmake_quoted_continuation})")
+  set(regex_cmake_quoted_argument "\"()\"")
+
+  set(regex_cmake_argument "${regex_cmake_bracket_argument}|${regex_cmake_quoted_argument}|${unquoted_argument}")
+  set(regex_cmake_separated_arguments "((${regex_cmake_separation})+(${regex_cmake_argument})?)|")
+  set(regex_cmake_arguments "(${regex_cmake_argument})?(${regex_cmake_separated_arguments})*")
+
+  set(regex_cmake_argument_string ".*")
+  set(regex_cmake_command_invocation "(${regex_cmake_space})*(${regex_cmake_identifier})(${regex_cmake_space})*\\((${regex_cmake_argument_string})\\)")
+  set(regex_cmake_command_invocation.regex_cmake_identifier CMAKE_MATCH_2)
+  set(regex_cmake_command_invocation.arguments CMAKE_MATCH_4)
+
+  set(regex_cmake_separated_arguments)
+  set(regex_cmake_file_element "(${regex_cmake_command_invocation}${regex_cmake_line_ending})|((${bracket_comment}|${regex_cmake_space})*|(${regex_cmake_line_ending}))")
+  set(regex_cmake_file "(${regex_cmake_file_element})*")
+
 
 endmacro()

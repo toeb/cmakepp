@@ -7,6 +7,7 @@ function(event_new name)
   ans(event)
 
   map_set(${event} name "${name}")
+  
   map_set(${events} "${name}" ${event})
   
   return(${event})  

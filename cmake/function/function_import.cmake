@@ -18,8 +18,6 @@ function(function_import callable)
   endif()
 
 
-  function_string_get("${callable}")
-  ans(function_string)
 
 
 
@@ -41,6 +39,18 @@ function(function_import callable)
     endif()
     message(FATAL_ERROR "cannot import '${callable}' as '${function_name}' because it already exists")
   endif()
+
+
+  lambda2_tryimport("${callable}" "${function_name}")
+  ans(res)
+  if(res)
+    return_ref(function_name)
+  endif()
+
+
+  function_string_get("${callable}")
+  ans(function_string)
+  
   function_string_rename("${function_string}" "${function_name}")
   ans(function_string)
   function_string_import("${function_string}")
