@@ -1,5 +1,4 @@
 function(test)
-
   obj("{id:1,b:{c:3}}")
   ans(data)
   template_run("[<%={data.id}%>](<%={data.id}%>)")

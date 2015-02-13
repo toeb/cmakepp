@@ -24,7 +24,7 @@ function(test_execute test)
   call("${test}"())
   
   set(time)
-  timer_elapsed("test duration")  
+  timer_elapsed("test duration")
   ans(time)
   popd()
 
