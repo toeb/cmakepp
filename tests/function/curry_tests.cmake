@@ -1,4 +1,43 @@
 function(test)
+  curry3(() => invocation_argument_string)
+  ans(res)
+  call("${res}"(hello you dude))
+  ans(res)
+  assert("${res}" STREQUAL "hello you dude")
+
+  curry3(() => invocation_argument_string(asd /1))
+  ans(res)
+  call("${res}"(bsd csd dsd))
+  ans(res)
+  assert("${res}" STREQUAL "asd csd")
+
+
+
+  curry3(abc => invocation_argument_string)
+  assert(COMMAND abc)
+  curry3(abc2() => invocation_argument_string)
+  assert(COMMAND abc2)
+  curry3(abc3(a) => invocation_argument_string)
+  assert(COMMAND abc3)
+  curry3(abc4(a b) => invocation_argument_string)
+  assert(COMMAND abc3)
+  curry3(invocation_argument_string)
+  ans(res)
+  assert(res)
+  call("${res}"(hello))
+  ans(res)
+  assert("${res}" STREQUAL "hello")
+  curry3(=> invocation_argument_string)
+  ans(res)
+  call("${res}"(hello you))
+  ans(res)
+  assert("${res}" STREQUAL "hello you")
+  
+  return()
+
+
+  return()
+
   curry3(() => ref_setnew("/0"))
   ans(res)
   assert(res)
@@ -52,12 +91,6 @@ function(test)
   timer_print_elapsed(curry_compile_100)
 
 
-  timer_start(curry_compile_100)
-
-  foreach(i RANGE 0 100)
-      curry(invocation_argument_string(/2 33 /1 44) as myfunc)
-  endforeach()
-  timer_print_elapsed(curry_compile_100)
 
   return()
 
