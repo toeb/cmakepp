@@ -35,13 +35,11 @@ assert("${res}" STREQUAL "1234")
 
 
   # test fails on cmake 3.0.1  ...
-  if(false)
-    curry3(() => funcA(/0 ] [))
-    ans(res)
-    call(${res}(1))
-    ans(res)
-    assert("${res}" STREQUAL "1][")
-endif()
+    # curry3(() => funcA(/0 ] [)) # because this line is invalid cmake syntax...
+    # ans(res)
+    # call(${res}(1))
+    # ans(res)
+    # assert("${res}" STREQUAL "1][")
 
 
 endfunction()
