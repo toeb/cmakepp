@@ -3,13 +3,13 @@
   "phases":[
     {
       "name":"parse",
-      "function":"parse_string(/1 /2 /3 /4 /5)",
+      "function":"parse_string(/0 /1 /2 /3 /4)",
       "input":["input_ref", "def" ,"definitions","parsers","global"],
       "output":["output"]
     },
     {
       "name":"create input ref",
-      "function":"ref_setnew(/1)",
+      "function":"ref_setnew(/0)",
       "input":["input"],
       "output":["input_ref"]
     }

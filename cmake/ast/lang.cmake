@@ -54,9 +54,16 @@
     # handle function call
     map_tryget("${current_target}" function)
     ans(func)
+    if("${func}" MATCHES "(.*)\\(([^\\)]*)\\)$" )
+        set(func "${CMAKE_MATCH_1}")
+        set(arg_assignments "${CMAKE_MATCH_2}")
+        string(REPLACE " " ";" arg_assignments "${arg_assignments}")
+    else()
+        message(FATAL_ERROR "failed to parse targets function")
+    endif()
 
     # curry function to specified arguments
-    curry2("${func}")
+    curry3(() => "${func}"(${arg_assignments}))
     ans(func)
 
     # compile argument string
@@ -78,7 +85,6 @@
     set(func_call "${func}(${arguments_string})")
  
     #message("lang: target '${target}'  func call ${func_call}")
-
    set_ans("")
     eval("${func_call}")
     ans(res)    

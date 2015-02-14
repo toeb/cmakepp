@@ -1,4 +1,7 @@
 function(test)
+  curry3(() => ref_setnew("/0"))
+  ans(res)
+  assert(res)
 
   curry3(invocation_argument_string)
   ans(res)

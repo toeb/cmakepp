@@ -3,7 +3,7 @@
   "phases":[
     {
       "name":"tokenize",
-      "function":"token_stream_new(/1 /2)",
+      "function":"token_stream_new(/0 /1)",
       "input":[
         "global",
         "str"
@@ -14,7 +14,7 @@
     },
     {
       "name":"parse",
-      "function":"ast_parse(/1 /2 /3 /4 /5)",
+      "function":"ast_parse(/0 /1 /2 /3 /4)",
       "input":[
         "tokens",
         "root_definition",
@@ -28,7 +28,7 @@
     },
     {
       "name":"compile",
-      "function":"ast_eval(/1 /2 /3 /4)",
+      "function":"ast_eval(/0 /1 /2 /3)",
       "input":[
         "ast",
         "context",

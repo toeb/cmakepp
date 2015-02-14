@@ -59,15 +59,6 @@
     endif()
 
 
-    lambda_isvalid("${__function_call_func}")      
-    ans(is_lambda)
-    if(is_lambda)
-      lambda_import("${__function_call_func}" __function_call_import)
-      __function_call_import(${__function_call_args})
-      return_ans()
-    endif()
-
-
     if(DEFINED "${__function_call_func}")
       call("${__function_call_func}"(${__function_call_args}))
       return_ans()

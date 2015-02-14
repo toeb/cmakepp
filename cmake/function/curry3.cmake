@@ -12,8 +12,7 @@ function(curry_compile_encoded_list out_func)
     set(invocation "${CMAKE_MATCH_2}")
   else()
     set(invocation "${arguments}")
-    function_new()
-    ans(definition)
+    set(definition)
   endif()
 
   list_peek_front(invocation)
@@ -60,11 +59,14 @@ function(curry_compile_encoded_list out_func)
     set(definition_name "${CMAKE_MATCH_1}")
     set(definition_args )
   elseif("${definition}" MATCHES "^\;?\\(;(.*);\\)")
-    function_new()
-    ans(definition_name)
+    set(definition_name)
     set(definition_args "${CMAKE_MATCH_1}")
   endif()
 
+  if(NOT definition_name)
+    function_new()
+    ans(definition_name)
+  endif()
 
 
 
