@@ -35,7 +35,7 @@ function(event_emit event)
     ## 
     map_tryget(${event} handlers)
     ans(handlers)
-    list(REMOVE_ITEM handlers ${previous_handlers} "")
+    list_remove(handlers ${previous_handlers} "")
     list(APPEND previous_handlers ${handlers})
 
     list_length(handlers)
