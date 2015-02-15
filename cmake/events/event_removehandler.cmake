@@ -1,4 +1,7 @@
-# removes the specified handler from the event idenfied by event_id
+## `(<event handler>)-><bool>`
+##
+## removes the specified handler from the event idenfied by event_id
+## returns true if the handler was removed
 function(event_removehandler event handler)
 
   event("${event}")

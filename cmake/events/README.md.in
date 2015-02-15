@@ -37,3 +37,17 @@ assert(EQUALS ${result} answer1 "i am an argument")
 * `event_removehandler(<event id> <callable>)` removes the specified event handler from the handler list (it is no longer invoked when event is emitted)
 * `event_emit(<event id> [arg ...]) -> any[]` invokes the event identified by `<event id>` calls every handler passing along the argument list. every eventhandler's return value is concatenated and returned.  It is possible to register event handlers during call of the event itself the emit routine continues as long as their are uncalled registered event handlers but does not call them twice.
 * ... (functions for dynamic events, access to all available events)
+
+
+
+<%
+    assign(function_files = glob("**.cmake" --relative))
+%>
+### Function List
+
+<%= markdown_template_function_list(${function_files}) %>
+
+
+### Function Descriptions
+
+<%= markdown_template_function_descriptions(${function_files}) %>

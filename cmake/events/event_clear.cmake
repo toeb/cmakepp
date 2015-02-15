@@ -1,13 +1,15 @@
+## `(<~event>)-><void>`
+##
 ## removes all handlers from the specified event
-function(event_clear event_name)
-  event_get("${event_name}")
+function(event_clear event)
+  event_get("${event}")
   ans(event)
 
-  event_handlers("${event_name}")
+  event_handlers("${event}")
   ans(handlers)
 
   foreach(handler ${handlers})
-    event_removehandler("${event_name}" "${handler}")
+    event_removehandler("${event}" "${handler}")
   endforeach()  
 
   return()

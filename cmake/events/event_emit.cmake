@@ -1,10 +1,13 @@
-## event_emit
+## `(<~event> <args:<any...>>)-><any...>`
 ##
-## emits the specified event 
-## calls all registered event handlers for event '<name>'
+## emits the specified event. goes throug all event handlers registered to
+## this event and 
 ## if event handlers are added during an event they will be called as well
+##
 ## if a event calls event_cancel() 
 ## all further event handlers are disregarded
+##
+## returns the accumulated result of the single event handlers
 function(event_emit event)
   is_event("${event}")
   ans(is_event)

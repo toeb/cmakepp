@@ -1,4 +1,3 @@
-
     function(markdown_include_sourcecode path)
         fread("${path}")
         ans(res)

@@ -1,6 +1,7 @@
-## event_addhandler()
+## `event_addhandler(<~event> <~callable>)-><event handler>`
 ##
-## adds an event handler to the event specified by name
+## adds an event handler to the specified event. returns an `<event handler>`
+## which can be used to remove the handler from the event.
 ##
 function(event_addhandler event handler)
   event("${event}")

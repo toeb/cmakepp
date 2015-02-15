@@ -1,8 +1,8 @@
-## event_handlers
+## `(<event>)-><event handler...>`
 ##
-## returns the handlers registered for event
-function(event_handlers event_name)
-  event_get("${event_name}")
+## returns all handlers registered for the event
+function(event_handlers event)
+  event_get("${event}")
   ans(event)
 
   if(NOT event)

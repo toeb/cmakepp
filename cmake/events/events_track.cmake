@@ -1,4 +1,7 @@
-## sts up a function which listens only to the specified events
+## `(<event-id...>)-><event tracker>`
+##
+## sets up a function which listens only to the specified events
+## 
 function(events_track)
   function_new()
   ans(function_name)

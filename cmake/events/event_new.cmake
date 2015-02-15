@@ -10,6 +10,7 @@
 ##   handlers: <callable...> 
 ##   ... (psibbly cancellable, aggregations)
 ## }
+## also defines a global function called `<event-id>` which can be used to emit the event
 ##
 function(event_new)
   set(event_id ${ARGN})
