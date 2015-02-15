@@ -29,7 +29,7 @@ function(alias_create name command_string)
     #message(INFO "alias ${name} was created - it will be available as soon as you restart your shell")
 
   else()
-    message(FATAL_ERROR "creating alias is not supported by oocmake on your system your current shell (${shell})")
+    message(FATAL_ERROR "creating alias is not supported by cmakepp on your system your current shell (${shell})")
   endif()
 endfunction()
 

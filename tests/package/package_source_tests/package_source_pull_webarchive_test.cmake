@@ -2,15 +2,15 @@ function(test)
 
 
   package_source_pull_webarchive(
-    "https://github.com/toeb/cmakepp/archive/v0.0.3.tar.gz"
+    "https://github.com/toeb/cmakepp/archive/v0.0.5.tar.gz"
     --refresh
     "pull/p1")
   ans(res)
   log_last_error_print()
   assert(res)
-  assertf({res.package_descriptor.id} STREQUAL "oo-cmake")
+  assertf({res.package_descriptor.id} STREQUAL "cmakepp")
   assertf({res.package_descriptor.license} STREQUAL "MIT")
-  assertf({res.archive_descriptor.package_descriptor_path} STREQUAL "cmakepp-0.0.3/package.cmake")
+  assertf({res.archive_descriptor.package_descriptor_path} STREQUAL "cmakepp-0.0.5/package.cmake")
   assert(EXISTS "${test_dir}/pull/p1")
 
 

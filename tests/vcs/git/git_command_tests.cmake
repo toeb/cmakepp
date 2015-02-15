@@ -30,9 +30,9 @@ function(test)
   popd()
 
 
-  ## clone remote repo (of oocmake)
+  ## clone remote repo (of cmakepp)
   pushd(dir3 --create)
-  git(clone "https://github.com/toeb/oo-cmake" . --return-code)
+  git(clone "https://github.com/toeb/cmakepp" . --return-code)
   ans(ret)
   assert("${ret}" EQUAL 0)
   assert(EXISTS "${test_dir}/dir3/cmake/vcs/git/git.cmake")

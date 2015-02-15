@@ -46,7 +46,7 @@ function(bash_autostart_register)
   fread("${session_profile_path}")
   ans(profile)
 
-  set(profile_path "$ENV{HOME}/oocmake.profile.sh")
+  set(profile_path "$ENV{HOME}/cmakepp.profile.sh")
 
   if(NOT EXISTS "${profile_path}")
     shell_script_create("${profile_path}" "")
@@ -80,7 +80,7 @@ function(bash_autostart_unregister)
 endfunction()
 
 
-# returs true if the oocmake session profile (environment variables)are registered
+# returs true if the cmakepp session profile (environment variables)are registered
 function(bash_autostart_isregistered)
   set(session_profile_path "$ENV{HOME}/.profile")
   if(NOT EXISTS "${session_profile_path}")

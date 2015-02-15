@@ -15,7 +15,7 @@ function(is_event event)
     return(false)
   endif()
 
-  map_has(event_id)
+  map_has(${event} event_id)
   ans(has_event_id)
   if(NOT has_event_id)
     return(false)

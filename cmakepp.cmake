@@ -23,14 +23,14 @@ cmake_policy(SET CMP0012 NEW)
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 OLD)
 endif()
-# installation dir of oocmake
+# installation dir of cmakepp
 set(cmakepp_base_dir "${CMAKE_CURRENT_LIST_DIR}")
 
-# include functions needed for initializing oocmake
+# include functions needed for initializing cmakepp
 include(CMakeParseArguments)
 
 
-# get temp dir which is needed by a couple of functions in oocmake
+# get temp dir which is needed by a couple of functions in cmakepp
 set(cmakepp_tmp_dir "$ENV{TMP}")
 if(NOT cmakepp_tmp_dir)
 	set(cmakepp_tmp_dir "${CMAKE_CURRENT_LIST_DIR}/tmp")
@@ -54,7 +54,7 @@ endfunction()
 
   
 
-## includes all cmake files of oocmake 
+## includes all cmake files of cmakepp 
 include("${cmakepp_base_dir}/cmake/core/require.cmake")
 
 require("${cmakepp_base_dir}/cmake/*.cmake")
@@ -68,12 +68,12 @@ map_set(global "command_line_args" ${command_line_args})
 map_set(global "unused_command_line_args" ${command_line_args})
 
 ## todo... change this 
-# setup oocmake config
+# setup cmakepp config
 map()
 	kv(base_dir
-		LABELS --oocmake-base-dir
+		LABELS --cmakepp-base-dir
 		MIN 1 MAX 1
-		DISPLAY_NAME "oo-cmake installation dir"
+		DISPLAY_NAME "cmakepp installation dir"
 		DEFAULT "${CMAKE_CURRENT_LIST_DIR}"
 		)
   kv(keep_temp 
@@ -102,7 +102,7 @@ end()
 ans(cmakepp_config_definition)
 
 cd("${CMAKE_SOURCE_DIR}")
-# setup config_function for oocmake
+# setup config_function for cmakepp
 config_setup("cmakepp_config" ${cmakepp_config_definition})
 
 

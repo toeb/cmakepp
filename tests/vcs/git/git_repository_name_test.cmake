@@ -1,7 +1,7 @@
 function(test)
-  git_repository_name("https://github.com/toeb/oo-cmake.git")
+  git_repository_name("https://github.com/toeb/cmakepp.git")
   ans(res)
-  assert("${res}" STREQUAL "oo-cmake")
+  assert("${res}" STREQUAL "cmakepp")
 
   git_repository_name("${test_dir}/dir1")
   ans(res)

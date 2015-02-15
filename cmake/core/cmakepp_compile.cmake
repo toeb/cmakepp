@@ -1,7 +1,7 @@
-## compile_oocmake() 
+## cmakepp_compile() 
 ##
 ## compiles cmakepp into a single file which is faster to include
-function(compile_oocmake source_dir target)
+function(cmakepp_compile source_dir target)
   set(base_dir ${source_dir})
 
 #  file(READ "${base_dir}/resources/expr.json" data)
@@ -10,9 +10,9 @@ function(compile_oocmake source_dir target)
  # file(WRITE "${res}/resources/expr.json" "${data}")
 
 
-  file(STRINGS "${base_dir}/cmakepp.cmake" oocmake_file)
+  file(STRINGS "${base_dir}/cmakepp.cmake" cmakepp_file_content)
 
-  foreach(line ${oocmake_file})
+  foreach(line ${cmakepp_file_content})
     if("_${line}" STREQUAL "_include(\"\${cmakepp_base_dir}/cmake/core/require.cmake\")")
 
     elseif("_${line}" STREQUAL "_require(\"\${cmakepp_base_dir}/cmake/*.cmake\")")

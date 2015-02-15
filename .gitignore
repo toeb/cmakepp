@@ -13,7 +13,7 @@
 *.a
 
 
-# oocmake ignores
+# cmakepp ignores
 tmp
 bin
 release

@@ -8,9 +8,9 @@ function(cmakepp_compile target_file)
   cmakepp_config(base_dir)
   ans(base_dir)
 
-  file(STRINGS "${base_dir}/cmakepp.cmake" oocmake_file)
+  file(STRINGS "${base_dir}/cmakepp.cmake" cmakepp_main_file)
 
-  foreach(line ${oocmake_file})
+  foreach(line ${cmakepp_main_file})
     if("_${line}" STREQUAL "_include(\"\${cmakepp_base_dir}/cmake/core/require.cmake\")")
 
     elseif("_${line}" STREQUAL "_require(\"\${cmakepp_base_dir}/cmake/*.cmake\")")

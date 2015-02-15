@@ -17,7 +17,6 @@ function(test)
   assertf({res.pid} MATCHES "[1-9][0-9]*")
 
 
-  #set(OOCMAKE_DEBUG_EXECUTE true)
   
   assert(NOT COMMAND test_exectutable_wrapper)
   wrap_executable(test_exectutable_wrapper ${CMAKE_COMMAND})  

@@ -5,7 +5,7 @@ function(test)
 
 
   # remote web repo
-  git_remote_exists("https://github.com/toeb/oo-cmake.git")
+  git_remote_exists("https://github.com/toeb/cmakepp.git")
   ans(res)
   assert(res)
 
