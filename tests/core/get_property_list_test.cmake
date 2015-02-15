@@ -9,7 +9,6 @@ function(test)
     string(REPLACE "\n" ";" output "${output}")
     list_pop_front(output)
 
-    json_print(${res})
     
     return(${output})
   endfunction()

@@ -1,10 +1,17 @@
-# removes the specified handler from the event idenfied by name
-function(event_removehandler name handler)
-  event_get("${name}")
+# removes the specified handler from the event idenfied by event_id
+function(event_removehandler event handler)
+
+  event("${event}")
   ans(event)
+  
   if(NOT event)
     return(false)
   endif()
+
+
+  event_handler("${handler}")
+  ans(handler)
+
 
   map_remove_item("${event}" handlers "${handler}")
   ans(success)
@@ -12,3 +19,4 @@ function(event_removehandler name handler)
   return_truth("${success}")
   
 endfunction()
+

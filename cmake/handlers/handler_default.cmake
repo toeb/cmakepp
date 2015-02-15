@@ -7,7 +7,7 @@
       return()
     endif()
       function_new()
-      ans(callable)
+      ans(call_function)
       function_import("
         function(funcname request response)
           map_tryget(\${request} input)
@@ -17,16 +17,16 @@
           map_set(\${response} output \"\${res}\")
           return(true)
         endfunction()
-        " as ${callable} REDEFINE)
+        " as ${call_function} REDEFINE)
 
     data("{
-      callable:$callable,
+      callable:$call_function,
       display_name:$func,
       labels:$func
       }")
     ans(handler)
 
-    handler("${handler}")
+    request_handler("${handler}")
     return_ans()
 
   endfunction()

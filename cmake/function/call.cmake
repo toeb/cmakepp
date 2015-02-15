@@ -27,6 +27,9 @@
       return_ans()
     endif()
 
+    
+
+
     if(DEFINED "${__function_call_func}")
       call("${${__function_call_func}}"(${__function_call_args}))
       return_ans()

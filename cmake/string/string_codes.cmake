@@ -8,7 +8,7 @@ macro(string_codes)
   string(ASCII 24 "${ARGN}empty_code")
   string(ASCII 2  "${ARGN}paren_open_code")
   string(ASCII 3  "${ARGN}paren_close_code")
-
+  set("${ARGN}identifier_token" "__")
 endmacro()
 
 function(string_codes_print)

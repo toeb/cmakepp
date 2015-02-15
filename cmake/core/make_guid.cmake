@@ -1,6 +1,6 @@
 
 #creates a unique id
-function(make_guid out_id)
+function(make_guid)
   string(RANDOM LENGTH 10 id)
-  set(${out_id} ${id} PARENT_SCOPE)
+  set(__ans ${id} PARENT_SCOPE)
 endfunction()

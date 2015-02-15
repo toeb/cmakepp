@@ -1,4 +1,13 @@
 function(test)
+
+
+  # call
+  set(callable_string "[](a b)return('{{a}}{{b}}')")
+  script(" $callable_string(1,2)")
+  ans(res)
+  assert("${res}" STREQUAL "12")
+
+
 script("{valaa1:['asd']}")
 ans(res)
 assert(DEREF "{res.valaa1}" STREQUAL "asd")
@@ -178,11 +187,6 @@ assert(DEREF "{res.exclude}" STREQUAL "asd")
   ans(res)
   assert("${res}" STREQUAL "9876")
 
-  # call
-  set(callable "[](a b)return('{{a}}{{b}}')")
-  script(" $callable(1,2)")
-  ans(res)
-  assert("${res}" STREQUAL "12")
 
   # indexation
   map_new()

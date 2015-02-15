@@ -1,14 +1,6 @@
 
 
   function(lambda2_instanciate source)
-    checksum_string("${source}")
-    ans(hash)
-    map_tryget(__lambdas_lookup "${hash}")
-    ans(lambda)
-    if(lambda)
-      return(${lambda})
-    endif()
-
     lambda2_compile("${source}")
     ans(lambda)
 
@@ -35,7 +27,5 @@
     set(source "function(${function_name} ${signature})${capture_code}\n${cmake_source}\nendfunction()")
     eval("${source}")
     map_set(${lambda} cmake_function "${source}")
-    map_set(__lambdas_lookup "${hash}" "${lambda}")
-    map_set(__lambdas "${function_name}" "${lambda}")
     return_ref(lambda)
   endfunction()

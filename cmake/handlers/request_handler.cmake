@@ -1,6 +1,6 @@
 ## creates a handler 
 ## 
-function(handler handler)
+function(request_handler handler)
   data("${handler}")
   ans(handler)
   map_isvalid(${handler})

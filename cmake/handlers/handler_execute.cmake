@@ -1,7 +1,7 @@
 
   ## executes a handler
   function(handler_execute handler request)
-    handler(${handler})
+    request_handler(${handler})
     ans(handler)
     data(${request})
     ans(request)
@@ -18,8 +18,8 @@
     else()
       assign(!response.handler = handler)
       map_tryget(${handler} callable)
-      ans(callable)
-      call(${callable}("${request}" "${response}"))
+      ans(callback)
+      call("${callback}"("${request}" "${response}"))
       ans(result)
     endif()
     return_ref(response)

@@ -21,6 +21,8 @@ function(test)
     return()
   endfunction()
 
+
+
   event_addhandler(on_find_package "test_handler_findpackage")
   event_addhandler(on_find_package "[](a) map_append(${context} find_package_after {{a}})")
 
@@ -34,7 +36,9 @@ function(test)
   assertf({context.find_package_after} STREQUAL "Hg")
 
 
-
+  event_clear(on_find_package)
+  event_addhandler(on_find_package "test_handler_findpackage")
+  
 
   map_set(${context} find_package)
   map_set(${context} find_package_after)
@@ -45,8 +49,6 @@ function(test)
   assert(res)
   assert("${res}" STREQUAL "huhu")
 
-  assertf({context.find_package} STREQUAL "asdasd")
-  assertf({context.find_package_after} ISNULL)
 
 
 endfunction()

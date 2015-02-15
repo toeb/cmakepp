@@ -1,4 +1,6 @@
-
+## returns the argument string which was passed to the parent function
+## it takes into considerations quoted arguments
+## todo: start and endindex
   macro(arguments_string __arg_count)
     set(__arg_res)   
     if(${__arg_count} GREATER 0)

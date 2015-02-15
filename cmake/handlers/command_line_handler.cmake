@@ -85,7 +85,7 @@
     ## or handler object
     method(add_handler)
     function(${add_handler})
-      handler(${ARGN})
+      request_handler(${ARGN})
       ans(handler)
       if(NOT handler)
         return()
