@@ -17,13 +17,11 @@ function(test)
 
   ## act
   assign(success = proj.install(pkg1))
-json_print(${tracker})
   ## assert
   assert(success)  
   assertf("{tracker.project_on_package_install[0].args[0]}" STREQUAL "${proj}")
   
   assertf("{tracker.project_on_package_load[1].args[0]}" STREQUAL "${proj}")
-  assertf("{tracker.project_on_package_load[1].args[1]}" STREQUAL "${proj}")
   
   assign(installed_packages = proj.local.query("?*"))
   assert(installed_packages)

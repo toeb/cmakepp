@@ -15,9 +15,5 @@ function(test)
 
   get_property_list()
   ans(res)
-  foreach(prop ${res})
-    message("prop '${prop}'")
-  endforeach()
 
-  message("stack: ${LISTFILE_STACK}")
 endfunction()

@@ -32,7 +32,6 @@ function(test)
 
 
   assert(success)
-
   assertf({tracker.project_on_package_uninstall[0].args} CONTAINS "${project}")
 
 endfunction()

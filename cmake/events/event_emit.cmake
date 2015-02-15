@@ -43,7 +43,7 @@ function(event_emit event)
 
     foreach(handler ${handlers})
 
-      event_handler_call(${handler} ${ARGN})
+      event_handler_call(${event} ${handler} ${ARGN})
       ans(success)
       list(APPEND result "${success}")
       ## check if cancel is requested
