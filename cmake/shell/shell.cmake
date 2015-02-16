@@ -21,10 +21,7 @@ function(shell cmd)
   list_extract_flag(args --result)
   ans(result_flag)
 
-  execute("{
-    path:$shell_script,
-    args:$args
-    }")
+  execute("{path:$shell_script,args:$args}")
   ans(res)
 
   # remove temp file
