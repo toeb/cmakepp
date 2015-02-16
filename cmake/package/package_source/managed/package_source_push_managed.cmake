@@ -52,6 +52,7 @@
 
     assign(!package_handle.managed_descriptor.hash = hash)
     assign(!package_handle.managed_descriptor.managed_dir = location)
+    assign(!package_handle.working_dir = '${location}/workspace')
     assign(!package_handle.managed_descriptor.source_name = source_name)
     assign(!package_handle.content_dir = target_dir)
 

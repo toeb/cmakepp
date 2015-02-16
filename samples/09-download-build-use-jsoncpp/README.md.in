@@ -1,0 +1,25 @@
+# Download, Build and Use `jsoncpp`
+<%
+    # create a temporary directory and copy sample there
+    pushtmp()    
+    ans(tmpdir)
+    sample_copy(09)
+%>
+
+
+
+<%
+    #pkg(install ./python)
+    assign(package = pkg(install ./jsoncpp))
+    json_print(${package})
+%>
+
+@ls()
+
+
+<%
+    popd()
+%>
+
+
+

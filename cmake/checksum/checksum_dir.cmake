@@ -1,13 +1,14 @@
-# calculates and returns the checksum for the specified directory
-# including file content
-# uses md5 as a default, other algorithms are possible (see string or file for algorithm names)
+## `(<direcotry> [--algorthm <checksum algorithm> = "MD5"])-><checksum>`
+##
+## calculates the checksum for the specified directory 
+## just like checksum_layout however also factors in the file's contents
+## 
   function(checksum_dir dir)
     set(args ${ARGN})
     list_extract_labelled_keyvalue(args --algorithm)
     ans(algorithm)
 
-    path("${dir}")
-    ans(dir)
+    path_qualify(dir)
 
     file(GLOB_RECURSE files RELATIVE "${dir}" "${dir}/**")
 

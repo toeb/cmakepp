@@ -61,35 +61,42 @@ function(test)
 
   set(len 1000)
 
-  timer_start(call)
+   timer_start(original_call)
+  foreach(i RANGE 0 ${len})
+    call(f1(1 2))
+  endforeach()
+  timer_print_elapsed(original_call)
+
+
+  timer_start(call2)
   foreach(i RANGE 0 ${len})
     call2(f1 1 2)
   endforeach()
-  timer_print_elapsed(call)
+  timer_print_elapsed(call2)
 
 
-  timer_start(call)
+  timer_start(callable_call)
   foreach(i RANGE 0 ${len})
 
     callable("f1")
     callable_call("${__ans}" 1 2)
   endforeach()
-  timer_print_elapsed(call)
+  timer_print_elapsed(callable_call)
 
 
-  timer_start(call)
+  timer_start(callable_function_eval)
   foreach(i RANGE 0 ${len})
     callable_function("f1")
     eval("${__ans}(1 2)")
   endforeach()
-  timer_print_elapsed(call)
+  timer_print_elapsed(callable_function_eval)
 
-  timer_start(call)
+  timer_start(pure_eval)
   foreach(i RANGE 0 ${len})
     eval("f1(1 2)")
   endforeach()
 
-  timer_print_elapsed(call)
+  timer_print_elapsed(pure_eval)
 
 
 endfunction()

@@ -18,7 +18,6 @@ macro(regex_cmake)
   set(regex_cmake_bracket_argument "${regex_cmake_bracket_open}${regex_cmake_bracket_content}${regex_cmake_bracket_close}")
   
 
-
   set(regex_cmake_backslash "\\\\")
 
   #set(escape_identity "(\\\\()|\\\\)|\\\\#|\\\\\"|\\\\ |)
@@ -43,4 +42,10 @@ macro(regex_cmake)
   set(regex_cmake_file "(${regex_cmake_file_element})*")
 
 
+  set(regex_cmake_function_begin "(^|${cmake_regex_newline})(${regex_cmake_space})?function(${regex_cmake_space})?\\([^\\)\\(]*\\)")
+  set(regex_cmake_function_end   "(^|${cmake_regex_newline})(${regex_cmake_space})?endfunction(${regex_cmake_space})?\\(([^\\)\\(]*)\\)")
+  set(regex_cmake_function_signature "(^|${cmake_regex_newline})((${regex_cmake_space})?)(${regex_cmake_identifier})((${regex_cmake_space})?)\\([${regex_cmake_space_chars}${regex_cmake_newline}]*(${regex_cmake_identifier})(.*)\\)")
+  set(regex_cmake_function_signature.name CMAKE_MATCH_7)
+  set(regex_cmake_function_signature.args CMAKE_MATCH_8)
+  
 endmacro()

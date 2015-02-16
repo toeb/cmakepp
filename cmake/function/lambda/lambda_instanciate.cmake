@@ -1,6 +1,7 @@
 
 
   function(lambda2_instanciate source)
+
     lambda2_compile("${source}")
     ans(lambda)
 
@@ -17,7 +18,6 @@
       function_new()
       ans(function_name)
     endif()
-
     map_set(${lambda} function_name ${function_name})
 
     map_tryget(${lambda} cmake_source)
