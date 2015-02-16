@@ -17,7 +17,7 @@ function(test)
   ans(h3)
 
 
-  set(finished)
+set(finished)
   echo_append("waiting")
   set(processes ${h1} ${h2} ${h3})
   while(processes)

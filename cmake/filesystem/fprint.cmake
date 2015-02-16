@@ -2,6 +2,15 @@
 function(fprint path)
   fread("${path}")
   ans(res)
-  message("${res}")
+  _message("${res}")
   return()
+endfunction()
+
+
+function(fprint_try path)
+  path_qualify(path)
+  if(EXISTS "${path}")
+    fprint("${path}")
+  endif()
+  returN()
 endfunction()

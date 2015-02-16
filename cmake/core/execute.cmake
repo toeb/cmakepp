@@ -19,6 +19,18 @@
   #
   #
   function(execute)
+    set(args ${ARGN}) 
+    
+    # list_extract_flag(cmd_line_args --result)
+    # ans(result_flag)
+    # list_extract_flag(cmd_line_args --return-code)
+    # ans(return_code_flag)
+    # list_extract_flag(cmd_line_args --async)
+    # ans(async)
+    # list_extract_flag(cmd_line_args --async-wait)
+    # ans(wait)
+    
+    
     #set(args ${ARGN})
     # todo - --result --return-code --async --async-wait --show-output
 
@@ -33,6 +45,8 @@
   
     map_clone_deep(${processStart})
     ans(processResult)
+
+
 
     scope_import_map(${processStart})
 
