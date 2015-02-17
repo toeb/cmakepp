@@ -7,7 +7,7 @@ function(process_info_Windows handlish)
   ans(pid)
 
 
-  win32_tasklist(/V /FO CSV /FI "PID eq ${pid}" --handle )
+  win32_tasklist(/V /FO CSV /FI "PID eq ${pid}" --process-handle )
   ans(exe_result)
 
 

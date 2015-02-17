@@ -8,12 +8,12 @@
 # Warning: --async is a bit experimental
 #
 # defines function
-# <alias>([--async]|[--handle]|[--exit-code])-> <stdout>|<process result>|<exit code>|<process handle>
+# <alias>([--async]|[--process-handle]|[--exit-code])-> <stdout>|<process result>|<exit code>|<process handle>
 #
 # <no flag>       if no flag is specified then the function will fail if the return code is not 0
 #                 if it succeeds the return value is the stdout
 #
-# --handle        flag the function will return a the execution 
+# --process-handle        flag the function will return a the execution 
 #                 result object (see execute()) 
 # --exit-code     flag the function will return the exit code
 # --async         will execute the executable asynchroniously and

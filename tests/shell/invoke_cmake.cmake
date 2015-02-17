@@ -1,7 +1,7 @@
 function(test)
   mkdir("${test_dir}")
   cd("${test_dir}")
-  cmake(--help-command string --handle)
+  cmake(--help-command string --process-handle)
   ans(res)
 
   map_tryget(${res} exit_code)

@@ -46,9 +46,9 @@ function(compile_tool name src)
       ")
     mkdir(build)
     cd(build)
-    cmake(../ --handle)
+    cmake(../ --process-handle)
     ans(configure_result)
-    cmake(--build . --handle)
+    cmake(--build . --process-handle)
     ans(build_result)
 
 

@@ -5,7 +5,7 @@ function(execute)
   arguments_encoded_list(${ARGC})
   ans(args)
 
-  list_extract_flag(args --handle)
+  list_extract_flag(args --process-handle)
   ans(return_handle)
   list_extract_flag(args --exit-code)
   ans(return_exit_code)

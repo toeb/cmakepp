@@ -16,7 +16,7 @@ function(archive_ls archive)
     tar(tf "${archive}")
     ans(files)
 
-    tar(tf "${archive}" --handle)
+    tar(tf "${archive}" --process-handle)
     ans(result)
 
     assign(error = result.exit_code)

@@ -13,7 +13,7 @@ function(svn_info uri)
     ans(uri)
 
 
-    svn(info ${uri} --handle --xml ${ARGN})
+    svn(info ${uri} --process-handle --xml ${ARGN})
     ans(res)
     map_tryget(${res} exit_code)
     ans(error)

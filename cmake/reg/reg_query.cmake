@@ -4,7 +4,7 @@
   ## returns a list of entries containing all direct child elements
   function(reg_query key)
     string(REPLACE / \\ key "${key}")
-    reg(query "${key}" --handle)
+    reg(query "${key}" --process-handle)
     ans(res)
 
     map_tryget(${res} stdout)

@@ -5,7 +5,7 @@ function(test)
   fwrite(dir1/errorscript.cmake "message(FATAL_ERROR byebye)")
 
   ## act
-  execute(${CMAKE_COMMAND} -P successscript.cmake TIMEOUT 3 WORKING_DIRECTORY dir1 --handle)
+  execute(${CMAKE_COMMAND} -P successscript.cmake TIMEOUT 3 WORKING_DIRECTORY dir1 --process-handle)
   ans(res)
 
   ## assert
@@ -22,7 +22,7 @@ function(test)
   assertf("{res.start_info.timeout}" EQUAL 3)
 
   ## act
-  execute(${CMAKE_COMMAND} -P errorscript.cmake WORKING_DIRECTORY dir1 --handle)
+  execute(${CMAKE_COMMAND} -P errorscript.cmake WORKING_DIRECTORY dir1 --process-handle)
   ans(res)
 
   ## assert
@@ -38,7 +38,7 @@ function(test)
 
 
 
-  execute(COMMAND cmake -E echo_append "hello;hello" turn the radio on --handle)
+  execute(COMMAND cmake -E echo_append "hello;hello" turn the radio on --process-handle)
   ans(res)
   assertf("{res.stdout}" EQUALS "hello;hello turn the radio on" )
 

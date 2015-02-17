@@ -44,7 +44,7 @@
           set(ref "HEAD")
         endif()
         if(read OR file)
-          git(show "${ref}:${read}" --handle)
+          git(show "${ref}:${read}" --process-handle)
           ans(git_result)
           assign(error = git_result.error)
           if(NOT error)

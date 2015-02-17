@@ -57,7 +57,7 @@
             set(ref "-r${ref}")
           endif()
 
-          hg(cat ${ref} "${path}" --handle)
+          hg(cat ${ref} "${path}" --process-handle)
           ans(hg_result)
           assign(error = hg_result.exit_code)
           if(NOT error)

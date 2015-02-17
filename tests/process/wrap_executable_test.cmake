@@ -11,7 +11,7 @@ function(test)
   wrap_executable(cmake_script_test "${CMAKE_COMMAND}" -P "${path}")
 
 
-  #cmake_script_test(--async-wait --handle)
+  #cmake_script_test(--async-wait --process-handle)
   #ans(res)
   #assertf({res.pid} MATCHES "[1-9][0-9]*")
 
@@ -41,13 +41,13 @@ function(test)
 
 
   ## assert that --result returns an object containing correct return code
-  test_exectutable_wrapper(-P myscript.cmake --handle)
+  test_exectutable_wrapper(-P myscript.cmake --process-handle)
   ans(res)
   assert(DEREF "{res.exit_code}" STREQUAL "0") # return code should be error free
   assert(DEREF "{res.stdout}" MATCHES "hello") # stdout should contain only hello (possibly a line break)
   assert(DEREF "{res.start_info.timeout}" STREQUAL "-1") # timeout default value should be -1 (no timeout)
 
-  test_exectutable_wrapper(-P myerrorscript.cmake --handle)
+  test_exectutable_wrapper(-P myerrorscript.cmake --process-handle)
   ans(res)
   assert(DEREF NOT "{res.exit_code}" EQUAL "0")
   assert(DEREF "{res.stderr}" MATCHES "byebye") # stdout should contain only hello (possibly a line break)  

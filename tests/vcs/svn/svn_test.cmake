@@ -7,7 +7,7 @@ function(test)
   endif()
 
   
-  svn(--version --quiet --handle)  
+  svn(--version --quiet --process-handle)  
   ans(res)
 
   json_print(${res})
