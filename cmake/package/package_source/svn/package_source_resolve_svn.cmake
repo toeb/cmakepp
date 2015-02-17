@@ -31,7 +31,7 @@
     file_make_temporary("")
     ans(tmp)
     rm(${tmp})
-    svn(export "${checkout_uri}" "${tmp}" --return-code)
+    svn(export "${checkout_uri}" "${tmp}" --exit-code)
     ans(error)
 
     if(NOT error)

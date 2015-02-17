@@ -1,84 +1,74 @@
+##
+##
+##
+function(execute)
+  arguments_encoded_list(${ARGC})
+  ans(args)
 
-  # input:
-  # {
-  #  <path:<executable>>, // path to executable or executable name -> shoudl be renamed to command
-  #  <args:<arg ...>>,        // command line arguments to executable, use string_semicolon_encode() on an argument if you want to pass an argument with semicolons
-  #  <?timeout:<seconds>],            // timout
-  #  <?cwd:<unqualified path>>,                // current working dir (default is whatever pwd returns)
-  #
-  # }
-  # returns:
-  # {
-  #   path: ...,
-  #   args: ...,
-  #   <timeout:<seconds>> ...,
-  #   <cwd:<qualified path>> ...,
-  #   output: <string>,   // all output of the process (stderr, and stdout)
-  #   result: <int>       // return code of the process (normally 0 indicates success)
-  # }
-  #
-  #
-  function(execute)
-    #arguments_encoded_list(${ARGC})
-    #ans(argument_list)
-    set(args ${ARGN}) 
+  list_extract_flag(args --handle)
+  ans(return_handle)
+  list_extract_flag(args --exit-code)
+  ans(return_exit_code)
+  list_extract_flag(args --async)
+  ans(async)
+  list_extract_flag(args --async-wait)
+  ans(wait)
+  if(wait)
+    set(async true)
+  endif()
+  list_extract_flag(args --silent-fail)
+  ans(silent_fail)
+
+
+  if(NOT args)
+    messagE(FATAL_ERROR "no command specified")
+  endif()
+
+  process_start_info_new(${args})
+  ans(start_info)
+
+  process_handle_new(${start_info})
+  ans(process_handle)
+
+
+  if(async)
+    process_start(${process_handle})
+    return(${process_handle})
+  else()
+    process_execute(${process_handle})
+    if(return_handle)
+      return(${process_handle})
+    endif()
     
-    # list_extract_flag(cmd_line_args --result)
-    # ans(result_flag)
-    # list_extract_flag(cmd_line_args --return-code)
-    # ans(return_code_flag)
-    # list_extract_flag(cmd_line_args --async)
-    # ans(async)
-    # list_extract_flag(cmd_line_args --async-wait)
-    # ans(wait)
+    map_tryget(${process_handle} exit_code)
+    ans(exit_code)
 
-    process_start_info(${ARGN})
-    ans(processStart)
+    if(return_exit_code)
+      return_ref(exit_code)
+    endif()
 
-    if(NOT processStart)
+    map_tryget(${process_handle} pid)
+    ans(pid)
+    if(NOT pid)
+      message(FATAL_ERROR FORMAT "could not find command '{start_info.command}'")
+    endif()
+
+
+    if(exit_code AND silent_fail)
+      error("process {start_info.command} failed with {process_handle.exit_code}")
       return()
     endif()
 
-  
-    map_clone_deep(${processStart})
-    ans(processResult)
+    if(exit_code)
+      message(FATAL_ERROR FORMAT "process {start_info.command} failed with {process_handle.exit_code}")
+    endif()
 
 
+    map_tryget(${process_handle} stdout)
+    ans(stdout)
+    return_ref(stdout)
 
-    scope_import_map(${processStart})
-
-    set(timeout TIMEOUT ${timeout})
-    set(cwd WORKING_DIRECTORY "${cwd}")
-
-
-    command_line_args_combine(${args})
-    ans(arg_string)
-    
-    ## todo - test this
-    string(REPLACE \\ \\\\ arg_string "${arg_string}")
-
-    set(execute_process_command "
-        execute_process(
-          COMMAND \"\${command}\" ${arg_string}
-          \${timeout}
-          \${cwd}
-          RESULT_VARIABLE result
-          OUTPUT_VARIABLE output
-          ERROR_VARIABLE output
-        )
-
-        map_set(\${processResult} output \"\${output}\")
-        map_set(\${processResult} stdout \"\${output}\")
-        map_set(\${processResult} result \"\${result}\")
-        map_set(\${processResult} error \"\${result}\")
-        map_set(\${processResult} return_code \"\${result}\")
-    ")
+  endif()
 
 
-     
-    eval("${execute_process_command}")
-
-
-
-    return(${processResult})
-  endfunction()
+endfunction()

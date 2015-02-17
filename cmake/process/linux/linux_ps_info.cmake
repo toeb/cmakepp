@@ -1,15 +1,15 @@
 
 function(linux_ps_info pid key)
-  linux_ps(-p "${pid}" -o "${key}=" --result)
+  linux_ps(-p "${pid}" -o "${key}=" --handle)
   ans(res)
 
-  map_tryget(${res} return_code)
-  ans(return_code)
-  if(NOT "${return_code}" EQUAL 0)
+  map_tryget(${res} exit_code)
+  ans(erro)
+  if(NOT "${erro}" EQUAL 0)
 
     return()
   endif()
-  map_tryget(${res} output)
+  map_tryget(${res} stdout)
   ans(stdout)
 
   string(STRIP "${stdout}" val)

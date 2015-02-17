@@ -68,7 +68,7 @@ function(svn_cached_checkout uri)
   mkdir("${cached_path}")
 
 
-  svn(checkout "${checkout_uri}" "${cached_path}" --non-interactive  --return-code)
+  svn(checkout "${checkout_uri}" "${cached_path}" --non-interactive  --exit-code)
   ans(error)
 
   if(error)

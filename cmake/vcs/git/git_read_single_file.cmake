@@ -25,12 +25,12 @@ function(git_read_single_file repository branch path )
 
 
   pushd("${tmp_dir}")
-  git(show --format=raw "${branch}:${path}" --result)
+  git(show --format=raw "${branch}:${path}" --handle)
   ans(result)
 
-  map_tryget(${result} output)
+  map_tryget(${result} stdout)
   ans(res)
-  map_tryget(${result} result)  
+  map_tryget(${result} exit_code)  
   ans(error)
   popd()
 

@@ -8,13 +8,10 @@ function(process_list_Windows)
   set(ids)
 
   foreach(id ${matches})
-    
     process_handle("${id}")
     ans(handle)
     list(APPEND ids ${handle})
   endforeach()
 
   return_ref(ids)
-
-
 endfunction()

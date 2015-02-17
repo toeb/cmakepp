@@ -7,13 +7,13 @@ function(test)
   endif()
 
   
-  svn(--version --quiet --result)  
+  svn(--version --quiet --handle)  
   ans(res)
 
   json_print(${res})
 
 
-  map_tryget(${res} output)
+  map_tryget(${res} stdout)
   ans(res)
   string(STRIP "${res}" res)
 

@@ -24,34 +24,6 @@ function(touch path)
       return_ref(path)
 
     endfunction()
-  #else()
-  #  function(touch path)
-  #    path("${path}")
-  #    ans(path)
-#
-#  #    set(args ${ARGN})
-#  #    list_extract_flag(args --nocreate)
-#  #    ans(nocreate)
-#
-#
-#
-#  #    set(cmd touch)
-#  #    if(nocreate)
-#  #      set(cmd touch_nocreate)
-#
-#  #    endif()
-#
-#  #    cmake(-E ${cmd} "${path}" --result)
-#  #    ans(res)
-#  #    json_print(${res})
-#  #    map_tryget(${res} result)
-#  #    ans(erro)
-#  #    if(erro)
-#  #      message(FATAL_ERROR "faild")
-#  #    endif()
-#  #    return_ref(path)
-#  #  endfunction()
-  #endif()
   touch("${path}")
   return_ans()
 endfunction()

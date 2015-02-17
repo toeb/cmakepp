@@ -35,7 +35,7 @@ function(test)
   assertf("{res.request_url}" STREQUAL "http://notahost.tld")
 
 
-  http_get("http://notahost.tld" --return-code)
+  http_get("http://notahost.tld" --exit-code)
   ans(error)
   assert( error)
 
@@ -49,7 +49,7 @@ function(test)
   assertf("{res.http_status_code}" STREQUAL "200")
   assertf("{res.http_reason_phrase}" STREQUAL "OK")
 
-  http_get("http://httpbin.org/get" --return-code)
+  http_get("http://httpbin.org/get" --exit-code)
   ans(error)
   assert(NOT error)
 

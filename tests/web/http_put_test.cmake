@@ -30,11 +30,11 @@ function(http_put_test)
   ans(res)
   assertf("{res.json.id}" STREQUAL "hello world")
 
-  http_put("http://httpbin.org/put" "{id:'hello world'}" --return-code --show-progress)
+  http_put("http://httpbin.org/put" "{id:'hello world'}" --exit-code --show-progress)
   ans(error)
   assert(NOT error)
 
-  http_put("http://httpbin.org/put" "{id:'hello world'}" --return-code)
+  http_put("http://httpbin.org/put" "{id:'hello world'}" --exit-code)
   ans(error)
   assert("${error}" EQUAL "0")
 

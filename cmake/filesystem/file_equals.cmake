@@ -7,7 +7,7 @@
     path("${rhs}")
     ans(rhs)
 
-    cmake(-E compare_files "${lhs}" "${rhs}" --return-code)
+    cmake(-E compare_files "${lhs}" "${rhs}" --exit-code)
     ans(return_code)
     
     if("${return_code}" STREQUAL "0")

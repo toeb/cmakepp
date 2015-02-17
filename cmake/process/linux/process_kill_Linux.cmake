@@ -8,11 +8,8 @@
     map_tryget(${handle} pid)
     ans(pid)
 
-    linux_kill(-SIGTERM ${pid} --result)
-    ans(res)
+    linux_kill(-SIGTERM ${pid} --exit-code)
+    ans(error)
 
-    map_tryget(${res} return_code)
-    ans(return_code)
-
-    return_truth("${return_code}" EQUAL 0)
+    return_truth("${error}" EQUAL 0)
   endfunction() 

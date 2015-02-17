@@ -41,7 +41,7 @@ Another example showing usage of the `execute()` function:
 ```
 find_package(Hg)
 set(cmdline --version)
-execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
+execute({path:$HG_EXECUTABLE, args: $cmdline} --handle)
 ans(res)
 map_get(${res} result)
 ans(error)
@@ -55,7 +55,7 @@ json_print(${res}) # outputs input and output of process
 
 ### Functions and Datatypes
 
-* `execute(<process start info ?!> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
+* `execute(<process start info ?!> [--handle|--exit-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--exit-code` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
   * example: `execute("{path:'<command>', args:['a','b']}")`  
 * `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
 * `<process start info?!>` a string which can be converted to a `<process start>` object using the `process_start_info()` function.

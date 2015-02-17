@@ -1,9 +1,5 @@
 function(test)
 
-
-
-
-
   ## runs three scripts and expects then to stop in a particular order
 
 

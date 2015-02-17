@@ -16,10 +16,10 @@ function(archive_ls archive)
     tar(tf "${archive}")
     ans(files)
 
-    tar(tf "${archive}" --result)
+    tar(tf "${archive}" --handle)
     ans(result)
 
-    assign(error = result.error)
+    assign(error = result.exit_code)
     if(error)
       error("tar exited with {result.error}")
       return()

@@ -29,7 +29,7 @@
       set(repo_cache_dir "${cache_dir}/git_cache/${cache_key}")
 
       if(NOT EXISTS "${repo_cache_dir}")
-        git(clone --mirror "${remote_uri}" "${repo_cache_dir}" --return-code)
+        git(clone --mirror "${remote_uri}" "${repo_cache_dir}" --exit-code)
         ans(error)
         if(error)
           rm("${repo_cache_dir}")
@@ -44,7 +44,7 @@
           set(ref "HEAD")
         endif()
         if(read OR file)
-          git(show "${ref}:${read}" --result)
+          git(show "${ref}:${read}" --handle)
           ans(git_result)
           assign(error = git_result.error)
           if(NOT error)
