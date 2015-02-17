@@ -19,6 +19,8 @@
   #
   #
   function(execute)
+    #arguments_encoded_list(${ARGC})
+    #ans(argument_list)
     set(args ${ARGN}) 
     
     # list_extract_flag(cmd_line_args --result)
@@ -29,10 +31,6 @@
     # ans(async)
     # list_extract_flag(cmd_line_args --async-wait)
     # ans(wait)
-    
-    
-    #set(args ${ARGN})
-    # todo - --result --return-code --async --async-wait --show-output
 
     process_start_info(${ARGN})
     ans(processStart)
@@ -41,7 +39,6 @@
       return()
     endif()
 
-    #obj("${processStart}")
   
     map_clone_deep(${processStart})
     ans(processResult)
