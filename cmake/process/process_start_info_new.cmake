@@ -1,6 +1,7 @@
-
-## `()-><process start info>` 
-## 
+## `(<command string>|<object>)-><process start info>` 
+## `<command string> ::= "COMMAND"? <command> <arg...>` 
+##
+## creates a new process_start_info with the following fields
 ## ```
 ## <process start info> ::= {
 ##   command: <executable> 
@@ -9,6 +10,11 @@
 ##   timeout: <n>
 ## }
 ## ```
+##
+## *example*
+##  * `process_start_info_new(COMMAND cmake -E echo "asd bsd" csd) -> <% process_start_info_new(COMMAND cmake -E echo "asd;bsd")
+##  ans(info)
+##  template_out_json(${info}) %>` 
 function(process_start_info_new)
   arguments_encoded_list(${ARGC})
   ans(arguments_list)

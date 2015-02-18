@@ -1,9 +1,10 @@
-## `(<pid>)-><process handle>`
+## `(<process start info>)-><process handle>`
 ##
-## returns a new process handle
+## returns a new process handle which has the following layout:
 ## ```
 ## <process handle> ::= {
 ##   pid: <pid>  
+##   start_info: <process start info>
 ##   state: "unknown"|"running"|"terminated"
 ##   stdout: <text>
 ##   stderr: <text>
@@ -16,7 +17,7 @@
 function(process_handle_new start_info)
   map_new()
   ans(process_handle)
-  map_set(${process_handle} pid "${pid}")
+  map_set(${process_handle} pid "")
   map_set(${process_handle} start_info "${start_info}")
   map_set(${process_handle} state "unknown")
   map_set(${process_handle} stdout "")

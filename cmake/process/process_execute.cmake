@@ -1,4 +1,4 @@
-## `(<command> <arg...>)-><process handle>`
+## `(<process handle>)-><process handle>`
 ##
 ## executes the specified command with the specified arguments in the 
 ## current working directory

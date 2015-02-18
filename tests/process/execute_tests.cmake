@@ -42,6 +42,26 @@ function(test)
   ans(res)
   assertf("{res.stdout}" EQUALS "hello;hello turn the radio on" )
 
+  map_new()
+  ans(context)
+  execute(COMMAND cmake -E echo_append "hello;hello" 
+    --success-callback "[](handle)map_append(${context} result 'success{{exit_code}}')" 
+    --error-callback "[](handle) map_append(${context} result 'error{{exit_code}}')"
+    --silent-fail
+  )
 
+  assertf("{context.result}" STREQUAL "success0")
+
+
+
+  map_new()
+  ans(context)
+  execute(COMMAND cmake -E echo_appendFAILBECAUSESTUPIDERROR "hello;hello" 
+    --success-callback "[](handle)map_append(${context} result 'success{{exit_code}}')" 
+    --error-callback "[](handle) map_append(${context} result 'error{{exit_code}}')"
+    --silent-fail
+  )
+
+  assertf("{context.result}" STREQUAL "error1")
 
 endfunction()

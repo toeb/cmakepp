@@ -5,10 +5,14 @@
 # this function will return nothing if there was a cycle or if no input was given
 # else it will return the topological order of the graph
 function(topsort get_hash expand)
+  function_import("${get_hash}" as __topsort_get_hash REDEFINE)
+  function_import("${expand}" as __topsort_expand REDEFINE)
+
+
   # visitor function
   function(topsort_visit result visited node)
     # get hash for current node
-    call("${get_hash}" ("${node}"))
+    __topsort_get_hash("${node}")
     ans(hash)
 
     map_tryget("${visited}" "${hash}")
@@ -20,7 +24,7 @@ function(topsort get_hash expand)
     endif()
     if(NOT mark)
       map_set("${visited}" "${hash}" temp)
-      call("${expand}" ("${node}"))
+      __topsort_expand("${node}")
       ans(successors)
       # visit successors
       foreach(successor ${successors})
@@ -50,7 +54,7 @@ function(topsort get_hash expand)
   # select unmarked node and visit
   foreach(node ${ARGN})
     # get hash for node
-    call("${get_hash}" ("${node}"))
+    __topsort_get_hash("${node}")
     ans(hash)
     
     # get marking      
