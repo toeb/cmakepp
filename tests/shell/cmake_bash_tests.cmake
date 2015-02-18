@@ -1,8 +1,5 @@
 function(test)
   
-  if(NOT WIN32)
-    message(WARNING "currently does not work on *nix")
-  endif()
   
   path("${test_dir}")
    ans(p)

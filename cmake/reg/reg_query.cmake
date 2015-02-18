@@ -4,14 +4,14 @@
   ## returns a list of entries containing all direct child elements
   function(reg_query key)
     string(REPLACE / \\ key "${key}")
-    reg(query "${key}" --result)
+    reg(query "${key}" --process-handle)
     ans(res)
 
-    map_tryget(${res} output)
+    map_tryget(${res} stdout)
     ans(output)
 
 
-    map_tryget(${res} result)
+    map_tryget(${res} exit_code)
     ans(error)
 
     if(error)

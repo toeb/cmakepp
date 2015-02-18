@@ -2,6 +2,14 @@ function(test)
 
 
 
+
+  listing()
+  ans(uut)
+  listing_append(${uut} "call('hello;asd')")
+  listing_compile(${uut})
+  ans(res)
+  assert("${res}" EQUALS "call(\"hello;asd\")")
+
   listing_begin()
     line("test()")
 
@@ -30,13 +38,6 @@ function(test)
   test_uut("call(\${asd} \${bsd_csd} \${dsd_sdk})" "call({asd} {bsd_csd} {dsd_sdk})")
   test_uut("call(\"hello\")" "call('hello')")
 
-
-  listing()
-  ans(uut)
-  listing_append(${uut} "call('hello;asd')")
-  listing_compile(${uut})
-  ans(res)
-  assert("${res}" EQUALS "call(\"hello;asd\")")
 
 
 

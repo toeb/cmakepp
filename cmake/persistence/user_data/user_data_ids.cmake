@@ -2,7 +2,7 @@
 function(user_data_ids)
   user_data_dir()
   ans(dir)
-  file_glob("${dir}" *.cmake)
+  glob("${dir}/*.cmake")
   ans(files)
   set(keys)
   foreach(file ${files})

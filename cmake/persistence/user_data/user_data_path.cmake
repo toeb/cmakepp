@@ -1,6 +1,6 @@
 ## returns the user data path for the specified id
 ## id can be any string that is also usable as a valid filename
-## it is located in %HOME_DIR%/.oocmake
+## it is located in %HOME_DIR%/.cmakepp
 function(user_data_path id)  
   if(NOT id)
     message(FATAL_ERROR "no id specified")

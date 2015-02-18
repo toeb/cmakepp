@@ -12,7 +12,7 @@ function(eval code)
   # retrieve current ans value  
   ans(__eval_current_ans)
   
-  oocmake_config(temp_dir)
+  cmakepp_config(temp_dir)
   ans(__eval_temp_dir)
 
   file_random( "${__eval_temp_dir}/eval_{{id}}.cmake")
@@ -27,7 +27,7 @@ function(eval code)
   include(${__eval_file_name})
   ans(res)
 
-  oocmake_config(keep_temp)
+  cmakepp_config(keep_temp)
   ans(keep_temp)
   if(NOT keep_temp)
     file(REMOVE ${__eval_file_name})

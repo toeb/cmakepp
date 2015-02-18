@@ -2,7 +2,7 @@
 # scope of invokation
 macro(eval_ref __eval_ref_theref)
   ans(__eval_ref_current_ans)
-  oocmake_config(temp_dir)
+  cmakepp_config(temp_dir)
   ans(__eval_ref_dir)
 
   file_random( "${__eval_ref_dir}/eval_{{id}}.cmake")
@@ -14,7 +14,7 @@ macro(eval_ref __eval_ref_theref)
   ans(__eval_ref_res)
   
 
-  oocmake_config(keep_temp)
+  cmakepp_config(keep_temp)
   ans(__eval_ref_keep_temp)
   if(NOT __eval_ref_keep_temp)
     file(REMOVE ${__eval_ref_filename})

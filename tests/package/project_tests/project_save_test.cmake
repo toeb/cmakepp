@@ -3,6 +3,9 @@ function(test)
   project_new()
   ans(project)
 
+  events_track(project_on_installed_package_save project_on_installed_packages_save on_package_save)
+  ans(tracker)
+
 
   call(project.load("pr1"))
 
@@ -34,7 +37,7 @@ function(test)
   assert(EXISTS "${test_dir}/myfile.qm")
 
 
-
-
+  assertf("{tracker.project_on_installed_package_save[0].args[0]}" STREQUAL "${project}")
+  assertf("{tracker.project_on_installed_package_save[0].args[1]}" STREQUAL "${project}")
 
 endfunction()

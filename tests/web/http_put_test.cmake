@@ -14,9 +14,15 @@ function(http_put_test)
 
 
 
-  http_put("http://httpbin.org/put" --file myfile.txt --json)
+  http_put("http://httpbin.org/put" --file myfile.txt --response)
   ans(res)
-  assertf("{res.data}" STREQUAL "hello world")
+  assign(data = res.content)
+  message("${data}")
+  json_deserialize("${data}")
+  ans(data2)
+  json_print(${data2})
+  json_print(${res})
+  assertf("{data2.data}" STREQUAL "hello world")
 
 
 
@@ -24,11 +30,11 @@ function(http_put_test)
   ans(res)
   assertf("{res.json.id}" STREQUAL "hello world")
 
-  http_put("http://httpbin.org/put" "{id:'hello world'}" --return-code --show-progress)
+  http_put("http://httpbin.org/put" "{id:'hello world'}" --exit-code --show-progress)
   ans(error)
   assert(NOT error)
 
-  http_put("http://httpbin.org/put" "{id:'hello world'}" --return-code)
+  http_put("http://httpbin.org/put" "{id:'hello world'}" --exit-code)
   ans(error)
   assert("${error}" EQUAL "0")
 

@@ -28,7 +28,7 @@
       path_qualify(target_dir)
 
       ## create a cache directory for the uri
-      oocmake_config(cache_dir)
+      cmakepp_config(cache_dir)
       ans(cache_dir)
 
       string(MD5 cache_key "${remote_uri}")
@@ -37,7 +37,7 @@
 
       ## initial clone of repo 
       if(NOT EXISTS "${repo_cache_dir}")
-        hg(clone "${remote_uri}" "${repo_cache_dir}" --return-code)
+        hg(clone "${remote_uri}" "${repo_cache_dir}" --exit-code)
         ans(error)
         if(error)
           rm("${repo_cache_dir}")
@@ -57,9 +57,9 @@
             set(ref "-r${ref}")
           endif()
 
-          hg(cat ${ref} "${path}" --result)
+          hg(cat ${ref} "${path}" --process-handle)
           ans(hg_result)
-          assign(error = hg_result.error)
+          assign(error = hg_result.exit_code)
           if(NOT error)
             assign(result = hg_result.stdout)
             if(file)

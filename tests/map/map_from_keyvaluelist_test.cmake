@@ -52,13 +52,6 @@ function(test)
   endforeach()
 
 
-  # # file separator
-  # # group separator
-  # # record separator
-  # # unit separator
-  #    
-  message("fs '${file_separator}' gs '${group_separator}' rs '${record_separator}' us '${unit_separator}'")
-  #FS
   #  GS key1 US
   #    val1
     

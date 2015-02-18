@@ -38,7 +38,7 @@ function(svn_cached_checkout uri)
     set(ref_type tags)
   endif()
   
-  oocmake_config(cache_dir)
+  cmakepp_config(cache_dir)
   ans(cache_dir)
 
   string(MD5 cache_key "${base_uri}@${revision}@${ref_type}@${ref}")
@@ -68,7 +68,7 @@ function(svn_cached_checkout uri)
   mkdir("${cached_path}")
 
 
-  svn(checkout "${checkout_uri}" "${cached_path}" --non-interactive  --return-code)
+  svn(checkout "${checkout_uri}" "${cached_path}" --non-interactive  --exit-code)
   ans(error)
 
   if(error)

@@ -12,7 +12,7 @@ function(test)
   assert("${res}" EQUAL 15)
 
 
-  list_fold(mylist "(a b)-> return_math(\"$a + $b\")")
+  list_fold(mylist "[](a b)return_math('{{a}} + {{b}}')")
   ans(res)
   assert("${res}" EQUAL 15)
 
@@ -24,7 +24,7 @@ function(test)
 
 
   timer_start(timer)
-  list_fold(range "(a b)->return_math(\"$a + $b\")")
+  list_fold(range "[](a b)return_math('{{a}} + {{b}}')")
   ans(res)
   timer_print_elapsed(timer)
 

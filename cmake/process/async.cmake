@@ -7,7 +7,7 @@
 ##   include further files for custom functions     
 ##   environment vars
   function(async callable)
-    oocmake_config(base_dir)
+    cmakepp_config(base_dir)
     ans(base_dir)
     set(args ${ARGN})
     list_pop_front(args)

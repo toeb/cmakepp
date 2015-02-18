@@ -12,7 +12,7 @@ function(test_execute test)
   # setup a directory for the test
   string_normalize("${test_name}")
   ans(test_dir)
-  oocmake_config(temp_dir)
+  cmakepp_config(temp_dir)
   ans(temp_dir)
   set(test_dir "${temp_dir}/tests/${test_dir}")
   file(REMOVE_RECURSE "${test_dir}")
@@ -24,7 +24,7 @@ function(test_execute test)
   call("${test}"())
   
   set(time)
-  timer_elapsed("test duration")  
+  timer_elapsed("test duration")
   ans(time)
   popd()
 

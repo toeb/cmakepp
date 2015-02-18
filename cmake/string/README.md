@@ -15,24 +15,22 @@ So I have created somewhat alot of functions which does things that you might ne
 * [cmake_string_escape](#cmake_string_escape)
 * [cmake_string_unescape](#cmake_string_unescape)
 * [delimiters](#delimiters)
+* [argument_escape](#argument_escape)
 * [format](#format)
 * [regex_search](#regex_search)
 * [string_append_line_indented](#string_append_line_indented)
 * [string_char_at](#string_char_at)
+* [string_codes](#string_codes)
 * [string_combine](#string_combine)
+* [string_concat](#string_concat)
 * [string_contains](#string_contains)
-* [string_decode_bracket](#string_decode_bracket)
 * [string_decode_delimited](#string_decode_delimited)
-* [string_decode_empty](#string_decode_empty)
-* [string_decode_list](#string_decode_list)
-* [string_encode_bracket](#string_encode_bracket)
-* [string_encode_delimited](#string_encode_delimited)
-* [string_encode_empty](#string_encode_empty)
-* [string_encode_list](#string_encode_list)
 * [string_ends_with](#string_ends_with)
 * [string_eval](#string_eval)
+* [string_find](#string_find)
 * [string_isempty](#string_isempty)
 * [string_isnumeric](#string_isnumeric)
+* [string_length](#string_length)
 * [string_lines](#string_lines)
 * [string_match](#string_match)
 * [string_nested_split](#string_nested_split)
@@ -40,16 +38,13 @@ So I have created somewhat alot of functions which does things that you might ne
 * [string_normalize_index](#string_normalize_index)
 * [string_overlap](#string_overlap)
 * [string_pad](#string_pad)
-* [string_parentheses_encode](#string_parentheses_encode)
-* [string_parentheses_encode](#string_parentheses_encode)
+* [string_random](#string_random)
 * [string_regex_escape](#string_regex_escape)
 * [string_remove_beginning](#string_remove_beginning)
 * [string_remove_ending](#string_remove_ending)
 * [string_repeat](#string_repeat)
 * [string_replace](#string_replace)
 * [string_replace_first](#string_replace_first)
-* [string_semicolon_decode](#string_semicolon_decode)
-* [string_semicolon_encode](#string_semicolon_encode)
 * [string_shorten](#string_shorten)
 * [string_slice](#string_slice)
 * [string_split](#string_split)
@@ -65,6 +60,7 @@ So I have created somewhat alot of functions which does things that you might ne
 * [string_take_regex](#string_take_regex)
 * [string_take_whitespace](#string_take_whitespace)
 * [string_tolower](#string_tolower)
+* [string_toupper](#string_toupper)
 * [string_trim](#string_trim)
 * [string_trim_to_difference](#string_trim_to_difference)
 
@@ -108,6 +104,12 @@ So I have created somewhat alot of functions which does things that you might ne
  parses delimiters and retruns a list of length 2 containing the specified delimiters. 
  The usefullness of this function becomes apparent when you use [string_take_delimited](#string_take_delimited)
  
+
+
+
+
+
+## <a name="argument_escape"></a> `argument_escape`
 
 
 
@@ -166,6 +168,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 
+## <a name="string_codes"></a> `string_codes`
+
+
+
+
+
 ## <a name="string_combine"></a> `string_combine`
 
  combines the varargs into a string joining them with separator
@@ -174,13 +182,13 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 
+## <a name="string_concat"></a> `string_concat`
+
+
+
+
+
 ## <a name="string_contains"></a> `string_contains`
-
-
-
-
-
-## <a name="string_decode_bracket"></a> `string_decode_bracket`
 
 
 
@@ -192,44 +200,6 @@ So I have created somewhat alot of functions which does things that you might ne
  returns either the original or the parsed delimited string
  delimiters can be specified via varargs
  see also string_take_delimited
-
-
-
-
-## <a name="string_decode_empty"></a> `string_decode_empty`
-
-
-
-
-
-## <a name="string_decode_list"></a> `string_decode_list`
-
-
-
-
-
-## <a name="string_encode_bracket"></a> `string_encode_bracket`
-
-
-
-
-
-## <a name="string_encode_delimited"></a> `string_encode_delimited`
-
- escapes a string to be delimited
- by the the specified delimiters
-
-
-
-
-## <a name="string_encode_empty"></a> `string_encode_empty`
-
-
-
-
-
-## <a name="string_encode_list"></a> `string_encode_list`
-
 
 
 
@@ -249,6 +219,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 
+## <a name="string_find"></a> `string_find`
+
+
+
+
+
 ## <a name="string_isempty"></a> `string_isempty`
 
  returns true if the given string is empty
@@ -264,6 +240,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
  returns true if the string is a integer (number)
  does not match non integers
+
+
+
+
+## <a name="string_length"></a> `string_length`
+
 
 
 
@@ -314,13 +296,7 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 
-## <a name="string_parentheses_encode"></a> `string_parentheses_encode`
-
-
-
-
-
-## <a name="string_parentheses_encode"></a> `string_parentheses_encode`
+## <a name="string_random"></a> `string_random`
 
 
 
@@ -357,18 +333,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 ## <a name="string_replace_first"></a> `string_replace_first`
-
-
-
-
-
-## <a name="string_semicolon_decode"></a> `string_semicolon_decode`
-
-
-
-
-
-## <a name="string_semicolon_encode"></a> `string_semicolon_encode`
 
 
 
@@ -473,6 +437,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 ## <a name="string_tolower"></a> `string_tolower`
+
+
+
+
+
+## <a name="string_toupper"></a> `string_toupper`
 
 
 

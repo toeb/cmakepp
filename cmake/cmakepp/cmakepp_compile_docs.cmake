@@ -1,7 +1,7 @@
 ## 
 ## goes through all of cmakepp's README.md.in files and generates them
 function(cmakepp_compile_docs)
-  oocmake_config(base_dir)
+  cmakepp_config(base_dir)
   ans(base_dir)
   file(GLOB_RECURSE template_paths "${base_dir}/**README.md.in")
   

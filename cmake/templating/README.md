@@ -175,7 +175,8 @@ There is  one major caveat at the moment.  Files larger than `500 kB` lead to me
  * assume `add(lhs rhs) => {lhs+rhs}`
  * assume `data = {a:1,b:[2,3,4],c:{d:5,b:[6,7,8]}}`
  * assume `data2 = "hello!"`
- * `@@` => ` * `<%%` => `<%`
+ * `@@` => `@`
+ * `<%%` => `<%`
  * `%%>` => `%>`
  * `@data2` => `hello!`
  * `@add(1 4)` => `5`

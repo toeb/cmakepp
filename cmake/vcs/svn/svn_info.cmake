@@ -13,15 +13,15 @@ function(svn_info uri)
     ans(uri)
 
 
-    svn(info ${uri} --result --xml ${ARGN})
+    svn(info ${uri} --process-handle --xml ${ARGN})
     ans(res)
-    map_tryget(${res} result)
+    map_tryget(${res} exit_code)
     ans(error)
     if(error)
       return()
     endif()
 
-    map_tryget(${res} output)
+    map_tryget(${res} stdout)
     ans(xml)
 
     xml_parse_attrs("${xml}" entry path)    

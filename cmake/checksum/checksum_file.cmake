@@ -1,9 +1,11 @@
-# calculates and returns the checksum for the specified file
-# uses md5 as a default, other algorithms are possible (see string or file for algorithm names)
+## `(<file> [--algorithm <checksum algorithm> = "MD5"])-><checksum>`
+##
+## calculates the checksum for the specified file delegates the
+## call to `CMake`'s file(<algorithm>) function
+## 
 function(checksum_file file)
 
   path_qualify(file)
-
 
   set(args ${ARGN})
   list_extract_labelled_value(args --algorithm)

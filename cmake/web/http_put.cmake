@@ -5,7 +5,7 @@
 ##
 ##   --json											flag will deserialize the result data
 ##
-##   --return-code  						flag will return the http clients return code 
+##   --exit-code    						flag will return the http clients return code 
 ##															non-zero indicates an error
 ##   --show-progress 						flag causes a console message which indicates 
 ##															the progress of the operation
@@ -43,7 +43,7 @@ function(http_put uri)
 	list_extract_flag(args --show-progress)
 	ans(show_progress)
 
-	list_extract_flag(args --return-code)
+	list_extract_flag(args --exit-code)
 	ans(return_return_code)
 
 	list_extract_flag(args --json)
@@ -112,7 +112,6 @@ function(http_put uri)
 	)
 	## parse http client status
 	list_extract(client_result client_status client_message)
-
 	if(EXISTS "${temp_file}")
 		rm("${temp_file}")
 	endif()

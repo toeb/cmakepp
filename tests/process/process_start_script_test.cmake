@@ -13,10 +13,14 @@ function(test)
 
   process_start_script("${script}")
   ans(pi1)
+  message(started1)
   process_start_script("${script}")
   ans(pi2)
+  message(started2)
   process_start_script("${script}")
   ans(pi3)
+  message(started3)
+
 
 
   process_wait_all(${pi1} ${pi2} ${pi3})

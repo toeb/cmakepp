@@ -1,6 +1,0 @@
-function(test)
-  lambda_import("(test)->return('$test$test')" mylamb)
-  mylamb(1)
-  ans(res)
-  assert("${res}" STREQUAL "11")
-endfunction()

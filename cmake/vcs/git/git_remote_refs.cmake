@@ -3,12 +3,12 @@
 function(git_remote_refs uri)
   git_uri("${uri}")
   ans(uri)
-  git(ls-remote "${uri}" --result)
+  git(ls-remote "${uri}" --process-handle)
   ans(result)
 
-  map_tryget(${result} result)
+  map_tryget(${result} exit_code)
   ans(error)
-  map_tryget(${result} output)
+  map_tryget(${result} stdout)
   ans(res)
 
   if(error)

@@ -62,16 +62,12 @@ function(list_equal)
 
 	# depending on the comparator
 	if(${_COMPARATOR} STREQUAL "STREQUAL")
-		set(lambda "(a b) eval_truth(\"\${a}\" STREQUAL \"\${b}\") \n ans(res) \n return_value(\${res})")
+		set(lambda "[](a b) eval_truth('{{a}}' STREQUAL '{{b}}')")
 	elseif(${_COMPARATOR} STREQUAL "EQUAL")
-		set(lambda "(a b) eval_truth( \"\${a}\" EQUAL \"\${b}\") \n ans(res) \n return_value(\${res})")
+		set(lambda "[](a b) eval_truth('{{a}}' EQUAL '{{b}}')")
 	else()
 		set(lambda "${_COMPARATOR}")
 	endif()
-
-	# convert lambda expressin into a  function string
-	lambda(lambda "${lambda}")
-
 	# import function string 
 	function_import("${lambda}" as __list_equal_comparator REDEFINE)
 		
@@ -82,7 +78,8 @@ function(list_equal)
 		list(GET listA ${i} a)
 		list(GET listB ${i} b)
 		#message("comparing ${a} ${b}")
-		__list_equal_comparator(res ${a} ${b})
+		__list_equal_comparator(${a} ${b})
+		ans(res)
 		if(NOT res)
 			return(false)
 		endif()

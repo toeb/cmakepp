@@ -4,7 +4,7 @@ function(git_remote_exists uri)
   git_uri("${uri}")
   ans(uri)
 
-  git(ls-remote "${uri}" --return-code)
+  git(ls-remote "${uri}" --exit-code)
   ans(res)
   
   if("${res}" EQUAL 0)

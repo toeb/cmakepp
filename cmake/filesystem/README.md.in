@@ -76,7 +76,7 @@ popd() # pwd is now ${CMAKE_SOURCE_DIR} again and stack is empty
   - `fappend(<unqualified path> <content:string>)->void` appends the specified content to the target file
   - `fwrite(<unqualified path> <content:string>)->void` writes the content to the target file (overwriting it)
   - `parent_dir(<unqualified path>)-><qualified path>` returns the parent directory of the specified path
-  - `file_timestamp(<unqualified path>)-><timestampstring>` returns the timestamp string for the specified path yyyy-MM-ddThh:mm:ss
+  - `ftime(<unqualified path>)-><timestampstring>` returns the timestamp string for the specified path yyyy-MM-ddThh:mm:ss
   - `ls([<unqualified path>])-><qualified path>[]` returns files and subfolders of specified path
   - `mkdir(<unqualified path>)-><qualfied path>` creates the specified dir and returns its qualified path
   - `mkdirs(<unqualified path>...)-><qualified path>[]` creates all of the directories specified

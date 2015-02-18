@@ -7,24 +7,25 @@ function(process_info_Windows handlish)
   ans(pid)
 
 
-  win32_tasklist(/V /FO CSV /FI "PID eq ${pid}" --result )
+  win32_tasklist(/V /FO CSV /FI "PID eq ${pid}" --process-handle )
   ans(exe_result)
 
-  map_tryget(${exe_result} return_code)
+
+  map_tryget(${exe_result} exit_code)
   ans(error)
   if(error)
     return()
   endif()
 
 
-  map_tryget(${exe_result} output)
+  map_tryget(${exe_result} stdout)
   ans(csv)
+
 
   csv_deserialize("${csv}" --headers)  
   ans(res)
 
   map_rename(${res} PID pid)
-
   return_ref(res)
 endfunction()
 

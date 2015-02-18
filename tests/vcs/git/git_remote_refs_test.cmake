@@ -18,7 +18,7 @@ function(test)
   assert(COUNT 2 ${refs})
 
 
-  list_select(refs "(r)-> return({r.name})")
+  list_select(refs "[](r)format({r.name})")
   ans(refs)
 
   assert(CONTAINS HEAD ${refs})

@@ -3,7 +3,7 @@
     uri("${uri}")
     ans(uri)
 
-    list_to_map(${__lst} "(m)->map_tryget($m source_name)")
+    list_to_map(${__lst} "[](m)map_tryget({{m}} source_name)")
     ans(map)
 
     map_tryget("${uri}" schemes)

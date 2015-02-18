@@ -11,19 +11,27 @@ function(function_import callable)
     message(FATAL_ERROR "no callable specified")
   endif()
 
-  if(COMMAND "${function_name}" AND function_name AND function_name STREQUAL "${callable}")
-    message(DEBUG LEVEL 6 "function '${function_name}' should be imported as '${target_name}' ... returning without operation")
-    return()
+  if(COMMAND "${callable}")
+    if("${function_name}_" STREQUAL "_" OR "${callable}_" STREQUAL "${function_name}_")
+      return_ref(callable)
+    endif()
   endif()
 
-  function_string_get("${callable}")
-  ans(function_string)
+
+
+
 
   if(NOT function_name)
-    function_new()
-    ans(function_name)
-    set(redefine true)
+    if(COMMAND "${callable}")
+      set(function_name "${callable}")
+      return_ref(function_name)
+    else()
+      function_new()
+      ans(function_name)
+      set(redefine true)
+    endif()
   endif()
+
 
   if(COMMAND "${function_name}" AND NOT redefine)
     if(once)
@@ -32,8 +40,20 @@ function(function_import callable)
     message(FATAL_ERROR "cannot import '${callable}' as '${function_name}' because it already exists")
   endif()
 
+
+  lambda2_tryimport("${callable}" "${function_name}")
+  ans(res)
+  if(res)
+    return_ref(function_name)
+  endif()
+
+
+  function_string_get("${callable}")
+  ans(function_string)
+  
   function_string_rename("${function_string}" "${function_name}")
   ans(function_string)
+  
   function_string_import("${function_string}")
 
   return_ref(function_name)

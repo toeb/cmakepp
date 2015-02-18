@@ -1,7 +1,7 @@
-## event_cancel()-><null>
+## `()-><null>`
 ##
-## only for inside event handlers 
-## causes event_emit not to continue with event 
+## only usable inside event handlers. cancels the current event and returns
+## after this handler.
 function(event_cancel)
   ref_set(${__current_event_cancel} true)
   return()

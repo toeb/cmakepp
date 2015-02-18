@@ -9,12 +9,19 @@ function(test)
   file(WRITE "${test_dir}/dir1/file3.txt" "asd")
 
 
-  file_glob("${test_dir}" "**" --relative)
+  glob("**" --relative --recurse)
   ans(res)
-  message("adda ${res}")
+  assert(${res} COUNT 6)
+  assert(${res} CONTAINS file1.txt)
+  assert(${res} CONTAINS file2.txt)
+  assert(${res} CONTAINS file3.txt)
+  assert(${res} CONTAINS dir1/file1.txt)
+  assert(${res} CONTAINS dir1/file2.txt)
+  assert(${res} CONTAINS dir1/file3.txt)
   
-  file_glob("${test_dir}" "**")
+
+  glob("*")
   ans(res)
-  message("adda ${res}")
+  assert(${res} COUNT 4)
   
 endfunction()

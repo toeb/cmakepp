@@ -6,11 +6,19 @@
 ## output:
 ##  varA: '1' varB: 'abc'
   function(print_vars)
+    set(args "${ARGN}")
+    list_extract_flag(args --plain)
+    ans(plain)
     set(__str)
-    foreach(arg ${ARGN})
+    foreach(arg ${args})
       assign(____cur = ${arg})
-      json("${____cur}")
-      ans(____cur)
+      if(NOT plain)
+        json("${____cur}")
+        ans(____cur)
+      else()
+        set(____cur "'${____cur}'")
+      endif()
+
       string_shorten("${____cur}" "300")
       ans(____cur)
       set(__str "${__str} ${arg}: ${____cur}")

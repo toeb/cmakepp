@@ -4,7 +4,6 @@ function(test)
   ans(res)
   assert(DEREF "{res.authors}" EQUALS "To bi" "Katti")
 
-
   json2("true")
   ans(res)
   assert("${res}" STREQUAL "true")

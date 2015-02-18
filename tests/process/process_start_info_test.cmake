@@ -1,6 +1,6 @@
 function(test)
-
   define_test_function(test_uut process_start_info)
+
 
 
   # command

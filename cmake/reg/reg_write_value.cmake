@@ -6,7 +6,7 @@
     ans(value)
     string(REPLACE / \\ key "${key}")
     set(type REG_SZ)
-    reg(add "${key}" /v "${value_name}" /t "${type}" /f /d "${value}" --return-code)
+    reg(add "${key}" /v "${value_name}" /t "${type}" /f /d "${value}" --exit-code)
     ans(error)
     if(error)
       return(false)

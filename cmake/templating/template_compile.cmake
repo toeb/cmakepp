@@ -15,7 +15,7 @@
 ## * assume `add(lhs rhs) => {lhs+rhs}`
 ## * assume `data = {a:1,b:[2,3,4],c:{d:5,b:[6,7,8]}}`
 ## * assume `data2 = "hello!"`
-## * `@@@@` => `@`
+## * `@@@@` => `@@`
 ## * `<%%%` => `<%%`
 ## * `%%%>` => `%%>`
 ## * `@@data2` => `hello!`
@@ -73,7 +73,7 @@ function(template_compile input)
     "${input}"
   )
   string(REGEX REPLACE 
-    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}]+)"
+    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\r\n]+)"
     "${delimiter_code}=\"{\\1}\"${delimiter_code}"
     input
     "${input}"
@@ -87,8 +87,9 @@ function(template_compile input)
   string(REPLACE "${delimiter_start_escape_code}" "${delimiter_start}"  fragments "${fragments}")
   string(REPLACE "${delimiter_end_escape_code}" "${delimiter_end}"  fragments "${fragments}")
   string(REPLACE "${shorthand_indicator_escape_code}" "${shorthand_indicator}"  fragments "${fragments}")
-
-
+  string(REPLACE "${shorthand_indicator_code}" "${shorthand_indicator}" fragments "${fragments}")
+  
+  
   ref_new()
   ans(result)
   ref_append_string("${result}" "template_begin()")
@@ -100,13 +101,22 @@ function(template_compile input)
     # now the fragment input is exactly the same as it was in input
     string_decode_bracket("${fragment}")
     ans(fragment)
+
     string_semicolon_decode("${fragment}")
     ans(fragment)
 
     if("${fragment}" MATCHES "${code_fragment_regex}")
       ## handle code fragment
       set(code "${CMAKE_MATCH_1}")
-      
+
+      ## special case <%>
+      if("${code}" MATCHES "^>([a-zA-Z_0-9]+ )(.*)")
+        set(output_var "${CMAKE_MATCH_1}")
+        cmake_string_escape("${CMAKE_MATCH_2}")
+        ans(output)
+        set(code "set(${output_var} \"${output}\")\n${CMAKE_MATCH_2}")
+      endif()
+
       ## special case <%= 
       if("${code}" MATCHES "^=(.*)")  
         set(code "${CMAKE_MATCH_1}")
@@ -114,7 +124,7 @@ function(template_compile input)
           set(code "set(__ans) \n ${code} \n template_out(\"\${__ans}\")")
         else()
           set(code "template_out_format(${code})")
-        endif()      
+        endif()
       else()
 
       endif()

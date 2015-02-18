@@ -11,7 +11,8 @@
       -NoLogo                   # no info output 
       -NonInteractive           # no interaction
       -ExecutionPolicy ByPass   # bypass execution policy 
-      -WindowStyle Hidden       # hide window
+     # -NoNewWindow              
+      #-WindowStyle Hidden       # hide window
       -File "${script_file}"    # the file to execute
       ${ARGN}                   # add further args to command line
       )

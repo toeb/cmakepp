@@ -10,22 +10,28 @@ function(test)
   ## event handler protocols all events fired
 
   ## arrange
-  map_new()
-  ans(context)
-  event_addhandler(on_event "(name)->map_append(${context} events_emitted $name)")
 
+
+  events_track(project_on_package_install project_on_package_load project_on_package_uninstall)
+  ans(tracker)
   project_create(pr1)
   ans(project)
 
+  assign(project.remote = path_package_source())
+
   assign(success = project.install(pkg1))
 
-  map_set(${context} events_emitted) ## reset events
 
   ## act
-  assign(success = project.uninstall(mypkg_0_0_0))
+  assign(success = project.uninstall(?id=mypkg))
 
   ## assert
+
+  assign(installed_packages = project.local.query(?*))
+  assert(NOT installed_packages)
+
+
   assert(success)
-  assertf({context.events_emitted} CONTAINS project_on_package_uninstall)
+  assertf({tracker.project_on_package_uninstall[0].args} CONTAINS "${project}")
 
 endfunction()

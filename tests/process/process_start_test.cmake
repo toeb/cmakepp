@@ -1,9 +1,5 @@
 function(test)
 
-
-
-
-
   ## runs three scripts and expects then to stop in a particular order
 
 
@@ -17,7 +13,7 @@ function(test)
   ans(h3)
 
 
-  set(finished)
+set(finished)
   echo_append("waiting")
   set(processes ${h1} ${h2} ${h3})
   while(processes)

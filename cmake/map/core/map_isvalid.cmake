@@ -1,5 +1,6 @@
 # returns true if ref is a valid reference and its type is 'map'
 function(map_isvalid  ref )
+
 	ref_isvalid("${ref}")
 	ans(isref)
 	if(NOT isref)

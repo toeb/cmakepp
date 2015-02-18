@@ -119,7 +119,7 @@ return()
 
 
 
-  assign(uut.key = "'(a)-> map_tryget($a id)'")
+  assign(uut.key = "'[](a) map_tryget({{a}} id)'")
   #json_print(${uut})
 
 

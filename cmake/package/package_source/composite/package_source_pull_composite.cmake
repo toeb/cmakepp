@@ -26,8 +26,7 @@
 
     ## use the package package source to pull the correct package
     ## and return the result
-    call(package_source.pull("${package_uri}" ${args}))
-    ans(package_handle)
+    assign(package_handle = package_source.pull("${package_uri}" ${args}))
 
     return_ref(package_handle)
   endfunction()

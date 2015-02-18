@@ -25,10 +25,8 @@
         error("could not download {resource_uri}" --aftereffect)
         return()
     endif()
-
     package_source_resolve_archive("${cached_archive_path}")
     ans(archive_package_handle)
-
     if(NOT archive_package_handle)
         error("{uri.uri} is not a supported archive file ")
         return()

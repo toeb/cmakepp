@@ -18,29 +18,26 @@ function(shell cmd)
   # execute shell script which write the keyboard input to the ${value_file}
   set(args ${ARGN})
 
-  list_extract_flag(args --result)
-  ans(result_flag)
+  list_extract_flag(args --process-handle)
+  ans(return_process_handle)
 
-  execute("{
-    path:$shell_script,
-    args:$args
-    }")
+  execute("${shell_script}" ${args} --process-handle)
   ans(res)
 
   # remove temp file
   file(REMOVE "${shell_script}")
-  if(result_flag)
+  if(return_process_handle)
     return_ref(res)
   endif()
 
-  map_tryget(${res} result)
-  ans(return_code)
+  map_tryget(${res} exit_code)
+  ans(exit_code)
 
-  if(NOT "_${return_code}" STREQUAL "_0")
+  if(NOT "_${exit_code}" STREQUAL "_0")
     return()
   endif()
 
-  map_tryget(${res} output)
-  ans(output)
-  return_ref(output)
+  map_tryget(${res} stdout)
+  ans(stdout)
+  return_ref(stdout)
 endfunction()

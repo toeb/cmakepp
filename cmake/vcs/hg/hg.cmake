@@ -2,7 +2,7 @@
 # use cd() to navigate to working directory
 # usage is same as hg command line client
 # syntax differs: hg arg1 arg2 ... -> hg(arg1 arg2 ...)
-# add a --result flag to get a object containing return code
+# add a --process-handle flag to get a object containing return code
 # input args etc.
 # else only console output is returned
 function(hg)

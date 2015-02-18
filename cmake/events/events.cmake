@@ -1,4 +1,6 @@
-# returns the global events map
+## `()-> <event>`
+##
+## returns the global events map it contains all registered events.
 function(events)
 
   function(events)

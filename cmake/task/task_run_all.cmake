@@ -1,0 +1,15 @@
+
+
+  function(task_run_all)
+    set(completed_tasks)
+    while(true)
+      task_run_next()
+      ans(completed_task)
+      if(completed_task)
+        list(APPEND completed_tasks ${completed_task})
+      else()
+        break()
+      endif()
+    endwhile()
+    return_ref(completed_tasks)
+  endfunction()

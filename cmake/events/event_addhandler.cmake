@@ -1,17 +1,18 @@
-## event_addhandler()
+## `event_addhandler(<~event> <~callable>)-><event handler>`
 ##
-## adds an event handler to the event specified by name
+## adds an event handler to the specified event. returns an `<event handler>`
+## which can be used to remove the handler from the event.
 ##
-function(event_addhandler name handler)
-  event("${name}")
+function(event_addhandler event handler)
+  event("${event}")
   ans(event)
 
-  ## todo - maybe escape handler string semicolon?
-  ## todo import handler function and create  a mapping from handler->fuction
+  event_handler("${handler}")
+  ans(handler)
+
   ## then only append function 
   map_append_unique("${event}" handlers "${handler}")
  
-  return()  
+  return(${handler})  
 endfunction()
-
 

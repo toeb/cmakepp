@@ -52,7 +52,7 @@ function(datetime)
     return("${dt}")
   else()
 
-    message(WARNING "oocmake's datetime is not implemented  for your system")
+    message(WARNING "cmakepp's datetime is not implemented  for your system")
     set(yyyy)
     set(MM)
     set(dd)

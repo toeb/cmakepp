@@ -5,7 +5,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)](https://github.com/toeb/cmakepp/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/network)
 [![GitHub issues](https://img.shields.io/github/issues/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/issues)
-[![biicode block](https://img.shields.io/badge/toeb%2Fcmakepp-DEV%3A0-yellow.svg)](https://www.biicode.com/toeb/cmakepp)  
+[![Build Status](https://webapi.biicode.com/v1/badges/toeb/toeb/cmakepp/master?pleasegithubstopcachingmycoolbadge)](https://www.biicode.com/toeb/cmakepp)
 [![Project Stats](https://www.ohloh.net/p/cmakepp/widgets/project_thin_badge.gif)](https://www.ohloh.net/p/cmakepp)
 
 
@@ -19,6 +19,7 @@ Look through the files in the package.  Most functions will be commented and the
 `cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
 
 
+* [Creating Checksums](cmake/checksum/README.md)
 * [Collections](cmake/collections/README.md)
 * [Date/Time](cmake/datetime/README.md)
 * [Events](cmake/events/README.md)
@@ -26,6 +27,7 @@ Look through the files in the package.  Most functions will be commented and the
 * [Functions](cmake/function/README.md)
 * [Logging Functions](cmake/log/README.md)
 * [Maps - Structured Data in CMake](cmake/map/README.md)
+* [Navigation Functions](cmake/navigation/README.md)
 * [Objects ](cmake/object/README.md)
 * [Package Management](cmake/package/README.md)
 * [User Data](cmake/persistence/README.md)
@@ -59,6 +61,8 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 * [Creating a Compressed Package](samples/04-create-simple-compressed-package/README.md)
 * [Creating and Installing a Package with an Install Hook](samples/05-create-install-simple-package-with-install-script/README.md)
 * [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
+* [Adding Boost to you `CMake` project](samples/07-adding-boost-by-package-manager/README.md)
+* [Download, Build and Use `jsoncpp`](samples/09-download-build-use-jsoncpp/README.md)
 
 
 
@@ -154,6 +158,7 @@ I would be very happy If you choose to contribute to `cmakepp`. You can open any
 
 If you want to change something you may send pull requests through github. Normally I will check them quickly and `travis-ci` will build them.  I suggest you run all tests using the sublime project before you create a pull request to see if anything breaks.  (the master branch will have to pass the tests)  
 
+Also if you want to support me financially for all the hardwork - consider donating a couple of $ <a href='https://pledgie.com/campaigns/28347'><img alt='Click here to lend your support to: cmakepp  and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/28347.png?skin_name=chrome' border='0' ></a>
 
 # Developer Guidlines
 
@@ -267,7 +272,7 @@ This is possible by overwriting CMakes default return() function with a macro. I
   "Host":"httpbin.org",
   "User-Agent":"curl/7.16.1"
  },
- "origin":"85.180.184.251",
+ "origin":"87.157.218.55",
  "url":"http://httpbin.org/get?key=value"
 }
 

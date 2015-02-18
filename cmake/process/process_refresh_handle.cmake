@@ -6,14 +6,8 @@ function(process_refresh_handle handle)
   ans(handle)
 
 
-  set(args ${ARGN})
-
   process_isrunning("${handle}")
   ans(isrunning)
-
-
-
-
 
   if(isrunning)
     set(state running)
@@ -21,25 +15,23 @@ function(process_refresh_handle handle)
     set(state terminated)
   endif()
 
-  # get old state update new state
-  map_tryget(${handle} state)
-  ans(previous_state)
-  map_set(${handle} state "${state}")
 
+  process_handle_change_state("${handle}" "${state}")
+  ans(state_changed)
 
-  if(NOT "${state}_" STREQUAL "${previous_state}_")
-    #message(FORMAT "statechange ({handle.pid}) : {previous_state} -> {state} ")
+  if(state_changed)
     if("${state}" STREQUAL "terminated")
       process_return_code("${handle}")
-      ans(return_code)
+      ans(exit_code)
       process_stdout("${handle}")
       ans(stdout)
       process_stderr("${handle}")
       ans(stderr)
-      map_capture("${handle}" return_code stdout stderr)
+      map_capture("${handle}" exit_code stdout stderr)
     endif()
   endif()
 
-  return(${isrunning})
+
+  return_ref(isrunning)
 
 endfunction()

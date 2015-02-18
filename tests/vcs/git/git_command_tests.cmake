@@ -5,17 +5,17 @@ function(test)
   assert("${res}" MATCHES "git")
 
   pushd("dir1" --create)  
-  git(init --return-code)
+  git(init --exit-code)
   ans(ret)
   assert("${ret}" EQUAL 0)
   assert(EXISTS "${test_dir}/dir1/.git")
 
   ## create a repo and add a file to it
   fwrite(README.md "hello world")
-  git(add . --return-code)
+  git(add . --exit-code)
   ans(ret)
   assert("${ret}" EQUAL 0)
-  git(commit -m "initial commit" --return-code)
+  git(commit -m "initial commit" --exit-code)
   ans(ret)
   assert("${ret}" EQUAL 0)
 
@@ -23,16 +23,16 @@ function(test)
 
   ## clone local repo
   pushd(dir2 --create)
-  git(clone ../dir1 . --return-code)
+  git(clone ../dir1 . --exit-code)
   ans(ret)
   assert("${ret}" EQUAL 0)
   assert(EXISTS "${test_dir}/dir2/README.md")
   popd()
 
 
-  ## clone remote repo (of oocmake)
+  ## clone remote repo (of cmakepp)
   pushd(dir3 --create)
-  git(clone "https://github.com/toeb/oo-cmake" . --return-code)
+  git(clone "https://github.com/toeb/cmakepp" . --exit-code)
   ans(ret)
   assert("${ret}" EQUAL 0)
   assert(EXISTS "${test_dir}/dir3/cmake/vcs/git/git.cmake")

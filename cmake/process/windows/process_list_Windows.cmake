@@ -6,13 +6,12 @@ function(process_list_Windows)
 
   string(REGEX MATCHALL "[0-9]+" matches "${ids}")
   set(ids)
+
   foreach(id ${matches})
     process_handle("${id}")
     ans(handle)
-    list(APPEND ids ${id})
+    list(APPEND ids ${handle})
   endforeach()
 
   return_ref(ids)
-
-
 endfunction()

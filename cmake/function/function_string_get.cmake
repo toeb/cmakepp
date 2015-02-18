@@ -43,10 +43,16 @@ function(function_string_get func)
 	is_function_cmake(is_cmake_func "${func}")
 
 	if(is_cmake_func)
+		## todo: just return nothing as func is already correctly defined...
 		set(source "macro(${func})\n ${func}(\${ARGN})\nendmacro()")
 		return_ref(source)		
 		return()
 	endif()
+	
+	if(NOT (is_string OR is_file OR is_cmake_func)  )
+		message(FATAL_ERROR "the following is not a function: '${func}' ")
+	endif()
+	return()	
 
 	lambda_parse("${func}")
 	ans(parsed_lambda)
@@ -54,11 +60,7 @@ function(function_string_get func)
 	if(parsed_lambda)
 		return_ref(parsed_lambda)
 		return()
-	endif()
+	#endif()
 
-	if(NOT (is_string OR is_file OR is_cmake_func)  )
-		message(FATAL_ERROR "the following is not a function: '${func}' ")
-	endif()
-	return()	
 
 endfunction()

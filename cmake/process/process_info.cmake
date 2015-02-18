@@ -3,5 +3,6 @@
 function(process_info)
   wrap_platform_specific_function(process_info)
   process_info(${ARGN})
-  return_ans()
+  ans(res)
+  return_ref(res)
 endfunction()

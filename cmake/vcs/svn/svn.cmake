@@ -3,9 +3,9 @@
 # usage is same as svn command line client
 # syntax differs: svn arg1 arg2 ... -> svn(arg1 arg2 ...)
 # also see wrap_executable for usage
-# add a --result flag to get a object containing return code, output
+# add a --process-handle flag to get a object containing return code, output
 # input args etc.
-# add --return-code flag to get the return code of the commmand
+# add --exit-code flag to get the return code of the commmand
 # by default fails if return code is not 0 else returns  stdout/stderr
 function(svn)
   find_package(Subversion)

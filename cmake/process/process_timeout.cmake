@@ -2,11 +2,11 @@
 #todo create shims
 function(process_timeout n)
   if(${CMAKE_MAJOR_VERSION} GREATER 2)
-    process_start("{command:$CMAKE_COMMAND, args:['-E', 'sleep', $n]}")
+    execute(${CMAKE_COMMAND} -E sleep ${n} --async)
     return_ans()
   else()
     if(UNIX)
-      process_start("{command:'sleep', args:$n}")
+      execute(sleep ${n} --async)
       return_ans()
     endif()
   endif()

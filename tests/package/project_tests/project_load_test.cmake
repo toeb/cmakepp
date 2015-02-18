@@ -1,17 +1,26 @@
 function(test)
   
-  ## event handler protocols all events fired
-  map_new()
-  ans(context)
-  event_addhandler(on_event "(name)->map_append(${context} events_emitted $name)")
+  path_package_source()
+  ans(path_source)
 
+
+
+  events_track(
+    project_on_begin_load 
+    project_on_load 
+    project_on_package_load 
+    project_on_packages_loaded
+  )
+  ans(tracker)
+
+  ## event handler protocols all events fired
   ### load default non existing project
 
   ## arrange
   project_new()
   ans(project)
 
-  map_set(${context} events_emitted) # reset events
+
 
   ## act
   assign(success = project.load("pr0"))
@@ -31,7 +40,14 @@ function(test)
   project_new()
   ans(project)
 
-  map_set(${context} events_emitted) # reset events
+
+  events_track(
+    project_on_begin_load 
+    project_on_load 
+    project_on_package_load 
+    project_on_packages_loaded
+  )
+  ans(tracker)
   ## act
   assign(success = project.load("pr1" 
     "{
@@ -47,24 +63,31 @@ function(test)
   assertf({project.dependency_dir} STREQUAL "${test_dir}/pr1/custom_package_dir")
   assertf({project.config_dir} STREQUAL "${test_dir}/pr1/custom_config_dir")
   assertf({project.content_dir} STREQUAL "${test_dir}/pr1/custom_content_dir")
-  assertf({project.dependency_source.directory} STREQUAL "${test_dir}/pr1/custom_package_dir")
+  assertf({project.local.directory} STREQUAL "${test_dir}/pr1/custom_package_dir")
 
-  assertf({context.events_emitted} CONTAINS project_on_begin_load)
-  assertf({context.events_emitted} CONTAINS project_on_load)
+  assertf({tracker.event_ids} CONTAINS project_on_begin_load)
+  assertf({tracker.event_ids} CONTAINS project_on_load)
+
 
 
   ### load existing project with default layout with installed packages
-  
+    
+  events_track(
+    project_on_begin_load 
+    project_on_load 
+    project_on_package_load 
+    project_on_packages_loaded
+  )
+  ans(tracker)
   ## arrange
   fwrite_data("pkg1/package.cmake" "{id:'mypkg',version:'0.0.0',includes:'**'}" --json)
   managed_package_source("project" "${test_dir}/pr2/packages")
   ans(managed_source)
 
-  assign(success = managed_source.push(pkg1))
+  assign(success = managed_source.push(${path_source} pkg1))
   project_new()
   ans(project)
 
-  map_set(${context} events_emitted) # reset events
 
   ## act
   assign(success = project.load("pr2"))
@@ -73,13 +96,12 @@ function(test)
   ## assert
   assert(success)
   assertf({project.project_dir} STREQUAL "${test_dir}/pr2")
-  assertf({project.dependency_source.directory} STREQUAL "${test_dir}/pr2/packages")
+  assertf({project.local.directory} STREQUAL "${test_dir}/pr2/packages")
 
 
-  assertf({context.events_emitted} CONTAINS project_on_begin_load)
-  assertf({context.events_emitted} CONTAINS project_on_load)
-  assertf({context.events_emitted} CONTAINS project_on_package_load)
-  assertf({context.events_emitted} CONTAINS project_on_packages_loaded)
-  assertf({context.events_emitted} CONTAINS project_on_load)  
+  assertf({tracker.event_ids} CONTAINS project_on_begin_load)
+  assertf({tracker.event_ids} CONTAINS project_on_load)
+  assertf({tracker.event_ids} CONTAINS project_on_package_load)
+  assertf({tracker.event_ids} CONTAINS project_on_packages_loaded)
 
 endfunction()

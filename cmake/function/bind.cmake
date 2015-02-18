@@ -1,3 +1,6 @@
+# is the same as function_capture.
+# deprecate one of the two
+#
 # binds variables to the function
 # by caputring their current value and storing
 # them

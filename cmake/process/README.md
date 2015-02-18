@@ -1,8 +1,47 @@
-## Process Management
+# Process Management
 
 
 
 This section how to manage processes and external programs.  Besides replacements for cmake's `execute_process` function this section defines a control system for parallel processes controlled from any cmake.  
+
+## Function List
+
+
+* [async](#async)
+* [await](#await)
+* [command_line](#command_line)
+* [command_line_args_combine](#command_line_args_combine)
+* [command_line_args_escape](#command_line_args_escape)
+* [command_line_parse](#command_line_parse)
+* [command_line_parse_string](#command_line_parse_string)
+* [command_line_to_string](#command_line_to_string)
+* [execute](#execute)
+* [process_execute](#process_execute)
+* [process_handle](#process_handle)
+* [process_handles](#process_handles)
+* [process_handle_change_state](#process_handle_change_state)
+* [process_handle_get](#process_handle_get)
+* [process_handle_new](#process_handle_new)
+* [process_handle_register](#process_handle_register)
+* [process_info](#process_info)
+* [process_isrunning](#process_isrunning)
+* [process_kill](#process_kill)
+* [process_list](#process_list)
+* [process_refresh_handle](#process_refresh_handle)
+* [process_return_code](#process_return_code)
+* [process_start](#process_start)
+* [](#)
+* [process_start_info_new](#process_start_info_new)
+* [process_start_script](#process_start_script)
+* [process_stderr](#process_stderr)
+* [process_stdout](#process_stdout)
+* [process_timeout](#process_timeout)
+* [process_wait](#process_wait)
+* [process_wait_all](#process_wait_all)
+* [process_wait_any](#process_wait_any)
+* [string_take_commandline_arg](#string_take_commandline_arg)
+* [wrap_executable](#wrap_executable)
+
 
 ## Common Definitions
 
@@ -39,7 +78,7 @@ Another example showing usage of the `execute()` function:
 ```
 find_package(Hg)
 set(cmdline --version)
-execute({path:$HG_EXECUTABLE, args: $cmdline} --result)
+execute({path:$HG_EXECUTABLE, args: $cmdline} --process-handle)
 ans(res)
 map_get(${res} result)
 ans(error)
@@ -53,7 +92,7 @@ json_print(${res}) # outputs input and output of process
 
 ### Functions and Datatypes
 
-* `execute(<process start info ?!> [--result|--return-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--result` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
+* `execute(<process start info ?!> [--process-handle|--exit-code]) -> <stdout>|<process info>|<int>` executes the process described by `<process start ish>` and by default fails fatally if return code is not 0.  if `--exit-code` flag is specified `<process info>` is returned and if `<return-code>` is specified the command's return code is returned.  (the second two options will not cause a fatal error)
   * example: `execute("{path:'<command>', args:['a','b']}")`  
 * `wrap_executable(<name:string> <command>)`  takes the executable/command and wraps it inside a function called `<name>` it has the same signature as `execute(...)`
 * `<process start info?!>` a string which can be converted to a `<process start>` object using the `process_start_info()` function.
@@ -220,39 +259,8 @@ To communicate with you processes you can use any of the following well known me
 
 
 
-### Function List
 
-
-* [async](#async)
-* [await](#await)
-* [command_line](#command_line)
-* [command_line_args_combine](#command_line_args_combine)
-* [command_line_args_escape](#command_line_args_escape)
-* [command_line_parse](#command_line_parse)
-* [command_line_parse_string](#command_line_parse_string)
-* [command_line_to_string](#command_line_to_string)
-* [process_handle](#process_handle)
-* [process_handles](#process_handles)
-* [process_info](#process_info)
-* [process_isrunning](#process_isrunning)
-* [process_kill](#process_kill)
-* [process_list](#process_list)
-* [process_refresh_handle](#process_refresh_handle)
-* [process_return_code](#process_return_code)
-* [process_start](#process_start)
-* [](#)
-* [process_start_script](#process_start_script)
-* [process_stderr](#process_stderr)
-* [process_stdout](#process_stdout)
-* [process_timeout](#process_timeout)
-* [process_wait](#process_wait)
-* [process_wait_all](#process_wait_all)
-* [process_wait_any](#process_wait_any)
-* [test](#test)
-* [string_take_commandline_arg](#string_take_commandline_arg)
-* [wrap_executable](#wrap_executable)
-
-### Function Descriptions
+## Function Descriptions
 
 ## <a name="async"></a> `async`
 
@@ -320,6 +328,60 @@ To communicate with you processes you can use any of the following well known me
 
 
 
+## <a name="execute"></a> `execute`
+
+ `(<process start info> [--process-handle] [--exit-code] [--async] [--silent-fail] [--success-callback <callable>]  [--error-callback <callable>] [--state-changed-callback <callable>])-><process handle>|<exit code>|<stdout>|<null>`
+
+ *options*
+ * `--process-handle` 
+ * `--exit-code` 
+ * `--async` 
+ * `--silent-fail` 
+ * `--success-callback <callable>[exit_code](<process handle>)` 
+ * `--error-callback <callable>[exit_code](<process handle>)` 
+ * `--state-changed-callback <callable>[old_state\;new_state](<process handle>)` 
+
+ *example*
+ ```
+  execute(cmake -E echo_append hello) -> 'hello'
+ ```
+
+
+
+
+## <a name="process_execute"></a> `process_execute`
+
+ `(<process handle>)-><process handle>`
+
+ executes the specified command with the specified arguments in the 
+ current working directory
+ creates and registers a process handle which is then returned 
+ this function accepts arguments as encoded lists. this allows you to include
+ arguments which contain semicolon and other special string chars. 
+ the process id of processes start with `process_execute` is always -1
+ because `CMake`'s `execute_process` does not return it. This is not too much of a problem
+ because the process will always be terminated as soon as the function returns
+ 
+ **parameters**
+   * `<command>` the executable (may contain spaces) 
+   * `<arg...>` the arguments - may be an encoded list 
+ **scope**
+   * `pwd()` used as the working-directory
+ **events** 
+   * `on_process_handle_created` global event is emitted when the process_handle is ready
+   * `process_handle.on_state_changed`
+
+ **returns**
+ ```
+ <process handle> ::= {
+   pid: "-1"|"0"
+     
+ }
+ ``` 
+
+
+
+
 ## <a name="process_handle"></a> `process_handle`
 
  returns the runtime unique process handle
@@ -333,6 +395,46 @@ To communicate with you processes you can use any of the following well known me
 ## <a name="process_handles"></a> `process_handles`
 
  transforms a list of <process handle?!> into a list of <process handle>  
+
+
+
+
+## <a name="process_handle_change_state"></a> `process_handle_change_state`
+
+
+
+
+
+## <a name="process_handle_get"></a> `process_handle_get`
+
+
+
+
+
+## <a name="process_handle_new"></a> `process_handle_new`
+
+ `(<process start info>)-><process handle>`
+
+ returns a new process handle which has the following layout:
+ ```
+ <process handle> ::= {
+   pid: <pid>  
+   start_info: <process start info>
+   state: "unknown"|"running"|"terminated"
+   stdout: <text>
+   stderr: <text>
+   exit_code: <integer>|<error string>
+   command: <executable>
+   command_args: <encoded list>
+   on_state_change: <event>[old_state, new_state](${process_handle}) 
+ }
+ ``` 
+
+
+
+
+## <a name="process_handle_register"></a> `process_handle_register`
+
 
 
 
@@ -397,6 +499,36 @@ To communicate with you processes you can use any of the following well known me
 
 
 
+## <a name="process_start_info_new"></a> `process_start_info_new`
+
+ `(<command string>|<object>)-><process start info>` 
+ `<command string> ::= "COMMAND"? <command> <arg...>` 
+
+ creates a new process_start_info with the following fields
+ ```
+ <process start info> ::= {
+   command: <executable> 
+   command_arguments: <encoded list>
+   working_directory: <directory>
+   timeout: <n>
+ }
+ ```
+
+ *example*
+  * `process_start_info_new(COMMAND cmake -E echo "asd bsd" csd) -> {
+ "command":"cmake",
+ "command_arguments":[
+  "-E",
+  "echo",
+  "asdbsd"
+ ],
+ "working_directory":"C:/Users/Tobi/Documents/projects/cmakepp/cmake/process",
+ "timeout":"-1"
+}` 
+
+
+
+
 ## <a name="process_start_script"></a> `process_start_script`
 
  shorthand to fork a cmake script
@@ -440,10 +572,26 @@ To communicate with you processes you can use any of the following well known me
 
 ## <a name="process_wait_all"></a> `process_wait_all`
 
- process_wait_all(<handles: <process handle...>> <?"--quietly"> <?"--timeout":<seconds>>)
- waits for all specified <handles> to finish
- specify --quietly to supress output
- if --timeout <n> is specified the function will return all finished processes after n seconds
+ `(<handles: <process handle...>>  [--timeout <seconds>] [--idle-callback <callable>] [--task-complete-callback <callable>] )`
+
+ waits for all specified <process handles> to finish returns them in the order
+ in which they completed
+
+ `--timeout <n>`    if value is specified the function will return all 
+                    finished processes after n seconds
+
+ `--idle-callback <callable>`   
+                    if value is specified it will be called at least once
+                    and between every query if a task is still running 
+
+ `--task-complete-callback <callable>`
+                    if value is specified it will be called whenever a 
+                    task completes.
+
+ *Example*
+ `process_wait_all(${handle1} ${handle1}  --task-complete-callback "[](handle)message(FORMAT '{handle.pid}')")`
+ prints the process id to the console whenver a process finishes
+
 
 
 
@@ -453,12 +601,6 @@ To communicate with you processes you can use any of the following well known me
  waits until any of the specified handles stops running
  returns the handle of that process
  if --timeout <n> is specified function will return nothing after n seconds
-
-
-
-
-## <a name="test"></a> `test`
-
 
 
 

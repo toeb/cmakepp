@@ -3,6 +3,7 @@
   ## if --timeout <n> is specified function will return nothing after n seconds
   function(process_wait_any)
     set(args ${ARGN})
+
     list_extract_flag(args --quietly)
     ans(quietly)    
 

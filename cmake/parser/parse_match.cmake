@@ -6,10 +6,10 @@
     map_get(${definition} search)
     ans(search)
 
-    #message("parsing match with '${parser_id}' (search: '${search}') for '${str}'")
+   # message("parsing match with '${parser_id}' (search: '${search}') for '${str}'")
     map_tryget(${definition} ignore_regex)
     ans(ignore_regex)
-   # message("ignore: ${ignore_regex}")
+   #message("ignore: ${ignore_regex}")
     list(LENGTH ignore_regex len)
     if(len)
      # message("ignoring ${ignore_regex}")

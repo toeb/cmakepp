@@ -1,11 +1,11 @@
-## http_get(<~uri> <?content:<structured data>> [--progress] [--response] [--return-code] )-> <http response>
+## http_get(<~uri> <?content:<structured data>> [--progress] [--response] [--exit-code] )-> <http response>
 ##
 ##
 ## flags: 
 ##   --json         flag deserializes the content and returns it 
 ##   --show-progress     flag prints the progress of the download to the console
 ##   --response     flag
-##   --return-code  flag
+##   --exit-code  flag
 ##   --silent-fail  flag
 ##  
 function(http_get uri)
@@ -16,7 +16,7 @@ function(http_get uri)
   ans(show_progress)
   list_extract_flag(args --response)
   ans(return_response)
-  list_extract_flag(args --return-code)
+  list_extract_flag(args --exit-code)
   ans(return_error)
   list_extract_flag(args --silent-fail)
   ans(silent_fail)

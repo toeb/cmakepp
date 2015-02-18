@@ -31,7 +31,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_tryget](#map_tryget)
 * [dfs](#dfs)
 * [dfs_callback](#dfs_callback)
-* [dfs_recurse](#dfs_recurse)
 * [list_match](#list_match)
 * [map_all_paths](#map_all_paths)
 * [map_at](#map_at)
@@ -71,6 +70,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_push_back](#map_push_back)
 * [map_push_front](#map_push_front)
 * [map_rename](#map_rename)
+* [map_set_if_missing](#map_set_if_missing)
 * [map_to_keyvaluelist](#map_to_keyvaluelist)
 * [map_to_valuelist](#map_to_valuelist)
 * [map_unpack](#map_unpack)
@@ -229,12 +229,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 ## <a name="dfs_callback"></a> `dfs_callback`
-
-
-
-
-
-## <a name="dfs_recurse"></a> `dfs_recurse`
 
 
 
@@ -493,6 +487,12 @@ Due to the "variable variable" system (ie names of variables are string which ca
 ## <a name="map_rename"></a> `map_rename`
 
  renames a key in the specified map
+
+
+
+
+## <a name="map_set_if_missing"></a> `map_set_if_missing`
+
 
 
 

@@ -7,5 +7,4 @@ function(map_append_string map key str)
   endif()
   get_property(property_val GLOBAL PROPERTY "${map}.${key}" )
   set_property(GLOBAL PROPERTY "${map}.${key}" "${property_val}${str}")
-
 endfunction() 

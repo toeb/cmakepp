@@ -9,7 +9,7 @@ function(test)
     ans(cache_dir)
 
     if(NOT cache_dir)
-      oocmake_config(cache_dir)
+      cmakepp_config(cache_dir)
       ans(cache_dir)
       set(cache_dir "${cache_dir}/package_cache")
     endif()
