@@ -19,17 +19,18 @@ function(execute)
   list_extract_flag(args --silent-fail)
   ans(silent_fail)
 
-
   if(NOT args)
     messagE(FATAL_ERROR "no command specified")
   endif()
 
   process_start_info_new(${args})
   ans(start_info)
+  
+##debug here
+  #print_vars(start_info.command start_info.command_arguments)
 
   process_handle_new(${start_info})
   ans(process_handle)
-
 
   if(async)
     process_start(${process_handle})
@@ -39,6 +40,8 @@ function(execute)
     if(return_handle)
       return(${process_handle})
     endif()
+
+
     
     map_tryget(${process_handle} exit_code)
     ans(exit_code)
@@ -52,7 +55,6 @@ function(execute)
     if(NOT pid)
       message(FATAL_ERROR FORMAT "could not find command '{start_info.command}'")
     endif()
-
 
     if(exit_code AND silent_fail)
       error("process {start_info.command} failed with {process_handle.exit_code}")

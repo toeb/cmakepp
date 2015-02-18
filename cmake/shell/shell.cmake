@@ -21,8 +21,7 @@ function(shell cmd)
   list_extract_flag(args --process-handle)
   ans(return_process_handle)
 
-
-  execute(${shell_script} ${args} --process-handle)
+  execute("${shell_script}" ${args} --process-handle)
   ans(res)
 
   # remove temp file
@@ -31,14 +30,14 @@ function(shell cmd)
     return_ref(res)
   endif()
 
-  map_tryget(${res} result)
-  ans(return_code)
+  map_tryget(${res} exit_code)
+  ans(exit_code)
 
-  if(NOT "_${return_code}" STREQUAL "_0")
+  if(NOT "_${exit_code}" STREQUAL "_0")
     return()
   endif()
 
-  map_tryget(${res} output)
-  ans(output)
-  return_ref(output)
+  map_tryget(${res} stdout)
+  ans(stdout)
+  return_ref(stdout)
 endfunction()

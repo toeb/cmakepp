@@ -10,7 +10,7 @@ function(git_read_single_file repository branch path )
     set(branch_arg --branch "${branch}") 
   endif()
 
-  git(clone --no-checkout ${branch_arg} --depth 1 "${repository}" "${tmp_dir}" --return-code)
+  git(clone --no-checkout ${branch_arg} --depth 1 "${repository}" "${tmp_dir}" --exit-code)
   ans(error)
 
   if(error)
