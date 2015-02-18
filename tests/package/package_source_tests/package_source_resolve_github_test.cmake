@@ -3,6 +3,7 @@ function(test)
   # resolve tests
   package_source_resolve_github("toeb/cmakepp")
   ans(res)
+  assert(res)
   assertf({res.package_descriptor.id} STREQUAL "cmakepp")
 
   package_source_resolve_github("toeb/cppdynamic")
