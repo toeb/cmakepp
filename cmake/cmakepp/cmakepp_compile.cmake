@@ -4,7 +4,6 @@
 ## compiles cmakepp into a single file which is faster to include
 function(cmakepp_compile target_file)
   path_qualify(target_file)
-
   cmakepp_config(base_dir)
   ans(base_dir)
 
@@ -22,7 +21,7 @@ function(cmakepp_compile target_file)
         file(APPEND "${target_file}" "\n\n\n${content}\n\n")
       endforeach()
     elseif("_${line}" STREQUAL "_include(\"\${cmakepp_base_dir}/cmake/task/task_enqueue\")")
-      file(READ "${base_dir}/cmake/task/task_enqueue.cmake" content)
+      file(READ "${base_dir}/cmake/task/task_enqueue" content)
       file(APPEND "${target_file}" "\n\n\n${content}\n\n")
 
     else()
