@@ -36,7 +36,7 @@ function(test)
   assertf({res.pid} STREQUAL "-1")
 
 
-  uut(COMMAND cmake -E echo_append abc bcd cde WORKING_DIRECTORY C:/)
+  uut(COMMAND cmake -E echo_append abc bcd cde WORKING_DIRECTORY ../ )
   ans(res)
   assertf({res.stdout} STREQUAL "abc bcd cde")
   assertf({res.state} STREQUAL "terminated")

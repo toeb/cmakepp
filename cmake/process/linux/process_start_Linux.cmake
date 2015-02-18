@@ -30,7 +30,7 @@ function(process_start_Linux process_handle)
   file_make_temporary("")
   ans(pid_out)
 
-  process_change_state(${process_handle} starting)
+  process_handle_change_state(${process_handle} starting)
   # create a temporary shell script 
   # which starts bash with the specified command 
   # output of the command is stored in stdout file 
@@ -57,7 +57,7 @@ function(process_start_Linux process_handle)
 
   map_set(${process_handle} pid "${pid}")
 
-  process_change_state(${process_handle} running)
+  process_handle_change_state(${process_handle} running)
 
 
   ## set output of process
