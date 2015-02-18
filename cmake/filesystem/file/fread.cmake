@@ -1,8 +1,7 @@
 # reads the file specified and returns its content
-function(flines path)
+function(fread path)
   path("${path}")
   ans(path)
-  file(STRINGS "${path}" res)
+  file(READ "${path}" res)
   return_ref(res)
 endfunction()
-
