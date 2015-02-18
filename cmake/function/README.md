@@ -24,11 +24,12 @@ Functions in cmake are not variables - they have a separate global only scope in
 ### Function List
 
 
+* [arguments_encoded_list](#arguments_encoded_list)
+* [arguments_string](#arguments_string)
 * [bind](#bind)
 * [call](#call)
 * [check_function](#check_function)
-* [curry](#curry)
-* [curry2](#curry2)
+* [curry_compile_encoded_list](#curry_compile_encoded_list)
 * [function_capture](#function_capture)
 * [function_help](#function_help)
 * [function_import](#function_import)
@@ -42,6 +43,8 @@ Functions in cmake are not variables - they have a separate global only scope in
 * [function_string_get](#function_string_get)
 * [function_string_import](#function_string_import)
 * [function_string_rename](#function_string_rename)
+* [invocation_argument_encoded_list](#invocation_argument_encoded_list)
+* [invocation_argument_string](#invocation_argument_string)
 * [is_function](#is_function)
 * [is_function_cmake](#is_function_cmake)
 * [is_function_file](#is_function_file)
@@ -55,6 +58,23 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 ### Function Descriptions
+
+## <a name="arguments_encoded_list"></a> `arguments_encoded_list`
+
+ usage arguments_string(${ARGC}) => acutal arguments string 
+ 
+
+
+
+
+## <a name="arguments_string"></a> `arguments_string`
+
+ returns the argument string which was passed to the parent function
+ it takes into considerations quoted arguments
+ todo: start and endindex
+
+
+
 
 ## <a name="bind"></a> `bind`
 
@@ -74,13 +94,10 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 
-## <a name="curry"></a> `curry`
+## <a name="curry_compile_encoded_list"></a> `curry_compile_encoded_list`
 
+ (["[" <capture vars> "]"] <callable> "(" (<argument>|<assignment>)* ")" ["=>" <?func_name>(<arg names>)  ])->
 
-
-
-
-## <a name="curry2"></a> `curry2`
 
 
 
@@ -160,6 +177,18 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 ## <a name="function_string_rename"></a> `function_string_rename`
+
+
+
+
+
+## <a name="invocation_argument_encoded_list"></a> `invocation_argument_encoded_list`
+
+
+
+
+
+## <a name="invocation_argument_string"></a> `invocation_argument_string`
 
 
 

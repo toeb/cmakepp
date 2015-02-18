@@ -1,10 +1,15 @@
-## Process Management
+# Process Management
 <%
     assign(function_files = glob("**.cmake" --relative))
 %>
 
 
 This section how to manage processes and external programs.  Besides replacements for cmake's `execute_process` function this section defines a control system for parallel processes controlled from any cmake.  
+
+## Function List
+
+<%= markdown_template_function_list(${function_files}) %>
+
 
 ## Common Definitions
 
@@ -222,11 +227,8 @@ To communicate with you processes you can use any of the following well known me
 
 
 
-### Function List
 
-<%= markdown_template_function_list(${function_files}) %>
-
-### Function Descriptions
+## Function Descriptions
 
 <%= markdown_template_function_descriptions(${function_files}) %>
 

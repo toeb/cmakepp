@@ -1,8 +1,47 @@
-## Process Management
+# Process Management
 
 
 
 This section how to manage processes and external programs.  Besides replacements for cmake's `execute_process` function this section defines a control system for parallel processes controlled from any cmake.  
+
+## Function List
+
+
+* [async](#async)
+* [await](#await)
+* [command_line](#command_line)
+* [command_line_args_combine](#command_line_args_combine)
+* [command_line_args_escape](#command_line_args_escape)
+* [command_line_parse](#command_line_parse)
+* [command_line_parse_string](#command_line_parse_string)
+* [command_line_to_string](#command_line_to_string)
+* [execute](#execute)
+* [process_execute](#process_execute)
+* [process_handle](#process_handle)
+* [process_handles](#process_handles)
+* [process_handle_change_state](#process_handle_change_state)
+* [process_handle_get](#process_handle_get)
+* [process_handle_new](#process_handle_new)
+* [process_handle_register](#process_handle_register)
+* [process_info](#process_info)
+* [process_isrunning](#process_isrunning)
+* [process_kill](#process_kill)
+* [process_list](#process_list)
+* [process_refresh_handle](#process_refresh_handle)
+* [process_return_code](#process_return_code)
+* [process_start](#process_start)
+* [](#)
+* [process_start_info_new](#process_start_info_new)
+* [process_start_script](#process_start_script)
+* [process_stderr](#process_stderr)
+* [process_stdout](#process_stdout)
+* [process_timeout](#process_timeout)
+* [process_wait](#process_wait)
+* [process_wait_all](#process_wait_all)
+* [process_wait_any](#process_wait_any)
+* [string_take_commandline_arg](#string_take_commandline_arg)
+* [wrap_executable](#wrap_executable)
+
 
 ## Common Definitions
 
@@ -220,45 +259,8 @@ To communicate with you processes you can use any of the following well known me
 
 
 
-### Function List
 
-
-* [async](#async)
-* [await](#await)
-* [command_line](#command_line)
-* [command_line_args_combine](#command_line_args_combine)
-* [command_line_args_escape](#command_line_args_escape)
-* [command_line_parse](#command_line_parse)
-* [command_line_parse_string](#command_line_parse_string)
-* [command_line_to_string](#command_line_to_string)
-* [execute](#execute)
-* [process_execute](#process_execute)
-* [process_handle](#process_handle)
-* [process_handles](#process_handles)
-* [process_handle_change_state](#process_handle_change_state)
-* [process_handle_get](#process_handle_get)
-* [process_handle_new](#process_handle_new)
-* [process_handle_register](#process_handle_register)
-* [process_info](#process_info)
-* [process_isrunning](#process_isrunning)
-* [process_kill](#process_kill)
-* [process_list](#process_list)
-* [process_refresh_handle](#process_refresh_handle)
-* [process_return_code](#process_return_code)
-* [process_start](#process_start)
-* [](#)
-* [process_start_info_new](#process_start_info_new)
-* [process_start_script](#process_start_script)
-* [process_stderr](#process_stderr)
-* [process_stdout](#process_stdout)
-* [process_timeout](#process_timeout)
-* [process_wait](#process_wait)
-* [process_wait_all](#process_wait_all)
-* [process_wait_any](#process_wait_any)
-* [string_take_commandline_arg](#string_take_commandline_arg)
-* [wrap_executable](#wrap_executable)
-
-### Function Descriptions
+## Function Descriptions
 
 ## <a name="async"></a> `async`
 

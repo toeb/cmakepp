@@ -218,6 +218,7 @@ json_print(${res})
 ## Function List
 
 
+* [dns_parse](#dns_parse)
 * [uri](#uri)
 * [uri_check_scheme](#uri_check_scheme)
 * [uri_coerce](#uri_coerce)
@@ -239,6 +240,12 @@ json_print(${res})
 * [uri_to_localpath](#uri_to_localpath)
 
 ## Function Descriptions
+
+## <a name="dns_parse"></a> `dns_parse`
+
+
+
+
 
 ## <a name="uri"></a> `uri`
 

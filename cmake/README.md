@@ -4,6 +4,7 @@
 `cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
 
 
+* [Creating Checksums](checksum/README.md)
 * [Collections](collections/README.md)
 * [Date/Time](datetime/README.md)
 * [Events](events/README.md)

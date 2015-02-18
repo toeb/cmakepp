@@ -51,7 +51,6 @@ This is done by creating a hash from the input string and using it as a cache ke
 * [json_indented](#json_indented)
 * [json_print](#json_print)
 * [json_read](#json_read)
-* [json_serialize](#json_serialize)
 * [json_string_to_cmake](#json_string_to_cmake)
 * [json_tokenize](#json_tokenize)
 * [json_write](#json_write)
@@ -115,12 +114,6 @@ This is done by creating a hash from the input string and using it as a cache ke
 
 
 ## <a name="json_read"></a> `json_read`
-
-
-
-
-
-## <a name="json_serialize"></a> `json_serialize`
 
 
 

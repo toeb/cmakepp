@@ -6,6 +6,7 @@
 
 
 
+
 ```
 ./> 
 ./build/> cmake .. 
@@ -25,12 +26,11 @@
 -- Found Subversion: C:/Program Files (x86)/Subversion/bin/svn.exe (found version "1.8.11") 
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktemplXypC/build
+-- Build files have been written to: C:/temp/cutil/temp/mktemp45R4v/build
 
 ./build/> cmake --build .
  ...
 ./build/>./bin/myexe 
-hello
 
 
 ```
