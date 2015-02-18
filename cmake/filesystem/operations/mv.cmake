@@ -24,7 +24,7 @@ function(mv)
   endif()
 
   foreach(source ${args})
-    file_name("${source}")
+    path_file_name("${source}")
     ans(fn)
     mv("${source}" "${target}/${fn}")
   endforeach()

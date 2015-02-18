@@ -65,12 +65,9 @@ function(file_map_read)
   message("path ${path}")
   
   file(GLOB_RECURSE paths RELATIVE "${path}" ${path}/**)
-  #file_glob("${path}" **/** --relative)
-  #ans(paths)
 
   message("paths ${paths}")
 
- # paths_to_map(${paths})
 
 
   return_ans()

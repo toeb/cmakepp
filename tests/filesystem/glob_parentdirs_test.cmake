@@ -19,16 +19,15 @@ function(test)
   fwrite("f31.txt" "asd")
   fwrite("f32.txt" "asd")
 
-  file_glob_up("." 2 *.txt)
+  glob_up(2 *.txt)
   ans(res_gl)
 
 
-
   popd()
   popd()
 
 
-  file_glob("${test_dir}" ** --recurse)
+  glob("${test_dir}/**" --recurse)
   ans(res)
 
 

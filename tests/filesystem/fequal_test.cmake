@@ -8,16 +8,16 @@ function(test)
 
 
 
-  file_equals("a.txt" "b.txt")
+  fequal("a.txt" "b.txt")
   ans(res)
   assert(NOT res)
 
 
-  file_equals("a.txt" "a.txt")
+  fequal("a.txt" "a.txt")
   ans(res)
   assert(res)
 
-  file_equals("b.txt" "c.txt")
+  fequal("b.txt" "c.txt")
   ans(res)
   assert(res)
 

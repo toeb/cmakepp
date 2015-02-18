@@ -4,7 +4,7 @@ function(uncompress file)
   ans(types)
 
   if("${types}" MATCHES "application/x-gzip")
-    directory_ensure_exists(".")  
+    dir_ensure_exists(".")  
     path_qualify(file)
     tar(xzf "${file}" ${ARGN})
     return_ans()

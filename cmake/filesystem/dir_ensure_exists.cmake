@@ -1,7 +1,7 @@
 
 ## ensures that the directory specified exists 
 ## the directory is qualified with path()
-function(directory_ensure_exists path)
+function(dir_ensure_exists path)
   path("${path}")
   ans(path)
   if(EXISTS "${path}")

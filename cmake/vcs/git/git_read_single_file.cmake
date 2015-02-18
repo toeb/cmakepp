@@ -1,7 +1,7 @@
 # reads a single file from a git repository@branch using the 
 # repository relative path ${path}. returns the contents of the file
 function(git_read_single_file repository branch path )
-  file_tempdir()
+  mktemp()
   ans(tmp_dir)
   mkdir("${tmp_dir}")
 

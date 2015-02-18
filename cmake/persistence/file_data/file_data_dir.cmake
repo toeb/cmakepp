@@ -3,7 +3,7 @@
 function(file_data_ids dir)
   path("${dir}")
   ans(dir)
-  file_glob("${dir}" *.cmake)
+  glob("${dir}/*.cmake")
 
   ans(files)
   set(keys)

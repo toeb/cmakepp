@@ -18,7 +18,7 @@
    
     if(EXISTS "${cached_path}" AND NOT refresh)
       if(readonly)
-        file_glob("${cached_path}" "**")
+        glob("${cached_path}/**")
         ans(file_path)
         if(EXISTS "${file_path}")
           return_ref(file_path)

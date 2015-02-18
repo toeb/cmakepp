@@ -1,14 +1,11 @@
 
 function(compress_tgz target_file)
+  set(args ${ARGN})
   # target_file file
   path_qualify(target_file)
 
-  # get current working dir
-  pwd()
-  ans(pwd)
-
   # get all files to compress
-  file_glob("${pwd}" ${args} --relative)
+  glob(${args} --relative)
   ans(paths)
 
   # compress all files into target_file using paths relative to pwd()

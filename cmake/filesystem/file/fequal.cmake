@@ -1,19 +1,14 @@
   ## compares the specified files
   ## returning true if their content is the same else false
-  function(file_equals lhs rhs)
-    path("${lhs}")
-    ans(lhs)
-
-    path("${rhs}")
-    ans(rhs)
+  function(fequal lhs rhs)
+    path_qualify(lhs)
+    path_qualify(rhs)
 
     cmake(-E compare_files "${lhs}" "${rhs}" --exit-code)
-    ans(return_code)
+    ans(error)
     
-    if("${return_code}" STREQUAL "0")
-      return(true)
-    else()
+    if(error)
       return(false)
     endif()
-
+    return(true)
   endfunction()
