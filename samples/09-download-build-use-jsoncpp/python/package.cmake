@@ -1,9 +1,0 @@
-{
-  "id":"python-wrap",
-  "version":"3.5.0",
-  "cmakepp":{
-    "hooks":{
-      "on_install":"install_script.cmake"
-    }
-  }
-}

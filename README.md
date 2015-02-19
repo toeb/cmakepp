@@ -55,14 +55,12 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 
 
 
-* [Including `cmakepp` and pulling `eigen` library ](samples/01-include-cmakepp-pull-eigen/README.md)
-* [Including `cmakepp` in `CMakeLists.txt`](samples/02-include-cmakepp-in-CMakeLists/README.md)
+* [Compiling a simple progam by including `cmakepp` and pulling `eigen` library ](samples/01-include-cmakepp-pull-eigen/README.md)
+* [Including and using `cmakepp` in `CMakeLists.txt`](samples/02-include-cmakepp-in-CMakeLists/README.md)
 * [Downloading and Including `cmakepp` in a `CMakeLists.txt`](samples/03-download-include-cmakepp-in-CMakeLists/README.md)
 * [Creating a Compressed Package](samples/04-create-simple-compressed-package/README.md)
 * [Creating and Installing a Package with an Install Hook](samples/05-create-install-simple-package-with-install-script/README.md)
 * [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
-* [Adding Boost to you `CMake` project](samples/07-adding-boost-by-package-manager/README.md)
-* [Download, Build and Use `jsoncpp`](samples/09-download-build-use-jsoncpp/README.md)
 
 
 

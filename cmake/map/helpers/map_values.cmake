@@ -13,3 +13,18 @@ function(map_values this)
 	endforeach()
   return_ref(res)
 endfunction()
+
+
+## faster
+macro(map_values map)
+  set(__ans ${ARGN})
+  if(NOT __ans)
+    map_keys(${map})
+  endif()
+  ## key does not conflict as it is the loop variable
+  foreach(key ${__ans})
+    map_tryget(${map} ${key})
+    list(APPEND __map_values_result ${__ans})
+  endforeach()
+  set(__ans ${__map_values_result})
+endmacro()

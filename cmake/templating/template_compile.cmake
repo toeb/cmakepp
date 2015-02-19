@@ -114,7 +114,7 @@ function(template_compile input)
         set(output_var "${CMAKE_MATCH_1}")
         cmake_string_escape("${CMAKE_MATCH_2}")
         ans(output)
-        set(code "set(${output_var} \"${output}\")\n${CMAKE_MATCH_2}")
+        set(code "set(${output_var} \"${output}\")\n")
       endif()
 
       ## special case <%= 

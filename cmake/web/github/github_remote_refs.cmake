@@ -6,7 +6,7 @@
 ##   commit: <sha>
 ## }
 ##
-## ref type query ::= "branches"|"tags"|"*"
+## ref type query ::= "branches"|"tags"|"commits"|"*"
 ## returns the remote refs for the specified github repository
 function(github_remote_refs user repo ref_query)
   set(args ${ARGN})
@@ -15,7 +15,20 @@ function(github_remote_refs user repo ref_query)
 
   set(tags)
   set(branches)
+  set(commits)
   set(refs)
+
+  if(ref_query AND "${ref_query}" STREQUAL "commits" AND ref_name_query)
+      github_api("repos/${user}/${repo}/commits/${ref_name_query}" --exit-code)
+      ans(error)
+      if(NOT error)
+        set(ref ${ref_name_query})
+        set(commit ${ref_name_query})
+        set(ref_type "commits")
+        map_capture_new(ref_type ref commit)
+        ans_append(refs)
+      endif()
+  endif()
 
   if(ref_query AND "${ref_query}" STREQUAL "*" OR "${ref_query}" STREQUAL "tags")
     github_api("repos/${user}/${repo}/tags" --json --silent-fail)

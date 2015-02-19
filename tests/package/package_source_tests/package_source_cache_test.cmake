@@ -1,33 +1,47 @@
 function(test)
 
+  default_package_source()
+  ans(default_source)
+
+  cached_package_source("${default_source}" "cache") 
+  ans(uut)
+
+  timer_start(query_miss)
+  assign(res = uut.query(toeb/cmakepp))
+  timer_print_elapsed(query_miss)
+  assert(res)
+
+  timer_start(query_hit)
+  assign(res = uut.query(toeb/cmakepp))
+  timer_print_elapsed(query_hit)
+  assert(res)
+  
 
 
+  assign(res = uut.resolve(toeb/cmakepp))
+  timer_start(resolve_miss)
+  assign(res = uut.resolve(toeb/cmakepp))
+  timer_print_elapsed(resolve_miss)
+  assert(res)
 
-  function(cached_package_source inner)
-    set(args ${ARGN})
-    list_pop_front(args)
-    ans(cache_dir)
+  timer_start(resolve_hit)
+  assign(res = uut.resolve(?id=cmakepp))
+  timer_print_elapsed(resolve_hit)
+  assert(res)
 
-    if(NOT cache_dir)
-      cmakepp_config(cache_dir)
-      ans(cache_dir)
-      set(cache_dir "${cache_dir}/package_cache")
-    endif()
+  timer_start(resolve_hit)
+  assign(res = uut.resolve(?id=cmakepp))
+  timer_print_elapsed(resolve_hit)
+  assert(res)
 
-    path_qualify(cache_dir)
+  timer_start(pull_miss)
+  assign(res = uut.pull(?id=cmakepp pull_miss))
+  timer_print_elapsed(pull_miss)
+  assert(res)
 
-    set(this)
-    assign(!this.cache_dir = cache_dir)
-    assign(!this.inner = inner)
-
-    assign(!this.query = 'package_source_query_cache')
-    assign(!this.resolve = 'package_source_resolve_cache')
-    assign(!this.pull = 'package_source_pull_cache')
-
-    return_ref(this)
-  endfunction()
-
-
-  github_package_source()
-
+  timer_start(pull_hit)
+  assign(res = uut.pull(?id=cmakepp pull_hit))
+  timer_print_elapsed(pull_hit)
+  assert(res)
+  
 endfunction()

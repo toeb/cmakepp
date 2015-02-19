@@ -2,8 +2,7 @@
 function(package_source_query_path uri)
   set(args ${ARGN})
 
-  uri("${uri}")
-  ans(uri)
+  uri_coerce(uri)
 
   list_extract_flag(args --package-handle)
   ans(return_package_handle)
@@ -17,6 +16,19 @@ function(package_source_query_path uri)
   if(NOT "${host}" STREQUAL "localhost")
     return()
   endif()   
+
+  uri_check_scheme("${uri}" "file?")
+  ans(scheme_ok)
+  if(NOT scheme_ok)
+    error("path package query only accepts file and <none> as a scheme")
+    return()
+  endif()
+
+  assign(query = uri.query)
+  if(NOT "_${query}" MATCHES "(^_$)|(_hash=[0-9a-zA-Z]+)")
+    error("path package source only accepts a hash query in the uri.")
+    return()
+  endif()
 
   ## get localpath from uri and check that it is a dir and cotnains a package_descriptor
   uri_to_localpath("${uri}")

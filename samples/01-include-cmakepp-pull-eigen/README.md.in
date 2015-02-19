@@ -1,4 +1,4 @@
-# Including `cmakepp` and pulling `eigen` library 
+# Compiling a simple progam by including `cmakepp` and pulling `eigen` library 
 
 ## Description
 
@@ -11,18 +11,26 @@ This sample contains a single `CMakeLists.txt` which downloads and includes `cma
 
 
 ## How to use
-
-
+<%
+    ## create temp dir and copy the sample to it
+    pushtmp()
+    sample_copy(01)
+%>
+```bash
+sample folder/> mkdir build <% mkdir(build) %>
+sample folder/> cd build                # creates a build folder <% cd(build)%>
+sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin ..          # generates the project configuration specified that the executable will be in the build/bin folder
+@cmake(-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin ..)
+sample folder/build/> cmake --build .   # builds the generated project <% cmake(--build .)%>
+... CMake build output ...
+sample folder/build/> bin/myexe 
+@execute(bin/myexe)
 ```
-sample folder/> mkdir build
-sample folder/> cd build                # creates a build folder
-sample folder/build/> cmake ..          # generates the project configuration
-sample folder/build/> cmake --build .   # builds the generated project
+<% cd(..) #go up one directory because currently we are in build/%>
+@markdown_include_sourcecode(main.cpp cpp)
 
-# linux:
-sample folder/build/> ./
-# windows:
-sample folder/build/> ./Debug/myexe.exe 
-```
+@markdown_include_sourcecode(CMakeLists.txt cmake)
 
-
+<%
+    popd()
+%>

@@ -8,7 +8,7 @@ function(cmakepp_setup_environment)
   ans(base_dir)
   
   message(STATUS "creating alias `icmake`")  
-  alias_create("icmake" "cmake -P ${base_dir}/cmakepp.cmake -icmake")
+  alias_create("icmake" "cmake -P ${base_dir}/cmakepp.cmake icmake")
   message(STATUS "creating alias `cmakepp`")  
   alias_create("cmakepp" "cmake -P ${base_dir}/cmakepp.cmake")
   message(STATUS "creating alias `pkg`")  
