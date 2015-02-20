@@ -1,15 +1,10 @@
 function(test)
 
-
-
-
   github_package_source()
   ans(github_source)
 
-  cached_package_source("${default_source}")#"cache") 
+  cached_package_source("${github_source}")#"cache") 
   ans(uut)
-
-
 
   timer_start(query_miss)
   assign(res = uut.query(toeb/cmakepp))
@@ -21,8 +16,6 @@ function(test)
   timer_print_elapsed(query_hit)
   assert(res)
   
-
-
   assign(res = uut.resolve(toeb/cmakepp))
   timer_start(resolve_miss)
   assign(res = uut.resolve(toeb/cmakepp))
