@@ -7,6 +7,7 @@ function(test)
     )
 
   ans(res)
+  assert(res)
   assertf({res.archive_descriptor.hash} STREQUAL "a089a57c4ffd54725ff68faffb495847")
   assertf({res.query_uri} STREQUAL "https://github.com/toeb/cmakepp/archive/v0.0.4.tar.gz" )
   assertf({res.uri} STREQUAL "https://github.com/toeb/cmakepp/archive/v0.0.4.tar.gz?hash=a089a57c4ffd54725ff68faffb495847" )

@@ -16,7 +16,7 @@ function(package_source_query_webarchive uri)
   ## parse and format uri
   uri_coerce(uri)
 
-  uri_check_scheme("${uri}" http https)
+  uri_check_scheme("${uri}" http? https?)
   ans(scheme_ok)
 
   if(NOT scheme_ok)
