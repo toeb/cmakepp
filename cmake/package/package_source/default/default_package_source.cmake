@@ -42,7 +42,11 @@
     endif()
 
     composite_package_source("" ${sources})
+    ans(inner)
+
+    cached_package_source("${inner}")
     ans(default_package_source)
+
     map_set(global default_package_source ${default_package_source})
     function(default_package_source)
       map_get(global default_package_source)

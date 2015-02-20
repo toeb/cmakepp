@@ -21,9 +21,16 @@ function(cached_package_source inner)
   assign(index = this.indexed_store.index_add("package_handle.package_descriptor.id"))
   assign(this.indexed_store.key = "'[](container) ref_nav_get({{container}} package_handle.uri)'")
 
+
+  assign(!this.clear_cache = 'package_source_cached_clear_cache')
   assign(!this.query = 'package_source_query_cached')
   assign(!this.resolve = 'package_source_resolve_cached')
   assign(!this.pull = 'package_source_pull_cached')
 
   return_ref(this)
+endfunction()
+
+function(package_source_cached_clear_cache)
+  this_get(cache_dir)
+  rm(-r "${cache_dir}")
 endfunction()
