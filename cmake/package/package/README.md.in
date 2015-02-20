@@ -1,3 +1,26 @@
 # Package
 
 
+
+## The `query uri`
+
+Any kind of valid or can be a `query uri`
+
+## The `unique uri`
+
+A unique uri identifies a 
+
+## The `dependable uri`
+
+
+## The `volatile uri`
+
+A volatile uri uniquely identifies a package at a specific point in time. 
+
+## The `package uri` 
+
+a package uri is a query uri
+
+
+
+volatile and steady uri

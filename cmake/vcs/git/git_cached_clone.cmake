@@ -44,8 +44,10 @@
           set(ref "HEAD")
         endif()
         if(read OR file)
+          git(fetch)
           git(show "${ref}:${read}" --process-handle)
           ans(git_result)
+
           assign(error = git_result.error)
           if(NOT error)
             assign(result = git_result.stdout)

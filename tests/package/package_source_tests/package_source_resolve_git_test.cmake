@@ -1,5 +1,12 @@
 function(test)
 
+ package_source_resolve_git("https://github.com/toeb/cmakepp.git")
+ ans(res)
+ assert(res)
+ assertf("{res.package_descriptor.license}" STREQUAL "MIT")
+
+
+
 
   pushd(localrepo --create)
     git(init)

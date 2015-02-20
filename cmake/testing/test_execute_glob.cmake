@@ -65,6 +65,8 @@ function(test_execute_glob)
   glob(${ARGN})
   ans(test_files)
   list(LENGTH test_files len)
+  ## sort the test files so that they are always executed in the same order
+  list(SORT test_files)
   message("found ${len} tests in path for '${ARGN}'")
   set(i 0)
   foreach(test ${test_files})

@@ -51,7 +51,7 @@ function(package_source_query_github uri)
     else()
       set(ref_query "*")
     endif()
-    print_vars(user repo ref_type ref_query)
+
     github_remote_refs("${user}" "${repo}" "${ref_type}" "${ref_query}")
     ans(refs)
     foreach(current_ref ${refs})

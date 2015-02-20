@@ -2,7 +2,12 @@ function(test)
 
 
 
-
+  package_source_pull_git("https://github.com/toeb/cmakepp" "clone3")
+  ans(res)
+  assert(res)
+  assert(EXISTS "${test_dir}/clone3/README.md")
+  print_vars(res.package_descriptor)
+  assertf("{res.package_descriptor.license}" STREQUAL "MIT")
 
 
   pushd(localrepo --create)
@@ -31,12 +36,6 @@ function(test)
   #assert(EXISTS "${test_dir}/clone5/README.md")
 
 
-
-  package_source_pull_git("https://github.com/toeb/cmakepp" "clone3")
-  ans(res)
-  assert(res)
-  assertf("{res.package_descriptor.license}" STREQUAL "MIT")
-  assert(EXISTS "${test_dir}/clone3/README.md")
 
 
   package_source_pull_git("localrepo" "localclone1")
