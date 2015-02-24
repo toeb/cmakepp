@@ -46,7 +46,7 @@ function(test)
   assign(res = uut.query("source1:pkg1" --package-handle))
   ans(res)
   assert(res)
-  assertf("{res.package_source}" STREQUAL "${source1}")
+  assertf("{res.package_source_name}" STREQUAL "source1")
 
 
 
