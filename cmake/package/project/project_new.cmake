@@ -9,8 +9,8 @@
   ## installed packages
   ##
   function(project_new)
-    default_package_source()
-    ans(default_source)
+    #default_package_source()
+    #ans(default_source)
     obj("{
       load:'project_load',
       save:'project_save',

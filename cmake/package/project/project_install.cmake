@@ -1,42 +1,38 @@
-  ## project_install()
-  ## 
-  ## events:
-  ##   project_on_package_install(<project package> <package handle>)
-  ##   project_on_package_load(<project package> <package handle>)
-  function(project_install)
-    set(args ${ARGN})
-    list_pop_front(args)
-    ans(uri)
-    if(NOT uri)
-      error("no uri was specified to install")
-      return()
-    endif()
+## project_install()
+## 
+## events:
+##   project_on_package_install(<project package> <package handle>)
+##   project_on_package_load(<project package> <package handle>)
+function(project_install)
+  set(args ${ARGN})
+  list_pop_front(args)
+  ans(uri)
+  if(NOT uri)
+    error("no uri was specified to install")
+    return()
+  endif()
 
-    uri_coerce(uri)
-
-
-    ## pull package from remote source to temp directory
-    ## then push it into local from there
-    ## return if anything did not work
-
-    assign(remote = this.remote)
-    assign(local = this.local)
+  uri_coerce(uri)
+  this_get(remote)
+  this_get(local)
 
 
+  ## pull package from remote source to temp directory
+  ## then push it into local from there
+  ## return if anything did not work
 
-    assign(installed_package_handle = local.push(${remote} ${uri}))
-    
+  assign(installed_package_handle = local.push("${remote}" "${uri}" ${args}))
+  
+  if(NOT installed_package_handle)
+    error("could not install package")
+    return()
+  endif()
 
+  ## project install is executed before load
+  event_emit(project_on_package_install "${this}" "${installed_package_handle}")
 
-    if(NOT installed_package_handle)
-      message(FATAL_ERROR "nononono")
-    endif()
+  ## package is loaded
+  project_load_installed_package("${installed_package_handle}")
 
-    ## project install is executed before load
-    project_install_package("${installed_package_handle}")
-
-    ## project is loaded
-    project_load_installed_package("${installed_package_handle}")
-
-    return_ref(installed_package_handle)
-  endfunction()
+  return_ref(installed_package_handle)
+endfunction()

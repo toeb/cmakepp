@@ -97,6 +97,11 @@ map()
     MIN 1 MAX 1
     DEFAULT "${CMAKE_CURRENT_LIST_DIR}/bin"
     )
+  kv(cmakepp_path
+    LABELS --cmakepp-path
+    MIN 1 MAX 1
+    DEFAULT "${CMAKE_CURRENT_LIST_FILE}"
+    )
 
 end()
 ans(cmakepp_config_definition)
@@ -132,6 +137,6 @@ set(CMAKEPP_BASE_DIR "${cmakepp_base_dir}")
 set(CMAKEPP_BIN_DIR "${cmakepp_base_dir}/bin")
 set(CMAKEPP_TMP_DIR "${cmakepp_tmp_dir}")
 
-
+set(CMAKEPP_PATH "${CMAKE_CURRENT_LIST_FILE}")
 ## setup file
 set(ENV{CMAKEPP_PATH} "${CMAKE_CURRENT_LIST_FILE}")

@@ -14,7 +14,7 @@
   "build_systems":[
     {
       "name": "cmakepp run test file",
-      "file_regex": "([^ ]+):([0-9][0-9]*):[0-9][0-9]*|",
+      "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
       "linux":
       {
         "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute",  "$file" ]
@@ -27,7 +27,7 @@
     },
     {
       "name": "cmakepp run all tests",
-      "file_regex": "([^ ]+):([0-9][0-9]*):[0-9][0-9]*|",
+      "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
       "linux":
       {
         "cmd": ["cmake","-P", "$project_path/build/script.cmake" ]
@@ -40,7 +40,7 @@
     }, 
     {
       "name": "cmakepp run tests in current dir",
-      "file_regex": "([^ ]+):([0-9][0-9]*):[0-9][0-9]*|",
+      "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
       "linux":
       {
         "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake" ]
@@ -53,7 +53,7 @@
     },
     {
       "name": "cmakepp run tests in dir and subdirs",
-      "file_regex": "([^ ]+):([0-9][0-9]*):[0-9][0-9]*|",
+      "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
       "linux":
       {
         "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake", "--recurse"  ]
@@ -97,6 +97,17 @@
       "windows":
       {
         "cmd": ["cmake","-P", "$file"],
+        "encoding": "cp1252"
+      }
+    },
+    {
+      "name": "cmakepp tool",
+      "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_tool", "$file_path"],
+      "linux":
+      {
+      },
+      "windows":
+      {
         "encoding": "cp1252"
       }
     }

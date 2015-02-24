@@ -10,7 +10,7 @@ function(test)
   events_track(project_on_package_install project_on_package_load)
   ans(tracker)
 
-  project_create(--force)
+  project_create(--force proj1)
   ans(proj)
   assign(proj.remote = path_package_source())
 
@@ -27,8 +27,15 @@ function(test)
   assert(installed_packages)
   
 
+  ## install same project 
+  assign(success = proj.install(pkg1))
+  assert(NOT success)
 
- 
+
+
+
+  
+
 
 
 

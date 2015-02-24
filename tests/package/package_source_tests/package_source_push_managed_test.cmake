@@ -9,6 +9,11 @@ function(test)
     fwrite(README.md "hello")
   popd()
 
+  pushd("pkg3" --create)
+    fwrite_data("package.cmake" "{id:'mypkg3',version:'0.0.0',include:'**'}" --mime-type application/json)
+    fwrite(README.md "hello")
+  popd()
+
 
   path_package_source()
   ans(path_source)
@@ -20,24 +25,28 @@ function(test)
   map_set(${this} source_name "mysource")
 
 
-
+timer_start(push_package)
   package_source_push_managed(${path_source} "pkg1")
   ans(res)
+  timer_print_elapsed(push_package)
   assert(res) 
-  assertf("{res.managed_descriptor.source_name}" STREQUAL "mysource")
+  assertf("{res.managed_descriptor.remote_source_name}" STREQUAL "file")
   assertf("{res.package_descriptor.id}" STREQUAL "mypkg")
 
   package_source_push_managed(${path_source} "asdasdasd")
   ans(res)
   assert(NOT res)
 
-return()  
-  assert("${res}" MATCHES "mysource:.*mypkg.*")
-  string(REPLACE "mysource:" "" res "${res}")
-  assert(EXISTS "${test_dir}/packages/${res}")
 
 
-  package_source_push_managed("pkg2")
+package_source_push_managed(${path_source} "pkg3" --package-dir "_pkgs")
+ans(res)
+assert(res)
+assert(EXISTS "${test_dir}/_pkgs/mypkg3")
+assertf({res.content_dir} STREQUAL "${test_dir}/_pkgs/mypkg3")
+
+
+
 
 
 endfunction()
