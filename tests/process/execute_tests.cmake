@@ -1,24 +1,5 @@
 function(test)
 
-  function(execute_script script)
-    set(args ${ARGN})
-
-    list_extract_flag(args --no-cmakepp)
-    ans(nocmakepp)
-
-    if(NOT nocmakepp)
-      cmakepp_config(cmakepp_path)
-      ans(cmakepp_path)
-      set(script "include(\"${cmakepp_path}\")\n${script}")
-    endif()
-    file_make_temporary("${script}")
-    ans(script_file)
-    ## execute add callback to delete temporary file
-    execute("${CMAKE_COMMAND}" -P "${script_file}"  --on-terminated-callback "[]() rm(${script_file})" ${args}) 
-    return_ans()
-  endfunction()
-
-
   ## the workind directory needs to exist. maybe this needs to be ensured within execute.
   mkdir(mytempdir)
   
@@ -37,8 +18,6 @@ function(test)
   process_wait(${process_handle})
   assertf("{process_handle.stdout}" MATCHES "/mytempdir$")
 
-
-  return()
 
 ##
   mkdir("dir1")
