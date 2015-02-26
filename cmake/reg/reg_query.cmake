@@ -18,7 +18,7 @@
       return()
     endif()
     
-    string_semicolon_encode("${output}")
+    string_encode_semicolon("${output}")
     ans(output)
     string(REPLACE "\n" ";" lines ${output})
 

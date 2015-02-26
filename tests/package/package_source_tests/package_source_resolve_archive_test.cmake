@@ -27,6 +27,13 @@ function(test)
   ans(expected_checksum_3)
 
 
+  ## test that query result can be resolved
+  package_source_query_archive("${test_dir}/archive3.tgz")
+  ans(uri)
+  package_source_resolve_archive("${uri}")
+  ans(res)
+  assert(res)
+
 
 
   package_source_resolve_archive("${test_dir}/archive3.tgz")

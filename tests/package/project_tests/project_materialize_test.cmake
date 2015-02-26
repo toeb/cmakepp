@@ -7,7 +7,7 @@ function(test)
   }" --json)
 
 
-  events_track(project_on_package_install project_on_package_load)
+  events_track(project_on_package_materialized)
   ans(tracker)
 
   project_create(--force proj1)
@@ -16,19 +16,18 @@ function(test)
 
 
   ## act
-  assign(success = proj.install(pkg1))
+  assign(success = proj.materialize(pkg1))
+
   ## assert
   assert(success)  
-  assertf("{tracker.project_on_package_install[0].args[0]}" STREQUAL "${proj}")
-  
-  assertf("{tracker.project_on_package_load[1].args[0]}" STREQUAL "${proj}")
-  
+  assertf("{tracker.project_on_package_materialized[0].args[0]}" STREQUAL "${proj}")
+ # assertf("{tracker.project_on_package_load[1].args[0]}" STREQUAL "${proj}")
   assign(installed_packages = proj.local.query("?*"))
   assert(installed_packages)
   
 
-  ## install same project 
-  assign(success = proj.install(pkg1))
+  ## materialize same project - should not work
+  assign(success = proj.materialize(pkg1))
   assert(NOT success)
 
 

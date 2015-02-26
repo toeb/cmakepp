@@ -1,9 +1,9 @@
-## project_install()
+## project_materialize()
 ## 
 ## events:
 ##   project_on_package_install(<project package> <package handle>)
 ##   project_on_package_load(<project package> <package handle>)
-function(project_install)
+function(project_materialize)
   set(args ${ARGN})
   list_pop_front(args)
   ans(uri)
@@ -11,6 +11,7 @@ function(project_install)
     error("no uri was specified to install")
     return()
   endif()
+
 
   uri_coerce(uri)
   this_get(remote)
@@ -21,7 +22,7 @@ function(project_install)
   ## then push it into local from there
   ## return if anything did not work
 
-  assign(installed_package_handle = local.push("${remote}" "${uri}" ${args}))
+  assign(installed_package_handle = local.push("${remote}" "${uri}" => ${args}))
   
   if(NOT installed_package_handle)
     error("could not install package")
@@ -29,10 +30,7 @@ function(project_install)
   endif()
 
   ## project install is executed before load
-  event_emit(project_on_package_install "${this}" "${installed_package_handle}")
-
-  ## package is loaded
-  project_load_installed_package("${installed_package_handle}")
+  event_emit(project_on_package_materialized "${this}" "${installed_package_handle}")
 
   return_ref(installed_package_handle)
 endfunction()

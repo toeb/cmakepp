@@ -9,17 +9,22 @@
   ## installed packages
   ##
   function(project_new)
-    #default_package_source()
-    #ans(default_source)
+    default_package_source()
+    ans(default_source)
     obj("{
       load:'project_load',
       save:'project_save',
-      install:'project_install',
-      uninstall:'project_uninstall',
+      materialize:'project_materialize',
+      dematerialize:'project_dematerialize',
       remote:$default_source,
       config_dir: '.cps',
       dependency_dir: 'packages'
     }")
     ans(project)
+
+    # events
+    # assign(project.on_materialize = )
+    # assign(project.on_dematerialize = )
+    # assign(project.on_load)
     return_ref(project)
   endfunction()

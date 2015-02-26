@@ -2,7 +2,10 @@ function(test)
 
 
 
+
   fwrite("test/asdasd/package.cmake" "{\"id\":\"mypkg\"}")
+
+
   mkdir("test/asdasd2")
   # test/asdasd3
   fwrite("test/asdasd4/package.cmake" "{}")

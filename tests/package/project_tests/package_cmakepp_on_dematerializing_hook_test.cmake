@@ -3,8 +3,8 @@ function(test)
   ans(map)
 
   set(hook_callback "[](a b)map_append(${map} called {{a}} {{b}})")
-  ## create a package with an uninstall hook that registers
-  fwrite_data("pkg1/package.cmake" "{cmakepp:{hooks:{on_uninstall:$hook_callback}}}" --json)
+  ## create a package with a dematerialize hook that registers
+  fwrite_data("pkg1/package.cmake" "{cmakepp:{hooks:{on_dematerializing:$hook_callback}}}" --json)
 
 
   project_create(proj)
@@ -13,11 +13,11 @@ function(test)
   assign(project.remote = path_package_source())
 
 
-  assign(installed_package = project.install("${test_dir}/pkg1"))
+  assign(installed_package = project.materialize("${test_dir}/pkg1"))
   assert(installed_package)
   assign(installed_package_uri = installed_package.uri)
 
-  assign(success = project.uninstall("${installed_package_uri}"))
+  assign(success = project.dematerialize("${installed_package_uri}"))
   assert(success)
 
 
@@ -26,7 +26,7 @@ function(test)
 
 
 
-  ## create a package with an uninstall hook that registers
+  ## create a package without a dematerialize hook 
   fwrite_data("pkg1/package.cmake" "{}" --json)
 
   project_create(proj --force)
@@ -35,9 +35,9 @@ function(test)
   assign(project.remote = path_package_source())
 
 
-  assign(installed_package = project.install("${test_dir}/pkg1"))
+  assign(installed_package = project.materialize("${test_dir}/pkg1"))
   assign(installed_package_uri = installed_package.uri)
-  assign(success = project.uninstall("${installed_package_uri}"))
+  assign(success = project.dematerialize("${installed_package_uri}"))
   assert(success)
 
   ## should run through without failing

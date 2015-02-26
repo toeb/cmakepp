@@ -45,7 +45,7 @@ endfunction()
 
 ## create invoke later functions 
 function(task_enqueue callable)
-  ## semicolon encode before string_semicolon_encode exists
+  ## semicolon encode before string_encode_semicolon exists
   string(ASCII  31 us)
   string(REPLACE ";" "${us}" callable "${callable}")
   set_property(GLOBAL APPEND PROPERTY __initial_invoke_later_list "${callable}") 

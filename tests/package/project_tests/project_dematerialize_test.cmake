@@ -11,19 +11,18 @@ function(test)
 
   ## arrange
 
-
-  events_track(project_on_package_install project_on_package_load project_on_package_uninstall)
+  events_track(project_on_package_materialized project_on_package_dematerializing)
   ans(tracker)
   project_create(pr1)
   ans(project)
 
   assign(project.remote = path_package_source())
 
-  assign(success = project.install(pkg1))
+  assign(success = project.materialize(pkg1))
 
 
   ## act
-  assign(success = project.uninstall(?id=mypkg))
+  assign(success = project.dematerialize(?id=mypkg))
 
   ## assert
 
@@ -32,6 +31,6 @@ function(test)
 
 
   assert(success)
-  assertf({tracker.project_on_package_uninstall[0].args} CONTAINS "${project}")
+  assertf({tracker.project_on_package_dematerializing[0].args} CONTAINS "${project}")
 
 endfunction()

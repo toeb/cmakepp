@@ -41,6 +41,7 @@ function(package_source_query_path uri)
     return()
   endif()
 
+
   ## compute hash
   set(content)
 
@@ -49,12 +50,12 @@ function(package_source_query_path uri)
     json_read("${path}/package.cmake")
     ans(package_descriptor)
   endif()
+
   
   assign(default_id = uri.last_segment)
   map_defaults("${package_descriptor}" "{id:$default_id,version:'0.0.0'}")
   ans(package_descriptor)
   assign(content = package_descriptor.content)
-
   if(content)
     pushd("${path}")
       checksum_glob_ignore(${content})
@@ -71,7 +72,6 @@ function(package_source_query_path uri)
     error("hashes did not match for ${path}")
     return()
   endif()
-
   ## create the valid result uri (file:///e/t/c)
   uri("${path}?hash=${hash}")
   ans(result)

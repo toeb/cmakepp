@@ -9,15 +9,15 @@ function(test)
   fwrite_data("pkg1/package.cmake" "{
     cmakepp:{
       hooks:{
-        on_install:'cmake/on_install.cmake'
+        on_materialized:'cmake/on_materialized.cmake'
       }
     }
   }" --json)
 
-  fwrite("pkg1/cmake/on_install.cmake" "
+  fwrite("pkg1/cmake/on_materialized.cmake" "
     ## function name is unimportant - it will be imported anyway
     function(__ a1 a2)
-      map_set(${context} on_install_hook_called true \${a1} \${a2})
+      map_set(${context} on_materialized_hook_called true \${a1} \${a2})
     endfunction()
   ")
 
@@ -32,13 +32,13 @@ function(test)
 
   ## act
   timer_start(t1)
-  event_emit(project_on_package_install ${proj} ${pkg1})
+  event_emit(project_on_package_materialized ${proj} ${pkg1})
   timer_print_elapsed(t1)
 
   ## assert
 
-  ## check that on_load hook was called
-  assertf({context.on_install_hook_called} EQUALS true ${proj} ${pkg1})
+  ## check that on_materialized_hook_called hook was called
+  assertf({context.on_materialized_hook_called} EQUALS true ${proj} ${pkg1})
 
 
   ## check that calling a project without the predefined fields does not fail
@@ -49,7 +49,7 @@ function(test)
   ans(pkg2)
 
   ## act
-  event_emit(project_on_package_install ${proj} ${pkg2})
+  event_emit(project_on_package_materialized ${proj} ${pkg2})
 
   ## no assertion success is when this code is reached :D
 

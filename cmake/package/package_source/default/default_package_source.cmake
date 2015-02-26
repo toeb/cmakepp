@@ -1,6 +1,9 @@
 
 
-  function(default_package_source)
+function(default_package_source)
+  map_tryget(global default_package_source)
+  ans(result)
+  if(NOT result)
     set(sources)
 
     path_package_source()
@@ -20,7 +23,7 @@
       github_package_source()
       ans_append(sources)
     endif()    
-  
+
     if(GIT_FOUND AND HG_FOUND)
       bitbucket_package_source()
       ans_append(sources)
@@ -48,10 +51,10 @@
     ans(default_package_source)
 
     map_set(global default_package_source ${default_package_source})
-    function(default_package_source)
-      map_get(global default_package_source)
-      return_ans()
-    endfunction()
+  endif()
+  function(default_package_source)
+    map_get(global default_package_source)
     return_ans()
   endfunction()
-
+  return_ans()  
+endfunction()

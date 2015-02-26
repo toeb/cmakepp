@@ -7,6 +7,10 @@ function(test)
   endfunction()
 
 
+  # failed a regex
+  test_uri("." "{}")
+
+
   ## test schemes
 
   test_uri("asd+basd:" "{scheme:'asd+basd',schemes:['asd','basd'] }")

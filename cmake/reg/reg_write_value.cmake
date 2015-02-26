@@ -2,7 +2,7 @@
   ## sets the specified windows registry value 
   ## value may contain semicolons
   function(reg_write_value key value_name value)
-    string_semicolon_encode("${value}")
+    string_encode_semicolon("${value}")
     ans(value)
     string(REPLACE / \\ key "${key}")
     set(type REG_SZ)

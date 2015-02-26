@@ -1,10 +1,9 @@
-
-## `(<var> <query...>)-><bool>`
+## `(<list&> <query...>)-><bool>`
 ##  
 ## `<query> := <value>|'!'<value>|<value>'?'`
 ## 
-## * checks to see that every value specified is contained in the lsit 
-## * if the value is preceded by a `!` checks taht the value is not in the list_check_items
+## * checks to see that every value specified is contained in the list 
+## * if the value is preceded by a `!` checks that the value is not in the list
 ## * if the value is succeeded by a `?` the value may or may not be contained
 ##
 ## returns true if all queries match

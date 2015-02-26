@@ -9,7 +9,6 @@ function(cmakepp_project_cli)
   list_extract_flag(args --save)
   ans(save)
 
- # list_extract_flag(args cmakepp_project_cli)
 
   list_extract_labelled_value(args --project)
   ans(project_dir)

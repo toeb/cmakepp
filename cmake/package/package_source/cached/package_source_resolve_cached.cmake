@@ -10,9 +10,10 @@ function(package_source_resolve_cached uri)
   package_source_query_cached("${uri}" ${refresh} --cache-container)
   ans(cache_container)
 
-  if("${cache_container}" MATCHES ";")
-      error("multiple matches found")
-      return()
+
+  if("${cache_container}" MATCHES ";")  
+    error("multiple matches found")
+    return()
   endif()
 
   set(is_resolved false)
@@ -29,10 +30,10 @@ function(package_source_resolve_cached uri)
   endif()
 
   if(NOT is_resolved)
-    #message(FORMAT "RESOLVE_MISS {uri.uri}")
 
     assign(package_handle = this.inner.resolve("${uri}"))
     if(NOT package_handle)
+      error("cache package source: inner package source could not resolve {uri.uri}")
       return()
     endif()
     map_set(${cache_container} is_resolved true)
@@ -46,7 +47,9 @@ function(package_source_resolve_cached uri)
     return_ref(cache_container)
   endif()
 
+
   map_tryget(${cache_container} package_handle)
   ans(package_handle)
+
   return_ref(package_handle)
 endfunction()

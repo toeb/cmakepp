@@ -51,7 +51,7 @@ function(template_compile input)
   string(REPLACE "${delimiter_end_escape}" "${delimiter_end_escape_code}" input "${input}")
 
 
-   string_semicolon_encode("${input}")
+   string_encode_semicolon("${input}")
    ans(input)
    string_encode_bracket("${input}")
    ans(input)
@@ -102,7 +102,7 @@ function(template_compile input)
     string_decode_bracket("${fragment}")
     ans(fragment)
 
-    string_semicolon_decode("${fragment}")
+    string_decode_semicolon("${fragment}")
     ans(fragment)
 
     if("${fragment}" MATCHES "${code_fragment_regex}")
