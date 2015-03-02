@@ -5,6 +5,8 @@ function(test)
     
     data("${ARGN}")
     ans(data)
+    data("${query}")
+    ans(query)
 
     timer_start(query_match_cnf)
     query_match_cnf("${query}" "${data}")

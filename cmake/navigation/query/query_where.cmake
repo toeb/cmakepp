@@ -1,7 +1,7 @@
 ##
 ##
 ##
-function(query_select query)
+function(query_where query)
   data("${query}")
   ans(query)
 
@@ -14,8 +14,6 @@ function(query_select query)
     map_tryget(${query} "${selector}")
     ans(predicate)
 
-
-
     if("${selector}" STREQUAL " ")
       set(selector)
       set(foreach_item false)
@@ -25,7 +23,6 @@ function(query_select query)
     else()
       set(foreach_item false)
     endif()
-
 
     ref_nav_get("${ARGN}" ${selector})
     ans(value)

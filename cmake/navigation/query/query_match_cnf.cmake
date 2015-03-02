@@ -6,10 +6,8 @@ function(query_match_cnf clauses)
   ans(clauses)
 
   foreach(clause ${clauses})
-
     query_disjunction(${clause} ${ARGN})
     ans(clause_result)
-  #  print_vars(clause_result clause)
     if(NOT clause_result)
       return(false)
     endif()
