@@ -137,6 +137,7 @@ set(CMAKEPP_BASE_DIR "${cmakepp_base_dir}")
 set(CMAKEPP_BIN_DIR "${cmakepp_base_dir}/bin")
 set(CMAKEPP_TMP_DIR "${cmakepp_tmp_dir}")
 
+set(cmakepp_path "${CMAKE_CURRENT_LIST_FILE}")
 set(CMAKEPP_PATH "${CMAKE_CURRENT_LIST_FILE}")
 ## setup file
 set(ENV{CMAKEPP_PATH} "${CMAKE_CURRENT_LIST_FILE}")

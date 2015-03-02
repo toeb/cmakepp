@@ -1,4 +1,4 @@
-  ## usage arguments_string(${ARGC}) => acutal arguments string 
+  ## (${ARGC}) => 
   ## 
   macro(arguments_encoded_list __arg_count)
     set(__arg_res)   

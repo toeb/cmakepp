@@ -32,3 +32,4 @@ function(map_clone_shallow original)
   return_ref(original)
 
 endfunction()
+

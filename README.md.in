@@ -151,6 +151,7 @@ To describe cmake functions I use formalisms which I found most useful they shou
   - `{ <name:<string>> <age:<int>> }`
   - `{ name:<string> age:<int>}` 
   - `{ name:<string> address:{ street:<string> area_code:<string>} age:<int>}`
+  - `{ <<group:<string>>:<users:<string...>> ...> }` describes a map which contains keys of type string which identify a group and associated values which are a string list representing users
 * `<void>` primitive which stands for nothing
 * `<null> ::= ""` primitive which is truely empty (a string of length `0`) 
 * `<falseish>:"false"|""|"no"` cmake's false values (list incomplete)

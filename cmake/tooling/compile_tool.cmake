@@ -67,14 +67,15 @@ function(compile_tool name src)
   endif()
   
         
-  wrap_executable("__${name}" "${dir}/build/bin/${name}")
+  wrap_executable_bare("__${name}" "${dir}/build/bin/${name}")
 
   eval("
     function(${name})
 
       __${name}()
-      ans(res)
-      eval(\"\${res}\")
+      ans_extract(error)
+      ans(stdout)
+      eval(\"\${stdout}\")
       return_ans()
     endfunction()
     ")

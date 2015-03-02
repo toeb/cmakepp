@@ -51,7 +51,7 @@
 
 
     process_handle_change_state(${process_handle} starting)
-    win32_powershell("start-process -File ${path} -WindowStyle Hidden")
+    win32_powershell_lean("start-process -File ${path} -WindowStyle Hidden")
 
 
     ## wait until the pidfile exists and contains a valid pid
