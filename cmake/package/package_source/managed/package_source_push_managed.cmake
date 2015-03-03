@@ -39,7 +39,7 @@
     assign(package_handle = source.resolve(${uri}))
 
     if(NOT package_handle)
-      error("could not result ${source_args} to a package handle")
+      error("could not resolve ${source_args} to a package handle")
       return()
     endif()
 
