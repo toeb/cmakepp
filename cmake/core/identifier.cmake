@@ -7,7 +7,7 @@
 ## property.  it is unique to the execution of cmake
 ## and can be used as a function name
 function(identifier)
-  string_codes()
+  #string_codes()
   while(true)
     make_guid()
     ans(guid)
