@@ -43,7 +43,7 @@ function(process_start_Linux process_handle)
   ans(script)
   ## execute the script in bash with nohup 
   ## which causes the script to run detached from process
-  bash(-c "nohup ${script} > /dev/null 2> /dev/null" --exit-code)
+  bash_lean(-c "nohup ${script} > /dev/null 2> /dev/null")
   ans(error)
 
   if(error)
