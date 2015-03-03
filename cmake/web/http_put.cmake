@@ -121,7 +121,10 @@ function(http_put uri)
 	endif()
 
 	## parse response from log since it is not downloaded
-	string(REGEX REPLACE "Response:\n(.*)\n\nDebug:\nAbout to connect\\(\\) to.*" "\\1" response_content "${http_log}")
+	set(response_content)
+	if("${http_log}" MATCHES  "Response:\n(.*)\n\nDebug:\n")
+		set(response_content "${CMAKE_MATCH_1}")
+	endif()
 	
 	if(NOT return_response AND client_status)
 		error("http_put failed: ${client_message} - ${client_status}")
@@ -130,7 +133,6 @@ function(http_put uri)
 		endif()
 		return()
 	endif()
-
 
 
 	if(return_json)

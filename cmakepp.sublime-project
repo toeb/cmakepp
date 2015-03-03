@@ -15,97 +15,70 @@
     {
       "name": "cmakepp run test file",
       "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
-      "linux":
-      {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute",  "$file" ]
-      },
+      "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute",  "$file" ],
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute",  "$file" ],
+        "encoding": "cp1252"
+      }, 
+      "osx":
+      {
         "encoding": "cp1252"
       }
     },
     {
       "name": "cmakepp run all tests",
       "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
-      "linux":
-      {
-        "cmd": ["cmake","-P", "$project_path/build/script.cmake" ]
-      },
+      "cmd": ["cmake","-P", "$project_path/build/script.cmake" ],
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/build/script.cmake" ],
         "encoding": "cp1252"
       }
     }, 
     {
       "name": "cmakepp run tests in current dir",
       "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
-      "linux":
-      {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake" ]
-      },
+      "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake" ],
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake" ],
         "encoding": "cp1252"
       }
     },
     {
       "name": "cmakepp run tests in dir and subdirs",
       "file_regex": "([A-Z]?:?/.*?):?([0-9]*):?([0-9]*)",
-      "linux":
-      {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake", "--recurse"  ]
-      },
+      "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake", "--recurse"  ],
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","test_execute_glob", "${file_path}/**.cmake", "--recurse"  ],
         "encoding": "cp1252"
       }
     },
     {
       "name": "cmakepp template run",
-      "linux":
-      {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_execute", "$file"]
-      },
+      "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_execute", "$file"],
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","template_execute", "$file"],
         "encoding": "cp1252"
       }
     },
     {
       "name": "cmakepp build docs",
-      "linux":
-      {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_compile_docs"]
-      },
+      "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_compile_docs"],
       "windows":
       {
-        "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_compile_docs"],
         "encoding": "cp1252"
       }
     },
     {
       "name": "cmake -P",
-      "linux":
-      {
-        "cmd": ["cmake","-P","$file"]
-      },
+      "cmd": ["cmake","-P","$file"],
       "windows":
       {
-        "cmd": ["cmake","-P", "$file"],
         "encoding": "cp1252"
       }
     },
     {
       "name": "cmakepp tool",
       "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_tool", "$file_path"],
-      "linux":
-      {
-      },
       "windows":
       {
         "encoding": "cp1252"

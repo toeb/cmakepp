@@ -1,7 +1,12 @@
 function(test)
 
+
+
+
+
   ## runs three scripts and expects then to stop in a particular order
 
+timer_start(t1)
 
   process_timeout(5)
   ans(h1)
@@ -12,6 +17,7 @@ function(test)
   process_timeout(1)  
   ans(h3)
 
+timer_print_elapsed(t1)
 
 set(finished)
   function(spinner)

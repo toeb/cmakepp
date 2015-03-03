@@ -32,7 +32,7 @@ function(test)
 
 
 
-
+return()
   timer_start(t1)
   cmake_environment(--update-cache)
   timer_print_elapsed(t1)

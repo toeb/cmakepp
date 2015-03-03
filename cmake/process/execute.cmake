@@ -8,12 +8,17 @@
 ## * `--success-callback <callable>[exit_code](<process handle>)` 
 ## * `--error-callback <callable>[exit_code](<process handle>)` 
 ## * `--state-changed-callback <callable>[old_state;new_state](<process handle>)` 
-##
+## * `--lean`
 ## *example*
 ## ```
 ##  execute(cmake -E echo_append hello) -> '@execute(cmake -E echo_append hello)'
 ## ```
 function(execute)
+  set(args ${ARGN})
+  list_extract_flag(args --lean)
+  ans(lean)
+
+
   arguments_encoded_list(${ARGC})
   ans(args)
 
