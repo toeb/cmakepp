@@ -3,7 +3,7 @@
 # else it can be tags heads or HEAD
 # returns the corresponding ref object
 function(git_remote_ref uri ref_name ref_type)
-  git_remote_refs( ${uri})
+  git_remote_refs( "${uri}")
   ans(refs)
   foreach(current_ref ${refs})
     map_navigate(name "current_ref.name")

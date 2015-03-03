@@ -2,10 +2,13 @@ function(semver_parse_lazy version_string)
   if(NOT version_string)
     return()
   endif()
+  string_take_regex(version_string "v")
+
 
   map_new()
   ans(version)
   map_set(${version} string "${version_string}")
+
 
   set(version_number_regex "[0-9]+")
   set(identifier_regex "[0-9a-zA-Z]+")

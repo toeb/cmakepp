@@ -3,7 +3,7 @@
 function(git_remote_refs uri)
   git_uri("${uri}")
   ans(uri)
-  git(ls-remote "${uri}" --process-handle)
+  git(ls-remote ${uri} --process-handle)
   ans(result)
 
   map_tryget(${result} exit_code)
