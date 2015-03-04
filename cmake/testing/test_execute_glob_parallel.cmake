@@ -22,7 +22,7 @@ function(test_execute_glob_parallel)
   ## 
   set(processes)
 
-  ## status callback  shows 
+  ## status callback  shows a status message with current progress and a spinner
   set(status_callback)
   if(NOT no_status)
     function_new()
