@@ -16,6 +16,7 @@ This section how to manage processes and external programs.  Besides replacement
 * [command_line_parse_string](#command_line_parse_string)
 * [command_line_to_string](#command_line_to_string)
 * [execute](#execute)
+* [execute_script](#execute_script)
 * [process_execute](#process_execute)
 * [process_handle](#process_handle)
 * [process_handles](#process_handles)
@@ -39,8 +40,10 @@ This section how to manage processes and external programs.  Besides replacement
 * [process_wait](#process_wait)
 * [process_wait_all](#process_wait_all)
 * [process_wait_any](#process_wait_any)
+* [process_wait_n](#process_wait_n)
 * [string_take_commandline_arg](#string_take_commandline_arg)
 * [wrap_executable](#wrap_executable)
+* [wrap_executable_bare](#wrap_executable_bare)
 
 
 ## Common Definitions
@@ -340,11 +343,24 @@ To communicate with you processes you can use any of the following well known me
  * `--success-callback <callable>[exit_code](<process handle>)` 
  * `--error-callback <callable>[exit_code](<process handle>)` 
  * `--state-changed-callback <callable>[old_state\;new_state](<process handle>)` 
-
+ * `--lean`
  *example*
  ```
   execute(cmake -E echo_append hello) -> 'hello'
  ```
+
+
+
+
+## <a name="execute_script"></a> `execute_script`
+
+ `(<cmake code> [--pure] <args...>)-><execute result>`
+
+ equivalent to `execute(...)->...` runs the specified code using `cmake -P`.  
+ prepends the current `cmakepp.cmake` to the script  (this default behaviour can be stopped by adding `--pure`)
+
+ all not specified `args` are forwarded to `execute`
+
 
 
 
@@ -584,6 +600,7 @@ To communicate with you processes you can use any of the following well known me
                     if value is specified it will be called at least once
                     and between every query if a task is still running 
 
+
  `--task-complete-callback <callable>`
                     if value is specified it will be called whenever a 
                     task completes.
@@ -605,6 +622,31 @@ To communicate with you processes you can use any of the following well known me
 
 
 
+## <a name="process_wait_n"></a> `process_wait_n`
+
+ `(<n:<int>|"*"> <process handle>... [--idle-callback:<callable>])-><process handle>...`
+
+ waits for at least <n> processes to complete 
+
+ returns: 
+  * at least `n` terminated processes
+ 
+ arguments: 
+ * `n` an integer the number of processes to return (lower bound) if `n` is clamped to the number of processes. if `n` is * it is replaced with the number of processes 
+ * `--idle-callback` is called after every time a processes state was polled. It is guaranteed to be called once per process handle. it has access to the following scope variables
+    * `terminated_count` number of terminated processes
+    * `running_count` number of running processes
+    * `wait_time` time that was waited
+    * `wait_counter` number of times the waiting loop iterated
+    * `running_processes` list of running processes 
+    * `current_process` the current process being polled
+    * `is_running` the running state of the current process
+    * `terminated_processes` the list of terminated processes
+
+
+
+
+
 ## <a name="string_take_commandline_arg"></a> `string_take_commandline_arg`
 
 
@@ -613,6 +655,15 @@ To communicate with you processes you can use any of the following well known me
 
 ## <a name="wrap_executable"></a> `wrap_executable`
 
+
+
+
+
+## <a name="wrap_executable_bare"></a> `wrap_executable_bare`
+
+ a fast wrapper for the specified executable
+ this should be used for executables that are called often
+ and do not need to run async
 
 
 

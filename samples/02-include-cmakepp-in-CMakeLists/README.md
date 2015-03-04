@@ -29,7 +29,7 @@ sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin-DCMAKE_RUNTIME_
 -- Detecting CXX compiler ABI info - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktempV0fNf/build
+-- Build files have been written to: C:/temp/cutil/temp/mktempFVFxQ/build
 
 # build the configured project
 sample_folder/build/> cmake --build . 
@@ -48,10 +48,7 @@ cmake_minimum_required(VERSION 2.8.12)
 include("cmakepp.cmake")
 
 ## now that cmakepp is available it is ready to use.
-
-
 project(sample02)
-
 
 # write a simple main file
 fwrite("main.cpp" 

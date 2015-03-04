@@ -17,6 +17,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_append_string](#map_append_string)
 * [map_append_unique](#map_append_unique)
 * [map_delete](#map_delete)
+* [map_duplicate](#map_duplicate)
 * [map_get](#map_get)
 * [map_get_special](#map_get_special)
 * [map_has](#map_has)
@@ -48,6 +49,11 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_has_any](#map_has_any)
 * [map_invert](#map_invert)
 * [map_isempty](#map_isempty)
+* [map_keys_append](#map_keys_append)
+* [map_keys_clear](#map_keys_clear)
+* [map_keys_remove](#map_keys_remove)
+* [map_keys_set](#map_keys_set)
+* [map_keys_sort](#map_keys_sort)
 * [map_key_at](#map_key_at)
 * [map_match](#map_match)
 * [map_matches](#map_matches)
@@ -141,6 +147,12 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 ## <a name="map_delete"></a> `map_delete`
+
+
+
+
+
+## <a name="map_duplicate"></a> `map_duplicate`
 
 
 
@@ -348,6 +360,36 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 ## <a name="map_isempty"></a> `map_isempty`
+
+
+
+
+
+## <a name="map_keys_append"></a> `map_keys_append`
+
+
+
+
+
+## <a name="map_keys_clear"></a> `map_keys_clear`
+
+
+
+
+
+## <a name="map_keys_remove"></a> `map_keys_remove`
+
+
+
+
+
+## <a name="map_keys_set"></a> `map_keys_set`
+
+
+
+
+
+## <a name="map_keys_sort"></a> `map_keys_sort`
 
 
 

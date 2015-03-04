@@ -70,10 +70,7 @@ An importand property of `package handle`'s is that they `MUST` be serializable.
 
 # Package Source
 
-
-
-
-# <a href="packages"></a> Package Search and Retrieval
+# Package Search and Retrieval
 
 ## Motivation
 

@@ -3,7 +3,13 @@ function(status_line_clear)
   ans(whitespace)
 
   eval("
+
     function(status_line_clear)
+      map_tryget(global status)
+      ans(status)
+      if(\"\${status}_\" STREQUAL \"_\")
+        return()
+      endif()
       echo_append(\"\r${whitespace}\r\")    
     endfunction()
   ")

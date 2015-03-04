@@ -12,8 +12,6 @@ So I have created somewhat alot of functions which does things that you might ne
 * [ascii_char](#ascii_char)
 * [ascii_code](#ascii_code)
 * [ascii_generate_table](#ascii_generate_table)
-* [cmake_string_escape](#cmake_string_escape)
-* [cmake_string_unescape](#cmake_string_unescape)
 * [delimiters](#delimiters)
 * [argument_escape](#argument_escape)
 * [format](#format)
@@ -33,7 +31,6 @@ So I have created somewhat alot of functions which does things that you might ne
 * [string_length](#string_length)
 * [string_lines](#string_lines)
 * [string_match](#string_match)
-* [string_nested_split](#string_nested_split)
 * [string_normalize](#string_normalize)
 * [string_normalize_index](#string_normalize_index)
 * [string_overlap](#string_overlap)
@@ -81,18 +78,6 @@ So I have created somewhat alot of functions which does things that you might ne
 ## <a name="ascii_generate_table"></a> `ascii_generate_table`
 
  generates the ascii table and stores it in the global ascii_table variable  
-
-
-
-
-## <a name="cmake_string_escape"></a> `cmake_string_escape`
-
-
-
-
-
-## <a name="cmake_string_unescape"></a> `cmake_string_unescape`
-
 
 
 
@@ -257,12 +242,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 ## <a name="string_match"></a> `string_match`
-
-
-
-
-
-## <a name="string_nested_split"></a> `string_nested_split`
 
 
 

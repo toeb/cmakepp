@@ -3,16 +3,13 @@
 `CMake` is missing a lot of helper functions when it comes to collections. 
 However using the `list` function that `CMake` provides it is possible to add alot of functions that help the developer.
 
-Here is a list of these functions
-
-
-
 
 
 
 ### Function List
 
 
+* [encoded_list](#encoded_list)
 * [index_range](#index_range)
 * [list_after](#list_after)
 * [list_all](#list_all)
@@ -22,8 +19,8 @@ Here is a list of these functions
 * [list_check_items](#list_check_items)
 * [list_combinations](#list_combinations)
 * [list_contains](#list_contains)
+* [list_contains_any](#list_contains_any)
 * [list_count](#list_count)
-* [list_difference](#list_difference)
 * [list_equal](#list_equal)
 * [list_erase](#list_erase)
 * [list_erase_slice](#list_erase_slice)
@@ -97,6 +94,7 @@ Here is a list of these functions
 * [list_isvalid](#list_isvalid)
 * [list_new](#list_new)
 * [list_values](#list_values)
+* [set_difference](#set_difference)
 * [set_isequal](#set_isequal)
 * [set_issubset](#set_issubset)
 * [structured_list_parse](#structured_list_parse)
@@ -104,15 +102,27 @@ Here is a list of these functions
 
 ### Function Descriptions
 
+## <a name="encoded_list"></a> `encoded_list`
+
+ faster
+
+
+
+
 ## <a name="index_range"></a> `index_range`
 
+ returns a list of numbers [ start_index, end_index)
+ if start_index equals end_index the list is empty
+ if end_index is less than start_index then the indices are in declining order
+ ie index_range(5 3) => 5 4
+ (do not confuse this function with the `range_` functions)
 
 
 
 
 ## <a name="list_after"></a> `list_after`
 
- list_after(<list ref> <key:<string>>)-><any ....>
+ `(<list ref> <key:<string>>)-><any ....>`
 
  returns the elements after the specified key
 
@@ -121,23 +131,28 @@ Here is a list of these functions
 
 ## <a name="list_all"></a> `list_all`
 
- returns true iff predicate holds 
- for all elements of lst 
+ `(<list&> <predicate:<[](<any>)->bool>>)-><bool>` 
+
+ returns true iff predicate holds for all elements of `<list>` 
+ 
 
 
 
 
 ## <a name="list_any"></a> `list_any`
 
- returns true if there exists an element
- for which the predicate holds
+ `[](<list&> <predicate:<[](<any>)->bool>)-><bool>`
+
+ returns true if there exists an element in `<list>` for which the `<predicate>` holds
 
 
 
 
 ## <a name="list_at"></a> `list_at`
 
- returns all elements whose index are specfied in that order
+ 
+
+ returns all elements whose index are specfied
  
 
 
@@ -145,21 +160,21 @@ Here is a list of these functions
 
 ## <a name="list_before"></a> `list_before`
 
- list_before(<list ref> <key:<string>>)-><any ....>
+ `(<list&> <key:<string>>)-><any ....>`
 
- returns the elements after the before key
+ returns the elements before key
 
 
 
 
 ## <a name="list_check_items"></a> `list_check_items`
 
- `(<var> <query...>)-><bool>`
+ `(<list&> <query...>)-><bool>`
   
  `<query> := <value>|'!'<value>|<value>'?'`
  
- * checks to see that every value specified is contained in the lsit 
- * if the value is preceded by a `!` checks taht the value is not in the list_check_items
+ * checks to see that every value specified is contained in the list 
+ * if the value is preceded by a `!` checks that the value is not in the list
  * if the value is succeeded by a `?` the value may or may not be contained
 
  returns true if all queries match
@@ -170,15 +185,32 @@ Here is a list of these functions
 
 ## <a name="list_combinations"></a> `list_combinations`
 
+ `(<list&...>)-><any...>`
+
  returns all possible combinations of the specified lists
  e.g.
+ ```
  set(range 0 1)
- list_combinations(range range range) -> 000 001 010 011 100 101 110 111
+ list_combinations(range range range)
+ ans(result)
+ assert(${result} EQUALS 000 001 010 011 100 101 110 111)
+ ```
+
 
 
 
 
 ## <a name="list_contains"></a> `list_contains`
+
+ `(<list&> <element:<any...>>)-><bool>`
+
+ returns true if list contains every element specified 
+
+
+
+
+
+## <a name="list_contains_any"></a> `list_contains_any`
 
 
 
@@ -186,13 +218,9 @@ Here is a list of these functions
 
 ## <a name="list_count"></a> `list_count`
 
- counts all element for which the element hold 
+ `(<list&> <predicate:<[](<any>)-><bool>>> )-><uint>`
 
-
-
-
-## <a name="list_difference"></a> `list_difference`
-
+ counts all element for which the predicate holds 
 
 
 
@@ -741,6 +769,15 @@ Here is a list of these functions
 
 ## <a name="list_values"></a> `list_values`
 
+
+
+
+
+## <a name="set_difference"></a> `set_difference`
+
+ `(<listA&:<any...> <listB&:<any...>>)-><any..>`
+ 
+ 
 
 
 

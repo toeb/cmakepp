@@ -12,7 +12,7 @@ This sample contains a single `CMakeLists.txt` which downloads and includes `cma
 
 ## How to use
 
-```
+```bash
 sample folder/> mkdir build 
 sample folder/> cd build                # creates a build folder 
 sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin ..          # generates the project configuration specified that the executable will be in the build/bin folder
@@ -32,7 +32,7 @@ sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME
 -- Detecting CXX compiler ABI info - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktempzHkxr/build
+-- Build files have been written to: C:/temp/cutil/temp/mktempfpC5T/build
 
 sample folder/build/> cmake --build .   # builds the generated project 
 ... CMake build output ...
@@ -80,8 +80,9 @@ if(NOT EXISTS ${current_dir}/dependencies/eigen3)
 endif()
 
 ## from here on everything can be a normal CMakeLists file
-project(myproject)
+project(sample01)
 
+## include the eigen3 directory so that myexe has access to the header files
 include_directories("dependencies/eigen3")
 
 add_executable(myexe "main.cpp")

@@ -30,7 +30,7 @@ sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin-DCMAKE_RUNTIME_
 -- Detecting CXX compiler ABI info - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktempZvA14/build
+-- Build files have been written to: C:/temp/cutil/temp/mktempApIex/build
 
 # build the configured project
 sample_folder/build/> cmake --build . 
