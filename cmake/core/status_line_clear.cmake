@@ -1,5 +1,6 @@
 function(status_line_clear)
-  string_repeat(" " 80)
+
+  string_repeat(" " 100)
   ans(whitespace)
 
   eval("
