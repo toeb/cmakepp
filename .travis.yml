@@ -8,14 +8,15 @@ matrix:
   allow_failures:
     - os: osx
 env:
-  global: CMAKEPP_TEST_EXECUTE_PARALLEL="true"
+  global: 
+    - CMAKEPP_TEST_EXECUTE_PARALLEL="true"
     # github api token and secret
     # GITHUB_DEVEL_TOKEN_ID=<hidden>
-    secure: "fWQnD0UqfX9SfctAu7lAnUJ4V5brp8UqdmPxQ67MlbmR5GAXQK9yezeQEsOnDCbihM6H/WTkonR920+B14fOb1NO0RSY39yHzjZG6B4tM6ZJwRW0CAlgFzlCqdwyL//7EhfKnxmWqflsA8oY+ihuZsj8P9ZtQSpNWENlu0Cl324="
+    - secure: "fWQnD0UqfX9SfctAu7lAnUJ4V5brp8UqdmPxQ67MlbmR5GAXQK9yezeQEsOnDCbihM6H/WTkonR920+B14fOb1NO0RSY39yHzjZG6B4tM6ZJwRW0CAlgFzlCqdwyL//7EhfKnxmWqflsA8oY+ihuZsj8P9ZtQSpNWENlu0Cl324="
     # GITHUB_DEVEL_TOKEN_SECRET=<hidden>
-    secure: "i9rwJYZa6VDCpjXFaJoUggdn12mC1WB2zb9zaFP57VocTyL37Kpt3btXb9De5VQEJbyVKG2b9zlts20dEqvvruXBBuhWi+15VICT1yqq3zDQt25EPPDXw+AcB58dG+0icY1VKklWXR2Qxms4x/EZSN4TDNUp6LZgh+ACWlE1SRU="
+    - secure: "i9rwJYZa6VDCpjXFaJoUggdn12mC1WB2zb9zaFP57VocTyL37Kpt3btXb9De5VQEJbyVKG2b9zlts20dEqvvruXBBuhWi+15VICT1yqq3zDQt25EPPDXw+AcB58dG+0icY1VKklWXR2Qxms4x/EZSN4TDNUp6LZgh+ACWlE1SRU="
     # BII_PASSWORD=<hidden>
-    secure: "iRtdWDDNUAlA1H9nAblf+P/RWhGlygYtLf9bGV9MGQh55M0CgW4GRvIx8ErjTtXwkXgGtS0HxtRvgrvh8H/Wp3stqoqW2OSX0x+a3zlNmkwWv9TA827qD3O5mmNobZeK/m0iDUxq/7AsKNHBW4gliNOSQ9DcXLOxpRYrpo0mrVo="
+    - secure: "iRtdWDDNUAlA1H9nAblf+P/RWhGlygYtLf9bGV9MGQh55M0CgW4GRvIx8ErjTtXwkXgGtS0HxtRvgrvh8H/Wp3stqoqW2OSX0x+a3zlNmkwWv9TA827qD3O5mmNobZeK/m0iDUxq/7AsKNHBW4gliNOSQ9DcXLOxpRYrpo0mrVo="
   matrix:
     - CMAKE_DIR="v3.1" CMAKE_VERSION="3.1.2" 
     - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1" 
