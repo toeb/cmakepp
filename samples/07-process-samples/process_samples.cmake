@@ -19,21 +19,7 @@ function(test)
     assign(handles_list[] = process_start_script("${script}" --success-callback "[](process_handle) message(FORMAT 'process #${i} succeeded (pid: {process_handle.pid})')")) 
   endforeach()
 
-  ## this function creates a string containing status information
-  function(progress_string value maximum ticks)
-    math(EXPR multiplier "20/${maximum}")
-    math(EXPR value "${value} * ${multiplier}")
-    math(EXPR maximum "${maximum} * ${multiplier}")
-    math(EXPR rest_count "${maximum} - ${value}")
-    string_repeat("=" ${value})
-    ans(status)
-    string_repeat(" " ${rest_count})
-    ans(rest)
-    math(EXPR status_ticker "${ticks} % 5")
-    string_repeat("." ${status_ticker})
-    ans(status_ticker)
-    return("[${status}${rest}]${status_ticker}          ")
-  endfunction()
+  
 
   ## this idlecallback displays updating status on the console
   ## it uses the ref 'ticks' to count the numbber of times the idle callback was called
