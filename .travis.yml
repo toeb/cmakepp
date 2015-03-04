@@ -9,6 +9,7 @@ matrix:
     - os: osx
 env:
   global:
+    - CMAKEPP_TEST_EXECUTE_PARALLEL="true"
     # github api token and secret
     # GITHUB_DEVEL_TOKEN_ID=<hidden>
     secure: "fWQnD0UqfX9SfctAu7lAnUJ4V5brp8UqdmPxQ67MlbmR5GAXQK9yezeQEsOnDCbihM6H/WTkonR920+B14fOb1NO0RSY39yHzjZG6B4tM6ZJwRW0CAlgFzlCqdwyL//7EhfKnxmWqflsA8oY+ihuZsj8P9ZtQSpNWENlu0Cl324="
