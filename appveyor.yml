@@ -1,0 +1,14 @@
+version: 0.0.7-build{build}+appveyor
+init:
+- ps: >-
+    cinst cmake
+
+    cmake --version
+environment:
+  GITHUB_DEVEL_TOKEN_SECRET:
+    secure: I8c75OvMZF8ftesTtzMGMUq6HKjYVQGH6i8dZnqPIw7hNGDBRcLKVonkNx5xPs5e
+  GITHUB_DEVEL_TOKEN_ID:
+    secure: 0vOTPwzzwTN7gcI9p+HW1OXK9TgJRYGqRf2Svw2WZCE=
+build: off
+test_script:
+- ps: cmake -P build/script.cmake

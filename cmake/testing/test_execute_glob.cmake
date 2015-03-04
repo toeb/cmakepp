@@ -15,6 +15,51 @@ function(test_create file)
   return_ans()  
 endfunction()
 
+function(test_execute_glob_parallel)
+  timer_start(parallel)
+  cd("${CMAKE_CURRENT_BINARY_DIR}")
+  glob("${ARGN}")
+  ans(test_files)
+
+  set(max 8)
+  set(processes)
+
+  while(processes OR test_files)
+
+    while(true)
+      list(LENGTH processes process_count)
+      if(NOT "${process_count}" LESS ${max})
+        break()
+      endif()
+
+
+      list_pop_front(test_files)
+      ans(test_file)
+
+      if(NOT test_file)
+        break()
+      endif()
+      message("starting ${test_file}")
+      cmakepp("test_execute" "${test_file}" --async)
+      ans(handle)
+      map_set(${handle} test_name ${test_file})
+      list(APPEND processes ${handle})
+    endwhile()
+
+
+    process_wait_any(${processes} --quietly)
+    ans(finished)
+
+    list(REMOVE_ITEM processes ${finished})
+    message(FORMAT "finished {finished.test_name}")
+
+  endwhile()
+
+  timer_print_elapsed(parallel)
+
+
+endfunction()
+
 function(test_execute_glob_separate_process) 
 
 
@@ -61,6 +106,7 @@ function(test_execute_glob_separate_process)
 endfunction()
 
 function(test_execute_glob)
+  timer_start(test_run)
   cd("${CMAKE_CURRENT_BINARY_DIR}")
   glob(${ARGN})
   ans(test_files)
@@ -77,5 +123,8 @@ function(test_execute_glob)
     message_indent_pop()
     message(STATUS "done")
   endforeach()
+
+  timer_print_elapsed(test_run)
+
 
 endfunction()

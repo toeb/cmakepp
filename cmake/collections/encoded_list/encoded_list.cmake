@@ -1,3 +1,43 @@
+  
+
+## faster
+function(encoded_list str)
+  string_codes()
+  eval("
+    function(encoded_list str)
+      if(\"\${str}_\" STREQUAL \"_\")
+        return(${empty_code})
+      endif()
+    string(REPLACE \"[\" \"${bracket_open_code}\" str \"\${str}\")
+    string(REPLACE \"]\" \"${bracket_close_code}\" str \"\${str}\")
+    string(REPLACE \";\" \"${semicolon_code}\" str \"\${str}\")
+    set(__ans \"\${str}\" PARENT_SCOPE)
+  endfunction()
+  ")
+  encoded_list("${str}")
+  return_ans()
+endfunction()
+
+
+
+## faster
+function(encoded_list_decode str)
+  string_codes()
+  eval("
+  function(encoded_list_decode str)
+    if(\"\${str}\" STREQUAL \"${empty_code}\")
+      return()
+    endif()
+    string(REPLACE \"${bracket_open_code}\" \"[\"  str \"\${str}\")
+    string(REPLACE \"${bracket_close_code}\" \"]\"  str \"\${str}\")
+    string(REPLACE \"${semicolon_code}\" \";\"  str \"\${str}\")
+    set(__ans \"\${str}\" PARENT_SCOPE)
+  endfunction()
+  ")
+  encoded_list_decode("${str}")
+  return_ans()
+endfunction()
+
 
   macro(encoded_list_get __lst idx)
     list(GET ${__lst} ${idx} __ans)

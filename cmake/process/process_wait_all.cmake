@@ -1,4 +1,3 @@
-
 ## `(<handles: <process handle...>>  [--timeout <seconds>] [--idle-callback <callable>] [--task-complete-callback <callable>] )`
 ##
 ## waits for all specified <process handles> to finish returns them in the order

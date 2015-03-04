@@ -14,6 +14,13 @@ function(test)
   # endwhile()
   # timer_print_elapsed(timer)
   
+  set(lst --config "{asd:'bsd'}")
+  list_pop_front(lst)
+  ans(res)
+  assert("${res}" STREQUAL "--config")
+  assert("${lst}" STREQUAL "{asd:'bsd'}")
+
+
   set(lst "a;<>")
   list_pop_front(lst)
   ans(res)
