@@ -9,7 +9,7 @@ function(compile_tool name src)
   ans(chksum)
 
   cmakepp_config(temp_dir)
-  ans(tempdir)
+  ans(temp_dir)
 
 
   set(dir "${temp_dir}/tools/${chksum}")
