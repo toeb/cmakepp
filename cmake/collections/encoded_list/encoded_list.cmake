@@ -25,7 +25,7 @@ function(encoded_list_decode str)
   string_codes()
   eval("
   function(encoded_list_decode str)
-    if(\"\${str}\" STREQUAL \"${empty_code}\")
+    if(\"\${str}_\" STREQUAL \"${empty_code}_\")
       return()
     endif()
     string(REPLACE \"${bracket_open_code}\" \"[\"  str \"\${str}\")
