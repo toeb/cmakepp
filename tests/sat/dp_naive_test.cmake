@@ -1,7 +1,5 @@
 function(test)
 
-
-
   function(dp_naive_test cnf)
     cnf("${arguments_sequence}")
     ans(cnf)
@@ -35,8 +33,11 @@ function(test)
  # test_uut("{a:'true'}" "a|b")
  # test_uut("{a:'false'}" "!a|b")
  # test_uut("{a:'true',b:'true'}" "!a|b&a")
+  test_uut("{a:'true'}" "a")
+  test_uut("{a:'false'}" "!a")
+  test_uut("{a:'true',b:null}" "a;b" "a")
   test_uut("{A:'true',B1:'true','B2':'false','C':'true'}" "!A;B1;B2" "!B1;!B2" "!A;C" "!B2;!C" "A")
-  test_uut("" "!a;b" "!a;d" "!d;!c" "!b;c" "a")
+  test_uut("" "!a;b" "!a;d" "!d;!c" "!b;c" "a") # conflict
 
   test_uut("" "!meta:A;meta:B" "!meta:A;meta:D" "!meta:D;!meta:C" "!meta:B;meta:C" "meta:A")
 
@@ -51,127 +52,5 @@ return()
 
   test_uut("{}" "!3|36|7|;!3|!42|!48|;!49|!47|!41|;8|!40|17|;!21|!31|!39|;36|!22|49|;27|38|14|;15|!18|6|;6|7|!43|;34|!7|23|;2|14|!13|;2|47|!42|;!33|!35|3|;44|40|49|;50|36|31|;!36|!3|!37|;26|!29|43|;15|29|!45|;24|!11|18|;!47|!26|6|;!50|!33|!10|;32|6|16|;!34|37|41|;7|!28|!17|;!44|46|19|;7|22|!48|;3|39|34|;31|46|!43|;!27|32|23|;37|!50|!18|;20|5|11|;!45|!24|6|;!34|!23|!14|;!22|21|20|;!17|50|24|;!25|!24|!27|;3|35|21|;!26|47|!36|;!28|!45|49|;!21|!6|12|;!17|!15|!39|;41|2|!14|;25|36|!23|;!39|!3|!40|;50|20|35|;27|31|!39|;45|!15|!40|;34|50|35|;!1|!48|12|;18|!35|!30|;27|!24|!25|;!4|!33|!12|;!43|!24|!37|;!37|31|!44|;!9|!38|14|;33|!16|34|;4|!35|!5|;!3|!21|!19|;!35|!36|!29|;7|!43|36|;30|14|41|;!35|!24|!7|;35|!42|6|;!1|!15|39|;27|49|!16|;!37|49|!10|;50|!46|!3|;!41|20|34|;!1|23|28|;!12|!30|!20|;!24|29|!37|;12|5|!44|;!6|!2|48|;!2|!49|!43|;1|!50|24|;!7|!50|!44|;!41|43|4|;13|15|!11|;!3|!11|23|;33|48|41|;9|23|!49|;!43|47|1|;!40|16|!29|;30|19|3|;19|!34|48|;!16|!44|14|;38|!45|!12|;!4|!14|!31|;!48|35|!1|;45|!13|19|;9|42|!7|;!1|!15|8|;!13|!44|!14|;!43|!37|!31|;!27|!29|47|;7|4|17|;7|10|35|;!25|20|17|;35|!5|!42|;!50|24|!5|;!21|!26|2|;!8|45|!21|;!16|33|49|;!38|6|16|;5|21|37|;8|38|31|;!21|33|14|;20|40|!5|;!29|!9|31|;!7|42|!22|;!48|8|26|;48|!38|33|;!34|49|46|;!14|!46|25|;!46|4|18|;36|!12|!31|;12|!18|14|;!7|46|!16|;9|!8|7|;49|!42|!22|;22|!15|38|;34|!41|47|;22|!26|32|;!25|!45|!21|;!26|32|!11|;15|26|!25|;!1|46|25|;!14|!31|30|;!9|!22|12|;!18|26|!35|;!16|!32|!21|;31|!49|!21|;11|9|41|;!13|!30|19|;!10|4|6|;!4|3|!22|;!25|!50|!18|;!40|4|9|;37|20|46|;!27|22|!29|;34|14|3|;3|!31|20|;!50|2|!26|;17|!29|38|;!49|12|!41|;15|!35|!43|;!22|!23|!49|;!9|33|48|;26|29|35|;27|!50|37|;!7|46|!43|;!46|!37|!8|;!40|36|!24|;!44|46|15|;!3|36|!16|;!48|9|43|;!25|!4|44|;!22|37|!7|;!31|!17|!22|;!11|!48|17|;23|34|!28|;23|!48|!39|;!37|!1|!23|;!19|27|14|;!22|33|!6|;!6|!32|!26|;18|!20|!46|;43|22|27|;!13|34|49|;!35|!46|3|;32|39|!43|;6|!39|!9|;27|39|!16|;25|!17|!15|;!43|27|34|;!6|49|5|;!38|11|14|;40|!38|47|;37|!14|17|;39|29|36|;!39|!28|1|;!18|14|!16|;!40|50|15|;37|!42|18|;!13|31|33|;2|!42|33|;8|!3|!22|;1|23|!31|;!20|!45|26|;42|11|49|;29|11|!43|;!20|!21|30|;23|45|!35|;38|!30|!14|;!9|48|!29|;11|!18|!23|;!41|!1|!29|;5|41|26|;44|!30|!7|;38|!6|!41|;46|48|!15|;!18|!10|!47|;38|46|!32|;!32|46|12|;31|40|14|;!18|2|49|;28|!38|27|;!16|!21|14|;!29|15|12|;49|34|5|;14|22|!12|;30|33|20|;!24|22|25|;4|!48|!23|;!30|!36|9|;44|12|!35|;38|3|!21|;!11|33|49")
 
-return()
-  function(dpll_choose_literal f clauses)
-    map_values(${clauses})
-    ans(literals)
-    list_peek_front(literals)
-    return_ans()
-  endfunction()
 
-  function(dpll f clauses assignments)
-    set(decision ${ARGN})
-    print_vars(clauses assignments decision)
-    map_duplicate(${clauses})
-    ans(clauses)   
-
-    map_keys(${clauses})
-    ans(clause_indices)
-    if("${clause_indices}_" STREQUAL "_")
-      message(satisfied)
-      return(true)## satsifiable
-    endif()
-   # print_vars(clauses assignments )
-
-    ## unit propagate
-    bcp_unit_propagate_literals("${f}" "${clauses}" "${assignments}" ${ARGN})
-    ans(deduced_literals)
-
-
-    if("${deduced_literals}" MATCHES "(conflict)|(unsatisfied)")
-      message("propagation  ${deduced_literals}")
-      return(false)
-    endif()
-
-
-    bcp_pure_literals_assign("${f}" "${clauses}" "${assignments}")
-    ans(deduced_literals)
-    
-    if("${deduced_literals}" MATCHES "(conflict)|(unsatisfied)")
-      message("pure literal  ${deduced_literals}")
-      return(false)
-    endif()
-
-    dpll_choose_literal("${f}" "${clauses}")
-    ans(literal)
-
-
-
-    if("${literal}_" STREQUAL "_")
-      message("no literal chosen")
-      return(true)
-    endif()
-
-    message("decision ${literal} = true")
-
-    map_duplicate(${assignments})
-    ans(new_assignments)  
-    map_set(${new_assignments} ${literal} true)
-    messagE(PUSH)
-    dpll("${f}" "${clauses}" "${new_assignments}" ${literal})
-    ans(satsifiable)
-    messagE(POP)
-    if(satsifiable)
-      map_union(${assignments} ${new_assignments})
-      return(true)
-    endif()
-
-
-    message(FORMAT "backtrack after ${literal} = true")
-
-    message("decision ${literal} = false")
-
-    map_duplicate(${assignments})
-    ans(new_assignments)  
-    map_set(${new_assignments} ${literal} false)
-    messagE(PUSH)
-    dpll("${f}" "${clauses}" "${new_assignments}" ${literal})
-    ans(satsifiable)
-    messagE(POP)
-
-    if(satsifiable)
-      map_union(${assignments} ${new_assignments})
-      return(true)
-    endif()
-
-
-    message(FORMAT "backtrack after ${literal} = false")
-
-    return(false)
-  endfunction()
-
-  ## 
-  function(test_dpll cnf)
-    cnf("${cnf}")
-    ans(cnf)
-
-    #print_cnf(${cnf})
-    scope_import_map(${cnf})
-    map_new()
-    ans(assignments)
-    timer_start(t1)
-    dpll("${cnf}" "${clause_literal_map}" "${assignments}")
-    ans(res)
-    timer_print_elapsed(t1)
-
-    if(NOT res)
-      return(conflict)
-    endif()
-    json_print(${assignments})
-    literal_to_atom_assignments(${cnf} ${assignments})
-    ans(assignments)
-    json_print(${assignments})
-    return_ref(assignments)
-  endfunction()
-
-
-  define_test_function(test_uut test_dpll cnf)
-
-
-  #test_uut("{}" "!a|b;!b|c;!d|c;!a|d;a")
-
- ##c1 : (a ∨ b ∨ ¬c) ∧ c2 : (b ∨ c) ∧ c3 : (¬a ∨ b ∨ ¬c) ∧ c4 : (a ∨ ¬b ∨ c)∧
- ## c5 : (a ∨ ¬c ∨ d) ∧ c6 : (¬c ∨ ¬d)
-
- test_uut("{}" "a|b|!c;b|c;!a|b|!c;a|!b|c;a|!c|d;!c|!d")
 endfunction()

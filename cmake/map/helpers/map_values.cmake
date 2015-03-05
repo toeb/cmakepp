@@ -15,16 +15,16 @@ function(map_values this)
 endfunction()
 
 
-## faster
-macro(map_values map)
-  set(__ans ${ARGN})
-  if(NOT __ans)
-    map_keys(${map})
-  endif()
-  ## key does not conflict as it is the loop variable
-  foreach(key ${__ans})
-    map_tryget(${map} ${key})
-    list(APPEND __map_values_result ${__ans})
-  endforeach()
-  set(__ans ${__map_values_result})
-endmacro()
+# ## faster
+# macro(map_values map)
+#   set(__ans ${ARGN})
+#   if(NOT __ans)
+#     map_keys(${map})
+#   endif()
+#   ## ____map_values_key does not conflict as it is the loop variable
+#   foreach(____map_values_key ${__ans})
+#     map_tryget(${map} ${____map_values_key})
+#     list(APPEND __map_values_result ${__ans})
+#   endforeach()
+#   set(__ans ${__map_values_result})
+# endmacro()

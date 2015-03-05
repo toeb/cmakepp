@@ -7,6 +7,10 @@ function(dp_naive f)
   dp_naive_init(${f})
   ans(context)
   while(true)
+    ## decide which literal to try next to satisfy clauses
+    ## returns true if decision was possible
+    ## if no decision is made all clauses are satisfied
+    ## and the algorithm terminates with success
     dp_naive_decide()
     ans(decision)
     if(NOT decision)
@@ -14,14 +18,18 @@ function(dp_naive f)
       return_ans()
     endif()
 
-
+    ## propagate decision 
+    ## if a conflict occurs backtrack 
+    ## when backtracking is impossible the algorithm terminates with failure
     while(true)
+
       dp_naive_bcp()
       ans(bcp)
       if(bcp)
         break()
       endif()
 
+      ## backtrack 
       dp_naive_resolve_conflict()
       ans(resolved)
 
@@ -34,6 +42,7 @@ function(dp_naive f)
 
   message(FATAL_ERROR "unreachable code")
 endfunction()
+
 
 function(dp_naive_finish outcome)
   
@@ -159,23 +168,29 @@ endfunction()
 
 function(dp_naive_resolve_conflict)
   map_import_properties(${context} f)
+
+  ## undo decisions until a decision is found which was not 
+  ## tried the `other way` ie inversing the literals value
+  set(conflicting_decision)
   while(true)
     map_pop_back(${context} decision_stack)
     ans(dl)
-   # message(POP)
+    ## store conflicting_decision
+    map_set(${dl} conflicting_decision ${conflicting_decision})
+    set(conflicting_decision ${dl})
     map_tryget(${dl} tried_both_ways)
     ans(tried_both_ways)
-    if(NOT tried_both_ways) ## true is always the first choice
+    if(NOT tried_both_ways)
       break()
     endif()
   endwhile()
 
 
-  # d = mst recent decision not tried `both ways`
+  # d = most recent decision not tried `both ways`
   map_tryget(${dl} decision)
   ans(d)
   if("${d}_" STREQUAL "_")
-    ## decision layer 0 reaced -> cant resolve
+    ## decision layer 0 reached -> cannot resolve
     return(false)
   endif()
 
@@ -189,10 +204,8 @@ function(dp_naive_resolve_conflict)
   map_tryget(${dl} parent)
   ans(parent)
 
-
   ## pushback decision layer with value inverted
   dp_naive_push_decision(${parent} ${d} ${value} true)
-
 
   return(true)
 endfunction()

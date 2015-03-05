@@ -1,0 +1,127 @@
+Searching 1761 files for "package_source_resolve_all" (regex)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_dependency\package_dependency_configuration.cmake:
+   18  
+   19  
+   20:   #package_source_resolve_all(${package_source} --cache ${cache} ${required_uris})
+   21    #ans(required_package_handles)
+   22    map_tryget(${root_handle} uri)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\package_source_resolve_all.cmake:
+    1  
+    2:   function(package_source_resolve_all package_source)
+    3      set(args ${ARGN})
+    4      list_extract_labelled_value(args --cache)
+
+C:\Users\Tobi\Documents\projects\cmakepp\tests\package\project_tests\package_dependency_resolve_graph_test.cmake:
+   39      map_new()
+   40      ans(cache)
+   41:     package_source_resolve_all(${package_source} --cache ${cache} ${ARGN})
+   42      ans(package_handles)
+   43      timer_start(package_dependency_graph_resolve)
+
+3 matches across 3 files
+
+
+Searching 1761 files for "mappings" (regex)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\classes\CommandRunner.cmake:
+    1  function(CommandRunner)
+    2: 	# field containing all command name => handler mappings
+    3  	map_new()
+    4    ans(commands)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\package_source_resolve_all.cmake:
+   13  
+   14    map_new()
+   15:   ans(mappings)
+   16    set(uris)
+   17    foreach(admissable_uri ${args})
+   ..
+   19      ans(dependable_uri)
+   20      foreach(current_uri ${dependable_uri})
+   21:       map_append(${mappings} "${current_uri}" "${admissable_uri}")
+   22:       map_append(${mappings} "${admissable_uri}" "${current_uri}")
+   23      endforeach()
+   24      list(APPEND uris ${dependable_uri})
+   ..
+   38      endif()
+   39  
+   40:     map_tryget("${mappings}" "${uri}")
+   41      ans(admissable_uri)
+   42  
+
+5 matches across 2 files
+
+
+Searching 1761 files for "package_source_resolve_all" (regex)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\package_source_resolve_all.cmake:
+    2  ##
+    3  ##
+    4: function(package_source_resolve_all package_source)
+    5    set(args ${ARGN})
+    6    list_extract_labelled_value(args --cache)
+
+C:\Users\Tobi\Documents\projects\cmakepp\tests\package\project_tests\package_dependency_resolve_graph_test.cmake:
+   39      map_new()
+   40      ans(cache)
+   41:     package_source_resolve_all(${package_source} --cache ${cache} ${ARGN})
+   42      ans(package_handles)
+   43      timer_start(package_dependency_graph_resolve)
+
+2 matches across 2 files
+
+
+Searching 1766 files for "uri $" (regex)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\git\package_source_resolve_git.cmake:
+    1: ## returns a pacakge descriptor for the specified git uri 
+    2  ## takes long for valid uris because the whole repo needs to be checked out
+    3  function(package_source_resolve_git uri)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\github\package_source_resolve_github.cmake:
+    3    ## package_source_resolve_github() -> <package handle> {}
+    4    ##
+    5:   ## resolves the specifie package uri 
+    6    ## and if uniquely identifies a package 
+    7    ## returns its pacakge descriptor
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\hg\package_source_resolve_hg.cmake:
+    1  ## package_source_resolve_hg
+    2  ##
+    3: ## resolves a uri package to a immutable unqiue uri 
+    4  ##
+    5    function(package_source_resolve_hg uri)
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\path\README.md:
+   20    - `/home/path/pkg3` absolute posix path
+   21    - `~/pkgX` absolute home path 
+   22:   - `file:///C:/users/tobi/packages/pkg1` valid file uri 
+   23:   - `file://localhost/C:/users/tobi/packages/pkg1` valid file uri 
+   24  * valid package uris
+   25    - `file:///usr/local/pkg1`
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\package\package_source\path\README.md.in:
+   20    - `/home/path/pkg3` absolute posix path
+   21    - `~/pkgX` absolute home path 
+   22:   - `file:///C:/users/tobi/packages/pkg1` valid file uri 
+   23:   - `file://localhost/C:/users/tobi/packages/pkg1` valid file uri 
+   24  * valid package uris
+   25    - `file:///usr/local/pkg1`
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\uri\uri_parse.cmake:
+   12  #  extension: # extension of file 
+   13  #  rest: # the ret of the input string which is not part of the uri
+   14: #  query: # the query part of the uri 
+   15  #  fragment # fragment part of uri
+   16  # }
+
+C:\Users\Tobi\Documents\projects\cmakepp\cmake\web\http_put.cmake:
+   27  ##   on_http_put(<uri> <content>)-> <uri?>:
+   28  ##     event is called before put request is performed
+   29: ##     user may cancel event and return a modified uri 
+   30  ##     which is used to perform the request 
+   31  function(http_put uri)
+
+9 matches across 7 files

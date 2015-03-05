@@ -35,11 +35,12 @@ function(test)
     ans(cache)
     assign(package_handle = package_source.resolve("${package_id}"))
     timer_start(package_dependency_resolve)
-    package_dependency_resolve("${package_source}" "${cache}" "${package_handle}")
+    package_dependency_resolve("${package_source}"  "${package_handle}" --cache "${cache}")
     ans(res)
     timer_print_elapsed(package_dependency_resolve)
     map_new()
     ans(result)
+    print_vars(res)
     map_set(${result} cache "${cache}")
     map_set(${result} result ${res})
     return_ref(result)
@@ -47,12 +48,18 @@ function(test)
 
 
   define_test_function(test_uut test_package_dependency_resolve package_id)
+  test_uut("{
+    result:{
+     'C':{
+       'meta:C':{
+          dependees:{
+            'meta:D':{}
+          }}}}}" "D")
 
-
-  test_uut("{result:{}}" "C")
   test_uut("{cache:{'meta:C':{}, 'C':{} }}" "D")
-  test_uut("{result:{ C:{ dependees:{'meta:D':{ dependencies:{'C':{}} }}}}}" "D")
-  test_uut("{cache:{'meta:B':{}, 'meta:D':{}}}" "A")
+  test_uut("{result:{'C':{} }}" "D")
+  test_uut("{result:{}}" "C")
+  #test_uut("{cache:{'meta:B':{}, 'meta:D':{}}}" "A")
  
 
 endfunction()
