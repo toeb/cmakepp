@@ -64,7 +64,7 @@ function(test_execute_glob_parallel)
       message(FORMAT "test output: {process_handle.stderr}")
     else()
       ref_append(tests_succeeded ${process_handle})
-      message(FORMAT "success: {process_handle.test_file}")
+      message(STATUS FORMAT "success: {process_handle.test_file}")
 
     endif()
     ref_append(tests_completed ${process_handle})
@@ -96,9 +96,31 @@ function(test_execute_glob_parallel)
       list(REMOVE_ITEM processes ${complete})
     endif()
   endforeach()
-  
+
+
+      
   ## wait for all remaining processes (* indicates that all processes are to be waited for)
   process_wait_n(* ${processes} ${status_callback})
 
+  # print status once
+  ref_get(tests_failed)
+  ans(tests_failed)
+  ref_get(tests_succeeded)
+  ans(tests_succeeded)
+  ref_get(test_count)
+  ans(test_count)
+  ref_get(tests_completed)
+  ans(tests_completed)
+
+  list(LENGTH tests_failed failure_count)
+  list(LENGTH tests_succeeded success_count)
+  list(LENGTH tests_completed completed_count)
+
+  timer_elapsed(test_time_sum)
+  ans(elapsed_time)
+
+
+   status_line("")
+   message("\n\n${completed_count}  / ${test_count}  ok: ${success_count} nok: ${failure_count} (elapsed time ${elapsed_time} ms)")
 
 endfunction()

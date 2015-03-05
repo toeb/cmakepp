@@ -11,8 +11,10 @@ function(status_line_clear)
       if(\"\${status}_\" STREQUAL \"_\")
         return()
       endif()
-      echo_append(\"\r${whitespace}\r\")    
+
+      echo_append(\"\r${whitespace}\r\")
     endfunction()
   ")
   status_line_clear()
 endfunction()
+

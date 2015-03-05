@@ -23,10 +23,13 @@ function(test)
   endfunction()
 
 
+
   #dp_naive_test("a|b|!c;b|c;!a|b|!c;a|!b|c;a|!c|d;!c|!d")
 
   define_test_function(test_uut dp_naive_test cnf)
+  test_uut("{a:'false',b:'false',c:'false'}" "!a|b;!a|d;d|!c;!b|c;a")
 
+return()
   test_uut("{a:'true',b:'true',c:'false'}" "a|b|!c;b|c;!a|b|!c;a|!b|c;a|!c|d;!c|!d")
 
  # unsatisfiable
