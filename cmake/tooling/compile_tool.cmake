@@ -72,7 +72,7 @@ function(compile_tool name src)
   eval("
     function(${name})
 
-      __${name}()
+      __${name}(\${ARGN})
       ans_extract(error)
       ans(stdout)
       eval(\"\${stdout}\")

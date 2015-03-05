@@ -123,4 +123,7 @@ function(test_execute_glob_parallel)
    status_line("")
    message("\n\n${completed_count}  / ${test_count}  ok: ${success_count} nok: ${failure_count} (elapsed time ${elapsed_time} ms)")
 
+if(failure_count)
+  messagE(FATAL_ERROR "failed to execute all tests successfully")
+endif()
 endfunction()
