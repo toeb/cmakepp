@@ -1,5 +1,7 @@
 
  function(print_multi n)
+
+
   set(headers index ${ARGN})
   set(header_lengths )
   foreach(header ${headers})
@@ -10,6 +12,10 @@
 
   string(REPLACE ";" " " headers "${headers}")
   message("${headers}")
+
+  if(${n} LESS 0)
+    return()
+  endif()
 
   foreach(i RANGE 0 ${n})
     set(current_lengths ${header_lengths})

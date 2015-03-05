@@ -7,7 +7,7 @@
 ## if(result) => ok
 ## if(NOT result) => conflict
 function(bcp_assignment_add f assignments li value)
-  #print_vars(assignments li value)
+#  print_vars(assignments li value)
   map_tryget("${assignments}" ${li})
   ans(existing_value)
   if("${existing_value}_" STREQUAL "_")

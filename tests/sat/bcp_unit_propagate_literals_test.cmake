@@ -29,7 +29,8 @@ function(test)
   endfunction()
 
   define_test_function(test_uut test_bcp cnf atoms )
-  
+
+
   test_uut("{a:'false'}" "!a" "{}")
   test_uut("conflict" "a;!a" "{}")
   test_uut("{c:'true', b:'true', a:'false'}" "!a|!b;b|!c" "{c:'true'}")

@@ -3,7 +3,7 @@ function(test)
 
 
   function(dp_naive_test cnf)
-    cnf("${cnf}")
+    cnf("${arguments_sequence}")
     ans(cnf)
 
     #print_cnf(${cnf})
@@ -16,18 +16,29 @@ function(test)
     if(res)
       literal_to_atom_assignments(${cnf} ${res})
       ans(res)
+      map_keys_sort("${res}")
+  
     endif()
-    map_keys_sort(${res})
+    
    print_vars(res)
-    return_ref(res)  
+      return_ref(res)  
   endfunction()
 
 
 
   #dp_naive_test("a|b|!c;b|c;!a|b|!c;a|!b|c;a|!c|d;!c|!d")
 
-  define_test_function(test_uut dp_naive_test cnf)
-  test_uut("{a:'false',b:'false',c:'false'}" "!a|b;!a|d;d|!c;!b|c;a")
+  define_test_function(test_uut dp_naive_test)
+
+ # test_uut("{a:'true'}" "a")
+ # test_uut("{a:'false'}" "!a")
+ # test_uut("{a:'true'}" "a|b")
+ # test_uut("{a:'false'}" "!a|b")
+ # test_uut("{a:'true',b:'true'}" "!a|b&a")
+  test_uut("{A:'true',B1:'true','B2':'false','C':'true'}" "!A;B1;B2" "!B1;!B2" "!A;C" "!B2;!C" "A")
+  test_uut("" "!a;b" "!a;d" "!d;!c" "!b;c" "a")
+
+  test_uut("" "!meta:A;meta:B" "!meta:A;meta:D" "!meta:D;!meta:C" "!meta:B;meta:C" "meta:A")
 
 return()
   test_uut("{a:'true',b:'true',c:'false'}" "a|b|!c;b|c;!a|b|!c;a|!b|c;a|!c|d;!c|!d")

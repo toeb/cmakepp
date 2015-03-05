@@ -3,16 +3,19 @@
 ## returns unsatisfied if a clause is unsatisfieable
 ## returns indices of unit_clauses' literal
 ## else returns nothing 
-## sideffect updates clauses map 
+## sideffect updates clauses map removes unit clauses
 function(bcp_extract_unit_clauses f clauses)
-  #map_import_properties(${f})
+ # map_import_properties(${f})
   map_keys(${clauses})
   ans(clause_indices)
 
+
+
   set(unit_literals)
 
-  foreach(ci ${clause_indices})
-    ## get clause's literal indices
+
+  foreach(ci   ${clause_indices}  )
+    # ## get clause's literal indices
     map_tryget(${clauses} ${ci})
     ans(clause)
 

@@ -26,7 +26,8 @@ function(test)
     id:'D',
     version:'1.0.0',
     dependencies:{
-      'C':'false'
+      'C':'true',
+      'E':'false'
     }
   }"))
   assign(success = package_source.add_package_descriptor("{
@@ -69,7 +70,7 @@ function(test)
         foreach(dependency_handle ${dependency_handles})
           map_tryget(${dependency_handle} uri)
           ans(dependency_uri)
-          sequence_add(${clauses} "${package_uri}|!${dependency_uri}")
+          sequence_add(${clauses} "!${package_uri}" "!${dependency_uri}")
           ans(ci)
         endforeach()
       else()
@@ -79,7 +80,7 @@ function(test)
         foreach(dependency_handle ${dependency_handles})
           map_tryget(${dependency_handle} uri)
           ans(dependency_uri)
-          sequence_append_string("${clauses}" "${ci}" "|${dependency_uri}")
+          sequence_append("${clauses}" "${ci}" "${dependency_uri}")
         endforeach()
 
       endif()
@@ -118,34 +119,24 @@ function(test)
       create_clauses("${clauses}" "${package_handles}" "${package_uri}")
       
     endforeach()
-    map_keys(${clauses})
-    ans(keys)
-    set(res)
-    foreach(key ${keys})
-      map_tryget(${clauses} ${key})
-      ans(clause)
-      set(res "${res}&${clause}")
-    endforeach()
-    string(SUBSTRING "${res}" 1 -1 res)
 
     foreach(package_handle ${required_package_handles})
       map_tryget(${package_handle} uri)
       ans(required_uri)
-      set(res "${res}&${required_uri}")
+      sequence_add(${clauses} "${required_uri}")
     endforeach()
-    message("${res}")
-
-    cnf("${res}")
+    cnf("${clauses}")
     ans(cnf)
-    print_cnf("${cnf}")
-
+  
     dp_naive("${cnf}")
     ans(res)
-    literal_to_atom_assignments(${cnf} ${res})
-    ans(res)
+    if(res)
+      literal_to_atom_assignments("${cnf}" "${res}")
+      ans(res)
+    endif()
     
-
-    print_vars(res)
+  
+    return_ref(res)    
 
 
     map_new()

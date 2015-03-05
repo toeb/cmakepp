@@ -9,19 +9,38 @@
 ## returns "unsatisfied" if cnf is unsatisfiable 
 ## 
 function(bcp f clauses assignments)
-  map_import_properties(${f} literal_inverse_map) ## simplification inverse = i+-1
+  #map_import_properties(${f} literal_inverse_map) ## simplification inverse = i+-1
 
-  bcp_deduce_assignments("${f}" "${clauses}" "${assignments}")
-  ans(deduced_assignments)
+  # bcp_deduce_assignments("${f}" "${clauses}" "${assignments}")
+  # ans(deduced_assignments)
 
-  if("${deduced_assignments}" MATCHES "(conflict)|(unsatisfied)")
-    return_ref(deduced_assignments)
-  endif()
+  # if("${deduced_assignments}" MATCHES "(conflict)|(unsatisfied)")
+  #   return_ref(deduced_assignments)
+  # endif()
   
-  set(all_deductions)
-  set(propagation_queue ${deduced_assignments} ${ARGN})
+  # set(all_deductions ${deduced_assignments})
+ #set(propagation_queue ${deduced_assignments} ${ARGN})
+ set(propagation_queue ${ARGN})
+  while(true)
+    ## dedpuce assignments
+    bcp_deduce_assignments("${f}" "${clauses}" "${assignments}")
+    ans(deduced_assignments)
 
-  while(NOT "${propagation_queue}_" STREQUAL "_")
+    if("${deduced_assignments}" MATCHES "(conflict)|(unsatisfied)")
+      return_ref(deduced_assignments)
+    endif()
+
+    list(APPEND propagation_queue ${deduced_assignments})
+    list(APPEND all_deductions ${deduced_assignments})
+    list_remove_duplicates(propagation_queue)
+
+    list(LENGTH propagation_queue continue)
+    if(NOT continue)
+      break()
+    endif()
+
+
+    
     list_pop_front(propagation_queue)
     ans(li)
 
@@ -29,16 +48,6 @@ function(bcp f clauses assignments)
     ans(vi)
 
     bcp_simplify_clauses("${f}" "${clauses}" "${li}" "${vi}")
-    
-    bcp_deduce_assignments("${f}" "${clauses}" "${assignments}")
-    ans(deduced_assignments)
-
-    if("${deduced_assignments}" MATCHES "(conflict)|(unsatisfied)")
-      return_ref(deduced_assignments)
-    endif()
-    list(APPEND propagation_queue ${deduced_assignments})
-    list(APPEND all_deductions ${deduced_assignments})
-    list_remove_duplicates(propagation_queue)
   endwhile()
   return_ref(all_deductions)
 endfunction()
