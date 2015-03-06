@@ -1,0 +1,14 @@
+
+  function(qm2_deserialize serialized)
+    ref_new()
+    ref_get(__global_ref_count)
+    ans(ref_count)
+    ans(root_reference)
+    eval_ref(serialized)
+    math(EXPR ref_count "${ref_count} + ${root_reference}")
+    ref_set(__global_ref_count ${ref_count})
+    math(EXPR root_reference "${root_reference}")
+    set(root_reference ":${root_reference}")
+    ref_get(${root_reference})
+    return_ans()
+  endfunction()

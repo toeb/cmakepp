@@ -58,6 +58,8 @@
 function(dfs_callback callback)
   # inner function
   function(dfs_callback_inner node)
+ 
+
     map_isvalid("${node}")
     ans(ismap)
     if(NOT ismap)
@@ -90,6 +92,8 @@ function(dfs_callback callback)
     else()
       dfs_callback_emit("unvisited_reference")
     endif()
+
+    
     map_set(${visited} "${node}" true)
 
     map_keys(${node})
