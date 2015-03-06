@@ -93,7 +93,7 @@ function(dfs_callback callback)
       dfs_callback_emit("unvisited_reference")
     endif()
 
-    
+
     map_set(${visited} "${node}" true)
 
     map_keys(${node})
@@ -124,8 +124,13 @@ function(dfs_callback callback)
   endfunction()
 
   function(dfs_callback callback)
-    curry3(dfs_callback_emit => "${callback}"(/0) as dfs_callback_emit)
-
+#    curry3(dfs_callback_emit => "${callback}"(/0) as dfs_callback_emit)
+    # faster
+    eval("
+function(dfs_callback_emit)
+  ${callback}(\${ARGN})
+endfunction()
+")
     map_new()
     ans(visited)
 

@@ -54,7 +54,6 @@ function(package_source_query_composite uri)
     ## query the source
     ## args (especially --package-handle will be passed along)
     assign(current_result = source.query("${uri}" ${args}))
-
     if(return_package_handle)
       foreach(handle ${current_result})
         map_tryget(${source} source_name)

@@ -61,6 +61,14 @@
       }
     },
     {
+      "name": "cmakepp compile function doc",
+      "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","markdown_compile_function", "$file"],
+      "windows":
+      {
+        "encoding": "cp1252"
+      }
+    },
+    {
       "name": "cmakepp build docs",
       "cmd": ["cmake","-P", "$project_path/cmakepp.cmake","cmakepp_compile_docs"],
       "windows":

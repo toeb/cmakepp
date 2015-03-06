@@ -1,11 +1,14 @@
 
 function(cmakepp_cli)
   set(args ${ARGN})
+
   if(NOT args)
     ## get command line args and remove executable -P and script file
     commandline_args_get(--no-script)
     ans(args)
   endif()
+
+
   list_extract_flag(args --timer)
   ans(timer)
   list_extract_flag(args --silent)
@@ -29,11 +32,18 @@ function(cmakepp_cli)
   list_extract_flag(args --ini)
   ans(ini)
 
-  string_combine(" " ${args})
-  ans(lazy_cmake_code)
+  set(lazy_cmake_code)
+  foreach(arg ${args})
+    cmake_string_escape("${arg}")
+    set(lazy_cmake_code "${lazy_cmake_code} ${__ans}")
+  endforeach()
+
+  #string_combine(" " ${args})
+  #ans(lazy_cmake_code)
 
   lazy_cmake("${lazy_cmake_code}")
   ans(cmake_code)
+
   ## execute code
   set_ans("")
   if(timer)

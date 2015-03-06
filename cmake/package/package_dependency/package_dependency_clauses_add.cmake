@@ -35,30 +35,30 @@
 #      print_vars(package_uri admissable_uri dependency_uris)
 
 
+      if("${dependency_conditions}_" STREQUAL "_")
+        ## multiple dependecy handles per admissable uri
+        if(NOT "${dependency_conditions}" MATCHES "^(true)|(false)$")
+          message(FATAL_ERROR "complex dependency conditions not supported: '${dependency_conditions}'")
+        endif()
 
-      ## multiple dependecy handles per admissable uri
-      if(NOT "${dependency_conditions}" MATCHES "^(true)|(false)$")
-        message(FATAL_ERROR "comlpex dependency conditions not supported")
-      endif()
-
-      if("${dependency_conditions}" STREQUAL "false")
-        foreach(dependency_handle ${dependency_handles})
-          map_tryget(${dependency_handle} uri)
-          ans(dependency_uri)
-          sequence_add(${clauses} "!${package_uri}" "!${dependency_uri}")
+        if("${dependency_conditions}" STREQUAL "false")
+          foreach(dependency_handle ${dependency_handles})
+            map_tryget(${dependency_handle} uri)
+            ans(dependency_uri)
+            sequence_add(${clauses} "!${package_uri}" "!${dependency_uri}")
+            ans(ci)
+          endforeach()
+        else()
+          sequence_add(${clauses} "!${package_uri}")
           ans(ci)
-        endforeach()
-      else()
-        sequence_add(${clauses} "!${package_uri}")
-        ans(ci)
-        # todo complex conditions
-        foreach(dependency_handle ${dependency_handles})
-          map_tryget(${dependency_handle} uri)
-          ans(dependency_uri)
-          sequence_append("${clauses}" "${ci}" "${dependency_uri}")
-        endforeach()
+          # todo complex conditions
+          foreach(dependency_handle ${dependency_handles})
+            map_tryget(${dependency_handle} uri)
+            ans(dependency_uri)
+            sequence_append("${clauses}" "${ci}" "${dependency_uri}")
+          endforeach()
 
+        endif()
       endif()
-
     endforeach()
   endfunction()

@@ -5,6 +5,7 @@
   function(package_source_resolve_composite uri)
     set(args ${ARGN})
 
+    message(FORMAT "package_source_resolve_composite: {uri.uri}")
     uri_coerce(uri)
 
     ## query composite returns the best matching package_uris first
@@ -12,7 +13,6 @@
     ## containing the package_uri and the package_source
     package_source_query_composite("${uri}" --package-handle)
     ans(package_handles)
-
 
     ## loops through every package handle and tries to resolve
     ## it. returns the handle on the first success
@@ -36,7 +36,6 @@
 
       map_tryget(${package_handle} uri)
       ans(uri)
-      
       assign(package_handle = package_source.resolve("${uri}"))
 
       if(package_handle)

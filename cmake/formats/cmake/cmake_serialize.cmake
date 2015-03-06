@@ -1,7 +1,6 @@
 
-
-  function(qm2_serialize)
-      function(qm2_ref_format)
+  function(cmake_serialize)
+      function(cmake_ref_format)
         set(prop)
         if(ARGN)
           set(prop ".${ARGN}")
@@ -10,7 +9,7 @@
       endfunction()
 
      # define callbacks for building result
-    function(qm2_obj_begin)
+    function(cmake_obj_begin)
       map_tryget(${context} ${node})
       ans(ref)
       map_push_back(${context} refstack ${ref})
@@ -19,7 +18,7 @@
 ")
     endfunction()
 
-    function(qm2_obj_end)
+    function(cmake_obj_end)
       map_pop_back(${context} refstack)
       map_peek_back(${context} refstack)
       ans(ref)
@@ -29,10 +28,10 @@
 ")
     endfunction()
     
-    function(qm2_obj_keyvalue_begin)
-      qm2_ref_format()
+    function(cmake_obj_keyvalue_begin)
+      cmake_ref_format()
       ans(keystring)
-      qm2_ref_format(${map_element_key})
+      cmake_ref_format(${map_element_key})
       ans(refstring)
       
       map_append_string(${context} qm 
@@ -41,8 +40,8 @@ set_property(GLOBAL PROPERTY \"${refstring}\")
 ")
     endfunction()
 
-    function(qm2_literal)
-      qm2_ref_format(${map_element_key})
+    function(cmake_literal)
+      cmake_ref_format(${map_element_key})
       ans(refstring)
       cmake_string_escape("${node}")
       ans(node)
@@ -52,14 +51,14 @@ set_property(GLOBAL PROPERTY \"${refstring}\")
       return()
     endfunction()
 
-    function(qm2_unvisited_reference)
+    function(cmake_unvisited_reference)
       map_tryget(${context} ref_count)
       ans(ref_count)
       math(EXPR ref "${ref_count} + 1")
       map_set_hidden(${context} ref_count ${ref})
       map_set_hidden(${context} ${node} ${ref})
 
-      qm2_ref_format(${map_element_key})
+      cmake_ref_format(${map_element_key})
       ans(refstring)
 
       map_append_string(${context} qm
@@ -68,11 +67,11 @@ set_property(GLOBAL PROPERTY \":\${value}.__type__\" \"map\")
 set_property(GLOBAL APPEND PROPERTY \"${refstring}\" \":\${value}\")
 ")
     endfunction()
-    function(qm2_visited_reference)
+    function(cmake_visited_reference)
 map_tryget(${context} "${node}")
 ans(ref)
 
-  qm2_ref_format(${map_element_key})
+  cmake_ref_format(${map_element_key})
   ans(refstring)
 map_append_string(${context} qm
 "#revisited node
@@ -84,38 +83,39 @@ set_property(GLOBAL APPEND PROPERTY \"${refstring}\" \":\${value}\")
 
     endfunction()
      map()
-      kv(value              qm2_literal)
-      kv(map_begin          qm2_obj_begin)
-      kv(map_end            qm2_obj_end)
-      kv(map_element_begin  qm2_obj_keyvalue_begin)
-      kv(visited_reference  qm2_visited_reference)
-      kv(unvisited_reference  qm2_unvisited_reference)
+      kv(value              cmake_literal)
+      kv(map_begin          cmake_obj_begin)
+      kv(map_end            cmake_obj_end)
+      kv(map_element_begin  cmake_obj_keyvalue_begin)
+      kv(visited_reference  cmake_visited_reference)
+      kv(unvisited_reference  cmake_unvisited_reference)
     end()
-    ans(qm2_cbs)
-    function_import_table(${qm2_cbs} qm2_callback)
+    ans(cmake_cbs)
+    function_import_table(${cmake_cbs} cmake_callback)
 
     # function definition
-    function(qm2_serialize)        
+    function(cmake_serialize)        
       map_new()
       ans(context)
       map_set(${context} refstack 0)
       map_set(${context} ref_count 0)
   
-      dfs_callback(qm2_callback ${ARGN})
+      dfs_callback(cmake_callback ${ARGN})
       map_tryget(${context} qm)
       ans(res)
       map_tryget(${context} ref_count)
       ans(ref_count)
 
-      set(res "#qm/2.0
-set(base \${ref_count})
+      set(res "#cmake/1.0
+get_property(base GLOBAL PROPERTY \":0\")
 set(ref \${base})
-${res}set(ref_count ${ref_count})
+${res}math(EXPR base \"\${base} + ${ref_count} + 1\")
+set_property(GLOBAL PROPERTY \":0\" \${base})
 ")
 
       return_ref(res)  
     endfunction()
     #delegate
-    qm2_serialize(${ARGN})
+    cmake_serialize(${ARGN})
     return_ans()
   endfunction()

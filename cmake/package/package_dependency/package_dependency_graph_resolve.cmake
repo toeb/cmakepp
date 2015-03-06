@@ -14,6 +14,7 @@ function(package_dependency_graph_resolve)
     map_tryget("${package_handle}" uri)
     ans(package_uri)
 
+    #message(FORMAT "package_dependency_graph_resolve: expanding dependencies for ${package_uri}")
     map_has("${context}" "${package_uri}")
     ans(visited)
     if(visited)
@@ -26,6 +27,8 @@ function(package_dependency_graph_resolve)
     ## flatten the map twice -> results in package handles
     map_flatten(${__ans})
     map_flatten(${__ans})
+
+
     return_ans()
   endfunction()
 

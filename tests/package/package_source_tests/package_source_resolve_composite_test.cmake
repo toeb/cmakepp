@@ -27,23 +27,11 @@ function(test)
   assert(NOT res)
 
 
-  return()
-  assign(res = uut.query("pkg1"))
-  ans(res)
-  assert("${res}" MATCH "source1:pkg1")
-  assert("${res}" MATCH "source2:pkg2")
-  assert("${res}" MATCH "source3:pkg3")
-  assert("${res}" MATCH "source4:pkg4")
-  assert("${res}" MATCH "source5:pkg5")
+  assign(res = uut.resolve(pkg1))
+  assert(res)
+  assertf({res.package_descriptor.id} STREQUAL "pkg1")
 
 
-  assign(res = uut.query("source5:?*"))
-  ans(res)
-  assert("${res}" MATCH "source5:pkg5")
-  assert("${res}" MATCH "source5:pkg6")
-  assert(${res} COUNT 2)
-
-  
 
 
 

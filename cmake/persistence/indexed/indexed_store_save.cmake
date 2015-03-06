@@ -2,7 +2,7 @@
   function(indexed_store_save )
     this_get(indices)
     this_get(store_dir)
-    qm_serialize_unindented("${ARGN}")
+    cmake_serialize("${ARGN}")
     ans(serialized)
 
     this_get(key)

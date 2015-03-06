@@ -39,6 +39,8 @@ function(package_dependency_resolve package_source  package_handle )
   map_tryget(${package_handle} uri)
   ans(package_uri)
 
+  #message(FORMAT "package_dependency_resolve: trying to resolve ${admissable_uris}")
+
   ## resolve all package dependencies
   ## and assign package handles dependencies property
   package_source_query_resolve_all(${package_source} ${admissable_uris} --cache ${cache})

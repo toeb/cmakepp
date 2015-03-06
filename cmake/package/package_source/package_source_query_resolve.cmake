@@ -34,9 +34,11 @@ function(package_source_query_resolve package_source admissable_uri)
       
       ## 
       if(hit)
+        #message("package_source_query_resolve cache hit: ${dependable_uri}")
         map_tryget(${cache} ${dependable_uri})
         ans(resolved_handle)
       else()
+        #message("package_source_query_resolve cache miss: ${dependable_uri}")
         call(package_source.resolve("${dependable_uri}"))
         ans(resolved_handle)
         map_set("${cache}" "${dependable_uri}" ${resolved_handle})

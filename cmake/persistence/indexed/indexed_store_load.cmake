@@ -6,7 +6,7 @@ function(indexed_store_load )
   if(NOT EXISTS "${path}")
     return()
   endif()
-  qm_read("${path}")
+  cmake_read("${path}")
   return_ans()
 
 endfunction()
