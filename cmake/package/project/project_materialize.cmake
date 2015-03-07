@@ -41,8 +41,11 @@ function(project_materialize project_handle package_handle)
   map_tryget(${project_descriptor} dependency_dir)
   ans(dependency_dir)
 
-  format("{dependency_dir}/{package_handle.package_descriptor.id}-{package_handle.package_descriptor.version}")
+  format("{package_handle.package_descriptor.id}-{package_handle.package_descriptor.version}")
   ans(package_content_dir)
+  string_normalize("${package_content_dir}")
+  ans(package_content_dir)
+  set(package_content_dir "${dependency_dir}/${package_content_dir}")
 
   map_new()
   ans(package_installation)
