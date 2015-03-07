@@ -1,7 +1,7 @@
 ## `()-><dependency configuration>`
 ##
 ## 
-function(project_handle_update_dependencies package_source project_handle)
+function(package_dependency_configuration_update package_source project_handle)
   set(args ${ARGN})
   ## get cache if available - else create a new one
   list_extract_labelled_value(args --cache)
@@ -12,10 +12,9 @@ function(project_handle_update_dependencies package_source project_handle)
     ans(cache)
   endif()
 
-  package_dependency_update_handle(${project_handle} ${args})
+  package_handle_update_dependencies(${project_handle} ${args})
   ans(changes)
 
- # json_print(${project_handle})
 
   package_dependency_configuration(
     ${package_source} 

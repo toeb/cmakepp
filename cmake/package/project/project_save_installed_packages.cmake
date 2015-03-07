@@ -7,4 +7,3 @@ function(project_save_installed_packages)
 
   event_emit(project_on_installed_packages_save ${this})
 endfunction()
-

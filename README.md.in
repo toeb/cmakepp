@@ -106,6 +106,11 @@ If you want to help to develope `cmakepp` or want to develope `CMake` scripts wh
   * `cmakepp template run` will execute a `cmakepp` template file of which the filename ends with `.in` (see [templating](#))
   * you can open the `cmakepp.sublime-project` and modify the build system.
     
+# Developement Process
+
+I have two persistant branches: `master` and `devel`. Then there are an arbitrary amount of volatile branches which are used to develope features / remote store developements.  The `master` branch is only merged from `devel` and always is always stable - ie the build server determines that all tests were successfull. The `devel` branch is also built build servers but may sometime be in the failed state.  The volatile branches are just used to develop and are not built - as to not clutter up the build servers with uneccessary builds.  
+
+
 # Contributing
 
 I would be very happy If you choose to contribute to `cmakepp`. You can open any issue on github and I will try to reply as soon as possible. I care about any feature you want implemented, bug you want squashed, or modification.

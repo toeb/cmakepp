@@ -1,6 +1,3 @@
-
-
-
 ## project_create(<project dir> <project config?>) -> <project handle>
 ##
 ## creates a project in the specified directory

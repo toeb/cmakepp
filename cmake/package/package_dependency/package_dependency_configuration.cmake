@@ -1,5 +1,8 @@
-## `(<package source> <package handle>  [--cache <map>] )-> { <<package uri>:<bool>>... }`
+## `(<package source> <package handle>  [--cache <map>] )-> <dependency configuration>`
 ##  
+## the `<dependency configuration> ::= { <<dependable uri>:<bool>>... }`
+## is a map which indicates which dependncies MUST BE present and which MAY NOT
+##
 ##  returns a map of package_uris which consist of a valid dependecy configuration
 ##  { <package uri>:{ state: required|incompatible|optional}, package_handle{ dependencies: {packageuri: package handle} } }
 ##  or a reason why the configuration is impossible
