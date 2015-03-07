@@ -13,6 +13,7 @@
 
     cnf("${clauses}")
     ans(cnf)
+
     dp_naive("${cnf}")
     ans(package_configuration)
     if(package_configuration)

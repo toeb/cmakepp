@@ -37,23 +37,7 @@ function(test)
   }"))
 
 
-  map_new()
-  ans(project_handle)
 
-  package_dependency_update_handle(${project_handle} "A false" "B optional" "C" "D {content_dir:'asd'}")
-  ans(res)
-  json_print(${res})
-
-  #json_print(${project_handle})
-
-
-  map_new()
-  ans(project_handle)
-  map_set(${project_handle} uri project)
-
-  project_handle_update_dependencies(${package_source} ${project_handle} B )
-  ans(res)
-  json_print(${res})
 
 
 endfunction()
