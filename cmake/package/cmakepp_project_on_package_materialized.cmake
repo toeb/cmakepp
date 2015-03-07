@@ -1,5 +1,4 @@
-
-## 
+##
 ## 
 ## hooks:
 ##   package_descriptor.cmakepp.hooks.on_materialized(<project handle> <packag handle>)

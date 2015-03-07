@@ -1,10 +1,10 @@
-
 ##
 ## **events**: 
 ## * `project_on_package_materializing(<project handle> <package handle> <content_dir>)`
 ## * `project_on_package_materialized(<project handle> <package_handle> <content_dir>)`
 function(project_materialize project_handle package_handle)
   if("${project_handle}" STREQUAL "${package_handle}")
+    
     return(false)
   endif()
 
