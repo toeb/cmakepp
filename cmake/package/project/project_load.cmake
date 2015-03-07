@@ -1,67 +1,68 @@
-## project_load(project dir <~project config?>) -> bool
+
 ##
-## 
-## events:
-##   project_on_load(<project package>)
-##   project_on_begin_load(<project package>)
-##   project_on_package_load(<project package> <package handle>)
-##
-function(project_load)
-  set(args ${ARGN})
-
-  ## qualify project_dir
-  list_pop_front(args)
-  ans(project_dir)
-  path_qualify(project_dir)
-  assign(this.project_dir = project_dir)
-
-  ## parse and set project config
-  project_config(${args})
-  ans(project_config)
-  assign(this.configuration = project_config)
-
-  event_emit(project_on_begin_load ${this} ${project_config})
-
-  ## qualify directories relative to project dir
-  map_import_properties(${project_config} 
-    content_dir 
-    config_dir 
-    dependency_dir
-    package_descriptor_file
-  )
-
-  path_qualify_from("${project_dir}" "${package_descriptor_file}")
-  ans(package_descriptor_file)
-  path_qualify_from("${project_dir}" "${content_dir}")
-  ans(content_dir)
-  path_qualify_from("${project_dir}" "${config_dir}")
-  ans(config_dir)
-  path_qualify_from("${project_dir}" "${dependency_dir}")
-  ans(dependency_dir)
+## **events**
+## * `project_on_loading`
+## * `project_on_loaded`
+## * `project_on_package_loading`
+## * `project_on_package_loaded`
+## * `project_on_package_reload`
+## * `project_on_package_cycle`
+function(project_load project_handle)
+  ## load dependencies
+  assign(materialized_package_map = project_handle.project_descriptor.materialized_packages)
+  map_values(${materialized_package_map})
+  ans(materialized_packages)  
 
 
-  ## set directories
-  assign(this.content_dir = content_dir)
-  assign(this.config_dir = config_dir)
-  assign(this.dependency_dir = dependency_dir)
+  event_emit(project_on_loading ${project_handle})
+  
+  map_new()
+  ans(context)
+  function(load_recurse)
 
-  ## load package descriptor
-  fread_data("${package_descriptor_file}")
-  ans(package_descriptor)
-  assign(this.package_descriptor = package_descriptor)
+    foreach(package_handle ${ARGN})
+      
+      map_tryget(${context} ${package_handle})
+      ans(state)
+      if("${state}_" STREQUAL "visiting_")
+        event_emit(project_on_package_cycle ${project_handle} ${package_handle})
+      elseif("${state}_" STREQUAL "visited_")
+        event_emit(project_on_package_reload ${project_handle} ${package_handle})
+      else()
+        map_set(${context} ${package_handle} visiting)
+          
+        ## pre order callback
+        event_emit(project_on_package_loading ${project_handle} ${package_handle})
+        set(parent_parent_package ${parent_package})
+        set(parent_package ${package_handle})
+        
 
+        ## expand
+        map_tryget(${package_handle} dependencies)
+        ans(dependency_map)
+        if(dependency_map)
+          map_values(${dependency_map})
+          ans(dependencies)
 
-  ## create package source for project
-  managed_package_source("project" "${dependency_dir}")
-  ans(local)
-  assign(this.local = local)
+          load_recurse(${dependencies})
+          
+        endif()
+        
+        map_set(${context} ${package_handle} visited)
 
-  ## load all installed packages
-  ## including this project
-  project_load_installed_packages()  
+        ## post order callback
+        set(parent_package ${parent_parent_package})
+        event_emit(project_on_package_loaded ${project_handle} ${package_handle})
 
-  ## emit loaded event
-  event_emit(project_on_load ${this})  
-  return(true)
+      endif()
+    endforeach()
+  endfunction()
+
+  set(parent_parent_package)
+  set(parent_package)
+  load_recurse(${project_handle} ${materialized_packages})
+
+  event_emit(project_on_loaded ${project_handle})
 endfunction()
+
 

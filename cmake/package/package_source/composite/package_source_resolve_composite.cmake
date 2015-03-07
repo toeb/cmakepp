@@ -5,7 +5,7 @@
   function(package_source_resolve_composite uri)
     set(args ${ARGN})
 
-    message(FORMAT "package_source_resolve_composite: {uri.uri}")
+#    message(FORMAT "package_source_resolve_composite: {uri.uri}")
     uri_coerce(uri)
 
     ## query composite returns the best matching package_uris first

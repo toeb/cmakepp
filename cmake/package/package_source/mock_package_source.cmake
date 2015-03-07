@@ -20,6 +20,7 @@
         ans(dependee)
         map_set(${graph} ${dependee_id} ${dependee})
         map_set(${dependee} id ${dependee_id})
+        map_set(${dependee} version "0.0.0")
       endif()
 
       if(dependency)

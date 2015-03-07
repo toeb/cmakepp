@@ -74,7 +74,7 @@ function(process_execute process_handle)
     set(timeout)
   endif()
 
-  message("executing ${command}")
+  message("executing ${command} ${command_arguments_string}")
 
   set(eval_this "
     execute_process(

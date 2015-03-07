@@ -2,7 +2,6 @@
 function(fread_data path)
   set(args ${ARGN})
 
-
   path_qualify(path)
   
   list_pop_front(args)
@@ -25,6 +24,9 @@ function(fread_data path)
     return_ans()
   elseif("${mime_type}" MATCHES "application/x-quickmap")
     qm_read("${path}")
+    return_ans()
+  elseif("${mime_type}" MATCHES "application/x-serializedcmake")
+    cmake_read("${path}")
     return_ans()
   else()
     return()

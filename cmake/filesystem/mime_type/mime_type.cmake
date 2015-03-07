@@ -32,10 +32,11 @@ function(mime_type_from_file_content file)
 
   endif()
 
-  file_istarfile("${file}")
-  ans(is_tar)
-  if(is_tar)
-    return("application/x-gzip")
+
+  file_isserializedcmakefile("${file}")
+  ans(is_serializedcmake)
+  if(is_serializedcmake)
+    return("application/x-serializedcmake")
   endif()
 
 
@@ -45,9 +46,27 @@ function(mime_type_from_file_content file)
     return("application/x-quickmap")
   endif()
 
+
+  file_istarfile("${file}")
+  ans(is_tar)
+  if(is_tar)
+    return("application/x-gzip")
+  endif()
+
+
   return()
 endfunction()
-
+function(file_isserializedcmakefile file)
+  path_qualify(file)
+  if(NOT EXISTS "${file}" OR IS_DIRECTORY "${file}")
+    return(false)
+  endif()
+  file(READ "${file}" result LIMIT 7)
+  if("${result}" MATCHES "^#cmake")
+    return(true)
+  endif()
+  return(false)
+endfunction()
 function(file_isqmfile file)
     path_qualify(file)
     if(NOT EXISTS "${file}" OR IS_DIRECTORY "${file}")

@@ -1,76 +1,103 @@
-## project_open(<path?> [--force]) -> <project>|<null>
+## `(<package handle> | <project dir> | <project file>)-><project handle>`
+## 
+## ```
+## <project descriptor> ::= {
+##    package_cache:
+##    materialized_packages:
+##    dependency_dir:
+##    config_dir:
+##    project_file:
+##    package_descriptor_file:
+## }
+## ```
 ##
-## opens an existing project if project does not exist null is returned
-## if s
-## --force flag indicates that even if no project exists at specified dir 
-##              the default configuration will be opened
+##
+## **events**
+## * `project_on_opening(<project handle>)`
+## * `project_on_opened(<project handle>)`
 function(project_open)
+  project_constants()
+  pushd()
   set(args ${ARGN})
+  set(project_handle)
 
-  list_extract_flag(args --force)
-  ans(force)
 
-  list_pop_front(args)
-  ans(path)
-
-  path_qualify(path)
-
-  set(project_dir)
-  if(IS_DIRECTORY "${path}")
-    # assume path is project dir -> try to read project config file
-    set(project_dir "${path}")
-    set(path "${path}/.cps/config.qm")
-  endif()
+    ## the following section loads the project handle if it 
+    ## exists in default locations
+    ## afterwards the content_dir is set correctly
+    path("${args}")
+    ans(project_file)
+    if(EXISTS "${project_file}")
+      if(EXISTS "${project_file}/${project_constants_project_file}")
+        set(project_file "${project_file}/${project_constants_project_file}")
+      endif()
 
 
 
-  if(NOT EXISTS "${path}" AND NOT force)
-    error("could not find project configuration at {path}")
-    return()
-  endif()
-  
-  project_config("${path}")
-  ans(config)
-  
-  if(NOT project_dir)
-    map_tryget("${config}" config_file)
-    ans(config_file)
+      fread_data("${project_file}")
+      ans(project_handle)
+        
+
+      if(project_handle)
+        ## derive content dir from configured relative project file path
+        assign(project_file_path = project_handle.project_descriptor.project_file)
+        string_regex_escape("${project_file_path}")
+        ans(project_file_path)
+        string(REGEX REPLACE "(.*)\\/${project_file_path}$" "\\1" content_dir "${project_file}")
+
+      else()
+        path("")
+        ans(content_dir)
+      endif()
+    else()
+      path("")
+      ans(content_dir)
+    endif()
+
+
+    ## if args are a project handle
+    ## use them
+    ref_isvalid("${args}")
+    ans(is_ref)
+    if(is_ref)
+      set(project_handle ${args})
+    endif()
     
-    string_remove_ending("${path}" "${config_file}")
-    ans(project_dir)
+    map_defaults("${project_handle}" "{
+      uri:'project:root',
+      project_descriptor:{
+        package_cache:{},
+        package_installations:{},
+        materialized_packages:{},
+        dependency_dir:$project_constants_dependency_dir,
+        config_dir:$project_constants_config_dir,
+        project_file:$project_constants_project_file
+      }
+    }")
+    ans(project_handle)
 
-    path_qualify(project_dir)
-  endif()
+    ## content_dir is always set so the project stays portable
+    map_set(${project_handle} content_dir ${content_dir})
 
+    ## load package descriptor from location if specified
+    assign(package_descriptor_file = project_handle.project_descriptor.package_descriptor_file)
+    if(package_descriptor_file AND EXISTS "${content_dir}/${package_descriptor_file}")
+      fread_data("${content_dir}/${package_descriptor_file}")
+      ans(package_descriptor)
+      map_set(${project_handle} package_descriptor ${package_descriptor})
+    endif()
 
+    ## set project handle correctly
+    assign(!project_handle.project_descriptor.project_handle = project_handle)
+    
+  popd()
 
-  project_new()
-  ans(project)
+  ## open complete - emit events
 
+  event_emit(project_on_opening ${project_handle})
+  event_emit(project_on_opened ${project_handle})
 
-  glob("${project_dir}/package.json" "${project_dir}/package.qm")
-  ans(package_descriptor_file)
+  project_load(${project_handle})
 
-  list(LENGTH package_descriptor_file count)
-
-  if("${count}" GREATER 1)
-    error("multiple package descriptors found (package.json and package.qm)")
-    return()
-  elseif("${count}" EQUAL 1)
-    paths_make_relative("${project_dir}" "${package_descriptor_file}")
-    ans(package_descriptor_file)
-    map_set("${config}" package_descriptor_file "${package_descriptor_file}")
-  endif()
-
-
-  call(project.load("${project_dir}" "${config}"))
-  ans(success)
-
-  if(NOT success)
-    return()
-  endif()
-
-
-
-  return_ref(project)
+  return_ref(project_handle)
 endfunction()

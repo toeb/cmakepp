@@ -13,17 +13,25 @@ function(cmakepp_project_cli)
   list_extract_labelled_value(args --project)
   ans(project_dir)
 
-  project_open("${project_dir}" --force)
+  project_open("${project_dir}")
   ans(project)
 
-
-
+  map_tryget(${project} project_descriptor)
+  ans(project_descriptor)
+  map_tryget(${project_descriptor} package_source)
+  ans(package_source)
+  if(NOT package_source )
+    message("no package source found")
+    default_package_source()
+    ans(package_source)
+    map_set(${project_descriptor} package_source ${package_source})
+  endif()
   list_pop_front(args)
   ans(cmd)
 
 
   if(NOT cmd)
-    return_ref(project)
+    set(cmd run)
   endif()
 
 
@@ -42,21 +50,11 @@ function(cmakepp_project_cli)
     package_handle_invoke_hook("${project}" cmakepp.hooks.run "${project}" "${project}")
     ans(res)
   else()
-    assign(res = "project.${cmd}")
-
-    if(COMMAND "${res}" )
-      assign(res = "project.${cmd}"(${args}))
-    endif()
+    call("project_${cmd}"("${project}" ${args}))
+    ans(res)
   endif()
 
-  if(save)
-    assign(saved = project.save())
-    if(NOT saved)
-      error("could not save project")
-      return()
-    endif()
-  endif()
-
+  project_close(${project})
   return_ref(res)
 
 endfunction()

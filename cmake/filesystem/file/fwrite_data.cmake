@@ -22,6 +22,13 @@
     list_extract_flag(args --qm)
     ans(quickmap)
 
+    list_extract_flag(args --cmake)
+    ans(cmake)
+
+    if(cmake)
+      set(mime_types application/x-serializedcmake)
+    endif()
+
     if(json)
       set(mime_types application/json)
     endif()
@@ -47,6 +54,9 @@
     ## serialize data
     if("${mime_types}" MATCHES "application/json")
       json_indented("${data}")
+      ans(serialized)
+    elseif("${mime_types}" MATCHES "application/x-serializedcmake")
+      cmake_serialize("${data}")
       ans(serialized)
     elseif("${mime_types}" MATCHES "application/x-quickmap")
       qm_serialize("${data}")

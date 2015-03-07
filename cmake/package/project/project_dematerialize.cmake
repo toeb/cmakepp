@@ -1,21 +1,48 @@
-## 
-## events:
-##   project_on_package_dematerializing(<project package> <package handle>)
-function(project_dematerialize uri)
-  uri_coerce(uri)
+##
+##
+## **events**:
+## * `project_on_package_dematerializing(<project handle> <package handle>)`
+## * `project_on_package_dematerialized(<project handle> <package handle>)`
+function(project_dematerialize project_handle package_handle)
+  map_tryget(${project_handle} project_descriptor)
+  ans(project_descriptor)
 
-  assign(package_handle = this.local.resolve("${uri}"))
+  map_tryget(${package_handle} uri)
+  ans(package_uri)
 
-  if(NOT package_handle)
-    error("package '{uri.input}' does not exist in project")
-    return()
+  map_tryget(${project_descriptor} package_installations)
+  ans(package_installations)
+
+  map_tryget(${package_installations} ${package_uri})
+  ans(package_installation)
+
+  if(NOT package_installation)
+    message(FORMAT "project_dematerialize: package was not installed: '${package_uri}'")
+    return(false)
+  endif() 
+
+  event_emit(project_on_package_dematerializing ${project_handle} ${package_handle})
+
+  map_tryget(${project_handle} content_dir)
+  ans(project_dir)
+
+  map_tryget(${package_installation} content_dir)
+  ans(package_dir)
+
+  path_qualify_from(${project_dir} ${package_dir})
+  ans(package_dir)
+
+  map_remove(${package_installations} ${package_uri})
+
+  if("${project_dir}" STREQUAL "${package_dir}")
+    message(WARNING "project_dematerialize: package dir is project dir will not delete")
+    return(false) 
   endif()
 
-  event_emit(project_on_package_dematerializing ${this} ${package_handle})
 
-  assign(package_uri = package_handle.uri)
-  assign(success = this.local.delete("${package_uri}"))
+  rm(-r "${package_dir}")
 
+  event_emit(project_on_package_dematerialized ${project_handle} ${package_handle})
 
-  return(${success})
+  return(true)  
 endfunction()
