@@ -14,7 +14,7 @@ function(project_materialize project_handle package_handle)
   map_tryget(${project_descriptor} package_installations)
   ans(installations)
 
-  map_tryget(${project_handle} content_dir content_dir)
+  map_tryget(${project_handle} content_dir)
   ans(project_dir)
 
   map_tryget(${package_handle} uri)
@@ -23,10 +23,24 @@ function(project_materialize project_handle package_handle)
   map_tryget(${installations} ${package_uri})
   ans(package_installation)
 
+  set(package_content_dir)
   if(package_installation)
-    message(FORMAT "project_materialize: package is already installed ${package_uri} at {package_installation.content_dir}")
-    return(false)
+    map_tryget(${package_installation} content_dir)
+    ans(package_content_dir)
+    path_qualify_from(${project_dir} ${package_content_dir})
+    ans(target_dir)
+    if(EXISTS "${target_dir}")
+
+
+      message(FORMAT "project_materialize: package is already installed ${package_uri} at {package_installation.content_dir}")
+      return(false)
+    endif()
+  else()
+    map_new()
+    ans(package_installation)
   endif()
+
+  map_set(${package_installation} package_handle ${package_handle})
 
 
   map_tryget(${project_descriptor} package_source)    
@@ -38,17 +52,18 @@ function(project_materialize project_handle package_handle)
   
   ## generate the content dir for the package handle
 
-  map_tryget(${project_descriptor} dependency_dir)
-  ans(dependency_dir)
+  if(NOT package_content_dir)
+    map_tryget(${project_descriptor} dependency_dir)
+    ans(dependency_dir)
 
-  format("{package_handle.package_descriptor.id}-{package_handle.package_descriptor.version}")
-  ans(package_content_dir)
-  string_normalize("${package_content_dir}")
-  ans(package_content_dir)
-  set(package_content_dir "${dependency_dir}/${package_content_dir}")
-
-  map_new()
-  ans(package_installation)
+    format("{package_handle.package_descriptor.id}-{package_handle.package_descriptor.version}")
+    ans(package_content_dir)
+    string_normalize("${package_content_dir}")
+    ans(package_content_dir)
+    set(package_content_dir "${dependency_dir}/${package_content_dir}")
+  
+  endif()
+  
   map_set(${package_installation} content_dir ${package_content_dir})
   map_set(${installations} ${package_uri} ${package_installation})
 
