@@ -64,7 +64,10 @@ after_success:
  - bii publish toeb/cmakepp --tag STABLE
 after_failure: "cmake -P build/after_failure.cmake"
 after_script: "cmake -P build/after_script.cmake"
-
+branches:
+  only:
+    - master
+    - devel
 deploy:
   # - provider: biicode
   #   user: toeb
