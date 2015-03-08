@@ -10,7 +10,7 @@
 ##    package_descriptor_file:
 ## }
 ## ```
-##
+## @TODO add check for installations after opening project
 ##
 ## **events**
 ## * `project_on_opening(<project handle>)`
@@ -67,7 +67,7 @@ function(project_open)
       uri:'project:root',
       project_descriptor:{
         package_cache:{},
-        package_installations:{},
+        package_materializations:{},
         materialized_packages:{},
         dependency_dir:$project_constants_dependency_dir,
         config_dir:$project_constants_config_dir,
@@ -92,12 +92,18 @@ function(project_open)
     
   popd()
 
+
+
   ## open complete - emit events
 
   event_emit(project_on_opening ${project_handle})
+  
+  ## remove missing materializations
+  project_materialization_check_all(${project_handle})
+
   event_emit(project_on_opened ${project_handle})
 
+  ## load the project
   project_load(${project_handle})
-
   return_ref(project_handle)
 endfunction()

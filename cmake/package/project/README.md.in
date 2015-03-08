@@ -1,6 +1,20 @@
 # Project
 
 
+## Events
+
+* `project_on_opening`
+* `project_on_opened`
+* `project_on_package_loading`
+* `project_on_package_loaded`
+* `project_on_package_materialized`
+* `project_on_dependency_configuration_changed`
+* `project_on_package_dematerialized`
+* `project_on_package_unloading`
+* `project_on_package_unloaded`
+* `project_on_closing`
+* `project_on_closed`
+
 ## Installing a new package
 
 * `install {<uri> <?content dir> <?>  }`

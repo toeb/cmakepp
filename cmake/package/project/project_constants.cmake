@@ -1,3 +1,5 @@
+## `()->() *package constants are set` 
+##
 ## defines constants which are used in project management
 macro(project_constants)
   if(NOT __project_constants_loaded)

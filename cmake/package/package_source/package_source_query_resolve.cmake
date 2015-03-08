@@ -28,25 +28,12 @@ function(package_source_query_resolve package_source admissable_uri)
 
     ## resolve loop
     foreach(dependable_uri ${dependable_uris})
-      set(resolved_handle)
-      map_has(${cache} ${dependable_uri})
-      ans(hit)
-      
-      ## 
-      if(hit)
-        #message("package_source_query_resolve cache hit: ${dependable_uri}")
-        map_tryget(${cache} ${dependable_uri})
-        ans(resolved_handle)
-      else()
-        #message("package_source_query_resolve cache miss: ${dependable_uri}")
-        call(package_source.resolve("${dependable_uri}"))
-        ans(resolved_handle)
-        map_set("${cache}" "${dependable_uri}" ${resolved_handle})
+      package_source_resolve("${package_source}" "${dependable_uri}" --cache ${cache})
+      ans(resolved_handle)
+      if(resolved_handle)
         map_append_unique("${cache}" "${admissable_uri}" ${resolved_handle})
+        list(APPEND resolved_handles ${resolved_handle})
       endif()
-                  
-      ## 
-      list(APPEND resolved_handles ${resolved_handle})
     endforeach()
   endif()
 

@@ -1,5 +1,11 @@
 function(test)
 
+  timer_start(t1)
+  foreach(i RANGE 0 50)
+    
+  endforeach()
+  timer_print_elapsed(t1)
+
   define_test_function(test_uut uri_parse uri)
   ## helper because older tests are written with parameters in wrong order
   function(test_uri uri expected)

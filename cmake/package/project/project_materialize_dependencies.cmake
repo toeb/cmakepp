@@ -1,5 +1,5 @@
 ##
-## 
+## @TODO do not use installation queue. instead use dependency configuration
 ## **events**
 ## * `on_dependencies_materialized(<project handle> <changeset>)`
 function(project_materialize_dependencies project_handle)
