@@ -33,15 +33,17 @@ function(test)
 
 
   ## create project
-  project_create(--force)
+  map_new()
   ans(proj)
+
   ## create package handle
   package_handle("pkg1")
   ans(pkg1)
 
+
   ## act
   timer_start(t1)
-  event_emit(project_on_package_load ${proj} ${pkg1})
+  event_emit(project_on_package_loaded ${proj} ${pkg1})
   timer_print_elapsed(t1)
 
   ## assert
@@ -68,7 +70,7 @@ function(test)
   ans(pkg2)
 
   ## act
-  event_emit(project_on_package_load ${proj} ${pkg2})
+  event_emit(project_on_package_loaded ${proj} ${pkg2})
 
   ## no assertion
 

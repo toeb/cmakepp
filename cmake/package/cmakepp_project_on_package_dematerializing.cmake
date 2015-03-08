@@ -10,6 +10,5 @@ function(cmakepp_project_on_package_dematerializing project_handle package_handl
   package_handle_invoke_hook("${package_handle}" cmakepp.hooks.on_dematerializing ${project_handle} ${package_handle})
 endfunction()
 
-
 ## register listener for the project_on_package_dematerializing event 
 task_enqueue("[]()event_addhandler(project_on_package_dematerializing cmakepp_project_on_package_dematerializing)")

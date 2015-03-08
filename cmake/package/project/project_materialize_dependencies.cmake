@@ -1,49 +1,88 @@
+## `(<project handle>)-><materialization handle>...`
 ##
-## @TODO do not use installation queue. instead use dependency configuration
+##
+## **returns**
+## * the `materialization handle`s of all changed packages
+##
+## **sideffects**
+## * see `project_materialize`
+## * see `project_dematerialize`
+##
 ## **events**
-## * `on_dependencies_materialized(<project handle> <changeset>)`
+## * `project_on_dependencies_materializing(<project handle>)`
+## * `project_on_dependencies_materialized(<project handle>)`
+## * events from `project_materialize` and project `project_dematerialize`
 function(project_materialize_dependencies project_handle)
   map_tryget(${project_handle} project_descriptor)
   ans(project_descriptor)
-  map_tryget(${project_descriptor} installation_queue)
-  ans(installation_queue)
-  if(NOT installation_queue)
-    return()
-  endif()
+  map_import_properties(${project_descriptor} 
+    package_materializations
+    dependency_configuration
+    installation_queue
+    package_cache
+    )
 
-  ## map union merges right to left
-  ## so the newest overwrite the oldest changes
-  map_new()
-  ans(combined_changeset)
-  map_union(${combined_changeset} ${installation_queue})
+  set(materialization_handles)
 
-  map_tryget(${project_descriptor} package_cache)
-  ans(package_cache)
+  event_emit(project_on_dependencies_materializing ${project_handle})
 
-  map_keys(${combined_changeset})
-  ans(package_uris)
 
-  foreach(package_uri ${package_uris})
-    map_tryget(${combined_changeset} ${package_uri})
-    ans(action)
-    map_tryget(${package_cache} ${package_uri})
-    ans(package_handle)
-    if("${action}" STREQUAL "install")
-        project_materialize(${project_handle} ${package_handle})
-    elseif("${action}" STREQUAL "uninstall")
-        project_dematerialize(${project_handle} ${package_handle})
-    else()
-      message(FATAL_ERROR "project_materialize dependencies: invalid action '${action}'")
+  set(current_configuration ${dependency_configuration})
+  while(true)
+    list_pop_front(installation_queue)
+    ans(new_configuration)
+    if(NOT new_configuration)
+      break()
     endif()
+    package_dependency_configuration_changeset(${current_configuration} ${new_configuration})
+    ans(changeset)
 
-  endforeach() 
-  ## clear installation queue
-  map_set(${project_descriptor} installation_queue)
+
+    map_keys(${changeset})
+    ans(package_uris)
+    foreach(package_uri ${package_uris})
+      map_tryget(${dependency_configuration} ${package_uri})
+      ans(state)
+
+      map_tryget(${package_cache} ${package_uri})
+      ans(package_handle)
+      
+      map_tryget(${package_materializations} ${package_uri})
+      ans(materialization_handle)
+
+      map_tryget(${changeset} ${package_uri})
+      ans(action)
+
+      if("${action}" STREQUAL "install")
+        project_materialize(${project_handle} ${package_uri})
+        ans(materialization_handle)
+      elseif("${action}" STREQUAL "uninstall")
+        project_dematerialize(${project_handle} ${package_uri})
+        ans(materialization_handle)
+      else()
+        message(FATAL_ERROR "project_materialize_dependencies: invalid action `${action}`")    
+      endif()
+
+      if(NOT materialization_handle)
+        message(WARNING "failed to materialize/dematerialize dependency ${package_uri}")
+      endif()
+
+      list(APPEND materialization_handles ${materialization_handle})
+      
+    endforeach() 
+
+    #map_pop_front(${project_descriptor} installation_queue)
+    map_set(project_descriptor dependency_configuration ${new_configuration})
+    set(current_configuration ${new_configuration})
+  endwhile()
+
 
   ## emit event
-  event_emit(project_on_dependencies_materialized ${project_handle} ${combined_changeset})
+  event_emit(project_on_dependencies_materialized ${project_handle})
 
   ## load the project anew
   project_load(${project_handle})
 
+
+  return_ref(materialization_handles)
 endfunction()

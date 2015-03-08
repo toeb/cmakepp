@@ -24,7 +24,7 @@ function(test)
 
 
   ## create project
-  project_new()
+  map_new()
   ans(proj)
   ## create package handle
   package_handle("pkg1")

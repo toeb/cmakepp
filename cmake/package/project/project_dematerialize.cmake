@@ -1,48 +1,87 @@
-## `()`
+## `(<project handle> <package uri>)-><materialization handle>`
+##
+## **sideeffects**
+## * removes `project_handle.project_descriptor.package_installations.<package_uri>` 
+## * removes `package_handle.materialization_descriptor`
+## 
 ##
 ## **events**:
-## * `project_on_package_dematerializing(<project handle> <package handle>)`
-## * `project_on_package_dematerialized(<project handle> <package handle>)`
-function(project_dematerialize project_handle package_handle)
-  map_tryget(${project_handle} project_descriptor)
-  ans(project_descriptor)
+## * `[pwd=package content dir]project_on_package_dematerializing(<project handle> <package handle>)`
+## * `[pwd=package content dir]project_on_package_dematerialized(<project handle> <package handle>)`
+## 
+function(project_dematerialize project_handle package_uri)
+  map_import_properties(${project_handle} project_descriptor)
+  map_tryget(${project_handle} uri)
+  ans(project_uri)
+
+  map_import_properties(${project_descriptor} 
+    package_source
+    package_cache
+    package_materializations
+
+    )
+
+
+  ## special treatment for project - dematerialization is allowed
+  ## however it will only be virtual and not actualle affect the
+  ## content_dir
+  if("${project_uri}" STREQUAL "${package_uri}")
+    map_tryget(${package_materializations} ${project_uri})
+    ans(materialization_handle)
+    map_remove(${package_materializations} ${project_uri})    
+    return(${materialization_handle})
+  endif()
+
+
+  if(NOT package_source)
+    message(FATAL_ERROR "project_dematerialize: no package source available")
+  endif()
+
+  package_source_resolve(${package_source} ${package_uri} --cache ${package_cache})
+  ans(package_handle)
+
+  if(NOT package_handle)
+    return()
+  endif()
 
   map_tryget(${package_handle} uri)
   ans(package_uri)
 
-  map_tryget(${project_descriptor} package_materializations)
-  ans(package_materializations)
-
   map_tryget(${package_materializations} ${package_uri})
-  ans(package_materialization_handle)
+  ans(materialization_handle)
 
-  if(NOT package_materialization_handle)
-    message(FORMAT "project_dematerialize: package was not installed: '${package_uri}'")
-    return(false)
+  if(NOT materialization_handle)
+    return()
   endif() 
 
-  event_emit(project_on_package_dematerializing ${project_handle} ${package_handle})
+
 
   map_tryget(${project_handle} content_dir)
   ans(project_dir)
 
-  map_tryget(${package_materialization_handle} content_dir)
-  ans(package_dir)
+  map_tryget(${materialization_handle} content_dir)
+  ans(package_content_dir)
 
-  path_qualify_from(${project_dir} ${package_dir})
-  ans(package_dir)
+  path_qualify_from(${project_dir} ${package_content_dir})
+  ans(package_content_dir)
 
-  map_remove(${package_materializations} ${package_uri})
-
-  if("${project_dir}" STREQUAL "${package_dir}")
+  if("${project_dir}" STREQUAL "${package_content_dir}")
     message(WARNING "project_dematerialize: package dir is project dir will not delete")
-    return(false) 
+    popd()
+    return() 
   endif()
 
+  ## emit events before and after removing package
+  pushd("${package_content_dir}")  
 
-  rm(-r "${package_dir}")
+    event_emit(project_on_package_dematerializing ${project_handle} ${package_handle})
 
-  event_emit(project_on_package_dematerialized ${project_handle} ${package_handle})
+    map_remove(${package_materializations} ${package_uri})
+    map_remove(${package_handle} materialization_descriptor)
+    ## delete package content dir
+    rm(-r "${package_content_dir}")
 
-  return(true)  
+    event_emit(project_on_package_dematerialized ${project_handle} ${package_handle})
+  popd()
+  return(${materialization_handle})  
 endfunction()

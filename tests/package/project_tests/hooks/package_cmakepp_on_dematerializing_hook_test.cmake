@@ -7,7 +7,7 @@ function(test)
   fwrite_data("pkg1/package.cmake" "{cmakepp:{hooks:{on_dematerializing:$hook_callback}}}" --json)
 
 
-  project_create(proj)
+  map_new()
   ans(project)
 
   assign(project.remote = path_package_source())

@@ -1,57 +1,42 @@
 # Project
 
 
-## Events
-
-* `project_on_opening`
-* `project_on_opened`
-* `project_on_package_loading`
-* `project_on_package_loaded`
-* `project_on_package_materialized`
-* `project_on_dependency_configuration_changed`
-* `project_on_package_dematerialized`
-* `project_on_package_unloading`
-* `project_on_package_unloaded`
-* `project_on_closing`
-* `project_on_closed`
-
-## Installing a new package
-
-* `install {<uri> <?content dir> <?>  }`
-  * `resolve` package 
-    * `foreach dependency in dependencies: install dependency`
-  * `resolve` from remote `push` to managed package source`
-    - package content exists in content dir
-    - project can find package 
-  * call `on_after_pull` hook - this can be used to download custom files or do other extra work that need to be done so that the package content is complete. 
-  * check and install `dependencies`
-  * 
-
-
-
-
 ## The Project Lifecycle
 
-* `project_new` a project is created which does not know anything
-* `project_load` project configuration is loaded into `project_handle.configuration`
-  - qualfied paths are set in `project_handle` 
-    + `content_dir` were the projects content is
-    + `dependency_dir` were the dependencies of the project are installed to
-    + `config_dir` were configuration files for the project are written
-  - installed package load in arbitrary order except the project which is loaded last
-    + event `project_on_package_load(<project handle> <package handle>)` is emitted
-      * `cmakepp_project_on_package_load` is called 
-        * `package_descriptor.cmakepp.export :<glob ignore>` all files specifed by globbing expression are loaded in the order specified.
-        * `package_descriptor.cmakepp.hooks.on_load:<callable<` hook is invoked if it exists
-        * event `on_package_load(<project handle> <package handle>)` is emitted
-  - event `project_on_packages_loaded(<project handle> <package handle...>)` is emitted 
-  - event `project_on_load(<project handle>)` is emitted
-* `project_install(<package uri> [--reference]) ->` 
-  - `package content and package handle is pulled and pushed into managed package source which is based in dependency_dir`
-  - `package_descriptor.cmakepp.hooks.on_install(<project handle> <package handle>)` hook is invoked if it exists
-  - event `project_on_package_load(<project handle> <package handle>)` is emitted
-    * `cmakepp_project_on_package_load` is called 
-      * `package_descriptor.cmakepp.export :<glob ignore>` all files specifed by globbing expression are loaded in the order specified.
-      * `package_descriptor.cmakepp.hooks.on_load:<callable<` hook is invoked if it exists   
-* `project_uninstall`
-* `project_save`
+The project's lifecycle is characterized  by the events that are emitted. 
+
+* `project_on_opening(<project handle>)` called after project handle is created.  Called before project is loaded. 
+* `project_on_opened` called after project handle is created and project is loaded. 
+* `project_on_loading` called before any dependencies are loaded
+* `project_on_loaded` called after all dependencies and project was loaded
+* `project_on_package_loading` called before packages's dependencies are loaded.
+* `project_on_package_loaded` called after package's dependencies are loaded.  
+* `project_on_package_reload` called when a package was already loaded but is the dependency of another package
+* `project_on_package_cycle` called `project_load` when a dependency cycle is detected. 
+* `project_on_package_materialized` called by `project_materialize` before package content is pulled.  
+* `project_on_package_materialized` called by `project_materialize` after the package content is pulled.   
+* `project_on_dependency_configuration_changed` called by `project_change_dependencies` when the dependency after the dependency configuration was changed.
+* `project_on_dependencies_materializing` called by `project_materialize_dependencies` before any dependencies are materialized/dematerialized
+* `project_on_dependencies_materialized` called after all dependencies where successfully materialized/dematerialized
+* `project_on_package_dematerializing` called by `project_dematerialize` before the package content is removed
+* `project_on_package_dematerialized` called by `project_dematerialize` after the package content was removed
+* `project_on_unloading` called by `project_unload`, `project_close` before any dependencies are unloaded
+* `project_on_unloaded` called by `project_unload`, `project_close` after all dependencies are unloaded
+* `project_on_package_unloading` called by `project_unload` before any of `package`'s  dependencies were unloaded
+* `project_on_package_unloaded` called by `project_unload` after all of `package`'s dependencies were unloaded 
+* `project_on_closing` called before the project is `closed` and before it is `unloaded`
+* `project_on_closed` called after the project was `closed` and all packages where `unloaded`
+
+
+
+* `package_descriptor.cmakepp.export`
+
+## Hooks
+
+* `package_descriptor.cmakepp.hooks.on_loaded`
+* `package_descriptor.cmakepp.hooks.on_unloading`
+* `package_descriptor.cmakepp.hooks.on_materialized`
+* `package_descriptor.cmakepp.hooks.on_dematerializing`
+* `package_descriptor.cmakepp.hooks.on_run`
+
+

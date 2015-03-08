@@ -3,11 +3,16 @@
 ## **events**
 ## * `project_on_closing(<project handle>)`
 ## * `project_on_closed(<project handle>)`
+## * see `project_unload`
+## * see `project_load`
 function(project_close project_handle)
   event_emit(project_on_closing ${project_handle})
 
+  project_unload(${project_handle})
+
   map_tryget(${project_handle} content_dir)
   ans(project_content_dir)
+
 
 
   pushd("${project_content_dir}" --create)
@@ -33,5 +38,10 @@ function(project_close project_handle)
 
   event_emit(project_on_closed ${project_handle})
 
+  project_load(${project_handle})
+
+
   return_ref(project_file)
 endfunction()
+
+

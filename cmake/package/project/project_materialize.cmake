@@ -15,13 +15,14 @@
 ##
 ## 
 ## **events**: 
-## * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle> <content_dir>)`
-## * `[pwd=target_dir]project_on_package_materialized(<project handle> <package_handle> <content_dir>)`
+## * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
+## * `[pwd=target_dir]project_on_package_materialized(<project handle> <package handle>)`
 ##
 ## **sideffects**:
 ## * `IN` takes the package from the cache if it exits
-## * `OUT` adds the specified package to the `package cache` if it does not exist 
-## * `OUT` adds the materialization_handle to `project_handle.project_descriptor.package_materializations`
+## * adds the specified package to the `package cache` if it does not exist 
+## * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
+## * `package_handle.materialization_descriptor = <materialization handle>`
 function(project_materialize project_handle package_uri)
   set(args ${ARGN})
 
@@ -30,9 +31,6 @@ function(project_materialize project_handle package_uri)
 
   map_tryget(${project_handle} uri)
   ans(project_uri)
-  if("${project_uri}" STREQUAL "${package_uri}")
-    return()
-  endif()
 
   map_tryget(${project_handle} project_descriptor)
   ans(project_descriptor)
@@ -44,6 +42,25 @@ function(project_materialize project_handle package_uri)
     dependency_dir
   )
 
+  ## special treatment  if package uri is project uri
+  ## project is already materialized however 
+  ## events still need to be emitted / materialization_handle 
+  ## needs to be created
+  if("${project_uri}" STREQUAL "${package_uri}")
+    map_tryget(${package_materializations} ${project_uri})
+    ans(materialization_handle)
+    if(NOT materialization_handle)
+      map_new()
+      ans(materialization_handle)
+      map_set(${materialization_handle} content_dir "")
+      map_set(${materialization_handle} package_handle ${project_handle})
+      event_emit(project_on_package_materializing ${project_handle} ${project_handle})
+      map_set(${package_materializations} "${package_uri}" ${materialization_handle})
+      map_set(${project_handle} materialization_descriptor ${materialization_handle})
+      event_emit(project_on_package_materialized ${project_handle} ${project_handle})
+    endif()
+    return(${materialization_handle})
+  endif()
 
   if(NOT package_source)
     message(FATAL_ERROR "project_materialize: no package source available")
@@ -83,11 +100,13 @@ function(project_materialize project_handle package_uri)
   ans(materialization_handle)
   map_set(${materialization_handle} package_handle ${package_handle})
   map_set(${materialization_handle} content_dir ${package_content_dir})
-
+  map_set(${package_handle} materialization_descriptor ${materialization_handle})
 
   ## make a qualified path
   path_qualify_from(${project_dir} ${package_content_dir})
   ans(package_content_dir)
+
+  map_set(${package_handle} content_dir ${package_content_dir})
 
   if("${package_content_dir}" STREQUAL "${project_dir}")
     message(WARNING"project_materialize: invalid package dir '${package_content_dir}'")
@@ -96,21 +115,23 @@ function(project_materialize project_handle package_uri)
 
   pushd(${installation_dir} --create)
 
-    event_emit(project_on_package_materializing ${project_handle} ${materialization_handle})
+    event_emit(project_on_package_materializing ${project_handle} ${package_handle})
 
     call(package_source.pull("${package_uri}" "${package_content_dir}"))
     ans(pull_handle)
 
     if(NOT pull_handle)
+      map_remove(${package_handle} materialization_descriptor)
       popd()
       return()
     endif()
 
-    map_set(${package_materializations} ${package_uri} ${materialization_handle})
-    
-    event_emit(project_on_package_materialized ${project_handle} ${materialization_handle})
+    map_set(${package_materializations} ${package_uri} ${package_handle})
+
+    event_emit(project_on_package_materialized ${project_handle} ${package_handle})
   
   popd()
+
 
   return(${materialization_handle})
 endfunction()
