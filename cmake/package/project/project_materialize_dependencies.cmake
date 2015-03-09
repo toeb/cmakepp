@@ -22,7 +22,7 @@ function(project_materialize_dependencies project_handle)
     package_cache
     )
 
-  set(materialization_handles)
+  set(changed_packages)
 
   event_emit(project_on_dependencies_materializing ${project_handle})
 
@@ -44,30 +44,24 @@ function(project_materialize_dependencies project_handle)
       map_tryget(${dependency_configuration} ${package_uri})
       ans(state)
 
-      map_tryget(${package_cache} ${package_uri})
-      ans(package_handle)
-      
-      map_tryget(${package_materializations} ${package_uri})
-      ans(materialization_handle)
-
       map_tryget(${changeset} ${package_uri})
       ans(action)
 
       if("${action}" STREQUAL "install")
         project_materialize(${project_handle} ${package_uri})
-        ans(materialization_handle)
+        ans(package_handle)
       elseif("${action}" STREQUAL "uninstall")
         project_dematerialize(${project_handle} ${package_uri})
-        ans(materialization_handle)
+        ans(package_handle)
       else()
         message(FATAL_ERROR "project_materialize_dependencies: invalid action `${action}`")    
       endif()
 
-      if(NOT materialization_handle)
+      if(NOT package_handle)
         message(WARNING "failed to materialize/dematerialize dependency ${package_uri}")
       endif()
 
-      list(APPEND materialization_handles ${materialization_handle})
+      list(APPEND changed_packages ${package_handle})
       
     endforeach() 
 
@@ -84,5 +78,5 @@ function(project_materialize_dependencies project_handle)
   project_load(${project_handle})
 
 
-  return_ref(materialization_handles)
+  return_ref(changed_packages)
 endfunction()
