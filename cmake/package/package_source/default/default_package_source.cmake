@@ -47,8 +47,9 @@ function(default_package_source)
     composite_package_source("" ${sources})
     ans(inner)
 
-    cached_package_source("${inner}")
-    ans(default_package_source)
+    set(default_package_source ${inner})
+#    cached_package_source("${inner}")
+ #   ans(default_package_source)
 
     map_set(global default_package_source ${default_package_source})
   endif()

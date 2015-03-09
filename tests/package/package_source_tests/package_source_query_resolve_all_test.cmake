@@ -1,6 +1,5 @@
 function(test)
 
-
   metadata_package_source("meta")
   ans(package_source)
 

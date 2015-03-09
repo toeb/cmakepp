@@ -88,6 +88,8 @@ function(project_open)
       map_set(${project_handle} package_descriptor ${package_descriptor})
     endif()
 
+
+
     ## set project handle correctly
     assign(!project_handle.project_descriptor.project_handle = project_handle)
     

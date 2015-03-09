@@ -14,6 +14,7 @@ function(package_source_query_resolve_all package_source)
   map_new()
   ans(result)
 
+
   ## loop througgh all admissable uris
   foreach(admissable_uri ${admissable_uris})
     package_source_query_resolve("${package_source}" "${admissable_uri}" --cache ${cache})

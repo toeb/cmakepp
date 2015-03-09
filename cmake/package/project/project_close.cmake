@@ -33,6 +33,7 @@ function(project_close project_handle)
     ## after writing content dir is added so project  continues to work
     map_set(${project_handle} content_dir ${project_content_dir})
     
+    
   popd()
 
 
