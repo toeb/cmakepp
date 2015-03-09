@@ -1,8 +1,10 @@
-## `(<target> <link>?)-><bool>` 
+## `(<target:<path>> <link:<path>>?)-><bool>` 
 ##
-## creates a link from link to target on windows and linux
-## if link is omitted then the link will be created in the local directory 
+## creates a symlink from `<link>` to `<target>` on all operating systems
+## (Windows requires NTFS filesystem)
+## if `<link>` is omitted then the link will be created in the local directory 
 ## with the same name as the target
+##
 function(ln)
   wrap_platform_specific_function(ln)
   ln(${ARGN})

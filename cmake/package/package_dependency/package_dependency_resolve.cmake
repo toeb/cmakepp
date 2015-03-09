@@ -1,4 +1,6 @@
-## `()->`
+## `(<package handle> [--cache <map>])->`
+##
+##
 ## resolves all dependencies for the specified package_handle
 ## keys of `package_handle.package_descriptor.dependencies` are `admissable uri`s 
 ## `admissable uri`s are resolved to `dependency handle`s 
@@ -6,7 +8,7 @@
 ## an empty map is returned
 ## sideffects 
 ## sets `<package handle>.dependencies.<admissable uri> = { <<dependable uri>:<dependency handle>>... }` 
-## sets  to `<dependency handle>.dependees.<package uri> = <package handle>`
+## adds  to `<dependency handle>.dependees.<package uri> = { <admissable_uri>:<package handle> }` 
 function(package_dependency_resolve package_source  package_handle )
   set(args ${ARGN})
   list_extract_labelled_value(args --cache)
@@ -69,12 +71,16 @@ function(package_dependency_resolve package_source  package_handle )
         ans(dependees)
         map_set(${dependency_handle} dependees ${dependees}) 
       endif()
-
-      map_set("${dependees}" "${package_uri}" "${package_handle}")
+      map_tryget(${dependees} ${package_uri})
+      ans(dependee)
+      if(NOT dependee)
+        map_new()
+        ans(dependee)
+        map_set(${dependees} ${package_uri} ${dependee})
+      endif()
+      map_append_unique("${dependee}" "${admissable_uri}" "${package_handle}")
     endforeach()
   endforeach()
-
-
 
   return_ref(dependencies)
 endfunction()

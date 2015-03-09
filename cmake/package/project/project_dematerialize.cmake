@@ -27,9 +27,16 @@ function(project_dematerialize project_handle package_uri)
   ## content_dir
   if("${project_uri}" STREQUAL "${package_uri}")
     map_tryget(${package_materializations} ${project_uri})
-    ans(materialization_handle)
-    map_remove(${package_materializations} ${project_uri})    
-    return(${materialization_handle})
+    ans(project_handle)
+    map_tryget(${project_handle} content_dir)
+    ans(content_dir)
+    pushd(${content_dir})
+      event_emit(project_on_package_dematerializing ${project_handle} ${project_handle})
+        map_remove(${package_materializations} ${project_uri})    
+        map_remove(${project_handle} materialization_descriptor)
+      event_emit(project_on_package_dematerialized ${project_handle} ${project_handle})
+    popd()
+    return(${project_handle})
   endif()
 
 
@@ -47,14 +54,12 @@ function(project_dematerialize project_handle package_uri)
   map_tryget(${package_handle} uri)
   ans(package_uri)
 
-  map_tryget(${package_materializations} ${package_uri})
+  map_tryget(${package_handle} materialization_descriptor)
   ans(materialization_handle)
 
   if(NOT materialization_handle)
     return()
   endif() 
-
-
 
   map_tryget(${project_handle} content_dir)
   ans(project_dir)
@@ -65,12 +70,6 @@ function(project_dematerialize project_handle package_uri)
   path_qualify_from(${project_dir} ${package_content_dir})
   ans(package_content_dir)
 
-  if("${project_dir}" STREQUAL "${package_content_dir}")
-    message(WARNING "project_dematerialize: package dir is project dir will not delete")
-    popd()
-    return() 
-  endif()
-
   ## emit events before and after removing package
   pushd("${package_content_dir}")  
 
@@ -79,9 +78,15 @@ function(project_dematerialize project_handle package_uri)
     map_remove(${package_materializations} ${package_uri})
     map_remove(${package_handle} materialization_descriptor)
     ## delete package content dir
-    rm(-r "${package_content_dir}")
+
+    if("${project_dir}" STREQUAL "${package_content_dir}")
+      message(WARNING "project_dematerialize: package dir is project dir will not delete")
+    else()
+      rm(-r "${package_content_dir}")
+    endif()
+
 
     event_emit(project_on_package_dematerialized ${project_handle} ${package_handle})
   popd()
-  return(${materialization_handle})  
+  return(${package_handle})  
 endfunction()

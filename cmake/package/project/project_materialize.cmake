@@ -55,11 +55,11 @@ function(project_materialize project_handle package_uri)
       map_set(${materialization_handle} content_dir "")
       map_set(${materialization_handle} package_handle ${project_handle})
       event_emit(project_on_package_materializing ${project_handle} ${project_handle})
-      map_set(${package_materializations} "${package_uri}" ${materialization_handle})
+      map_set(${package_materializations} "${package_uri}" ${project_handle})
       map_set(${project_handle} materialization_descriptor ${materialization_handle})
       event_emit(project_on_package_materialized ${project_handle} ${project_handle})
     endif()
-    return(${materialization_handle})
+    return(${project_handle})
   endif()
 
   if(NOT package_source)
@@ -81,10 +81,10 @@ function(project_materialize project_handle package_uri)
   ans(package_uri)
 
   map_tryget(${package_materializations} ${package_uri})
-  ans(materialization_handle)
+  ans(is_materialized)
 
-  if(materialization_handle)
-    return(${materialization_handle})
+  if(is_materialized)
+    return(${package_handle})
   endif()
 
   
@@ -128,11 +128,15 @@ function(project_materialize project_handle package_uri)
 
     map_set(${package_materializations} ${package_uri} ${package_handle})
 
+    ## @TODO: on dependency materialized
+    ## @TODO: create symbolic link if content dir is specified
+
+
     event_emit(project_on_package_materialized ${project_handle} ${package_handle})
   
   popd()
 
 
-  return(${materialization_handle})
+  return(${package_handle})
 endfunction()
 

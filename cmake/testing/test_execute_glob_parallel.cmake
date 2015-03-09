@@ -123,6 +123,13 @@ function(test_execute_glob_parallel)
    status_line("")
    message("\n\n${completed_count}  / ${test_count}  ok: ${success_count} nok: ${failure_count} (elapsed time ${elapsed_time} ms)")
 
+   foreach(failure ${tests_failed})
+    map_tryget(${failure} test_file)
+    ans(test_file)
+    message(FORMAT "FAILED: ${test_file} ({failure.exit_code})")
+    message(FORMAT "output:\n{failure.stderr}")
+   endforeach()
+
 if(failure_count)
   messagE(FATAL_ERROR "failed to execute all tests successfully")
 endif()
