@@ -1,8 +1,6 @@
 function(test)
 
 
-
-
   fwrite("dir1/test.txt" "abc")
 
   ln("dir1/test.txt" "kaka.txt")
