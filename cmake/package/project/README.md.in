@@ -1,0 +1,42 @@
+# Project
+
+
+## The Project Lifecycle
+
+The project's lifecycle is characterized  by the events that are emitted. 
+
+* `project_on_opening(<project handle>)` called after project handle is created.  Called before project is loaded. 
+* `project_on_opened` called after project handle is created and project is loaded. 
+* `project_on_loading` called before any dependencies are loaded
+* `project_on_loaded` called after all dependencies and project was loaded
+* `project_on_package_loading` called before packages's dependencies are loaded.
+* `project_on_package_loaded` called after package's dependencies are loaded.  
+* `project_on_package_reload` called when a package was already loaded but is the dependency of another package
+* `project_on_package_cycle` called `project_load` when a dependency cycle is detected. 
+* `project_on_package_materialized` called by `project_materialize` before package content is pulled.  
+* `project_on_package_materialized` called by `project_materialize` after the package content is pulled.   
+* `project_on_dependency_configuration_changed` called by `project_change_dependencies` when the dependency after the dependency configuration was changed.
+* `project_on_dependencies_materializing` called by `project_materialize_dependencies` before any dependencies are materialized/dematerialized
+* `project_on_dependencies_materialized` called after all dependencies where successfully materialized/dematerialized
+* `project_on_package_dematerializing` called by `project_dematerialize` before the package content is removed
+* `project_on_package_dematerialized` called by `project_dematerialize` after the package content was removed
+* `project_on_unloading` called by `project_unload`, `project_close` before any dependencies are unloaded
+* `project_on_unloaded` called by `project_unload`, `project_close` after all dependencies are unloaded
+* `project_on_package_unloading` called by `project_unload` before any of `package`'s  dependencies were unloaded
+* `project_on_package_unloaded` called by `project_unload` after all of `package`'s dependencies were unloaded 
+* `project_on_closing` called before the project is `closed` and before it is `unloaded`
+* `project_on_closed` called after the project was `closed` and all packages where `unloaded`
+
+
+
+* `package_descriptor.cmakepp.export`
+
+## Hooks
+
+* `package_descriptor.cmakepp.hooks.on_loaded`
+* `package_descriptor.cmakepp.hooks.on_unloading`
+* `package_descriptor.cmakepp.hooks.on_materialized`
+* `package_descriptor.cmakepp.hooks.on_dematerializing`
+* `package_descriptor.cmakepp.hooks.on_run`
+
+

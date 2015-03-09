@@ -28,3 +28,8 @@ function(function_new )
 
 
 endfunction()
+
+## faster, but less debug info 
+macro(function_new )
+	identifier(function)
+endmacro()

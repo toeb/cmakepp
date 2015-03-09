@@ -33,16 +33,19 @@ function(list_extract_labelled_value lst label)
 
   list_erase_slice(${lst} ${pos} ${end})
   ans(vals)
+
   list_pop_front(vals)
   ans(flag)
     
+
   # special treatment for [] values
   if("_${vals}" MATCHES "^_\\[.*\\]$")
     string_slice("${vals}" 1 -2)
     ans(vals)
   endif()
 
-  if(NOT vals)
+
+  if("${vals}_" STREQUAL "_")
     set(vals ${ARGN})
   endif()
 

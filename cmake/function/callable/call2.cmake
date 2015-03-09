@@ -5,6 +5,7 @@ function(call2 callable)
   return_ans()
 endfunction()
 
+## faster version
 function(call2 callable)
   callable_function("${callable}")
   eval("${__ans}(${ARGN})")

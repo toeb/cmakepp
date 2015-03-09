@@ -1,8 +1,9 @@
 
 function(map_remove map key)
   map_has("${map}" "${key}")
-  map_set("${map}" "${key}")
   ans(has_key)
+  ## set value to "" without updating key
+  map_set_hidden("${map}" "${key}")
   if(NOT has_key)
     return(false)
   endif()

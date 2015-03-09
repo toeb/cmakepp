@@ -66,7 +66,7 @@ json_print(${res}) # outputs input and output of process
 * `<process start info?!>` a string which can be converted to a `<process start>` object using the `process_start_info()` function.
 * `<process start info>` a map/object containing the following fields
   - `command` command name / path of executable *required*
-  - `args` command line arguments to pass along to command, use `string_semicolon_encode` if you want to have an argument with semicolons *optional*
+  - `args` command line arguments to pass along to command, use `string_encode_semicolon` if you want to have an argument with semicolons *optional*
   - `timeout:<int>` *optional* number of seconds to wait before failing
   - `cwd:<unqualified path>` *optional*  by default it is whatever `pwd()` currently returns
 * `<process info>` contains all the fields of `<process start>` and additionaly

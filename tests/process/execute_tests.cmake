@@ -1,4 +1,24 @@
 function(test)
+
+  ## the workind directory needs to exist. maybe this needs to be ensured within execute.
+  mkdir(mytempdir)
+  
+  ## check if command is actually started in working directory
+  ## in sync mode
+  execute_script("echo_append(\${CMAKE_CURRENT_BINARY_DIR})" WORKING_DIRECTORY "mytempdir") # delegates to cmake
+  ans(res)
+  assert("${res}" MATCHES "/mytempdir$")  
+
+
+  ## check if command is actually started in working directory 
+  ## in async mode
+  execute_script("echo_append(\${CMAKE_CURRENT_BINARY_DIR})" WORKING_DIRECTORY "mytempdir" --async)
+  ans(process_handle)
+
+  process_wait(${process_handle})
+  assertf("{process_handle.stdout}" MATCHES "/mytempdir$")
+
+
 ##
   mkdir("dir1")
   fwrite(dir1/successscript.cmake "message(STATUS hello)")

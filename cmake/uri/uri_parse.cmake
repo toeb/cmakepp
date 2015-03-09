@@ -22,7 +22,8 @@ function(uri_parse str)
 
   list_extract_labelled_value(flags --into-existing)
   ans(res)
-
+  list_extract_flag(flags --basic)
+  ans(basic)
   list_extract_flag(flags --notnull)
   ans(notnull)
   if(notnull)
@@ -50,40 +51,60 @@ function(uri_parse str)
   uri_normalize_input("${res}" ${flags})
   map_get("${res}" uri)
   ans(str)
-
   # scheme
-  string_take_regex(str "${scheme_regex}:")
-  ans(scheme)
-
-  if(NOT "${scheme}_"  STREQUAL _)
-    string_slice("${scheme}" 0 -2)
-    ans(scheme)
+  set(CMAKE_MATCH_1)
+  set(CMAKE_MATCH_2)
+  if("_${str}" MATCHES "^_(${scheme_regex})${scheme_delimiter}(.*)")
+    set(scheme "${CMAKE_MATCH_1}")
+    set(str "${CMAKE_MATCH_2}")
+  else()
+    set(scheme)
   endif()
+  #string_take_regex(str "${scheme_regex}:")
+  #ans(scheme)
+
+  #if(NOT "${scheme}_"  STREQUAL _)
+  #  string_slice("${scheme}" 0 -2)
+  #  ans(scheme)
+  #endif()
 
   # scheme specic part is rest of uri
   set(scheme_specific_part "${str}")
 
 
   # net_path
-  string_take_regex(str "${net_root_regex}")
-  ans(net_path)
+  set(net_path)
+  set(authority)
+  set(CMAKE_MATCH_1)
+  set(CMAKE_MATCH_2)
+  if("_${str}" MATCHES "^_(${net_root_regex})(.*)")
+    set(net_path "${CMAKE_MATCH_1}")
+    set(str "${CMAKE_MATCH_2}")
+    set(CMAKE_MATCH_1)
+    set(CMAKE_MATCH_2)
+    if("_${str}" MATCHES "^_(${authority_regex})(.*)")
+      set(authority "${CMAKE_MATCH_1}")
+      set(str "${CMAKE_MATCH_2}")
+    endif()
+  endif()
+  #string_take_regex(str "${net_root_regex}")
+  #ans(net_path)
 
   # authority
-  set(authority)
-  if(net_path)
-    string_take_regex(str "${authority_regex}")
-    ans(authority)
+#  set(authority)
+ # if(net_path)
+  #  string_take_regex(str "${authority_regex}")
+   # ans(authority)
+ # endif()
+
+  set(path)
+  set(CMAKE_MATCH_1)
+  set(CMAKE_MATCH_2)
+  if("_${str}" MATCHES "^_(${path_char_regex}+)(.*)")
+    set(path "${CMAKE_MATCH_1}")
+    set(str "${CMAKE_MATCH_2}")
   endif()
 
-  string_take_regex(str "${path_char_regex}+")
-  ans(path)
-
-  string_take_regex(str "${query_regex}")
-  ans(query)
-  if(query)
-    string_slice("${query}" 1 -1)
-    ans(query)
-  endif()
 
 
 
@@ -91,12 +112,38 @@ function(uri_parse str)
     set(net_path "${authority}${path}")
   endif()
 
-  string_take_regex(str "${fragment_regex}")
-  ans(fragment)
-  if(fragment)
-    string_slice("${fragment}" 1 -1)
-    ans(fragment)
+
+ # string_take_regex(str "${path_char_regex}+")
+ # ans(path)
+
+  set(query)
+  set(CMAKE_MATCH_1)
+  set(CMAKE_MATCH_2)
+  if("_${str}" MATCHES "^_${query_delimiter}(${query_char_regex}*)(.*)")
+    set(query "${CMAKE_MATCH_1}")
+    set(str "${CMAKE_MATCH_2}")
   endif()
+  #string_take_regex(str "${query_regex}")
+  #ans(query)
+  #if(query)
+  #  string_slice("${query}" 1 -1)
+  #  ans(query)
+  #endif()
+
+  set(CMAKE_MATCH_1)
+  set(CMAKE_MATCH_2)
+  set(fragment)
+  if("_${str}" MATCHES "^_${fragment_delimiter_regex}(${fragment_char_regex}*)(.*)")
+    set(fragment "${CMAKE_MATCH_1}")
+    set(str "${CMAKE_MATCH_2}")
+  endif()
+
+  #string_take_regex(str "${fragment_regex}")
+  #ans(fragment)
+  #if(fragment)
+  #  string_slice("${fragment}" 1 -1)
+  #  ans(fragment)
+  #endif()
 
 
   map_capture(${res}
@@ -113,14 +160,14 @@ function(uri_parse str)
   )
 
 
-
-  # extended parse
-  uri_parse_scheme(${res})
-  uri_parse_authority(${res})
-  uri_parse_path(${res})
-  uri_parse_file(${res})
-  uri_parse_query(${res})      
-
+  if(NOT basic)
+    # extended parse
+    uri_parse_scheme(${res})
+    uri_parse_authority(${res})
+    uri_parse_path(${res})
+    uri_parse_file(${res})
+    uri_parse_query(${res})      
+  endif()
 
 
   return_ref(res)

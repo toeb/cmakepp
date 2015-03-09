@@ -27,7 +27,9 @@ function(process_handle_change_state process_handle new_state)
       ans(on_success_event)
       event_emit("${on_success_event}" ${process_handle})  
     endif()
-
+    map_tryget("${process_handle}" on_terminated)
+    ans(on_terminated_event)
+    event_emit("${on_terminated_event}" ${process_handle})
 endif()
 
   return(true)

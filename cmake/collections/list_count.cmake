@@ -1,4 +1,6 @@
-## counts all element for which the element hold 
+## `(<list&> <predicate:<[](<any>)-><bool>>> )-><uint>`
+##
+## counts all element for which the predicate holds 
 function(list_count __list_count_lst __list_count_predicate)
   function_import("${__list_count_predicate}" as __list_count_predicate REDEFINE)
   set(__list_count_counter 0)

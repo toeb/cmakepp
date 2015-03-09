@@ -1,0 +1,45 @@
+# Package Source
+
+### Package Sources
+
+A `package source` is a set of methods and possibly some implementation specific properties.  The interface for a `package source` was already described and consists of the methods.
+* `query`
+* `resolve`
+* `pull`
+* `push` *optional*
+
+In the following sections the package source implementations are briefly discussed. 
+
+
+
+
+<%
+set(package_source_dirs
+    default
+    github
+    bitbucket
+    git
+    hg
+    svn
+    webarchive
+    archive
+    path
+    managed
+    directory
+    composite
+    cached
+)
+%>
+
+
+@markdown_section(package_sources "Package Sources" +1)
+
+<% foreach(dir ${package_source_dirs})%>
+<%
+if(EXISTS "${dir}/README.md.in")
+    template_run_file("${dir}/README.md.in")
+    ans(res)
+    template_out("${res}")
+endif()
+%>
+<% endforeach() %>

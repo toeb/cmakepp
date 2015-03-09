@@ -3,6 +3,6 @@ function(test)
   process_list()
   ans(res)
   list(LENGTH res len)
-  assert(${len} GREATER 1)
+  assert(NOT ${len} LESS 1)
 
 endfunction()

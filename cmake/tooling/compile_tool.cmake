@@ -9,7 +9,7 @@ function(compile_tool name src)
   ans(chksum)
 
   cmakepp_config(temp_dir)
-  ans(tempdir)
+  ans(temp_dir)
 
 
   set(dir "${temp_dir}/tools/${chksum}")
@@ -67,14 +67,15 @@ function(compile_tool name src)
   endif()
   
         
-  wrap_executable("__${name}" "${dir}/build/bin/${name}")
+  wrap_executable_bare("__${name}" "${dir}/build/bin/${name}")
 
   eval("
     function(${name})
 
-      __${name}()
-      ans(res)
-      eval(\"\${res}\")
+      __${name}(\${ARGN})
+      ans_extract(error)
+      ans(stdout)
+      eval(\"\${stdout}\")
       return_ans()
     endfunction()
     ")

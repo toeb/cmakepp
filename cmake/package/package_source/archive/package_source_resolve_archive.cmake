@@ -2,9 +2,8 @@
 ## 
 ## resolves the specified uri to a unqiue immutable package handle 
 function(package_source_resolve_archive uri)
+    uri_coerce(uri)
 
-    uri("${uri}")
-    ans(uri)
 
     ## query for uri and return if no single uri is found
     package_source_query_archive("${uri}" --package-handle)

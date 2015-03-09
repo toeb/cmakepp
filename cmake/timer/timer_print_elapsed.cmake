@@ -2,6 +2,6 @@
 function(timer_print_elapsed id)
   timer_elapsed("${id}")
   ans(elapsed)
-  message("${id}: ${elapsed} ms")
+  message("${ARGN}${id}: ${elapsed} ms")
   return()
 endfunction()

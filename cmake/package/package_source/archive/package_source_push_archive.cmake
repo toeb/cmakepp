@@ -29,7 +29,6 @@
     assign(package_handle = source.pull(${source_args} "${temp_dir}"))
     assign(content_dir = package_handle.content_dir)# get content dir because pull may return somtehing different in case --reference is specified
     
-
     ## possibly generate a filename if ${target_file} is a directory
     if(IS_DIRECTORY "${target_file}")
         set(mimetype ${format})

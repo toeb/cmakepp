@@ -23,3 +23,23 @@ function(string_take_delimited __string_take_delimited_string_ref )
   return_ref(res) 
 endfunction()
 
+## faster version
+function(string_take_delimited __str_ref )
+  set(input "${${__str_ref}}")
+
+  regex_delimited_string(${ARGN})
+  ans(regex)
+  if("${input}" MATCHES "^${regex}")
+    string(LENGTH "${CMAKE_MATCH_0}" len)
+    if(len)
+      string(SUBSTRING "${input}" ${len} -1 input )
+    endif()
+    string(REPLACE "\\${delimiter_end}" "${delimiter_end}" res "${CMAKE_MATCH_1}")
+    set("${__str_ref}" "${input}" PARENT_SCOPE)
+    set(__ans "${res}" PARENT_SCOPE)
+  else()
+    set(__ans PARENT_SCOPE)
+  endif()
+
+endfunction()
+

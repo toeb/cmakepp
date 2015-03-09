@@ -1,6 +1,10 @@
 
   function(define_test_function name parse_function_name)
     set(args ${ARGN})
+    list(LENGTH args arg_len)
+    matH(EXPR arg_len "${arg_len} + 1")
+
+
     string_combine(" " ${args})
     ans(argstring)
     set(evaluated_arg_string)
@@ -11,6 +15,10 @@
    # message("evaluated_arg_string ${evaluated_arg_string}")
     eval("
       function(${name} expected ${argstring})
+        arguments_encoded_list2(${arg_len} \${ARGC})
+        ans(encoded_arguments)
+        arguments_sequence(${arg_len} \${ARGC})
+        ans(arguments_sequence)
         set(args \${ARGN})
         list_extract_flag(args --print)
         ans(print)

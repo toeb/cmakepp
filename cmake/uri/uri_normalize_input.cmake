@@ -49,8 +49,15 @@ function(uri_normalize_input input_uri)
     
 
     # the whole uri is delimited by a space or end of string
-    string_take_regex(input "${uric}+")
-    ans(uri)
+    set(CMAKE_MATCH_1)
+    set(CMAKE_MATCH_2)
+    set(uri)
+    if("_${input}" MATCHES "^_(${uric}+)(.*)")
+      set(uri "${CMAKE_MATCH_1}")
+      set(input "${CMAKE_MATCH_2}")
+    endif()
+    #string_take_regex(input "${uric}+")
+    #ans(uri)
 
     if("${rest}_" STREQUAL "_")
       set(rest "${input}")

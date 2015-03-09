@@ -9,7 +9,6 @@ function(event )
     event_get("${event_id}")
     ans(event)
   endif()
-
   if(NOT event)
     event_new(${event_id})
     ans(event)

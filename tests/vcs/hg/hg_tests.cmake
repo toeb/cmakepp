@@ -11,7 +11,8 @@ function(test)
   hg(--version --quiet)
   ans(res)
 
-  assert("${res}" MATCHES "${HG_VERSION_STRING}")
+  string(FIND "${res}" "${HG_VERSION_STRING}" idx)
+  assert(${idx} GREATER -1)
 
 
 

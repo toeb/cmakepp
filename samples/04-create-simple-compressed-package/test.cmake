@@ -1,5 +1,6 @@
 function(test)
 
+  default_package_source_set(archive)
 
 
   sample_copy("04")
@@ -36,7 +37,7 @@ function(test)
   ##    are included in the package (the default is **) 
   fwrite_data("package.cmake" --json 
   "{
-    content:['cmake/**'],
+    content:['cmake/**','package.cmake'],
     cmakepp:{
       export:[
         'cmake/my_sample_function.cmake'
@@ -48,7 +49,9 @@ function(test)
   ## push the package into a compressed file
   ## if the package decriptor does not specify which files
   ## are to be pushed all files of th package directory are used
-  package_source_push_archive("." "my_package.tgz")
+  path_package_source()
+  ans(path_source)
+  package_source_push_archive(${path_source} "." => "my_package.tgz")
 
   ## check that the package was created
   assert(EXISTS "${test_dir}/my_package.tgz")
@@ -58,11 +61,14 @@ function(test)
   ### using installing and using the package manager
 
   cd("project_dir")
-  ## compile cmakepp to asingle file in project dir
+  ## compile cmakepp to a single file in project dir
   cmakepp_compile("cmakepp.cmake")
 
   ## when cmakepp is installed you can use this command from the console
-  pkg(install "../my_package.tgz")
+  pkg(materialize "../my_package.tgz")
+  ans(res)
+  assert(res)
+
 
   ## create a build dir 
   ## configure project 
@@ -81,7 +87,7 @@ function(test)
 
 
  ## check that output matches the expected value
- assertf("{res.stdout}" MATCHES 42)
+ assert("${res}" MATCHES 42)
 
 
 

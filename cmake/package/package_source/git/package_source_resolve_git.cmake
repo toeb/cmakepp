@@ -1,10 +1,9 @@
 ## returns a pacakge descriptor for the specified git uri 
 ## takes long for valid uris because the whole repo needs to be checked out
-function(package_source_resolve_git uri_string)
+function(package_source_resolve_git uri)
   set(args ${ARGN})
 
-  uri("${uri_string}")
-  ans(uri)
+  uri_coerce(uri)
 
   package_source_query_git("${uri}" --package-handle)
   ans(package_handle)
@@ -12,6 +11,7 @@ function(package_source_resolve_git uri_string)
   list(LENGTH package_handle count)
   
   if(NOT "${count}" EQUAL 1)
+    error("could not get a unqiue uri for '{uri.uri}' (got {count})")
     return()
   endif()
 

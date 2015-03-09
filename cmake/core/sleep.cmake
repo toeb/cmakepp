@@ -14,6 +14,6 @@ function(sleep seconds)
     return()
   endif()
 
-  cmake(-E sleep "${seconds}")
+  _cmake(-E sleep "${seconds}")
   return()
 endfunction()

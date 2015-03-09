@@ -14,8 +14,8 @@ function(test)
   ## in the cmake folder and to load the my_sample_function.cmake
   ## file when the package is used
   ##
-  ## `cmakepp.hooks.on_install` tells cmakepp to execute the specified 
-  ##    script after the projects files were installed
+  ## `cmakepp.hooks.on_materialilzed` tells cmakepp to execute the specified 
+  ##    script after the projects files downloaded.
   ##    when the package is loaded 
   ## `content` tells the package source which files
   ##    are included in the package (the default is **) 
@@ -27,7 +27,7 @@ function(test)
     cmakepp:{
       cmakepp:{
         hooks:{
-          on_install:'my_install_script.cmake'
+          on_materialize:'my_install_script.cmake'
         }
       }
     }    

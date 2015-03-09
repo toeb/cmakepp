@@ -2,7 +2,7 @@
 
 function(http_headers_parse http_headers)
   http_regexes()
-  string_semicolon_encode("${http_headers}")
+  string_encode_semicolon("${http_headers}")
   ans(http_headers)
 
   string(REGEX MATCHALL "${http_header_regex}" http_header_lines "${http_headers}")
@@ -12,7 +12,7 @@ function(http_headers_parse http_headers)
   foreach(header_line ${http_header_lines})
     string(REGEX REPLACE "${http_header_regex}" "\\1" header_key "${header_line}")
     string(REGEX REPLACE "${http_header_regex}" "\\2" header_value "${header_line}")
-    string_semicolon_decode("${header_value}")
+    string_decode_semicolon("${header_value}")
     ans(header_value)
     map_set(${result} "${header_key}" "${header_value}")
   endforeach()

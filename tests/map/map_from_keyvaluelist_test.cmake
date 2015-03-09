@@ -40,7 +40,7 @@ function(test)
   string_take_regex(uut "0|[1-9][0-9]*")
   ans(res)
   assert("${res}_" STREQUAL "_")
-
+return()
   string(ASCII 28 file_separator)
   string(ASCII 29 group_separator)
   string(ASCII 30 record_separator)

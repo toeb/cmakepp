@@ -1,67 +1,93 @@
-## project_load(project dir <~project config?>) -> bool
+## `(<project>)-><bool>`
 ##
+## @TODO extract dfs algorithm, extreact dependency_load function which works for single dependencies
 ## 
-## events:
-##   project_on_load(<project package>)
-##   project_on_begin_load(<project package>)
-##   project_on_package_load(<project package> <package handle>)
-##
-function(project_load)
-  set(args ${ARGN})
+## loads the specified project and its dependencies
+##  
+## **events**
+## * `project_on_loading`
+## * `project_on_loaded`
+## * `project_on_package_loading`
+## * `project_on_package_loaded`
+## * `project_on_package_reload`
+## * `project_on_package_cycle`
+function(project_load project_handle)
+  map_tryget(${project_handle} project_descriptor)
+  ans(project_descriptor)
 
-  ## qualify project_dir
-  list_pop_front(args)
+  ## load dependencies
+  map_import_properties(${project_descriptor} package_materializations)
+  map_values(package_materializations)
+  ans(package_materializations)
+  set(materialized_packages)
+  map_tryget(${project_handle} content_dir)
   ans(project_dir)
-  path_qualify(project_dir)
-  assign(this.project_dir = project_dir)
 
-  ## parse and set project config
-  project_config(${args})
-  ans(project_config)
-  assign(this.configuration = project_config)
+  ## set content_dir for every package handle
+  ## it is obtained by qualifying the materialization descriptors content_dir
+  ## with the project's content_dir
+  foreach(materialization ${package_materializations})
+    map_tryget(${materialization} package_handle)
+    ans_append(materialized_packages)
+    ans(package_handle)
+    map_tryget(${materialization} content_dir)
+    ans(package_dir)
+    path_qualify_from(${project_dir} ${package_dir})
+    map_set(${package_handle} content_dir ${package_dir})
+  endforeach()
+  
+  
+  event_emit(project_on_loading ${project_handle})
+  
+  map_new()
+  ans(context)
+  function(__project_load_recurse)
 
-  event_emit(project_on_begin_load ${this} ${project_config})
+    foreach(package_handle ${ARGN})
+      
+      map_tryget(${context} ${package_handle})
+      ans(state)
+      if("${state}_" STREQUAL "visiting_")
+        event_emit(project_on_package_cycle ${project_handle} ${package_handle})
+      elseif("${state}_" STREQUAL "visited_")
+        event_emit(project_on_package_reload ${project_handle} ${package_handle})
+      else()
+        map_set(${context} ${package_handle} visiting)
+          
+        ## pre order callback
+        event_emit(project_on_package_loading ${project_handle} ${package_handle})
+        set(parent_parent_package ${parent_package})
+        set(parent_package ${package_handle})
+        
 
-  ## qualify directories relative to project dir
-  map_import_properties(${project_config} 
-    content_dir 
-    config_dir 
-    dependency_dir
-    package_descriptor_file
-  )
+        ## expand
+        map_tryget(${package_handle} dependencies)
+        ans(dependency_map)
+        if(dependency_map)
+          map_values(${dependency_map})
+          ans(dependencies)
 
-  path_qualify_from("${project_dir}" "${package_descriptor_file}")
-  ans(package_descriptor_file)
-  path_qualify_from("${project_dir}" "${content_dir}")
-  ans(content_dir)
-  path_qualify_from("${project_dir}" "${config_dir}")
-  ans(config_dir)
-  path_qualify_from("${project_dir}" "${dependency_dir}")
-  ans(dependency_dir)
+          __project_load_recurse(${dependencies})
+          
+        endif()
+        
+        map_set(${context} ${package_handle} visited)
 
+        ## post order callback
+        set(parent_package ${parent_parent_package})
+        event_emit(project_on_package_loaded ${project_handle} ${package_handle})
 
-  ## set directories
-  assign(this.content_dir = content_dir)
-  assign(this.config_dir = config_dir)
-  assign(this.dependency_dir = dependency_dir)
+      endif()
+    endforeach()
+  endfunction()
 
-  ## load package descriptor
-  fread_data("${package_descriptor_file}")
-  ans(package_descriptor)
-  assign(this.package_descriptor = package_descriptor)
+  set(parent_parent_package)
+  set(parent_package)
+  __project_load_recurse(${project_handle} ${materialized_packages})
 
-
-  ## create package source for project
-  managed_package_source("project" "${dependency_dir}")
-  ans(local)
-  assign(this.local = local)
-
-  ## load all installed packages
-  ## including this project
-  project_load_installed_packages()  
-
-  ## emit loaded event
-  event_emit(project_on_load ${this})  
+  event_emit(project_on_loaded ${project_handle})
+ 
   return(true)
 endfunction()
+
 

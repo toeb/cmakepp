@@ -13,7 +13,7 @@
       endif()
     endforeach()
 
-    string_semicolon_decode("${values}")
+    string_decode_semicolon("${values}")
     ans(values)
     reg_write_value("${key}" "${value_name}" "${values}")
     return_ref(added_values)

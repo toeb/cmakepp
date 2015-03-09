@@ -15,21 +15,23 @@ function(process_refresh_handle handle)
     set(state terminated)
   endif()
 
+  if("${state}" STREQUAL "terminated")
+    process_return_code("${handle}")
+    ans(exit_code)
+    process_stdout("${handle}")
+    ans(stdout)
+    process_stderr("${handle}")
+    ans(stderr)
+    map_capture("${handle}" exit_code stdout stderr)
+  endif()
+
 
   process_handle_change_state("${handle}" "${state}")
   ans(state_changed)
 
-  if(state_changed)
-    if("${state}" STREQUAL "terminated")
-      process_return_code("${handle}")
-      ans(exit_code)
-      process_stdout("${handle}")
-      ans(stdout)
-      process_stderr("${handle}")
-      ans(stderr)
-      map_capture("${handle}" exit_code stdout stderr)
-    endif()
-  endif()
+  
+
+
 
 
   return_ref(isrunning)

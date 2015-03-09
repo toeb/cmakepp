@@ -21,6 +21,7 @@
 # --async-wait    will execute the executable asynchroniously 
 #                 but will not return until the task is finished
 #                 printing a status indicator
+# --lean          lean call to executable (little overhead - no events etc)
 # 
 # else only the application output will be returned 
 # and if the application terminates with an exit code != 0 a fatal error will be raised

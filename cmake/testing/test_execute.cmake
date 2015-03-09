@@ -17,7 +17,7 @@ function(test_execute test)
   set(test_dir "${temp_dir}/tests/${test_dir}")
   file(REMOVE_RECURSE "${test_dir}")
   get_filename_component(test_dir "${test_dir}" REALPATH)
-  
+  path_qualify(test)
   message(STATUS "test directory is ${test_dir}")  
   pushd("${test_dir}" --create)
   timer_start("test duration")
