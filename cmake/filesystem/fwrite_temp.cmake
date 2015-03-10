@@ -3,24 +3,21 @@
 ## 
 ## creates a temporary file containing the specified content
 ## returns the path for that file 
-## --pattern 
-## --extension
-## --dir
 function(fwrite_temp content)
-  message(FATAL_ERROR not implemented)
-  set(args ${ARGN})
-  list_extract_value(args --pattern)
-  ans(pattern)
+  set(ext ${ARGN})
 
-  if(NOT pattern)
-    
-    list_extract_value(args --extension)
-    ans(ext)
-    list_extract_value(args --dir)
-    ans(dir)
-    if(NOT ext)
+  if(NOT ext)
+    set(ext ".txt")
+  endif()
 
-  endif() 
+  cmakepp_config(temp_dir)
+  ans(temp_dir)
 
-return()
+  path_vary("${temp_dir}/fwrite_temp${ext}")
+  ans(temp_path)
+
+  fwrite("${temp_path}" "${content}")
+
+  return_ref(temp_path)
+
 endfunction()

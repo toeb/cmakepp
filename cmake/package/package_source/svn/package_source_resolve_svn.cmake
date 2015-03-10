@@ -28,7 +28,7 @@
     endif()
     set(checkout_uri "${base_uri}/${ref_type}/${ref}/package.cmake@${revision}")
     
-    file_make_temporary("")
+    fwrite_temp("")
     ans(tmp)
     rm(${tmp})
     svn(export "${checkout_uri}" "${tmp}" --exit-code)

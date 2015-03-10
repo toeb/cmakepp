@@ -23,13 +23,13 @@ function(process_start_Linux process_handle)
   set(command_string "${command} ${command_arguments_string}")
 
   # define output files        
-  file_make_temporary("")
+  fwrite_temp("")
   ans(stdout)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(stderr)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(return_code)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(pid_out)
 
   process_handle_change_state(${process_handle} starting)

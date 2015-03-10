@@ -2,7 +2,7 @@
 ##
 ## returns a list of available generators on current system
 function(cmake_generator_list)
-  _cmake(--help)
+  cmake_lean(--help)
   ans(help_text)
   list_pop_front(help_text)
   ans(error)

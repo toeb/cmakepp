@@ -8,6 +8,7 @@ function(test)
   ## and register the on_load hook
   fwrite_data("pkg1/package.cmake" "{
     cmakepp:{
+      create_files:{ 'asd.txt':'content lala'},
       hooks:{
         on_materialized:'cmake/on_materialized.cmake'
       }
@@ -39,6 +40,12 @@ function(test)
 
   ## check that on_materialized_hook_called hook was called
   assertf({context.on_materialized_hook_called} EQUALS true ${proj} ${pkg1})
+
+  ## check that files are created 
+  assert(EXISTS "${test_dir}/pkg1/asd.txt")
+  fread("pkg1/asd.txt")
+  ans(res)
+  assert("${res}" STREQUAL "content lala")
 
 
   ## check that calling a project without the predefined fields does not fail

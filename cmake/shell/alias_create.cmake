@@ -23,7 +23,7 @@ function(alias_create name command_string)
   ans(shell)
 
   if("${shell}" STREQUAL "bash")
-    home_path(.bashrc)
+    path("~/.bashrc")
     ans(bc)
     fappend("${bc}" "\nalias ${name}='${command_string}'")
     #message(INFO "alias ${name} was created - it will be available as soon as you restart your shell")

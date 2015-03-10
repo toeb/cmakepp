@@ -4,7 +4,7 @@
 function(win32_wmic)
   pwd()
   ans(pwd)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(tmp)
   file(TO_NATIVE_PATH "${tmp}" out)
 

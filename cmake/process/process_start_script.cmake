@@ -1,13 +1,12 @@
 ## shorthand to fork a cmake script
 function(process_start_script scriptish)
-  file_temp_name("{{id}}.cmake")        
-  ans(ppath)
-  fwrite("${ppath}" "${scriptish}")
+  fwrite_temp("${scriptish}" ".cmake")
+  ans(script_path)
   execute(
     COMMAND
     "${CMAKE_COMMAND}"
     -P
-    "${ppath}"
+    "${script_path}"
     ${ARGN}
     --async
   )

@@ -12,7 +12,7 @@
 ##   content_dir: <path> # path relative to project root
 ##   package_handle: <package handle>
 ## }
-##
+## ```
 ## 
 ## **events**: 
 ## * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
@@ -23,6 +23,7 @@
 ## * adds the specified package to the `package cache` if it does not exist 
 ## * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
 ## * `package_handle.materialization_descriptor = <materialization handle>`
+##
 function(project_materialize project_handle package_uri)
   set(args ${ARGN})
 

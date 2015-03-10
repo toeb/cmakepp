@@ -1,9 +1,95 @@
 # Project
+<%
+    set(function_files
+        project_open.cmake
+        project_close.cmake
+        project_install.cmake
+        project_materialize.cmake
+        project_dematerialize.cmake
+        project_change_dependencies.cmake
+        project_materialize_dependencies.cmake
+    )
+    assign(function_files[] = glob("**.cmake" --relative --recurse))
+    list_remove_duplicates(function_files)
+%>
+
+## Motivation
+
+Package or Dependency management is not a new Idea.  Most Build systems for other languages have some kind of support for automatically handling packages.
+
+## Concept
+
+* slides from ryppl
+* reddit thread
+* ...
+
+
+## State of the Art
+
+
+
+## Implementation
+
+Working with dependencies implies that you are using a dependency graph. The root node from which you work is what I call the `project`.  
+
+The `project` is represented by the `project_handle` which is a `package_handle` and behaves as expected in all situations except that it has also has property called `project_descriptor` which contains project specific information.  The `project_descriptor` contains the whole object graph consisting of every `package handle` used in the project and all their properties.  Every `package_handle` (which is identified by an `package_uri`) is unique and only one reference will exist for it inside a project.  This while object graph is serialized and deserialized using the `scmake` serialization format (see `cmake_serialize` `cmake_deserialize`) which is able to persist the data including cycles and is quite fast (in comparison with other serializers).  It is important that the no data is added to the object graph which is not serializable.
+
+The `project_descriptor` is contains the following:
+
+```
+<project descriptor> ::= {
+   package_cache: { <admissable uri> : <package handle> } # contains all packages known to project
+   package_source: <package source> a package source object used to retrieve package metadata and files.
+   package_materializations: { <package uri> : <package handle> } # contains all materialized packages.
+   dependency_configuration: { <package_uri> : <bool> } # the currently configured dependencies
+   dependencies: { <package uri>:<package handle> } # all dependencies that this project has including transient dependencies. 
+   dependency_dir: <path = "packages"> # path relative to project root which is used as a the default dependency locations
+   config_dir: <path = ".cps"> # the locations of the configuration folder 
+   project_file: <path = ".cps/project.scmake"> # the location of the project's config file
+   package_descriptor_file: <path>?  # if specified the path of the package descriptor.  This will be read or written when project is opened or closes
+}
+```
+
+## The Commmand Line Interface
+
+Of course using the package functionality is possbile by using a command line interface.  It allows you to use the functions specified bellow and loads and stores you project automatically.  
+
+
+
+
+## Function List
+
+To work with the project I provide you with the following functions.
+
+<%= markdown_template_function_list(${function_files}) %>
 
 
 ## The Project Lifecycle
+ 
 
-The project's lifecycle is characterized  by the events that are emitted. 
+* `closed`
+    - The project handle does not exist / or should not be used
+    - `project_open` `->` `opening`
+
+* `opening` 
+    - `-> opened, loaded`
+* `unloaded`
+    - `project_load -> loading`
+* `loading`   
+* `loaded`
+    - `project_unload -> unloading`     
+    - `project_close -> closing`     
+* `materializing`
+    - all dependencies are loaded
+    - all materializations which are not dependencies are also loaded
+* `openend` 
+    - everything `of opening` 
+* `closing`
+
+
+The project's lifecycle is also characterized  by the events that are emitted.  
+The key to understanding the project lifecycle lies within these events.
+
 
 * `project_on_opening(<project handle>)` called after project handle is created.  Called before project is loaded. 
 * `project_on_opened` called after project handle is created and project is loaded. 
@@ -28,15 +114,29 @@ The project's lifecycle is characterized  by the events that are emitted.
 * `project_on_closed` called after the project was `closed` and all packages where `unloaded`
 
 
+## `cmakepp` integration
 
-* `package_descriptor.cmakepp.export`
+`cmakepp` listens for the project events and uses them to to provide extra functionality which is described here
 
-## Hooks
+* `package_descriptor.cmakepp.create_files : { <filename> : <filecontent> }` all keys specified here will be created in the `package`'s `content_dir` with the specified content. This is useful if you want to define a package completely in a `package descriptor`
+* `package_descriptor.cmakepp.export : <glob ignore expression>` includes all the files specified by the glob ignore expression in cmake allowing your package to provide cmake macros and functions to other packages.  **WARNING** cmake only has one function scope so you need to be careful that you do not overwrite any functions which are needed elsewhere.  The best practice would be for you to add a namespace string before each function name e.g. `mypkg_myfunction`.  
 
-* `package_descriptor.cmakepp.hooks.on_loaded`
-* `package_descriptor.cmakepp.hooks.on_unloading`
-* `package_descriptor.cmakepp.hooks.on_materialized`
-* `package_descriptor.cmakepp.hooks.on_dematerializing`
-* `package_descriptor.cmakepp.hooks.on_run`
+### `cmakepp` Hooks
 
+Hooks are invoked for every package which allows it to react to the project lifecycle  more easily.  These hooks are called `package_handle_invoke_hook`. You can use any function that you defined in your `cmakepp.export`s (except if stated otherwise) and also specify a file relative to the `package`'s root direcotry. 
+
+* `package_descriptor.cmakepp.hooks.on_loaded`  called after a package and all its dependencies are loaded.  You can also load custom data here or setup the project / package.
+* `package_descriptor.cmakepp.hooks.on_unloading` called when the package is unloaded.  You can store all information that you want to keep in the `package_handle`. Or you could use this hook to persist custom data 
+* `package_descriptor.cmakepp.hooks.on_materialized` called after the package content is available but before the package is loaded. Here you can only specifiy a script file because the exports might not be available (but you can include them yourself)
+* `package_descriptor.cmakepp.hooks.on_dematerializing` called before the package dematerializes. this allows you to perform cleanup before the package content is destroyed
+* `package_descriptor.cmakepp.hooks.on_run` called on project package if when command line client is invoked (see `cmakepp_project_cli`)
+
+
+## Caveats
+
+Speed.  `CMake` is slow.  And there are still alot of optimization possibilities in `cmakepp`.  Don't be mad if you wait much longer than other dependency managers.
+
+## Function Descriptions
+
+<%= markdown_template_function_descriptions(${function_files}) %>
 

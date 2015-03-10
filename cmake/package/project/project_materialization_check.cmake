@@ -1,16 +1,37 @@
-## `(<project handle> <materialization handle>)-><bool>`
-## 
-## checks wether an expected materialization actually exists and is valid
-## return true if it is
-function(project_materialization_check project_handle materialization_handle)
-  map_import_properties(${materialization_handle} content_dir package_handle)
-  map_tryget("${project_handle}" content_dir)
-  ans(project_dir)
-  path_qualify_from("${project_dir}" "${content_dir}")
-  ans(content_dir)
-  if(NOT EXISTS "${content_dir}")
-    return(false)
-  endif()
-  return(true)
-endfunction()
+## `(<project handle>)-><materialization handle>...`
+##
+## **events**
+## * `project_on_package_materialization_missing`
+##
+## **sideffects**
+## * removes missing materializations from `project_descriptor.package_materializations`
+## * removes missing materializations from `package_handle.materialization_descriptor`
+##
+## checks all materializations of a project 
+## if a materialization is missing it is removed from the 
+## map of materializations
+## returns all invalid materialization handles
+function(project_materialization_check project_handle)
+  map_import_properties(${project_handle} project_descriptor)
+  map_import_properties(${project_descriptor} package_materializations)
 
+  if(NOT package_materializations)
+    return()
+  endif()
+  map_keys(${package_materializations})
+  ans(package_uris)
+
+  set(invalid_materializations)
+  foreach(package_uri ${package_uris})
+    map_tryget("${package_materializations}" "${package_uri}")
+    ans(package_handle)
+    package_materialization_check("${project_handle}" "${package_handle}")
+    ans(ok)
+    if(NOT ok)
+      event_emit("project_on_package_materialization_missing" ${project_handle} ${package_handle})
+      project_dematerialize("${project_handle}" "${package_uri}")    
+      list(APPEND invalid_materializations ${package_handle})
+    endif()
+  endforeach()
+  return_ref(invalid_materializations)
+endfunction() 

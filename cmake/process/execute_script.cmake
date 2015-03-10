@@ -16,7 +16,7 @@ function(execute_script script)
     ans(cmakepp_path)
     set(script "include(\"${cmakepp_path}\")\n${script}")
   endif()
-  file_make_temporary("${script}")
+  fwrite_temp("${script}" ".cmake")
   ans(script_file)
   ## execute add callback to delete temporary file
   execute("${CMAKE_COMMAND}" -P "${script_file}"  --on-terminated-callback "[]() rm(${script_file})" ${args}) 

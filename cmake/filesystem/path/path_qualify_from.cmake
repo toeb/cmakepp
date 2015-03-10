@@ -1,4 +1,4 @@
-## path_qualify_from(<base_dir:<qualified path>> <~path>) -> <qualified path>
+## `(<base_dir:<qualified path>> <~path>) -> <qualified path>`
 ##
 ## qualfies a path using the specified base_dir
 ##
@@ -6,7 +6,7 @@
 ## it is returned as is
 ##
 ## if path starts with a '~' (tilde) the path is 
-## qualfied by prepending the current home directory
+## qualfied by prepending the current home directory (on all OSs)
 ##
 ## is neither absolute nor starts with ~
 ## the path is relative and it is qualified 
@@ -40,5 +40,3 @@ function(path_qualify_from base_dir path)
   
   return_ref(realpath)
 endfunction()
-
-

@@ -1,0 +1,53 @@
+# Using the package cli
+
+** This Sample is currently under Construction **
+
+
+Let's say we have a package source called `mock` which contains the following packages and dependencies:
+
+* `A` depends on `B` and `C`
+* `B` depends on `D` and `E` and `G`
+* `C` depends on nothing
+* `D` depends on `E` and `F`
+* `E` depends on nothing
+* `F` depends on nothing
+* `G` depends on `H`
+* `H` depends on `B`
+
+
+
+<%
+    mock_package_source(
+    "mock"
+    A B C D E F G H 
+    "A=>B" 
+    "A=>C" 
+    "B=>D" 
+    "B=>E" 
+    "B=>G"
+    "D=>E"
+    "D=>F"
+    "G=>H"
+    "H=>B"
+     )
+    ans(package_source)
+
+    rm(-r tmp)
+    pushd(tmp --create)
+        project_open()
+        ans(project)
+        assign(!package_source.metadata.A.cmakepp.create_files = "{
+            'packageA.txt':'hello'
+            }")
+        assign(!package_source.metadata.E.cmakepp.create_files = "{
+            'packageE.txt':'hello'
+            }")
+        assign(project.project_descriptor.package_source = package_source)
+        project_close(${project})
+
+        pkg(install A)
+        json_print(${__ans})
+    popd()
+%>
+
+@template_out(${asd})

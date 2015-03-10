@@ -1,16 +1,16 @@
 # reads a line from the console.  
 #  uses .bat file on windows else uses shell script file .sh
 function(read_line)
-  file_tmp("txt" "")
+  fwrite_temp("" ".txt")
   ans(value_file)
 
   if(WIN32)
     # thanks to Fraser999 for fixing whis to dissallow variable expansion and whitespace stripping
     # etc. See merge comments
-    file_tmp("bat" "@echo off\nsetlocal EnableDelayedExpansion\nset val=\nset /p val=\necho !val!> \"${value_file}\"")
+    fwrite_temp("@echo off\nsetlocal EnableDelayedExpansion\nset val=\nset /p val=\necho !val!> \"${value_file}\"" ".bat")
     ans(shell_script)
   else()
-    file_tmp("sh" "#!/bin/bash\nread text\necho -n $text>${value_file}")
+    fwrite_temp( "#!/bin/bash\nread text\necho -n $text>${value_file}" ".sh")
     ans(shell_script)
     # make script executable
     execute_process(COMMAND "chmod" "+x" "${shell_script}")

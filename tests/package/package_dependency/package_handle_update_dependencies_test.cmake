@@ -28,6 +28,7 @@ function(test)
 
   define_test_function(test_uut test_package_handle_update_dependencies)
     
+  test_uut("{dependencies:{A:{asd:'gaga'}, B:'true'}}" "A {asd:'gaga'}" B )
 
   test_uut("{dependencies:{A:'true'}}" --before "A")
   test_uut("{dependencies:{A:null}, diff:{A:'true'}}" "A remove" --before "A")

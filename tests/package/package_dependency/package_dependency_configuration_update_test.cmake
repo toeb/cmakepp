@@ -42,4 +42,5 @@ function(test)
   define_test_function(test_uut test_package_dependency_configuration_update)
 
   test_uut("{'mock:A':'true', 'mock:B':'true'}" A)
+  test_uut("{'mock:A':'true', 'mock:B':'true'}" "A {asd:'123'}")
 endfunction()

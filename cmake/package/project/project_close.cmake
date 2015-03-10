@@ -1,10 +1,12 @@
 ## `(<project handle>)-><project file:<path>>`
 ##
+## closes the specified project
+##
 ## **events**
-## * `project_on_closing(<project handle>)`
-## * `project_on_closed(<project handle>)`
-## * see `project_unload`
-## * see `project_load`
+##  * `project_on_closing(<project handle>)`
+##  * `project_on_closed(<project handle>)`
+##  * see `project_unload`
+##  * see `project_load`
 function(project_close project_handle)
   event_emit(project_on_closing ${project_handle})
 
@@ -39,10 +41,6 @@ function(project_close project_handle)
 
   event_emit(project_on_closed ${project_handle})
 
-  project_load(${project_handle})
-
-
   return_ref(project_file)
 endfunction()
-
 

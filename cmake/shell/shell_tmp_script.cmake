@@ -6,7 +6,7 @@
 function(shell_tmp_script code)
   shell_get_script_extension()
   ans(ext)
-  file_temp_name("{{id}}.${ext}")
+  fwrite_temp("${code}" ".${ext}")
   ans(tmp)
   shell_script_create("${tmp}" "${code}")
   ans(res)

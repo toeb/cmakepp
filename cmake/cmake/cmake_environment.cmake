@@ -37,7 +37,7 @@ function(cmake_environment)
 
 
       pushd(build --create)
-        _cmake("..")
+        cmake_lean("..")
         ans_extract(error)
         ans(stdout)
       popd()

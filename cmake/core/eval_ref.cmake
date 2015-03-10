@@ -5,11 +5,10 @@ macro(eval_ref __eval_ref_theref)
   cmakepp_config(temp_dir)
   ans(__eval_ref_dir)
 
-  file_random( "${__eval_ref_dir}/eval_{{id}}.cmake")
+  fwrite_temp("${${__eval_ref_theref}}" ".cmake")
   ans(__eval_ref_filename)
 
   set_ans("${__eval_ref_current_ans}")
-  file(WRITE ${__eval_ref_filename} "${${__eval_ref_theref}}")
 #_message("${ref_count}\n${${__eval_ref_theref}}")
 
   include(${__eval_ref_filename})

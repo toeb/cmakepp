@@ -71,7 +71,8 @@ function(project_dematerialize project_handle package_uri)
   ans(package_content_dir)
 
   ## emit events before and after removing package
-  pushd("${package_content_dir}")  
+  ## should also work if package doesnot exist anymore
+  pushd("${package_content_dir}" --create)  
 
     event_emit(project_on_package_dematerializing ${project_handle} ${package_handle})
 
