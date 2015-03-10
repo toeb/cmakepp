@@ -11,20 +11,27 @@ function(ln)
   return_ans()
 endfunction()
 
-function(ln_Linux link target)
+
+
+function(ln_Linux target)
    set(args ${ARGN})
   list_extract_flag(args -s)
   ans(symbolic)
 
-  path_qualify(link)
+  path_qualify(target)
 
   list_pop_front(args)
   ans(link)
-
   if("${link}_" STREQUAL "_")
     get_filename_component(link "${target}" NAME )
   endif()
-  return(false)
+
+  path_qualify(link)
+  execute_process(COMMAND ln -s "${target}" "${link}" RESULT_VARIABLE error ERROR_VARIABLE stderr)
+  if(error)
+    return(false)
+  endif() 
+  return(true)
 endfunction()
 
 
