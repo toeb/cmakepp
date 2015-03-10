@@ -22,7 +22,3 @@ function(string_codes_print)
   print_vars("paren_open_code")
   print_vars("paren_close_code")
 endfunction()
-
-
-
-#task_enqueue("[]()string_codes_print()")

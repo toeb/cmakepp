@@ -17,7 +17,7 @@ function(package_dependency_configuration_update package_source project_handle)
 
 
   package_dependency_configuration(
-    ${package_source} 
+    "${package_source}" 
     ${project_handle}
     --cache ${cache}
   )

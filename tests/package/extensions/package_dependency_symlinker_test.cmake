@@ -21,7 +21,7 @@ function(test)
 
   project_dematerialize(${project} "B")
 
-
+  ## cehck that lnk is removed but data stays intact
   assert(NOT EXISTS "${test_dir}/pkg1")
   assert(EXISTS "${test_dir}/packages/mock_A-0.0.0/hello.txt")
 

@@ -23,6 +23,9 @@ function(package_source_query_resolve package_source admissable_uri)
     #message("hit for ${admissable_uri} :${resolved_handles}")
 
   else()
+    if(NOT package_source)
+      message(FATAL_ERROR "no package source specified!")
+    endif()
     call(package_source.query("${admissable_uri}"))
     ans(dependable_uris)
 

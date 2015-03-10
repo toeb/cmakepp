@@ -9,7 +9,7 @@
 ## 
 function(package_dependency_symlinker project package)
   set(args ${ARGN})
-  list_extract_flag_name(args --unlink)
+  list_extract_flag(args --unlink)
   ans(unlink)
   map_import_properties(${package} dependencies package_descriptor content_dir)
   map_tryget(${package_descriptor} dependencies)
@@ -37,11 +37,13 @@ function(package_dependency_symlinker project package)
 
       map_tryget(${dependency} content_dir)
       ans(dependency_content_dir)
-      print_vars(symlink dependency_content_dir unlink)
 
-      ## creates the link
-      ln("${dependency_content_dir}" "${symlink}" ${unlink})
-
+      ## creates or destroys the link
+      if(unlink)
+        unlink("${symlink}")
+      else()
+        ln("${dependency_content_dir}" "${symlink}")
+      endif()
     endif()
   endforeach()
 endfunction()
