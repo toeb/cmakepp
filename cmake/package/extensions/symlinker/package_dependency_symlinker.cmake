@@ -14,6 +14,10 @@ function(package_dependency_symlinker project package)
   map_import_properties(${package} dependencies package_descriptor content_dir)
   map_tryget(${package_descriptor} dependencies)
   ans(dependency_constraints)
+  if(NOT dependencies)
+    return()
+  endif()
+  
   map_keys(${dependencies})
   ans(dependency_uris)
 
