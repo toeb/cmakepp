@@ -123,13 +123,31 @@ The key to understanding the project lifecycle lies within these events.
 
 ### `cmakepp` Hooks
 
-Hooks are invoked for every package which allows it to react to the project lifecycle  more easily.  These hooks are called `package_handle_invoke_hook`. You can use any function that you defined in your `cmakepp.export`s (except if stated otherwise) and also specify a file relative to the `package`'s root direcotry. 
+Hooks are invoked for every package which allows it to react to the project lifecycle  more easily.  These hooks are called using `package_handle_invoke_hook`. You can use any function that you defined in your `cmakepp.export`s (except if stated otherwise) and also specify a file relative to the `package`'s root direcotry. 
 
 * `package_descriptor.cmakepp.hooks.on_loaded`  called after a package and all its dependencies are loaded.  You can also load custom data here or setup the project / package.
 * `package_descriptor.cmakepp.hooks.on_unloading` called when the package is unloaded.  You can store all information that you want to keep in the `package_handle`. Or you could use this hook to persist custom data 
 * `package_descriptor.cmakepp.hooks.on_materialized` called after the package content is available but before the package is loaded. Here you can only specifiy a script file because the exports might not be available (but you can include them yourself)
 * `package_descriptor.cmakepp.hooks.on_dematerializing` called before the package dematerializes. this allows you to perform cleanup before the package content is destroyed
 * `package_descriptor.cmakepp.hooks.on_run` called on project package if when command line client is invoked (see `cmakepp_project_cli`)
+* `package_descriptor.cmakepp.hooks.on_ready` is invoked when all become ready and the package itself is materialized
+* `package_descriptor.cmakepp.hooks.on_unready` is invoked if any dependency becomes unready
+
+#### States
+
+
+
+* `unloaded`
+  - `on_loaded -> loaded`
+* `loaded`, `unready`
+  - `on_dematerializing -> unloading`
+  - `on_ready -> loaded, ready`
+* `loaded`, `ready`
+  - `on_unready -> loaded, unready`
+  - `on_dematerializing -> unloading`
+* `unloading`
+  - `on_unloading -> unloaded`
+
 
 
 ## Caveats

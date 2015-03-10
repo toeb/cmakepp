@@ -1,4 +1,4 @@
-## `(<project handle> <package uri>)-><materialization handle>`
+## `(<project handle> <package uri>)-><package handle>`
 ##
 ## **sideeffects**
 ## * removes `project_handle.project_descriptor.package_installations.<package_uri>` 
