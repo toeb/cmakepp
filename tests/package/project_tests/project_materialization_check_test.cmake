@@ -13,27 +13,29 @@ function(test)
 
 
   ## check that when project is opened no materialization is missing
-  events_track("project_on_package_materialization_missing")
+  events_track("project_on_package_ready" project_on_package_unready)
   ans(tracker)
   project_open()
   ans(project)
-  assertf("{tracker.project_on_package_materialization_missing}" ISNULL)
+  assertf("{tracker.project_on_package_ready}" ISNULL)
+  assertf("{tracker.project_on_package_unready}" ISNULL)
 
 
   rm("${test_dir}/packages/mock_A-0.0.0" -r)
   events_track(
-    project_on_package_materialization_missing
+    project_on_package_unready
+    project_on_package_ready
     project_on_package_dematerialized
     project_on_package_dematerializing
     )
   ans(tracker)
   project_open()
   ans(project)
-  assertf("{tracker.project_on_package_materialization_missing}" ISNOTNULL)
-  assertf("{tracker.project_on_package_materialization_missing[0].args[0]}" STREQUAL "${project}")
-  assertf("{tracker.project_on_package_materialization_missing[0].args[1].uri}" STREQUAL "mock:A")
   assertf("{tracker.project_on_package_dematerialized}" ISNOTNULL)
   assertf("{tracker.project_on_package_dematerializing}" ISNOTNULL)
+
+  assertf("{tracker.project_on_package_unready}" ISNOTNULL)
+  assertf("{tracker.project_on_package_ready}" ISNULL)
 
 
 
