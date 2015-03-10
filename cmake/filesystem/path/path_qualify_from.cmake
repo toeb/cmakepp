@@ -1,5 +1,6 @@
 ## `(<base_dir:<qualified path>> <~path>) -> <qualified path>`
 ##
+## @todo realpath or abspath?
 ## qualfies a path using the specified base_dir
 ##
 ## if path is absolute (starts with / or under windows with <drive letter>:/) 
@@ -13,7 +14,7 @@
 ## by prepending the specified <base dir>
 function(path_qualify_from base_dir path)
   string(REPLACE \\ / path "${path}")
-  get_filename_component(realpath "${path}" REALPATH)
+  get_filename_component(realpath "${path}" ABSOLUTE)
   
   ## windows absolute path
   if(WIN32 AND "_${path}" MATCHES "^_[a-zA-Z]:\\/")
@@ -36,7 +37,7 @@ function(path_qualify_from base_dir path)
   set(path "${base_dir}/${path}")
 
   ## relative path
-  get_filename_component(realpath "${path}" REALPATH)
+  get_filename_component(realpath "${path}" ABSOLUTE)
   
   return_ref(realpath)
 endfunction()

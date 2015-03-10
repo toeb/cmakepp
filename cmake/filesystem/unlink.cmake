@@ -21,7 +21,15 @@ function(unlink_Windows symlink)
 endfunction()
 
 
-function(unlink_Linux)
-  message(FATAL_ERROR "not implemented")
+function(unlink_Linux symlink)
+  path_qualify(symlink)
+  if("${symlink}" MATCHES "(.*)\\/$")
+    set(symlink "${CMAKE_MATCH_1}")
+  endif()
+  execute_process(COMMAND "unlink" "${symlink}" RESULT_VARIABLE res)
+  if(res)
+    return(false)
+  endif()
 
+  return(true)
 endfunction()
