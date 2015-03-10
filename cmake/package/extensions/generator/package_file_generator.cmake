@@ -9,6 +9,12 @@
 ## These keys are treated as filenames which are formatted using `format(...)` (this allows for customized filenames)
 ## the property value is interpreted as a template see `template_compile`. or if it exists 
 ## as a call to a cmake function.
+## 
+## **scope**
+## the following variables are available in the scope for `format` and `template_compile` and calling a function
+## * `project : <project handle>`
+## * `package : <package handle>`
+## 
 ## **Example**
 ##
 function(package_file_generator project package)
