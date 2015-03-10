@@ -34,12 +34,9 @@ function(project_open)
         set(project_file "${project_file}/${project_constants_project_file}")
       endif()
 
-
-
       fread_data("${project_file}")
       ans(project_handle)
         
-
       if(project_handle)
         ## derive content dir from configured relative project file path
         assign(project_file_path = project_handle.project_descriptor.project_file)

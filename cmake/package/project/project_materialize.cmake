@@ -129,7 +129,6 @@ function(project_materialize project_handle package_uri)
 
     map_set(${package_materializations} ${package_uri} ${package_handle})
 
-
     event_emit(project_on_package_materialized ${project_handle} ${package_handle})
   
   popd()
