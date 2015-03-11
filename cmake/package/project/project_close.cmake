@@ -27,16 +27,24 @@ function(project_close project_handle)
       ans(package_descriptor)
       fwrite_data("${package_descriptor_file}" ${package_descriptor})
     endif()
-    ## content dir is removed so that project stays portable
-    map_remove(${project_handle} content_dir)
+
+
+    ## remove every package handles content_dir
+    ## as persisting it would cause the project to
+    ## become unportable
+    assign(package_handles = project_handle.project_descriptor.package_materializations)
+    map_values(${package_handles})
+    ans(package_handles)
+
+    foreach(package_handle ${package_handles})
+      map_remove(${package_handle} content_dir)
+    endforeach()
 
     assign(project_file = project_handle.project_descriptor.project_file)
     path_qualify(project_file)
     fwrite_data("${project_file}" "${project_handle}")
-
-    ## after writing content dir is added so project  continues to work
-    map_set(${project_handle} content_dir ${project_content_dir})
     
+    map_set(${project_handle} content_dir ${project_content_dir})
     
   popd()
 

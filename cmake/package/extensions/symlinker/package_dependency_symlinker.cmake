@@ -31,31 +31,63 @@ function(package_dependency_symlinker project package)
     ## if the constraints have the symlink property the symlinker
     ## creates a link from the dependee's content_dir/${symlink} to the dependencies ${content_dir}
     map_has(${constraints} symlink)
-    ans(has_content_dir)
-    if(has_content_dir)
+    ans(has_symlink)
+    if(has_symlink)
       map_tryget(${constraints} symlink)
       ans(symlink)
 
-      path_qualify_from(${content_dir} ${symlink})
-      ans(symlink)
-
-      map_tryget(${dependency} content_dir)
-      ans(dependency_content_dir)
-
-      ## creates or destroys the link
-      if(unlink)
-        unlink("${symlink}")
-      else()
-        ln("${dependency_content_dir}" "${symlink}")
+      ref_isvalid("${symlink}")
+      ans(isref)
+      if(NOT isref)
+        set(single_link "${symlink}")
+        map_new()
+        ans(symlink)
+        map_set("${symlink}" "${single_link}" ".")
       endif()
+
+      map_keys("${symlink}")
+      ans(links)
+
+      foreach(link ${links})          
+        map_tryget("${symlink}" "${link}")
+        ans(target)
+
+        ## dependency
+        ## project 
+        ## package
+        format("${link}")
+        ans(link)
+        format("${target}")
+        ans(target)
+
+        path_qualify_from("${content_dir}" "${link}")
+        ans(link)
+
+        map_tryget(${dependency} content_dir)
+        ans(dependency_content_dir)
+
+        path_qualify_from("${dependency_content_dir}" "${target}")
+        ans(target)
+        ## creates or destroys the link
+        if(unlink)
+         log("unlinking '${link}' from '${target}'")
+          unlink("${link}")
+        else()
+          ## ensure that directory exists
+          get_filename_component(dir "${link}" PATH)
+          if(NOT EXISTS "${dir}")
+            mkdir("${dir}")
+          endif()
+          log("linking '${link}' to '${target}'")
+          ln("${target}" "${link}")
+          ans(success)
+          if(NOT success)
+           log("failed to lin '${link}' to '${target}'")
+          endif()
+        endif()
+
+      endforeach()
     endif()
   endforeach()
 endfunction()
 
-
-## register the symlinker to act on package ready/unready
-function(__package_dependency_symlinker)
-  event_addhandler(project_on_package_ready package_dependency_symlinker)
-  event_addhandler(project_on_package_unready "[]() package_dependency_symlinker({{ARGN}} --unlink)")
-endfunction()
-task_enqueue(__package_dependency_symlinker)

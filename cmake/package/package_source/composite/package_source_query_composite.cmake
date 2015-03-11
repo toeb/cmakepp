@@ -43,7 +43,6 @@ function(package_source_query_composite uri)
 
     map_tryget(${current} rating)
     ans(rating)
-
     ## source and all rest sources are incompatible 
     if(rating EQUAL 0)
       break()

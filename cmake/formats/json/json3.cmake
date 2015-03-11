@@ -1,3 +1,8 @@
+function(json3_cached)
+  define_cache_function(json3_cached json3)
+  json3_cached("${ARGN}")
+  return_ans()
+endfunction()
 ## 
 ##
 ## fast json parser

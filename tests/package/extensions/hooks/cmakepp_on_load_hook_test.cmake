@@ -7,8 +7,10 @@ function(test)
   ## create a simple package which exports cmake files
   ## and register the on_load hook
   fwrite_data("pkg1/package.cmake" "{
+    cmake:{
+      export:['cmake/**.cmake', '!cmake/pkg1_func3.cmake']
+    },
     cmakepp:{
-      export:['cmake/**.cmake', '!cmake/pkg1_func3.cmake'],
       hooks:{
         on_load:'[](a1 a2) map_set(${context} on_load_called true {{a1}} {{a2}})'
       }

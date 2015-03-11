@@ -10,5 +10,3 @@ function(git)
 
 
 endfunction()  
-
-

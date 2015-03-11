@@ -14,26 +14,9 @@
 ##     can be such callables. 
 ## 
 ##
-## events:
-##   on_package_loading(<project package> <package handle>):
-##     emitted after cmake exports  were loaded and packge's
-##     on_load hook was invoked. 
-##          
+## events:  
 function(cmakepp_on_loaded_hook project_handle package_handle)
   
-  ## load the exports and include them once
-  assign(content_dir = package_handle.content_dir)
-  assign(export = package_handle.package_descriptor.cmakepp.export)
-  if(IS_DIRECTORY "${content_dir}")
-    pushd("${content_dir}")
-      glob_ignore("${export}")
-      ans(paths)
-    popd()
-
-    foreach(path ${paths})
-      include_once("${path}")
-    endforeach()
-  endif()
 
 
   ## call on_load hook
@@ -41,6 +24,3 @@ function(cmakepp_on_loaded_hook project_handle package_handle)
 endfunction()
 
 
-## register listener for the project_on_package_load event 
-## as soon as cmakepp loads
-task_enqueue("[]()event_addhandler(project_on_package_loaded cmakepp_on_loaded_hook)")

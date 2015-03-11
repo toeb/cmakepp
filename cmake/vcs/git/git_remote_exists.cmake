@@ -4,11 +4,12 @@ function(git_remote_exists uri)
   git_uri("${uri}")
   ans(uri)
 
-  git(ls-remote "${uri}" --exit-code)
-  ans(res)
+
+  git_lean(ls-remote "${uri}")
+  ans_extract(error)
   
-  if("${res}" EQUAL 0)
-    return(true)
+  if(error)
+    return(false)
   endif()
-  return(false)
+  return(true)
 endfunction()

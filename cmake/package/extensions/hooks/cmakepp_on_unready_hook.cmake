@@ -13,5 +13,3 @@ function(cmakepp_on_unready_hook project_handle package_handle)
       )
   endif()
 endfunction()
-
-task_enqueue("[]() event_addhandler(project_on_package_unready cmakepp_on_unready_hook)")

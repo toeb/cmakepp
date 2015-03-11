@@ -1,6 +1,6 @@
 ## `(<project>)-><bool>`
 ##
-## loads the specified project and its dependencies
+## unloads the specified project and its dependencies
 ##  
 ## **events**
 ## * `project_on_unloading`  called before an packages is unloaded
@@ -23,7 +23,7 @@ function(project_unload project_handle)
   
   map_new()
   ans(context)
-  function(__project_load_recurse)
+  function(__project_unload_recurse)
 
     foreach(package_handle ${ARGN})
       
@@ -47,7 +47,7 @@ function(project_unload project_handle)
           map_values(${dependency_map})
           ans(dependencies)
 
-          __project_load_recurse(${dependencies})
+          __project_unload_recurse(${dependencies})
           
         endif()
         
@@ -63,11 +63,8 @@ function(project_unload project_handle)
 
   set(parent_parent_package)
   set(parent_package)
-  __project_load_recurse(${project_handle} ${package_handles})
+  __project_unload_recurse(${project_handle} ${package_handles})
 
-  foreach(package_handle ${package_handles})
-    map_remove(${package_handle} content_dir)
-  endforeach()
 
   event_emit(project_on_unloaded ${project_handle})
  

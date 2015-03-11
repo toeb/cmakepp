@@ -52,6 +52,12 @@ function(project_change_dependencies project_handle)
   )
   ans(changeset)
 
+  map_isempty(${changeset})
+  ans(is_empty)
+  if(is_empty)
+    return_ref(changeset)
+  endif()
+
   ## add the changeset to the installation queue
   map_append(${project_descriptor} installation_queue ${configuration})
 
