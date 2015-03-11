@@ -25,6 +25,7 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 * [arguments_encoded_list](#arguments_encoded_list)
+* [arguments_sequence](#arguments_sequence)
 * [arguments_string](#arguments_string)
 * [bind](#bind)
 * [call](#call)
@@ -43,6 +44,7 @@ Functions in cmake are not variables - they have a separate global only scope in
 * [function_string_get](#function_string_get)
 * [function_string_import](#function_string_import)
 * [function_string_rename](#function_string_rename)
+* [invocation_arguments_sequence](#invocation_arguments_sequence)
 * [invocation_argument_encoded_list](#invocation_argument_encoded_list)
 * [invocation_argument_string](#invocation_argument_string)
 * [is_function](#is_function)
@@ -63,6 +65,12 @@ Functions in cmake are not variables - they have a separate global only scope in
 
  (${ARGC}) => 
  
+
+
+
+
+## <a name="arguments_sequence"></a> `arguments_sequence`
+
 
 
 
@@ -177,6 +185,12 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 ## <a name="function_string_rename"></a> `function_string_rename`
+
+
+
+
+
+## <a name="invocation_arguments_sequence"></a> `invocation_arguments_sequence`
 
 
 

@@ -44,7 +44,9 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_ensure](#map_ensure)
 * [map_extract](#map_extract)
 * [map_fill](#map_fill)
+* [map_flatten](#map_flatten)
 * [map_from_keyvaluelist](#map_from_keyvaluelist)
+* [map_get_map](#map_get_map)
 * [map_has_all](#map_has_all)
 * [map_has_any](#map_has_any)
 * [map_invert](#map_invert)
@@ -335,7 +337,24 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
+## <a name="map_flatten"></a> `map_flatten`
+
+
+
+
+
 ## <a name="map_from_keyvaluelist"></a> `map_from_keyvaluelist`
+
+
+
+
+
+## <a name="map_get_map"></a> `map_get_map`
+
+ `(<map> <key>)-><map>`
+
+ returns a map for the specified key
+ creating it if it does not exist
 
 
 

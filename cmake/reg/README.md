@@ -30,7 +30,7 @@ Using this command I have added convinience functions for manipulating registry 
 set(kv HKCU/Environment testValue1)
 
 ## read/write
-reg_write_value(${kv} "b\;c")
+reg_write_value(${kv} "b;c")
 reg_read_value(${kv})
 ans(res)
 assert(EQUALS ${res} b c)

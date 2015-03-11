@@ -12,7 +12,7 @@ These are the basic functions which are available (there are more which all use 
   - `<object> := <ref>` an object is the instance of a type. 
   - `<member> := <key>` a string which identifies the member of an object
   - `obj_new(<type>):<object>` creates the instance of a type. calls the constructor function specified by type and returns an object instance
-  - `obj_delete(<object>):<void>` deletes an object instance. You MAY call this. If you do the desctructor of an object is invoked. This function is defined for completeness sake and can only be implemented if CMake script changes. So don't worry about this \;).
+  - `obj_delete(<object>):<void>` deletes an object instance. You MAY call this. If you do the desctructor of an object is invoked. This function is defined for completeness sake and can only be implemented if CMake script changes. So don't worry about this ;).
   - `obj_set(<object> <member> <value:<any...>>):<any>`  sets the object's  property identified by `<member>` to the specified value.  *the default behaviour can be seen in `obj_default_setter(...)` and MAY be overwridden by using `obj_declare_setter(...)`*
   - `obj_get(<object> <member>):<any>` gets the value of the object's property identified by `<member>` *the default behaviour MAY be overwridden b using `obj_declare_getter`*  
   - `obj_has(<object> <member>):<bool>` returns true iff the object has a property called `<member>`

@@ -56,7 +56,6 @@
               if("${function_call}_" STREQUAL "_")
                 break()
               endif()
-              string_take_delimited(function_call \" \")
               ans(arg)
               if("${arg}_" STREQUAL "_")
                 string_take_regex(function_call "[^ ]+")

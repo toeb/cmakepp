@@ -182,7 +182,7 @@ There is  one major caveat at the moment.  Files larger than `500 kB` lead to me
  * `@add(1 4)` => `5`
  * `123` => `123`
  * `<%= ${data2} %>` => `hello!`
- * `<%= ${data2} ${data2} bye! %>` => `hello!\;hello!\;bye!`
+ * `<%= ${data2} ${data2} bye! %>` => `hello!;hello!;bye!`
  * `<%= "${data2} ${data2} bye!" %>` => `hello! hello! bye!`
  * `<%= add(1 4) %> => `5`
  * `<% template_out(hi) %>` => `hi`

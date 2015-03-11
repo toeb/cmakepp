@@ -31,7 +31,7 @@ Look through the files in the package.  Most functions will be commented and the
 * [Maps - Structured Data in CMake](cmake/map/README.md)
 * [Navigation Functions](cmake/navigation/README.md)
 * [Objects ](cmake/object/README.md)
-* [Package Management](cmake/package/README.md)
+* [Package Mangement](cmake/package/README.md)
 * [User Data](cmake/persistence/README.md)
 * [Process Management](cmake/process/README.md)
 * [Quick Map Syntax](cmake/quickmap/README.md)
@@ -63,6 +63,7 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 * [Creating a Compressed Package](samples/04-create-simple-compressed-package/README.md)
 * [Creating and Installing a Package with an Install Hook](samples/05-create-install-simple-package-with-install-script/README.md)
 * [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
+* [Using the package cli](samples/08-packaging-sample/README.md)
 
 
 
@@ -94,9 +95,9 @@ wget https://raw.github.com/toeb/cmakepp/master/install.cmake && cmake -P instal
 *Powershell*
 ```
 ((new-object net.webclient).DownloadString('https://raw.github.com/toeb/cmakepp/master/install.cmake')) |`
-out-file -Encoding ascii install.cmake\; `
-cmake -P install.cmake\; `
-rm install.cmake\;
+out-file -Encoding ascii install.cmake; `
+cmake -P install.cmake; `
+rm install.cmake;
 
 
 ```
@@ -152,6 +153,11 @@ If you want to help to develope `cmakepp` or want to develope `CMake` scripts wh
   * `cmakepp template run` will execute a `cmakepp` template file of which the filename ends with `.in` (see [templating](#))
   * you can open the `cmakepp.sublime-project` and modify the build system.
     
+# Developement Process
+
+I have two persistant branches: `master` and `devel`. Then there are an arbitrary amount of volatile branches which are used to develope features / remote store developements.  The `master` branch is only merged from `devel` and always is always stable - ie the build server determines that all tests were successfull. The `devel` branch is also built build servers but may sometime be in the failed state.  The volatile branches are just used to develop and are not built - as to not clutter up the build servers with uneccessary builds.  
+
+
 # Contributing
 
 I would be very happy If you choose to contribute to `cmakepp`. You can open any issue on github and I will try to reply as soon as possible. I care about any feature you want implemented, bug you want squashed, or modification.
@@ -288,7 +294,7 @@ This is possible by overwriting CMakes default return() function with a macro. I
   "Host":"httpbin.org",
   "User-Agent":"curl/7.16.1"
  },
- "origin":"79.240.213.196",
+ "origin":"108.61.76.12",
  "url":"http://httpbin.org/get?key=value"
 }
 

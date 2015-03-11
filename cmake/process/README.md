@@ -342,7 +342,7 @@ To communicate with you processes you can use any of the following well known me
  * `--silent-fail` 
  * `--success-callback <callable>[exit_code](<process handle>)` 
  * `--error-callback <callable>[exit_code](<process handle>)` 
- * `--state-changed-callback <callable>[old_state\;new_state](<process handle>)` 
+ * `--state-changed-callback <callable>[old_state;new_state](<process handle>)` 
  * `--lean`
  *example*
  ```
@@ -504,12 +504,6 @@ To communicate with you processes you can use any of the following well known me
 ## <a name="process_start"></a> `process_start`
 
  starts a process and returns a handle which can be used to controll it.  
-
-
-
-
-
-## <a name=""></a> ``
 
 
 

@@ -1,6 +1,23 @@
 # Project
 
 
+## Motivation
+
+Package or Dependency management is not a new Idea.  Most Build systems for other languages have some kind of support for automatically handling packages.
+
+## Concept
+
+* slides from ryppl
+* reddit thread
+* ...
+
+
+## State of the Art
+
+
+
+## Implementation
+
 Working with dependencies implies that you are using a dependency graph. The root node from which you work is what I call the `project`.  
 
 The `project` is represented by the `project_handle` which is a `package_handle` and behaves as expected in all situations except that it has also has property called `project_descriptor` which contains project specific information.  The `project_descriptor` contains the whole object graph consisting of every `package handle` used in the project and all their properties.  Every `package_handle` (which is identified by an `package_uri`) is unique and only one reference will exist for it inside a project.  This while object graph is serialized and deserialized using the `scmake` serialization format (see `cmake_serialize` `cmake_deserialize`) which is able to persist the data including cycles and is quite fast (in comparison with other serializers).  It is important that the no data is added to the object graph which is not serializable.
@@ -46,26 +63,36 @@ To work with the project I provide you with the following functions.
 * [project_descriptor_new](#project_descriptor_new)
 * [project_load](#project_load)
 * [project_materialization_check](#project_materialization_check)
+* [project_package_ready_state_update](#project_package_ready_state_update)
 * [project_save](#project_save)
 * [project_unload](#project_unload)
 
 
 ## The Project Lifecycle
+ 
 
-A `project` begins its life when it is openend.  Either it already exists or it is new. 
+* `closed`
+    - The project handle does not exist / or should not be used
+    - `project_open` `->` `opening`
 
-* `openend` 
-    - the project knows its locations `project_handle.content_dir`
-    - the whole graph is loaded and accessible
+* `opening` 
+    - `-> opened, loaded`
+* `unloaded`
+    - `project_load -> loading`
+* `loading`   
+* `loaded`
+    - `project_unload -> unloading`     
+    - `project_close -> closing`     
+* `materializing`
     - all dependencies are loaded
     - all materializations which are not dependencies are also loaded
-* `closed`
-    - the project does not know its locations
-    - the project is unloaded
+* `openend` 
+    - everything `of opening` 
+* `closing`
 
 
 The project's lifecycle is also characterized  by the events that are emitted.  
-The key to understanding the project lies within these events.
+The key to understanding the project lifecycle lies within these events.
 
 
 * `project_on_opening(<project handle>)` called after project handle is created.  Called before project is loaded. 
@@ -98,15 +125,33 @@ The key to understanding the project lies within these events.
 * `package_descriptor.cmakepp.create_files : { <filename> : <filecontent> }` all keys specified here will be created in the `package`'s `content_dir` with the specified content. This is useful if you want to define a package completely in a `package descriptor`
 * `package_descriptor.cmakepp.export : <glob ignore expression>` includes all the files specified by the glob ignore expression in cmake allowing your package to provide cmake macros and functions to other packages.  **WARNING** cmake only has one function scope so you need to be careful that you do not overwrite any functions which are needed elsewhere.  The best practice would be for you to add a namespace string before each function name e.g. `mypkg_myfunction`.  
 
-## Hooks
+### `cmakepp` Hooks
 
-Hooks are invoked for every package which allows it to react to the project lifecycle  more easily.  These hooks are called `package_handle_invoke_hook`. You can use any function that you defined in your `cmakepp.export`s (except if stated otherwise) and also specify a file relative to the `package`'s root direcotry. 
+Hooks are invoked for every package which allows it to react to the project lifecycle  more easily.  These hooks are called using `package_handle_invoke_hook`. You can use any function that you defined in your `cmakepp.export`s (except if stated otherwise) and also specify a file relative to the `package`'s root direcotry. 
 
 * `package_descriptor.cmakepp.hooks.on_loaded`  called after a package and all its dependencies are loaded.  You can also load custom data here or setup the project / package.
 * `package_descriptor.cmakepp.hooks.on_unloading` called when the package is unloaded.  You can store all information that you want to keep in the `package_handle`. Or you could use this hook to persist custom data 
 * `package_descriptor.cmakepp.hooks.on_materialized` called after the package content is available but before the package is loaded. Here you can only specifiy a script file because the exports might not be available (but you can include them yourself)
 * `package_descriptor.cmakepp.hooks.on_dematerializing` called before the package dematerializes. this allows you to perform cleanup before the package content is destroyed
 * `package_descriptor.cmakepp.hooks.on_run` called on project package if when command line client is invoked (see `cmakepp_project_cli`)
+* `package_descriptor.cmakepp.hooks.on_ready` is invoked when all become ready and the package itself is materialized
+* `package_descriptor.cmakepp.hooks.on_unready` is invoked if any dependency becomes unready
+
+#### States
+
+
+
+* `unloaded`
+  - `on_loaded -> loaded`
+* `loaded`, `unready`
+  - `on_dematerializing -> unloading`
+  - `on_ready -> loaded, ready`
+* `loaded`, `ready`
+  - `on_unready -> loaded, unready`
+  - `on_dematerializing -> unloading`
+* `unloading`
+  - `on_unloading -> unloaded`
+
 
 
 ## Caveats
@@ -147,10 +192,10 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
  closes the specified project
 
  **events**
- * `project_on_closing(<project handle>)`
- * `project_on_closed(<project handle>)`
- * see `project_unload`
- * see `project_load`
+  * `project_on_closing(<project handle>)`
+  * `project_on_closed(<project handle>)`
+  * see `project_unload`
+  * see `project_load`
 
 
 
@@ -166,7 +211,7 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 ## <a name="project_materialize"></a> `project_materialize`
 
- `(<project handle> <volatile uri> <target dir>?)-><materialization handle>?`
+ `(<project handle> <volatile uri> <target dir>?)-><package handle>?`
 
  materializes a package for the specified project.
  if the package is already materialized the existing materialization handle
@@ -174,13 +219,7 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
  the target dir is treated relative to project root. if the target_dir
  is not given a target dir will be derived e.g. `<project root>/packages/mypackage-0.2.1-alpha`
 
- returns the materialization handle on success
- ```
- <materialization handle> ::= {
-   content_dir: <path> # path relative to project root
-   package_handle: <package handle>
- }
- ```
+ returns the package handle on success
  
  **events**: 
  * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
@@ -192,13 +231,19 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
  * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
  * `package_handle.materialization_descriptor = <materialization handle>`
 
+ ```
+ <materialization handle> ::= {
+   content_dir: <path> # path relative to project root
+   package_handle: <package handle>
+ }
+ ```
 
 
 
 
 ## <a name="project_dematerialize"></a> `project_dematerialize`
 
- `(<project handle> <package uri>)-><materialization handle>`
+ `(<project handle> <package uri>)-><package handle>`
 
  **sideeffects**
  * removes `project_handle.project_descriptor.package_installations.<package_uri>` 
@@ -317,6 +362,20 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
  if a materialization is missing it is removed from the 
  map of materializations
  returns all invalid materialization handles
+
+
+
+
+## <a name="project_package_ready_state_update"></a> `project_package_ready_state_update`
+
+ `(<project package> <package handle>)-><void>` 
+
+ updates all dependencies starting at package
+ **sideffects**
+ * 
+ **events**
+ * project_on_package_all_dependencies_materialized(<project handle> <package handle>)
+ * project_on_package_and_all_dependencies_materialized(<project handle> <package handle>)
 
 
 
