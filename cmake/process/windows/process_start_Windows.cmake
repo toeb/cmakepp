@@ -39,19 +39,19 @@
     ## creates a temporary batch file
     ## which gets the process id (get the parent process id wmic....)
     ## output pid to file output command_string to 
-    file_tmp("bat" "
+    fwrite_temp("
       @echo off
       cd ${working_directory}
       wmic process get parentprocessid,name|find \"WMIC\" > ${pidfile}
       ${command_string} > ${outputfile} 2> ${errorfile}
       echo %errorlevel% > ${returncodefile}
       exit
-    ")
+    " ".bat")
     ans(path)
 
 
     process_handle_change_state(${process_handle} starting)
-    win32_powershell("start-process -File ${path} -WindowStyle Hidden")
+    win32_powershell_lean("start-process -File ${path} -WindowStyle Hidden")
 
 
     ## wait until the pidfile exists and contains a valid pid

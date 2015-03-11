@@ -1,16 +1,20 @@
 macro(regex_cmake)
+  if(NOT __regex_cmake_included)
+    set(__regex_cmake_included true)
+
 #http://www.cmake.org/cmake/help/v3.0/manual/cmake-language.7.html#grammar-token-regex_cmake_escape_sequence
   set(regex_cmake_newline "\n")
   set(regex_cmake_space_chars " \t")
   set(regex_cmake_space "[${regex_cmake_space_chars}]+")
   set(regex_cmake_line_comment "#([^${regex_cmake_newline}]*)")
   set(regex_cmake_line_comment.comment CMAKE_MATCH_1)
-
+  set(regex_cmake_whitespace_chars "${regex_cmake_newline}${regex_cmake_space}")
   set(regex_cmake_line_ending "(${regex_cmake_line_comment})?(${regex_cmake_newline})")
 
   set(regex_cmake_separation "(${regex_cmake_space})|(${regex_cmake_line_ending})")
 
   set(regex_cmake_identifier "[A-Za-z_][A-Za-z0-9_]*")
+  set(regex_cmake_flag "-?-?[A-Za-z_][A-Za-z0-9_\\-]*")
 
   set(regex_cmake_bracket_open "[(=+)[")
   set(regex_cmake_bracket_close "](=+)]")
@@ -47,5 +51,6 @@ macro(regex_cmake)
   set(regex_cmake_function_signature "(^|${cmake_regex_newline})((${regex_cmake_space})?)(${regex_cmake_identifier})((${regex_cmake_space})?)\\([${regex_cmake_space_chars}${regex_cmake_newline}]*(${regex_cmake_identifier})(.*)\\)")
   set(regex_cmake_function_signature.name CMAKE_MATCH_7)
   set(regex_cmake_function_signature.args CMAKE_MATCH_8)
+  endif()
   
 endmacro()

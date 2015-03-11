@@ -1,6 +1,5 @@
-
 function(uri uri)
-  map_isvalid("${uri}")
+  ref_isvalid("${uri}")
   ans(ismap)
   if(ismap)
     return_ref(uri)

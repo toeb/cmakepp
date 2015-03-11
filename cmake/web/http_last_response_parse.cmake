@@ -15,7 +15,7 @@
 ##   }
 ## }
 function(http_last_response_parse http_log)
-	string_semicolon_encode("${http_log}")
+	string_encode_semicolon("${http_log}")
 	ans(http_log)
 	http_regexes()
 	

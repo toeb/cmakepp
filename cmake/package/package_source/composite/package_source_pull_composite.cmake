@@ -18,9 +18,17 @@
 
     ## get package source and uri from handle
     ## because current uri might not be fully qualified
-    map_tryget(${package_handle} package_source)
-    ans(package_source)
+    map_tryget(${package_handle} package_source_name)
+    ans(package_source_name)
 
+    if(NOT package_source_name)
+      message(FATAL_ERROR "no package source name in package handle")
+    endif()
+
+    assign(package_source = "this.children.${package_source_name}")
+    if(NOT package_source)
+      message(FATAL_ERROR "unknown package source ${package_source_name}")
+    endif()
     map_tryget(${package_handle} uri)
     ans(package_uri)
 

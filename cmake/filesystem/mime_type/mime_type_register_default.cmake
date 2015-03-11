@@ -11,6 +11,11 @@ function(mime_types_register_default)
       extensions:['zip']
   }")
 
+  mime_type_register("{
+      name:'application/x-serializedcmake',
+      description:'',
+      extensions:['cmake','scmake']
+  }")
 
   mime_type_register("{
       name:'application/x-7z-compressed',

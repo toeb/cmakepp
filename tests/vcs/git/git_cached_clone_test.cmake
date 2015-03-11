@@ -11,6 +11,7 @@ function(test)
     timer_start(timer3)
     git_cached_clone("https://github.com/toeb/cmakepp" "dir2" --read package.cmake)
     ans(res)
+    assert(res)
     timer_print_elapsed(timer3)
 
     message("${res}")

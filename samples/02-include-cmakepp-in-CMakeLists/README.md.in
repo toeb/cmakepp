@@ -1,15 +1,34 @@
-# Including `cmakepp` in `CMakeLists.txt`
+# Including and using `cmakepp` in `CMakeLists.txt`
 
-This sample shows you how to include `cmakepp` in your `CMakeLists.txt` 
-
-
+This sample shows you how to include `cmakepp` in your `CMakeLists.txt` and use `fwrite` to create a source file which is then compiled and executed
 
 ## Prerequisites
 
 * CMake version `>=2.8.12`
 * `bash`, `powershell` or `cmd.exe` 
 * `cmakepp.cmake` 
+ 
+## Usage
+<%
+  pushtmp()
+  sample_copy(02)
+  cmakepp_compile("cmakepp.cmake")
+%>
+```bash
+# create a build dir
+sample folder/> mkdir build <% mkdir(build)%>
+sample folder/> cd build <% cd(build) %>
+# generate the project
+sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin .. 
+@cmake(-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin ..)
+# build the configured project
+sample_folder/build/> cmake --build . <% cmake(--build .)%>
+... build output ...
+# run executable
+sample folder/build/> bin/myexe 
+@execute(bin/myexe)
+```
+<% popd() %>
+@markdown_include_sourcecode(CMakeLists.txt cmake)
 
-## usage
 
-See `test.cmake` and execute the commands there in your console of choice

@@ -29,7 +29,7 @@ function(test)
   ans(res)
   assert("${res}" STREQUAL 123)
   ## allow storage of code fragment in variable with '<%><varname> ' (space is importand)
-  template_run("<%>hello_you template_out(\${hello_you})%>")
+  template_run("<%>hello_you template_out(\${hello_you})%>@hello_you")
   ans(res)
   assert("${res}" STREQUAL "template_out(\${hello_you})")
 

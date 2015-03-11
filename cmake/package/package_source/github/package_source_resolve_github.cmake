@@ -14,7 +14,7 @@
 
     list(LENGTH package_handle count)
     if(NOT "${count}" EQUAL 1)
-        error("could not result {uri.uri} to a unique package")
+        error("could not resolve {uri.uri} to a unique package (got {count})")
         return()
     endif() 
 

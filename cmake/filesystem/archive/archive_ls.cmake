@@ -13,19 +13,19 @@ function(archive_ls archive)
     string_cache_return_hit(archive_ls_cache "${key}")
 
 
-    tar(tf "${archive}")
+    tar_lean(tf "${archive}")
+    ans_extract(erro)
     ans(files)
 
-    tar(tf "${archive}" --process-handle)
-    ans(result)
+    tar_lean(tf "${archive}")
+    ans_extract(error)
+    ans(files)
 
-    assign(error = result.exit_code)
     if(error)
       error("tar exited with {result.error}")
       return()
     endif()
 
-    assign(files = result.stdout)
 
     string(REGEX MATCHALL "(^|\n)([^\n]+)(\n|$)" files "${files}")
     string(REGEX REPLACE "(\r|\n)" "" files "${files}")

@@ -1,4 +1,7 @@
-## returns true if file eists and is a supported archive
+## `archive_isvalid(<path>)-> <bool>`
+##
+## returns true if the specified path identifies an archive 
+## file
 function(archive_isvalid file)
   mime_type("${file}")
   ans(types)

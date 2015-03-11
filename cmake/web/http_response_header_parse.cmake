@@ -2,7 +2,7 @@
 
 function(http_response_header_parse http_response)
   http_regexes()
-  string_semicolon_encode("${http_response}")
+  string_encode_semicolon("${http_response}")
   ans(http_response)
 
   string(REGEX REPLACE "${http_response_header_regex}" "\\1" response_line "${response}")

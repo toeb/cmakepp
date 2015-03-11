@@ -7,7 +7,7 @@
     ans(file)
 
     if("_${file}" MATCHES "\\.") # file contains an extension
-      string(REGEX MATCH "[^\\.]*$" extension "${file}")
+      string(REGEX MATCH "[^\\.]+$" extension "${file}")
       string(LENGTH "${extension}" extension_length)
 
       if(extension_length)

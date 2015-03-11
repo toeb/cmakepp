@@ -1,6 +1,4 @@
 
-
-
 function(message)
 	cmake_parse_arguments("" "PUSH_AFTER;POP_AFTER;DEBUG;INFO;FORMAT;PUSH;POP" "LEVEL" "" ${ARGN})
 	set(log_level ${_LEVEL})
@@ -90,9 +88,11 @@ function(message)
 	endif()
 
 	tock()
-	
-	_message(${modifier} "${indent}" "${text}")
 
+	## clear status line
+	status_line_clear()
+	_message(${modifier} "${indent}" "${text}")
+	status_line_restore()
 
 	
 	return()

@@ -1,3 +1,5 @@
+## `()-><qualified path>`
+##
 ## returns the current users home directory on all OSs
 ## 
 function(home_dir)
@@ -18,10 +20,10 @@ function(home_dir)
   else()
     message(FATAL_ERROR "supported shells: cmd & bash")
   endif() 
-  map_set(global home_dir "${res}")
-  function(home_dir)
-    map_tryget(global home_dir)
-    return_ans()
-  endfunction()
+  eval("
+    function(home_dir)
+      set(__ans \"${res}\" PARENT_SCOPE)
+    endfunction()
+      ")
   return_ref(res)
 endfunction()

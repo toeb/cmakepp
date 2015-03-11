@@ -1,5 +1,3 @@
-
-
 # removes the specified range from lst and returns the removed elements
 macro(list_erase_slice __list_erase_slice_lst start_index end_index)
   list_slice(${__list_erase_slice_lst} ${start_index} ${end_index})

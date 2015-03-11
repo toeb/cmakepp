@@ -1,9 +1,10 @@
 {
 	"id":"cmakepp",
 	"version":"0.0.0",
-	"description":"a cmake enhancement suite",
+	"description":"a CMake Enhancement Suite",
 	"license":"MIT",
-	"author":"Tobias P. Becker"
+	"authors":"toeb = Tobias P. Becker <toeb@thetoeb.de>",
+  "owner":"toeb"
 }
 
 

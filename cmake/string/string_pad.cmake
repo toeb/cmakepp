@@ -11,15 +11,17 @@ function(string_pad str len)
   endif()  
   string(LENGTH "${str}" actual)  
   if(${actual} LESS ${len})
-    math(EXPR n "${len} - ${actual}")    
+
+    math(EXPR n "${len} - ${actual}") 
+
     string_repeat("${delimiter}" ${n})
     ans(padding)
+    
     if(prepend)
       set(str "${padding}${str}")
     else()
-      set(str "${str}${pad}")    
+      set(str "${str}${padding}")    
     endif()    
   endif()
-
   return_ref(str)
 endfunction()

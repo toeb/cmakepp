@@ -61,7 +61,11 @@
 
     map_tryget("${scm_package_handle}" content_dir)
     ans(scm_content_dir)
-      
+    
+    if(NOT scm_package_descriptor)
+      map_new()
+      ans(scm_package_descriptor)
+    endif()  
     map_defaults("${package_descriptor}" "${scm_package_descriptor}")
 
     map_set("${package_handle}" content_dir "${scm_content_dir}")

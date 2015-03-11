@@ -62,7 +62,7 @@
                 string_take_regex(function_call "[^ ]+")
                 ans(arg)
               endif()
-              string_semicolon_encode("${arg}")
+              string_encode_semicolon("${arg}")
               ans(arg)
               map_append(${current} function_args "${arg}")
            

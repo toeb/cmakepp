@@ -14,15 +14,20 @@ function(package_source_query_webarchive uri)
   ans(return_package_handle)
 
   ## parse and format uri
-  uri("${uri}")
-  ans(uri)
+  uri_coerce(uri)
 
+  uri_check_scheme("${uri}" http? https?)
+  ans(scheme_ok)
+
+  if(NOT scheme_ok)
+    return()
+  endif()
 
   assign(uri_string = uri.uri)
   ## remove the last instance of the hash query - if it exists
   ## an edge case were this woudl fail is when another hash is meant
   ## a solution then would be to prepend the hash with a magic string 
-  string(REGEX REPLACE "hash=[0-9A-Za-z]+$" "" uri_string "${uri_string}")
+  string(REGEX REPLACE "hash=[0-9A-Fa-f]+$" "" uri_string "${uri_string}")
 
   ## use download cached to download a package (pass along vars like --refresh)
   download_cached("${uri_string}" --readonly ${args})

@@ -2,6 +2,7 @@
 
 ## A CMake Enhancement Suite
 [![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)](https://travis-ci.org/toeb/cmakepp)
+[![Appveyor branch](https://img.shields.io/appveyor/ci/toeb/cmakepp.svg)](https://ci.appveyor.com/project/toeb/cmakepp)
 [![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)](https://github.com/toeb/cmakepp/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/network)
 [![GitHub issues](https://img.shields.io/github/issues/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/issues)
@@ -19,6 +20,7 @@ Look through the files in the package.  Most functions will be commented and the
 `cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
 
 
+* [Buildserver](cmake/buildserver/README.md)
 * [Creating Checksums](cmake/checksum/README.md)
 * [Collections](cmake/collections/README.md)
 * [Date/Time](cmake/datetime/README.md)
@@ -55,14 +57,12 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 
 
 
-* [Including `cmakepp` and pulling `eigen` library ](samples/01-include-cmakepp-pull-eigen/README.md)
-* [Including `cmakepp` in `CMakeLists.txt`](samples/02-include-cmakepp-in-CMakeLists/README.md)
+* [Compiling a simple progam by including `cmakepp` and pulling `eigen` library ](samples/01-include-cmakepp-pull-eigen/README.md)
+* [Including and using `cmakepp` in `CMakeLists.txt`](samples/02-include-cmakepp-in-CMakeLists/README.md)
 * [Downloading and Including `cmakepp` in a `CMakeLists.txt`](samples/03-download-include-cmakepp-in-CMakeLists/README.md)
 * [Creating a Compressed Package](samples/04-create-simple-compressed-package/README.md)
 * [Creating and Installing a Package with an Install Hook](samples/05-create-install-simple-package-with-install-script/README.md)
 * [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
-* [Adding Boost to you `CMake` project](samples/07-adding-boost-by-package-manager/README.md)
-* [Download, Build and Use `jsoncpp`](samples/09-download-build-use-jsoncpp/README.md)
 
 
 
@@ -81,7 +81,7 @@ You have multiple options to install `cmakepp` the only prerequisite for all opt
 * Clone the repository and include `cmakepp.cmake` in your `CMakeLists.txt` (or other cmake script)
 
 
-## <a href="install_console"></a> Install by Console
+## <a name="install_console"></a> Install by Console
 
 For ease of use I provide you with simple copy paste code for your console of choice.  These scripts download the `install.cmake` file and execute it.  This file in turn downloads `cmakepp` and adds itself to your os (creating aliases and setting a environment variable - which allow you to use [icmake](#icmake) and [cmakepp cli](#cmake_cli) from the console).
 
@@ -116,7 +116,7 @@ endif()
 include("cmakepp.cmake")
 ```
 
-## <a href="install_aliases"></a> Manually setting up aliases
+## <a name="install_aliases"></a> Manually setting up aliases
 
 
 ```
@@ -177,7 +177,7 @@ I am a bit a hypocrit. I am trying to adhere to these rules though:
 # Implementation Notes
 
 
-## <a name="formalisms"></a> Formalisms 
+##  Formalisms 
 
 **Note**: *This section is incomplete but will give you an idea how I formally define data and functions.*
 
@@ -186,22 +186,38 @@ To describe cmake functions I use formalisms which I found most useful they shou
 
 * `@` denotes character data
 * `<string> ::= "\""@"\""` denotes a string literal
-* `<regex> ::= /<string>/` denotes a regular expression (as cmake defines it)
-* `<identifier> ::= /[a-zA-Z0-9_-]+/` denotes a identifier which can be used for definitions
-* `<datatype> ::= "<" "any"|"bool"|"number"|""|"void"|""|<structured data> <?"...">">"` denotes a datatype the elipses denotes that multiple values in array form are described else the datatype can be `any`, `bool`, `number`, `<structured data>` etc.. 
+* `<regex> ::= "/" <string> "/"` denotes a regular expression which needs to match
+* `<identifier> ::= /[a-zA-Z_][a-zA-Z0-9_]*/` denotes a identifier which can be used for definitions
+* `<datatype> ::= "<" "any"|"bool"|"number"|""|"void"|""|<structured data> <?"...">">"` denotes a datatype. the elipses denotes that multiple values in array form are described else the datatype can be `any`, `bool`, `number`, `<structured data>` etc.. 
 * `<named definition> ::= "<"<identifier>">"`
-* `<definition> ::= "<"<?"?"><identifier>|<identifier>":"<datatype>|<datatype>>">"`  denotes a possibly name piece of data. this is used in signatures and object descriptions e.g. `generate_greeting(<firstname:<string>> <?lastname:<string>>):<string>` specifies a function which which takes a required parameter called `first_name` which is of type `string` and an optional parameter called `lastname` which is of type `string` and returns a `string`
-* `<structured data> ::= "{"<? <named definition> ...>"}"`
-* `<void>` primitve which stand for nothing
+* `<definition> ::= "<" "?"? <identifier>"&"?|<identifier>"&"?":"<datatype>|<datatype>> ("="  ">"`  denotes a possibly named piece of data. this is used in signatures and object descriptions e.g. `generate_greeting(<firstname:<string>> <?lastname:<string>>)-><string>` specifies a function which which takes a required parameter called `first_name` which is of type `string` and an optional parameter called `lastname` which is of type `string` and returns a `string`
+  - `&` indicates that the identifier is a reference - a variable exists with the name passed in the named identifier
+  - `?` indicates optionality (no need to specify the value)
+  - `=  indicates the default value which is used when the specified value is not specified
+* `<structured data> ::= "{"<keyvalue:(<named definition>|(<identifier>":"<datatype>))...>|"}"`  the structured date is sometimes multiline
+  - `{ <name:<string>> <age:<int>> }`
+  - `{ name:<string> age:<int>}` 
+  - `{ name:<string> address:{ street:<string> area_code:<string>} age:<int>}`
+  - `{ <<group:<string>>:<users:<string...>> ...> }` describes a map which contains keys of type string which identify a group and associated values which are a string list representing users
+* `<void>` primitive which stands for nothing
+* `<null> ::= ""` primitive which is truely empty (a string of length `0`) 
 * `<falseish>:"false"|""|"no"` cmake's false values (list incomplete)
 * `<trueish>: !<falseish>`
 * `<bool> ::= "true":"false"` indicates a well defined true or false value
 * `<boolish> ::= <trueish>|<falsish>|<bool>`
 * `<any> ::= <string>|<number>|<structured data>|<bool>|<void>`
-* `<named function parameter>`
+* `<value identifier> ::= /a-zA-Z0-9_-/+`
+* `<named function parameter>::= "<"|"["<value identifier> (<definition>="<any>")?"]"|">"` specifies a named function parameter.  a `value identifier` without a `definition` causes the named function parameter to be a flag a boolean is derived which is `true` if the flag exists, else `false`.  
+  - `[--my-flag]` a flag
+  - `[--depth <n:int>]` a optional value
+  - `<--depth <n:int>>` a required value 
 * `<function parameter> ::= <definition>|<named function parameter>`
-* `<function definition> `
-* ... @todo
+* `<function definition> ::= ("["<scope inheritance>"]")?"("<function parameter...>")" "->" <function parameter>("," <side effects>)?` 
+  - `(<any>)-><bool>` a function expecting a single `<any>` element and returning a `<bool>`
+  - `(<any...>)-><string...>` a function taking a variable amount of any and returning a list of strings
+  - `[<depth:int>](<node:<any>>)-><node...>` a function taking a variable node of type `<any>` which returns a list of `<node>` expects a variable `depth` to be defined in parent scope which needs to be a integer
+  - `...`
+
 
 
 ## <a name="return"></a>Returning values
@@ -272,7 +288,7 @@ This is possible by overwriting CMakes default return() function with a macro. I
   "Host":"httpbin.org",
   "User-Agent":"curl/7.16.1"
  },
- "origin":"87.157.218.55",
+ "origin":"79.240.213.196",
  "url":"http://httpbin.org/get?key=value"
 }
 

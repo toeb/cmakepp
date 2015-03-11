@@ -1,4 +1,3 @@
-
 ## `(<handles: <process handle...>>  [--timeout <seconds>] [--idle-callback <callable>] [--task-complete-callback <callable>] )`
 ##
 ## waits for all specified <process handles> to finish returns them in the order
@@ -10,6 +9,7 @@
 ## `--idle-callback <callable>`   
 ##                    if value is specified it will be called at least once
 ##                    and between every query if a task is still running 
+##
 ##
 ## `--task-complete-callback <callable>`
 ##                    if value is specified it will be called whenever a 
@@ -34,50 +34,51 @@ function(process_wait_all)
 
 
   process_handles(${args})
-  ans(processes)
+  ans(process_list)
+  ans(running_processes)
 
 
-  list(LENGTH processes running_processes)
-  set(process_count ${running_processes})
+  list(LENGTH running_processes process_count)
 
   set(timeout_process_handle)
   if(timeout)
     process_timeout(${timeout})
     ans(timeout_process_handle)
-    list(APPEND processes ${timeout_process_handle})
+    list(APPEND running_processes ${timeout_process_handle})
   endif()
+  set(complete_count 0)
+  while(running_processes)
 
-  while(processes)
-
-    if(idle_callback)
-      call2("${idle_callback}")
-    endif()
-
-    list_pop_front(processes)
-    ans(process)
-    process_refresh_handle(${process})
-    ans(isrunning)
+    list_pop_front(running_processes)
+    ans(current_process)
+    process_refresh_handle(${current_process})
+    ans(is_running)
     
-    #message(FORMAT "{process.pid} isrunning {isrunning} {process.state} ")
+    #message(FORMAT "{current_process.pid} is_running {is_running} {current_process.state} ")
 
-    if(NOT isrunning)
-      if("${process}_" STREQUAL "_${timeout_process_handle}")
-        set(processes)
+    if(NOT is_running)
+      if("${current_process}_" STREQUAL "_${timeout_process_handle}")
+        set(running_processes)
       else()          
 
-        list(APPEND finished ${process})          
+        list(APPEND complete_processes ${current_process})          
         if(NOT quietly)
-          list(LENGTH finished finished_count)           
+          list(LENGTH complete_processes complete_count)           
           if(task_complete_callback)
-            call2("${task_complete_callback}" "${process}") 
+            call2("${task_complete_callback}" "${current_process}") 
           endif()
         endif() 
       endif()        
     else()
       ## insert into back
-      list(APPEND processes ${process})
+      list(APPEND running_processes ${current_process})
     endif()
+
+    if(idle_callback)
+      call2("${idle_callback}")
+    endif()
+
   endwhile()
 
-  return_ref(finished)
+  return_ref(complete_processes)
 endfunction()

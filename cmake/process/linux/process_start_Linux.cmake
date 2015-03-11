@@ -14,6 +14,8 @@ function(process_start_Linux process_handle)
   map_tryget(${process_start_info} command_arguments)
   ans(command_arguments)
 
+  map_tryget(${process_start_info} working_directory)
+  ans(working_directory)
 
   command_line_args_combine(${command_arguments})
   ans(command_arguments_string)
@@ -21,13 +23,13 @@ function(process_start_Linux process_handle)
   set(command_string "${command} ${command_arguments_string}")
 
   # define output files        
-  file_make_temporary("")
+  fwrite_temp("")
   ans(stdout)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(stderr)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(return_code)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(pid_out)
 
   process_handle_change_state(${process_handle} starting)
@@ -37,11 +39,11 @@ function(process_start_Linux process_handle)
   # error of the command is stored in stderr file 
   # return_code is stored in return_code file 
   # and the created process id is stored in pid_out
-  shell_tmp_script("( bash -c \"${command_string} > ${stdout} 2> ${stderr}\" ; echo $? > ${return_code}) & echo $! > ${pid_out}")
+  shell_tmp_script("( bash -c \"(cd ${working_directory}; ${command_string} > ${stdout} 2> ${stderr})\" ; echo $? > ${return_code}) & echo $! > ${pid_out}")
   ans(script)
   ## execute the script in bash with nohup 
   ## which causes the script to run detached from process
-  bash(-c "nohup ${script} > /dev/null 2> /dev/null" --exit-code)
+  bash_lean(-c "nohup ${script} > /dev/null 2> /dev/null")
   ans(error)
 
   if(error)

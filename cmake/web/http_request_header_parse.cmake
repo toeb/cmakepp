@@ -4,7 +4,7 @@
 function(http_request_header_parse http_request)
   http_regexes()
 
-  string_semicolon_encode("${http_request}")
+  string_encode_semicolon("${http_request}")
   ans(http_request)
 
   string(REGEX REPLACE "${http_request_header_regex}" "\\1" http_request_line "${http_request}")

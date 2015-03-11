@@ -1,6 +1,6 @@
 # decodes an encoded list
   function(string_decode_list str)
-    string_semicolon_decode("${str}")
+    string_decode_semicolon("${str}")
     ans(str)
     string_decode_bracket("${str}")
     ans(str)

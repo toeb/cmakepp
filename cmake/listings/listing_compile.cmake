@@ -30,7 +30,7 @@
       list(APPEND indented "${line}")
     endforeach()
     string(REPLACE ";" "\n" code "${indented}")
-    string_semicolon_decode("${code}")
+    string_decode_semicolon("${code}")
     ans(code)
     string(REPLACE "'" "\"" code "${code}")
     string(REGEX REPLACE "([^$]){([a-zA-Z0-9\\-_\\.]+)}" "\\1\${\\2}" code "${code}")

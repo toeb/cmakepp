@@ -30,7 +30,7 @@ function(download uri)
   if(IS_DIRECTORY "${target_path}")
     set(target_path "${target_path}/${filename}")    
   endif()
-
+  
   file(DOWNLOAD 
     "${uri_string}" "${target_path}" 
     STATUS status 

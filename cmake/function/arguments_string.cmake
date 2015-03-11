@@ -1,10 +1,10 @@
 ## returns the argument string which was passed to the parent function
 ## it takes into considerations quoted arguments
 ## todo: start and endindex
-  macro(arguments_string __arg_count)
+  macro(arguments_string __arg_begin __arg_end)
     set(__arg_res)   
-    if(${__arg_count} GREATER 0)
-      math(EXPR __last_arg_index "${__arg_count} - 1")
+    if(${__arg_end} GREATER 0)
+      math(EXPR __last_arg_index "${__arg_end} - 1")
       foreach(i RANGE 0 ${__last_arg_index})
         set(__current "${ARGV${i}}")
         if("${__current}_" MATCHES "(^_$)|(;)|(\\\")")

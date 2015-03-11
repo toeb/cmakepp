@@ -39,16 +39,15 @@ function(package_source_query_bitbucket uri)
   endif()
 
 
-  if(hash)
-    return(true)
-  endif()
   map_new()
   ans(package_handles)
 
   if(hash)
     bitbucket_remote_ref("${user}" "${repo}" "commits" "${hash}")
-    ans(ref)
+    ans(remote_ref)
 
+    map_import_properties(${remote_ref} ref_type ref)
+    map_set(${package_handles} "bitbucket:${user}/${repo}/${name}/${ref_type}/${ref}" "${remote_ref}")
   elseif(user)
     if("${repo}" STREQUAL "*")
       ## get all repositories of user - no hash

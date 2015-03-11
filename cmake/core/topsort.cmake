@@ -5,10 +5,8 @@
 # this function will return nothing if there was a cycle or if no input was given
 # else it will return the topological order of the graph
 function(topsort get_hash expand)
-  
   function_import("${get_hash}" as __topsort_get_hash REDEFINE)
   function_import("${expand}" as __topsort_expand REDEFINE)
-
   # visitor function
   function(topsort_visit result visited node)
     # get hash for current node

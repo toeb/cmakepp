@@ -8,12 +8,17 @@
 ## * `--success-callback <callable>[exit_code](<process handle>)` 
 ## * `--error-callback <callable>[exit_code](<process handle>)` 
 ## * `--state-changed-callback <callable>[old_state;new_state](<process handle>)` 
-##
+## * `--lean`
 ## *example*
 ## ```
 ##  execute(cmake -E echo_append hello) -> '@execute(cmake -E echo_append hello)'
 ## ```
 function(execute)
+  set(args ${ARGN})
+  list_extract_flag(args --lean)
+  ans(lean)
+
+
   arguments_encoded_list(${ARGC})
   ans(args)
 
@@ -37,7 +42,8 @@ function(execute)
   ans(error_callback)
   list_extract_labelled_value(args --state-changed-callback)
   ans(process_callback)
-
+  list_extract_labelled_value(args --on-terminated-callback)
+  ans(terminated_callback)
   if(NOT args)
     messagE(FATAL_ERROR "no command specified")
   endif()
@@ -63,10 +69,14 @@ function(execute)
     assign(success = process_handle.on_error.add("${error_callback}"))
   endif()
   if(process_callback)
-    message(yolo)
     string_decode_list("${process_callback}")
     ans(process_callback)
     assign(success = process_handle.on_state_change.add("${process_callback}"))
+  endif()
+  if(terminated_callback)
+    string_decode_list("${terminated_callback}")
+    ans(terminated_callback)
+    assign(success = process_handle.on_terminated.add("${terminated_callback}"))
   endif()
 
   if(async)

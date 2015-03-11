@@ -1,17 +1,13 @@
 
 function(linux_ps_info pid key)
-  linux_ps(-p "${pid}" -o "${key}=" --process-handle)
-  ans(res)
+  linux_ps_lean(-p "${pid}" -o "${key}=")
+  ans_extract(error)
+  ans(stdout)
+  #print_vars(error stdout)
 
-  map_tryget(${res} exit_code)
-  ans(erro)
-  if(NOT "${erro}" EQUAL 0)
-
+  if(error)
     return()
   endif()
-  map_tryget(${res} stdout)
-  ans(stdout)
-
   string(STRIP "${stdout}" val)
   return_ref(val)
 endfunction()

@@ -1,5 +1,10 @@
 #returns true if the the val is a function string or a function file
 function(is_function result val)
+	is_lambda("${val}")
+	ans(is_lambda)
+	if(is_lambda)
+		return(lambda)
+	endif()
 
 	is_function_string(is_func "${val}")
 	if(is_func)

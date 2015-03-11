@@ -22,9 +22,9 @@ function(cp)
     ans(source)
     # this just has to be terribly slow... 
     # i am missing a direct
-    cmake(-E "copy" "${source}" "${target}" --exit-code)
-    ans(ret)
-    if(NOT "${ret}" STREQUAL 0)
+    cmake_lean(-E "copy" "${source}" "${target}")
+    ans_extract(error)
+    if(error)
       message("failed to copy ${source} to ${target}")
     endif()
    return()

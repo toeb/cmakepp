@@ -14,7 +14,7 @@
         string(REGEX REPLACE "${regex}" "\\1" value_name "${line}")
         string(REGEX REPLACE "${regex}" "\\2" type "${line}")
         string(REGEX REPLACE "${regex}" "\\3" value "${line}")
-        string_semicolon_decode("${value}")
+        string_decode_semicolon("${value}")
         ans(value)
         
       else()

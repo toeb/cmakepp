@@ -2,8 +2,7 @@
 function(package_source_query_path uri)
   set(args ${ARGN})
 
-  uri("${uri}")
-  ans(uri)
+  uri_coerce(uri)
 
   list_extract_flag(args --package-handle)
   ans(return_package_handle)
@@ -18,6 +17,19 @@ function(package_source_query_path uri)
     return()
   endif()   
 
+  uri_check_scheme("${uri}" "file?")
+  ans(scheme_ok)
+  if(NOT scheme_ok)
+    error("path package query only accepts file and <none> as a scheme")
+    return()
+  endif()
+
+  assign(query = uri.query)
+  if(NOT "_${query}" MATCHES "(^_$)|(_hash=[0-9a-zA-Z]+)")
+    error("path package source only accepts a hash query in the uri.")
+    return()
+  endif()
+
   ## get localpath from uri and check that it is a dir and cotnains a package_descriptor
   uri_to_localpath("${uri}")
   ans(path)
@@ -29,6 +41,7 @@ function(package_source_query_path uri)
     return()
   endif()
 
+
   ## compute hash
   set(content)
 
@@ -37,12 +50,12 @@ function(package_source_query_path uri)
     json_read("${path}/package.cmake")
     ans(package_descriptor)
   endif()
+
   
   assign(default_id = uri.last_segment)
   map_defaults("${package_descriptor}" "{id:$default_id,version:'0.0.0'}")
   ans(package_descriptor)
   assign(content = package_descriptor.content)
-
   if(content)
     pushd("${path}")
       checksum_glob_ignore(${content})
@@ -59,7 +72,6 @@ function(package_source_query_path uri)
     error("hashes did not match for ${path}")
     return()
   endif()
-
   ## create the valid result uri (file:///e/t/c)
   uri("${path}?hash=${hash}")
   ans(result)

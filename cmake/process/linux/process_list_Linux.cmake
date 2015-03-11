@@ -4,8 +4,11 @@
 
   function(process_list_Linux)
 
-    linux_ps()
+    linux_ps_lean()
+    ans_extract(error)
     ans(res)
+
+   # print_vars(error res)
 
     string_lines("${res}")
     ans(lines)

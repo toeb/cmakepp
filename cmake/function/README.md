@@ -61,7 +61,7 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="arguments_encoded_list"></a> `arguments_encoded_list`
 
- usage arguments_string(${ARGC}) => acutal arguments string 
+ (${ARGC}) => 
  
 
 

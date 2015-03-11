@@ -5,7 +5,7 @@
 # {yyyy: <>, MM:<>, dd:<>, hh:<>, mm:<>, ss:<>, ms:<>}
 
 function(datetime)
-  file_make_temporary("")
+  fwrite_temp("")
   ans(file)
   file_timestamp("${file}")
   ans(timestamp)

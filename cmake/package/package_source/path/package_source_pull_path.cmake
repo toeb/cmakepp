@@ -11,8 +11,7 @@
 function(package_source_pull_path uri)
     set(args ${ARGN})
 
-    uri("${uri}")
-    ans(uri)
+    uri_coerce(uri)
 
     ## get package descriptor for requested uri
     package_source_resolve_path("${uri}")
@@ -22,7 +21,6 @@ function(package_source_pull_path uri)
         error("could not resolve {uri.uri} to a unique package")
       return()
     endif()
-
 
 
     list_extract_flag(args --reference)

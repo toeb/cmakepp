@@ -1,14 +1,13 @@
   ## package_source_query_archive(<~uri>)->
   ## 
-  function(package_source_query_archive uri_string)
+  function(package_source_query_archive uri)
     set(args ${ARGN})
     
     list_extract_flag(args --package-handle)
     ans(return_package_handle)
 
 
-    uri("${uri_string}")
-    ans(uri)
+    uri_coerce(uri)
 
     ## uri needs to be local
     map_tryget(${uri} normalized_host)
@@ -35,6 +34,7 @@
     ##
     checksum_file("${local_path}")
     ans(hash)
+
 
     if(NOT "${expected_hash}_" STREQUAL "_" AND NOT "${expected_hash}" STREQUAL "${hash}" )
         error("expected hash did not match hash of ${local_path}")
