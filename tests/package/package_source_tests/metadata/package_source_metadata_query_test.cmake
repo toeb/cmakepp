@@ -1,4 +1,22 @@
 function(test)
+  metadata_package_source(meta)
+  ans(uut)
+
+
+  assign(success = uut.add_package_descriptor("{id:'pkg1', version:'0.0.1'}"))
+  assign(success = uut.add_package_descriptor("{id:'pkg1', version:'0.0.2', make_current:'true'}"))
+  assign(success = uut.add_package_descriptor("{id:'pkg1', version:'0.0.3'}"))
+  assign(success = uut.add_package_descriptor("{id:'pkg2', version:'0.0.1'}"))
+  assign(success = uut.add_package_descriptor("{id:'pkg2', version:'0.0.2', make_current:'true'}"))
+  assign(success = uut.add_package_descriptor("{id:'pkg2', version:'0.0.3'}"))
+
+  assign(res = uut.query("pkg1" --package-handle))
+  ans(res)
+  assertf("{res.package_descriptor.id}" STREQUAL "pkg1")
+  assertf("{res.package_descriptor.version}" STREQUAL "0.0.2")
+
+  assign(res = uut.query("pkg1@*"))
+  assert(COUNT 3 ${res})
 
 
 

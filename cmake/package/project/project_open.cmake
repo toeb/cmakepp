@@ -101,15 +101,41 @@ function(project_open)
 
   event_emit(project_on_opening ${project_handle})
   
-  ## remove missing materializations
-  project_materialization_check(${project_handle})
-
-  ## load the project
-  project_load(${project_handle})
+  ## perform open (calls all registered events for project open)
+  event_emit(project_on_open ${project_handle})
 
   ## open complete
   event_emit(project_on_opened ${project_handle})
 
-
   return_ref(project_handle)
 endfunction()
+
+function(project_loader project)
+  if("${ARGN}_" STREQUAL "_" OR "${project}" STREQUAL "${ARGN}")
+    project_load(${project})
+  endif()
+endfunction()
+function(project_unloader project)
+  if("${ARGN}_" STREQUAL "_" OR "${project}" STREQUAL "${ARGN}")
+    project_unload(${project})
+  endif()
+endfunction()
+function(project_materializer project)
+  ## materialize project if it is not materialized
+  map_tryget(${project} materialization_descriptor)
+  ans(is_materialized)
+  if(NOT is_materialized)
+    map_tryget(${project} uri)
+    ans(project_uri)
+    project_materialize(${project} "${project_uri}")
+  endif()
+endfunction()
+
+## react to ready/unready events
+task_enqueue("[]() 
+  event_addhandler(project_on_package_ready project_loader)
+  event_addhandler(project_on_package_unready project_unloader)
+  event_addhandler(project_on_open project_materialization_check)
+  event_addhandler(project_on_open project_loader)
+  event_addhandler(project_on_close project_unloader)
+  ")

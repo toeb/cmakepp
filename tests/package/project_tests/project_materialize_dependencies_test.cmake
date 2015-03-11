@@ -4,7 +4,7 @@ function(test)
   ans(project)
 
   assign(project.project_descriptor.package_source 
-    = mock_package_source(mock A "B=>C" D C "B=>E" E))
+    = mock_package_source(mock A B D C E "B=>C" "B=>E"))
 
 
   project_change_dependencies(${project} A D)

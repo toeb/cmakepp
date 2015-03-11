@@ -11,7 +11,7 @@ Let's say we have a package source called `mock` which contains the following pa
 * `D` depends on `E` and `F`
 * `E` depends on nothing
 * `F` depends on nothing
-* `G` depends on `H`
+* `G` depends on `H`§
 * `H` depends on `B`
 
 

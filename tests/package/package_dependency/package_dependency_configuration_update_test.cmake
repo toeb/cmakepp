@@ -1,12 +1,11 @@
 function(test)
 
   mock_package_source("mock"
+    A B
     "A=>B"
-    "B"
 
     )
   ans(package_source)
-
 
   function(test_package_dependency_configuration_update)
     set(args ${ARGN})

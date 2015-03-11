@@ -10,11 +10,13 @@
 function(project_close project_handle)
   event_emit(project_on_closing ${project_handle})
 
-  project_unload(${project_handle})
+  #project_unload(${project_handle})
 
   map_tryget(${project_handle} content_dir)
   ans(project_content_dir)
 
+
+  event_emit(project_on_close ${project_handle})
 
 
   pushd("${project_content_dir}" --create)

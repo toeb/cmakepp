@@ -5,7 +5,7 @@ function(test)
 
 
 
-  mock_package_source(mock A "B=>C" C D "B=>E" E)
+  mock_package_source(mock A B C D E "B=>C" "B=>E")
   ans(package_source)
   assign(project.project_descriptor.package_source = package_source)
 
