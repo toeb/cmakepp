@@ -15,7 +15,7 @@
 * [Maps - Structured Data in CMake](map/README.md)
 * [Navigation Functions](navigation/README.md)
 * [Objects ](object/README.md)
-* [Package Management](package/README.md)
+* [Package Mangement](package/README.md)
 * [User Data](persistence/README.md)
 * [Process Management](process/README.md)
 * [Quick Map Syntax](quickmap/README.md)

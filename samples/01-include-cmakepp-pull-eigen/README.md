@@ -32,7 +32,7 @@ sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME
 -- Detecting CXX compiler ABI info - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktempfpC5T/build
+-- Build files have been written to: C:/temp/cutil/temp/mktemp_j7CIS/build
 
 sample folder/build/> cmake --build .   # builds the generated project 
 ... CMake build output ...

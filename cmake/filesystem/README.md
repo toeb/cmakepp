@@ -13,7 +13,7 @@ ans(path)
 assert("${path}" STREQUAL "${CMAKE_SOURCE_DIR}")
 
 
-pushd("dir1" --create) # goto  ${CMAKE_SOURCE_DIR}/dir1\; Create if not exists
+pushd("dir1" --create) # goto  ${CMAKE_SOURCE_DIR}/dir1; Create if not exists
 ans(path)
 assert("${path}" STREQUAL "${CMAKE_SOURCE_DIR}/dir1")
 
