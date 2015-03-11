@@ -13,12 +13,15 @@ function(project_register_extensions)
   
   event_addhandler(project_on_package_loaded cmake_export_handler)
   event_addhandler(project_on_package_loaded cmakepp_on_loaded_hook)
+  event_addhandler(project_on_package_loaded project_cmake_export_module)
 
   event_addhandler(project_on_package_unloading cmakepp_on_unloading_hook)
 
   event_addhandler(project_on_package_unready project_unloader)
   event_addhandler(project_on_package_unready "[]() package_dependency_symlinker({{ARGN}} --unlink)")
   event_addhandler(project_on_package_unready cmakepp_on_unready_hook)
+
+
 
 endfunction()
 

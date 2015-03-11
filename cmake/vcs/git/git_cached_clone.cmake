@@ -55,6 +55,7 @@
           ans(git_result)
 
           if(NOT error)
+            set(result "${git_result}")
             if(file)
               set(target_path "${target_dir}/${file}")
               fwrite("${target_path}" "${git_result}")

@@ -41,10 +41,16 @@ function(package_source_query_path uri)
     return()
   endif()
 
-  ## tries to open the package descriptor
-  fopen_data("${path}/package")
+  ## old style package descriptor
+  json_read("${path}/package.cmake")
   ans(package_descriptor)
-
+  if(NOT package_descriptor)
+    ## tries to open the package descriptor
+    ## in any other format
+    fopen_data("${path}/package")
+    ans(package_descriptor)
+  endif()
+  
 
 
   ## compute hash
