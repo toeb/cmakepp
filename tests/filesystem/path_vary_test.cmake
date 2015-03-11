@@ -10,7 +10,7 @@ function(test)
   path_vary("asd.txt")
   ans(res)
 
-  assert("${res}" MATCHES "\\/asd\\-.+\\.txt")
+  assert("${res}" MATCHES "\\/asd\\_.+\\.txt")
   
 
 endfunction()

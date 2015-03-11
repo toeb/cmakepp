@@ -19,7 +19,7 @@ function(path_vary path)
 
     ## alternatively count up
     string(RANDOM rnd)
-    set(rnd "-${rnd}")
+    set(rnd "_${rnd}")
 
   endwhile()
 endfunction()
