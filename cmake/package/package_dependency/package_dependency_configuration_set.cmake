@@ -5,8 +5,8 @@
 ## the package_handle's dependencies property to contain a single unique package handle 
 ## for every admissable_uri. before the dependencies property maps admissable_uri x {package uri x package handle}
 ##
-function(package_dependency_configuration_set configuration package_handles)
-
+function(package_dependency_configuration_set configuration)
+  set(package_handles ${ARGN})
 
   foreach(package_handle ${package_handles})
     map_tryget(${package_handle} dependencies)

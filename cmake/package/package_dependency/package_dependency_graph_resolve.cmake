@@ -1,11 +1,11 @@
-## `(<package_handles:<package handle>...>  [--cache:<map>])->{ <<package uri>:<package handle>>...}`
+## `(<package source> <package_handles:<package handle>...>  [--cache:<map>])->{ <<package uri>:<package handle>>...}`
 ##
 ## resolves the dependecy graphs given by `package_handles`
 ## returns a map of `<package uri> => <package handle>`
 ## uses the cache for to lookup `package uri`s
 ## the `package handle`s all habe a `dependees` and `dependencies` property
 ## see also `dependencies_resolve`
-function(package_dependency_graph_resolve)
+function(package_dependency_graph_resolve package_source)
 
   function(expand_dependencies package_source cache context package_handle)
     if(NOT package_handle)

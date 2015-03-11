@@ -18,6 +18,7 @@ function(package_handle_update_dependencies package_handle)
   package_dependency_changeset(${ARGN})
   ans(changeset)
 
+
   package_handle_dependencies("${package_handle}")
   ans(dependencies)
   
@@ -41,7 +42,8 @@ function(package_handle_update_dependencies package_handle)
     ## set new value
     map_tryget(${changeset} ${admissable_uri})
     ans_extract(action)
-    ans(contraint)
+    ans(constraint)
+
 
 
     if("${action}" STREQUAL "add")

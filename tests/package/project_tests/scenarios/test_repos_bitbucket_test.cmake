@@ -25,10 +25,6 @@ function(test)
 
   project_close(${project})
 
-
-
-
-
   project_open()
   ans(project)
 

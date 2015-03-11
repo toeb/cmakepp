@@ -10,6 +10,7 @@ function(test)
   assign(project.project_descriptor.package_source = package_source)
 
 
+
   events_track(project_on_dependency_configuration_changed)
   ans(tracker)
   project_change_dependencies(${project})
@@ -55,4 +56,12 @@ function(test)
 
 
 
+
+  project_open()
+  ans(project)
+  assign(project.project_descriptor.package_source = package_source)
+  project_change_dependencies(${project} "A {content_dir:'asd'}")
+  ans(res)
+  json_print(${res})
+  print_vars(project.package_descriptor.dependencies)
 endfunction()

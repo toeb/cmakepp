@@ -15,8 +15,6 @@ endfunction()
 
 function(ln_Linux target)
    set(args ${ARGN})
-  list_extract_flag(args -s)
-  ans(symbolic)
 
   path_qualify(target)
 
@@ -37,8 +35,6 @@ endfunction()
 
 function(ln_Windows target)
   set(args ${ARGN})
-  list_extract_flag(args -s)
-  ans(symbolic)
 
   path_qualify(link)
 

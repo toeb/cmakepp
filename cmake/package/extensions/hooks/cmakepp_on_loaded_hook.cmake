@@ -19,7 +19,7 @@
 ##     emitted after cmake exports  were loaded and packge's
 ##     on_load hook was invoked. 
 ##          
-function(cmakepp_project_on_package_loaded project_handle package_handle)
+function(cmakepp_on_loaded_hook project_handle package_handle)
   
   ## load the exports and include them once
   assign(content_dir = package_handle.content_dir)
@@ -43,4 +43,4 @@ endfunction()
 
 ## register listener for the project_on_package_load event 
 ## as soon as cmakepp loads
-task_enqueue("[]()event_addhandler(project_on_package_loaded cmakepp_project_on_package_loaded)")
+task_enqueue("[]()event_addhandler(project_on_package_loaded cmakepp_on_loaded_hook)")

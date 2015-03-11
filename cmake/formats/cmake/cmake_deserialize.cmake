@@ -1,7 +1,7 @@
 
 
   function(cmake_deserialize serialized)
-     file_make_temporary("")
+     fwrite_temp("" ".cmake")
   ans(tmp)
 
     eval("

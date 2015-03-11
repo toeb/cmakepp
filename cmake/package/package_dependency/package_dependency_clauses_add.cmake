@@ -46,9 +46,7 @@ function(package_dependency_clauses_add
   else()
     ## complex dependency
     ## 
-    if(NOT "${dependency_constraint}" MATCHES "^(true)|(false)$")
-      message(FATAL_ERROR "complex dependency constraints not supported: '${dependency_constraint}'")
-    endif()
+    package_dependency_clauses_add_complex_constraint("${clauses}" "${dependee_handle}" "${dependency_constraint}" ${dependency_handles})
 
   endif()
 

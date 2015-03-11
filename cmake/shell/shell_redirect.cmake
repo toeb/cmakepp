@@ -1,7 +1,7 @@
 
 # redirects the output of the specified shell to the result value of this function
 function(shell_redirect code)
-  file_tmp("txt" "")
+  fwrite_temp("" ".txt")
   ans(tmp_file)
   shell("${code}> \"${tmp_file}\"")
   fread("${tmp_file}")

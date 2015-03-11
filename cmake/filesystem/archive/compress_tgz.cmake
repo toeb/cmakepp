@@ -9,6 +9,7 @@ function(compress_tgz target_file)
   ans(paths)
 
   # compress all files into target_file using paths relative to pwd()
-  tar(cvzf "${target_file}" ${paths})
+  tar_lean(cvzf "${target_file}" ${paths})
+  ans_extract(error)
   return_ans()
 endfunction()

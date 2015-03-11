@@ -1,7 +1,7 @@
 # makes all paths passed as varargs into paths relative to base_dir
 function(paths_make_relative base_dir)
   set(res)
-  get_filename_component(base_dir "${base_dir}" REALPATH)
+  get_filename_component(base_dir "${base_dir}" ABSOLUTE)
 
   foreach(path ${ARGN})
     path_qualify(path)

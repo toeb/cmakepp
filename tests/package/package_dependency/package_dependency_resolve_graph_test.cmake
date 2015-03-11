@@ -65,7 +65,7 @@ function(test)
       ans_append(package_handles)
     endforeach()
     timer_start(package_dependency_graph_resolve)
-    package_dependency_graph_resolve( ${package_handles} --cache "${cache}")
+    package_dependency_graph_resolve("${package_source}" ${package_handles} --cache "${cache}")
     ans(res)
     timer_print_elapsed(package_dependency_graph_resolve)
 

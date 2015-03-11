@@ -45,7 +45,7 @@ function(package_dependency_resolve package_source  package_handle )
 
   ## resolve all package dependencies
   ## and assign package handles dependencies property
-  package_source_query_resolve_all(${package_source} ${admissable_uris} --cache ${cache})
+  package_source_query_resolve_all("${package_source}" ${admissable_uris} --cache ${cache})
   ans(dependencies)
 
   map_set(${package_handle} dependencies ${dependencies})

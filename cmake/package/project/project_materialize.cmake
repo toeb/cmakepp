@@ -1,4 +1,4 @@
-## `(<project handle> <volatile uri> <target dir>?)-><materialization handle>?`
+## `(<project handle> <volatile uri> <target dir>?)-><package handle>?`
 ##
 ## materializes a package for the specified project.
 ## if the package is already materialized the existing materialization handle
@@ -6,13 +6,7 @@
 ## the target dir is treated relative to project root. if the target_dir
 ## is not given a target dir will be derived e.g. `<project root>/packages/mypackage-0.2.1-alpha`
 ##
-## returns the materialization handle on success
-## ```
-## <materialization handle> ::= {
-##   content_dir: <path> # path relative to project root
-##   package_handle: <package handle>
-## }
-##
+## returns the package handle on success
 ## 
 ## **events**: 
 ## * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
@@ -23,6 +17,13 @@
 ## * adds the specified package to the `package cache` if it does not exist 
 ## * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
 ## * `package_handle.materialization_descriptor = <materialization handle>`
+##
+## ```
+## <materialization handle> ::= {
+##   content_dir: <path> # path relative to project root
+##   package_handle: <package handle>
+## }
+## ```
 function(project_materialize project_handle package_uri)
   set(args ${ARGN})
 
@@ -127,10 +128,6 @@ function(project_materialize project_handle package_uri)
     endif()
 
     map_set(${package_materializations} ${package_uri} ${package_handle})
-
-    ## @TODO: on dependency materialized
-    ## @TODO: create symbolic link if content dir is specified
-
 
     event_emit(project_on_package_materialized ${project_handle} ${package_handle})
   

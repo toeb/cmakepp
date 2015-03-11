@@ -27,7 +27,7 @@ function(package_dependency_configuration package_source root_handle)
   map_set("${cache}" "${root_uri}" "${root_handle}")
 
   ## returns a map of package_uri -> package_handle
-  package_dependency_graph_resolve(${root_handle} --cache ${cache}) 
+  package_dependency_graph_resolve("${package_source}" ${root_handle} --cache ${cache}) 
   ans(package_graph)
   
   ## creates a package configuration which can be rused to install / uninstall 

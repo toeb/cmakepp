@@ -8,7 +8,7 @@ function(test)
   fwrite(myfile3.txt "hello")
   fwrite(asd/myfile4.txt "asd")
 
-  tar("cvzf" "${test_dir}/myfile.tgz" "${test_dir}/asd/myfile4.txt" "myfile1.txt" "myfile2.txt" "myfile3.txt")
+  tar_lean("cvzf" "${test_dir}/myfile.tgz" "${test_dir}/asd/myfile4.txt" "myfile1.txt" "myfile2.txt" "myfile3.txt")
 
   assert(EXISTS "${test_dir}/myfile.tgz")
 

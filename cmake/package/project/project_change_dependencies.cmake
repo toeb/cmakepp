@@ -9,6 +9,7 @@
 ## * `project_on_dependency_configuration_changed(<project handle> <changeset>)` is called if dpendencies need to be changed
 function(project_change_dependencies project_handle)
   set(args ${ARGN})
+
   map_tryget(${project_handle} project_descriptor)
   ans(project_descriptor)
 
@@ -18,7 +19,7 @@ function(project_change_dependencies project_handle)
     )
   ## check for package source
   if(NOT package_source)
-    message(FATAL_ERROR "no package source set up in project handle")
+ #   message(FATAL_ERROR "no package source set up in project handle")
   endif()   
 
   ## get previous_configuration
@@ -32,8 +33,8 @@ function(project_change_dependencies project_handle)
 
   ## 
   package_dependency_configuration_update(
-    ${package_source}
-    ${project_handle}
+    "${package_source}"
+    "${project_handle}"
     ${args}
     --cache ${package_cache}
     )

@@ -14,7 +14,7 @@ function(shell_env_set key value)
   ans(shell)
     
   if("${shell}" STREQUAL "bash")
-    home_path(.bashrc)
+    path("~/.bashrc")
     ans(path)
     fappend("${path}" "\nexport ${key}=${value}")
     #message("environment variable '${key}' was exported in .bashrc it will be available as soon as your restart your shell")

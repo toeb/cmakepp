@@ -1,6 +1,8 @@
-# returns the fully qualified path name for path
-# if path is a fully qualified name it returns path
-# else path is interpreted as the relative path 
+## `(<path>)-><qualified path>`
+##
+## returns the fully qualified path name for path
+## if path is a fully qualified name it returns path
+## else path is interpreted as the relative path 
 function(path path)
   pwd()
   ans(pwd)

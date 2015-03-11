@@ -41,6 +41,7 @@ function(test)
   assertf({context.on_materialized_hook_called} EQUALS true ${proj} ${pkg1})
 
 
+
   ## check that calling a project without the predefined fields does not fail
   fwrite_data("pkg2/package.cmake" "{
 
