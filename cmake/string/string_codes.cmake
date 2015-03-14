@@ -1,9 +1,13 @@
 # special chars |||||||↔|†|‡
 macro(string_codes)
+  string(ASCII 14 "${ARGN}free_token1")
+  string(ASCII 15 "${ARGN}free_token2")
+  string(ASCII 1 "${ARGN}free_token3")
+  string(ASCII 2 "${ARGN}free_token4")
 
   string(ASCII 29 "${ARGN}bracket_open_code")
   string(ASCII 28 "${ARGN}bracket_close_code")
-  string(ASCII 20 "${ARGN}ref_token")
+  string(ASCII 30 "${ARGN}ref_token")
   string(ASCII 21 "${ARGN}free_token")
   string(ASCII 31 "${ARGN}semicolon_code")
   string(ASCII 24 "${ARGN}empty_code")

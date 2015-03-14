@@ -6,8 +6,13 @@ function(cmakepp_project_cli)
   #ans(args)
   set(args ${ARGN})
 
-  list_extract_flag(args -v)
+  list_extract_any_flag(args -g --global)
+  ans(global)
+
+
+  list_extract_any_flag(args -v --verbose)
   ans(verbose)
+
 
   if(verbose)
 
@@ -43,9 +48,17 @@ function(cmakepp_project_cli)
   list_extract_labelled_value(args --project)
   ans(project_dir)
 
-  project_open("${project_dir}")
-  ans(project)
-
+  if(global)
+    dir_ensure_exists("~/.cmakepp")
+    project_open("~/.cmakepp")
+    ans(project)
+    assign(project.project_descriptor.is_global = 'true')
+  else()
+    project_open("${project_dir}")
+   ans(project)
+  
+  endif()
+  
   map_tryget(${project} project_descriptor)
   ans(project_descriptor)
   map_tryget(${project_descriptor} package_source)

@@ -14,10 +14,11 @@
     endif()
     popd()
     assign(module_name = package.package_descriptor.id)
-    string(TOUPPER "${module_name}" module_name)
+   # string(TOUPPER "${module_name}" module_name)
     format("##
 set({module_name}_DIR \"{content_dir}\")
 set({module_name}_INCLUDE_DIRECTORIES ${include_dirs})
+set({module_name}_FOUND \"{content_dir}\")
 
 ")
     ans(result)

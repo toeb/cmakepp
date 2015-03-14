@@ -1,4 +1,5 @@
-
+##
+##
 function(cmake_script_parse content)
   set(args ${ARGN})
   list_extract_flag(args --comment-header)

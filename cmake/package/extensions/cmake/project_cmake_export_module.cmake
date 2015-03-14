@@ -35,11 +35,22 @@
     path_qualify_from("${module_dir}" "${module_file_name}")
     ans(module_file_path)
 
+
     if(NOT EXISTS "${module_file_path}")
       ## get module content
       package_cmake_module_content("${package}" "${module}")
       ans(module_content)
       fwrite("${module_file_path}" "${module_content}")
+    endif()
+
+    if(NOT EXISTS "${module_dir}/Findcmakepp.cmake")
+      cmakepp_config(cmakepp_path)
+      ans(cmakepp_path)
+      fwrite("${module_dir}/Findcmakepp.cmake" "
+        include(\"${cmakepp_path}\")
+        " )
+
+
     endif()
 
     return()
