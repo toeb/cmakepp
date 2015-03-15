@@ -16,7 +16,7 @@ function(test)
     list(LENGTH children length)
 
     timer_start(cmake_parse_string)
-    cmake_token_range_serialize.cmake("${root}")
+    cmake_token_range_serialize("${root}")
     ans(res)
     timer_elapsed(cmake_parse_string)
     ans(unparse_time)

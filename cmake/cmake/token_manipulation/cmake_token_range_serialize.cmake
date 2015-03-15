@@ -1,8 +1,8 @@
 ## `(<start:<cmake token>> <end:<cmake token>>?)-><cmake code>`
 ## 
 ## generates the cmake code corresponding to the cmake token range
-function(cmake_token_range_serialize.cmake start)
-  cmake_token_range_to_list("${start}" ${ARGN})
+function(cmake_token_range_serialize range)
+  cmake_token_range_to_list("${range}")
   ans(tokens)
   set(result)
   foreach(token ${tokens})

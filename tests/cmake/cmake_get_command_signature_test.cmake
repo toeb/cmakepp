@@ -11,7 +11,7 @@ function(test)
    a b c
     )
 
-  cmake_token_range_serialize.cmake(${invocation})
+  cmake_token_range_serialize(${invocation})
   ans(res)
   message("${res}")
 
