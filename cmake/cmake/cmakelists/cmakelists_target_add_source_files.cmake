@@ -1,0 +1,30 @@
+
+
+  function(cmakelists_target_add_source_files cmakelists target_name)
+    set(args ${ARGN})
+    cmakelists_target_section("${cmakelists}" "${target_name}")  
+    ans(target_section)
+    if(NOT target_section)
+      return()
+    endif()
+
+    map_tryget(${cmakelists} path)
+    ans(path)
+    path_parent_dir("${path}")
+    ans(dir)
+    
+    set(files)
+    set(flags)
+    foreach(file ${args})
+      if(NOT "${file}" MATCHES "^\\-\\-")
+        path_qualify(file)
+        path_relative("${dir}" "${file}")
+        ans_append(files)
+      else()
+        list(APPEND flags ${file})
+      endif()
+    endforeach()
+
+    cmake_token_range_variable("${target_section}" sources ${files} ${flags})
+    return_ans()  
+  endfunction()

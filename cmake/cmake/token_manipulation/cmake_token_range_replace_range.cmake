@@ -2,8 +2,10 @@
 ## 
 ## replaces the specified range with the specified replace range
 function(cmake_token_range_replace_range range replace_range)
-  list_extract(range start end)
-  list_extract(replace_range replace_start replace_end)
+  cmake_token_range("${range}")
+  ans_extract(start end)
+  cmake_token_range("${replace_range}")
+  ans_extract(replace_start replace_end)
   map_tryget(${start} previous)
   ans(previous)
   map_set(${previous} next ${replace_start})

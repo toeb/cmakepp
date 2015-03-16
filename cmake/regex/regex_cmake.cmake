@@ -53,7 +53,7 @@ macro(regex_cmake)
   ## misc
 
   # if a value matches this it needs to be put in quotes
-  set(regex_cmake_value_needs_quotes "[ \";]")
+  set(regex_cmake_value_needs_quotes "[ \";\\(\\)]")
 
   set(regex_cmake_value_quote_escape_chars "[\\\\\"]")
 

@@ -19,7 +19,7 @@
 ##  length: <uint> # the length of the token 
 ## }
 ## ```
-function(cmake_parse_string code)
+function(cmake_tokens_parse code)
   set(args ${ARGN})
   list_extract_flag(args --extended)
   ans(extended)
@@ -133,7 +133,15 @@ function(cmake_parse_string code)
     set(previous ${token})
     list(APPEND tokens ${token})
   endwhile()
+  cmake_token_eof()
+  ans(eof)
 
+  if(previous)
+    map_set(${previous} next ${eof})
+    map_set(${eof} previous ${previous})
+  endif()
+
+  list(APPEND tokens ${eof})
     
   return_ref(tokens)
 endfunction() 

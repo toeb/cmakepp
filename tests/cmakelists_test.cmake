@@ -1,124 +1,52 @@
 function(test)
 
-
-  function(cmakelists_open)
-    map_new()
-    ans(cmakelists)
-
-    pushd("${ARGN}")
-
-    path("CMakeLists.txt")
-    ans(cmakelists_path)
-    if(NOT EXISTS "${cmakelists_path}")
-      path_parent_dir_name("cmakelists_path}")
-      ans(project_name)
-      set(content "cmake_minimum_required(VERSION ${CMAKE_VERSION})\n\nproject(${project_name})\n## <section name=\"targets\">\n## </section>\n")
-
-    else()
-      fread("${cmakelists_path}")
-      ans(content)
-    endif()
+  macro(cmake_token_go_back token_ref)
+    map_tryget(${${token_ref}} previous)
+    ans(${token_ref})
+  endmacro()
 
 
 
-    cmake_tokens("${content}")
-    ans(tokens)
-    map_set(${cmakelists} tokens ${tokens})
-    list_peek_front(tokens)
-    ans(begin)
-    list_peek_back(tokens)
-    ans(end)
-    map_set(${cmakelists} begin ${begin})
-    map_set(${cmakelists} end ${end} )
-    map_set(${cmakelists} path "${cmakelists_path}")
-    popd()
-    return_ref(cmakelists)
-  endfunction()
+  function(cmakelists_targets cmakelists) 
+    set(regex_section_begin "^[# ]*<section[ ]+name[ ]*=[ ]*\"([^\"]+)\"[ ]*>[ #]*$")
 
-
-  function(cmakelists_close cmakelists) 
-    map_tryget(${cmakelists} begin)
-    ans(begin)
-    cmake_token_range_serialize("${begin}")
-    ans(content)
-    map_tryget(${cmakelists} path)
-    ans(cmakelists_path)
-    fwrite("${cmakelists_path}" "${content}")
-  endfunction()
-
-
-
-  function(cmakelists_add_target cmakelists type name)
-    if(NOT "${type}" MATCHES "^(library)|(executable)$")
-      message(FATAL_ERROR "invalid target type: ${type}")
-    endif()
-
+    regex_cmake()
     map_tryget(${cmakelists} begin)
     ans(begin)
 
-    cmake_token_range_comment_section_find("${begin}" "target:${name}")
-    ans(target_section)
+    cmake_token_range_comment_section_find_all("${begin}" "target:${regex_cmake_identifier}")
+    ans(sections)
 
-    if(target_section)
-      error("section already exists target:${name}")
-      return()
-    endif()
+    while(sections)
+      list_extract(sections target_begin target_end)
+      ans(sections)
+      set(section_header_token ${target_begin})
+      cmake_token_go_back(section_header_token) # \n
+      cmake_token_go_back(section_header_token) # header commment
 
-    cmake_token_range_comment_section_find("${begin}" "targets")
-    ans(targets_section)
+      map_tryget(${section_header_token} literal_value)
+      ans(section_header)
 
-    if(NOT targets_section)
-      error("no targets section exists in cmake file")
-      return()
-    endif()
-
-
-
-    cmake_token_range_replace("${targets_section}" 
-"##   <section name=\"target:${name}\">
-set(sources)
-set(link_libraries)
-set(include_directories)
-add_${type}(${name} \${sources})
-target_link_libraries(${name} \${link_libraries})
-target_include_directories(${name} \${include_directories})
-##   </section>
-")
-
-  endfunction()
-
-  function(cmakelists_target_add_source_files cmakelists target_name)
-    map_tryget(${cmakelists} begin)
-    ans(begin)
-
-    cmake_token_range_comment_section_find("${begin}" "target:${target_name}")
-    ans(target_section)
-    if(NOT target_section)
-      error("could not find section 'target:${target_name}'")
-      return()
-    endif()
-    map_tryget(${cmakelists} path)
-    ans(path)
-    pushd("${path}" --force)
-    foreach(file ${ARGN})
-      path_qualify(file)
-      if(NOT EXISTS "${file}")
-        fwrite("${file}" "")
+      if("${section_header}" MATCHES "${regex_section_begin}")
+        if("${CMAKE_MATCH_1}" MATCHES "^target:(.*)$")
+          set(target_name "${CMAKE_MATCH_1}")
+        endif()
       endif()
-    endforeach()
+    
+      if(NOT target_name)
+        message(FATAL_ERROR "could not extract target name from section")
+      endif()
 
-    cmake_invocation_argument_list_find("${target_section}" "^set$"  "^source($|;)")
-    ans(variable_invocation)
+      cmake_token_range_invocations_filter("${targt_begin};${target_end}"  --take 1)
+      ans(target_invocation)
+      
+      map_capture_new(taget_name)      
 
+    endwhile()
 
-    print_vars(variable_invocation)
-
-    #cmake_invocation_get_arguments_list()
-    #cmake_invocation_set_arguments()
-
-    popd()
 
   endfunction()
+
 
 
   pushd(proj1 --create)
@@ -128,11 +56,22 @@ target_include_directories(${name} \${include_directories})
 
 
   cmakelists_add_target(${cmakelists} library my_lib)
+  cmakelists_add_target(${cmakelists} library my_lib2)
+  cmakelists_add_target(${cmakelists} executable my_lib3)
 
-  cmakelists_target_add_source_files("${cmakelists}" "my_lib" "hihi.cpp" "huhu.h")
+  cmakelists_target_add_source_files("${cmakelists}" "my_lib" "hihi.cpp" "huhu.h" --append)
+  cmakelists_target_add_source_files("${cmakelists}" "my_lib" "gaga.cpp" "blublu.h" --append)
+  pushd(dir1 --create)
+    cmakelists_target_add_source_files("${cmakelists}" "my_lib" "gaganana.cpp" "blublsssu.h" --append)
+    cmakelists_target_add_source_files("${cmakelists}" "my_lib" "gagaasdasd.cpp" "blubludd.h" --append)
+  popd()
+  cmakelists_target_add_source_files("${cmakelists}" "my_lib" --sort)
+
+
+  cmakelists_targets(${cmakelists})
+  ans(res)
 
   cmakelists_close(${cmakelists})
-
 
 
   popd()
