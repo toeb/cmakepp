@@ -30,7 +30,7 @@ function(test_execute test)
   ans(time)
   popd()
 
-  event_removehandler(${handler})
+  event_removehandler(on_log_message ${handler})
 
 
   message(STATUS "done after ${time} ms")
