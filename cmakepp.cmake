@@ -31,10 +31,10 @@ include(CMakeParseArguments)
 
 
 # get temp dir which is needed by a couple of functions in cmakepp
-set(cmakepp_tmp_dir "$ENV{TMP}")
-if(NOT cmakepp_tmp_dir)
-	set(cmakepp_tmp_dir "${CMAKE_CURRENT_LIST_DIR}/tmp")
-endif()
+# first uses env variable TMP if it does not exists TMPDIR is used
+# if both do not exists current_list_dir/tmp is used
+set(cmakepp_tmp_dir "$ENV{TMP}" "$ENV{TMPDIR}" "${CMAKE_CURRENT_LIST_DIR}/tmp")
+list(GET cmakepp_tmp_dir 0 cmakepp_tmp_dir)
 file(TO_CMAKE_PATH "${cmakepp_tmp_dir}" cmakepp_tmp_dir)
 
 
