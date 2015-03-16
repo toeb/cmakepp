@@ -1,10 +1,11 @@
 function(test)
-  fwrite("source1/pkg1/package.cmake" "{id:'pkg1'}" )
-  fwrite("source2/pkg2/package.cmake" "{id:'pkg2'}" )
-  fwrite("source3/pkg3/package.cmake" "{id:'pkg3'}" )
-  fwrite("source4/pkg4/package.cmake" "{id:'pkg4'}" )
-  fwrite("source5/pkg5/package.cmake" "{id:'pkg5'}" )
-  fwrite("source5/pkg6/package.cmake" "{id:'pkg6'}" )
+  fwrite_data("source1/pkg1/package.cmake" "{id:'pkg1'}" --json)
+  fwrite_data("source2/pkg2/package.cmake" "{id:'pkg2'}" --json)
+  fwrite_data("source3/pkg3/package.cmake" "{id:'pkg3'}" --json)
+  fwrite_data("source4/pkg4/package.cmake" "{id:'pkg4'}" --json)
+  fwrite_data("source5/pkg5/package.cmake" "{id:'pkg5'}" --json)
+  fwrite_data("source5/pkg6/package.cmake" "{id:'pkg6'}" --json)
+
 
 
   directory_package_source("source1" "source1")

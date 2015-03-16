@@ -1,4 +1,6 @@
 function(test_execute test)
+  event_addhandler(on_log_message "[](msg) message(FORMAT '{msg.message}') ")
+  ans(handler)
 
   message(STATUS "running test ${test}...")
 
@@ -27,6 +29,8 @@ function(test_execute test)
   timer_elapsed("test duration")
   ans(time)
   popd()
+
+  event_removehandler(${handler})
 
 
   message(STATUS "done after ${time} ms")

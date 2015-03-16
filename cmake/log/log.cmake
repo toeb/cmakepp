@@ -31,6 +31,12 @@
 ## %>
 ## ```
 function(log)
+  event_handlers(on_log_message)
+  ans(has_handlers)
+  if(NOT has_handlers)
+    return()
+  endif()
+
 
   set(args ${ARGN})
   list_extract_flag(args --warning)
@@ -44,6 +50,11 @@ function(log)
   list_extract_labelled_value(args --push)
   list_extract_labelled_value(args --pop)
   list_extract_labelled_value(args --error-code)
+  list_extract_labelled_value(args --function)
+  ans(function)
+  if(function)
+    set(member_function ${function})
+  endif()
   ans(error_code)
   map_new()
   ans(entry)

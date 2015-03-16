@@ -5,16 +5,18 @@
   ## resolves the specifie package uri 
   ## and if uniquely identifies a package 
   ## returns its pacakge descriptor
-  function(package_source_resolve_github uri)  
-    uri("${uri}")
-    ans(uri)
+  function(package_source_resolve_github uri)
+    uri_coerce(uri)
+
+    log("querying for '{uri.uri}'" --trace --function package_source_resolve_github)
+
 
     package_source_query_github("${uri}" --package-handle)
     ans(package_handle)
 
     list(LENGTH package_handle count)
     if(NOT "${count}" EQUAL 1)
-        error("could not resolve {uri.uri} to a unique package (got {count})")
+        error("could not resolve '{uri.uri}' to a unique package (got {count})" --function package_source_resolve_github)
         return()
     endif() 
 
@@ -23,7 +25,7 @@
     ans(package_uri)
     assign(hash = package_uri.params.hash)
     if(NOT hash)
-        error("package uri is not unique. requires a hash param: {uri.uri}")
+        error("package uri is not unique. requires a hash param: '{uri.uri}'" --function package_source_resolve_github)
         return()
     endif()
 
@@ -37,7 +39,7 @@
     github_api("repos/${user}/${repo}" --json)
     ans(repo_descriptor)
     if(NOT repo_descriptor)
-        error("could not resolve repository descriptor")
+        error("could not resolve repository descriptor" --function package_source_resolve_github)
         return()
     endif()
 
@@ -61,9 +63,13 @@
     }")
     ans(package_descriptor)
     
+
+
     ## response
     map_set(${package_handle} package_descriptor "${package_descriptor}")
     map_set(${package_handle} github_descriptor "${repo_descriptor}")
+
+    log("resolved package handle for '{package_handle.query_uri}': '{package_handle.uri}'" --trace --function package_source_resolve_github)
 
     return_ref(package_handle)
   endfunction()
