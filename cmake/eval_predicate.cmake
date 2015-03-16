@@ -11,8 +11,13 @@
     cmake_arguments_quote_if_necessary(${arguments})
     ans(arguments)
 
-    string_combine(" " ${arguments})
-    ans(predicate)
+    set(predicate)
+    foreach(arg ${arguments})
+      encoded_list_decode("${arg}")
+      ans(arg)
+      set(predicate "${predicate} ${arg}")
+    endforeach()
+
     #_message("${predicate}")
     set(code "
       if(${predicate})

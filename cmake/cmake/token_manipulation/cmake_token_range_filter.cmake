@@ -2,7 +2,7 @@
 function(cmake_token_range_filter range )
   arguments_encoded_list2(1 ${ARGC})
   ans(args)
-  
+
   cmake_token_range("${range}")
   ans_extract(current end)
   list_extract_labelled_value(args --skip)
@@ -12,6 +12,7 @@ function(cmake_token_range_filter range )
   if("${take}_" STREQUAL "_")
     set(take -1)
   endif()
+  set(predicate ${args})
   set(result)
   while(take AND current AND NOT "${current}" STREQUAL "${end}")
     map_tryget("${current}" literal_value)
@@ -19,10 +20,11 @@ function(cmake_token_range_filter range )
     map_tryget("${current}" type)
     ans(type)
 
-    eval_predicate(${args})
+    eval_predicate(${predicate})
     ans(predicate_holds)
 
-    #string(REPLACE "{type}" "${type}" current_predicate "${args}")
+   # print_vars(predicate predicate_holds value type)
+    #string(REPLACE "{type}" "${type}" current _predicate "${args}")
     #string(REPLACE "{value}" "${value}" current_predicate "${current_predicate}")
     if(predicate_holds)
 
