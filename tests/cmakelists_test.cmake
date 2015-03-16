@@ -1,15 +1,18 @@
 function(test)
 
+
   function(cmakelists_open)
     map_new()
     ans(cmakelists)
+
+    pushd("${ARGN}")
 
     path("CMakeLists.txt")
     ans(cmakelists_path)
     if(NOT EXISTS "${cmakelists_path}")
       path_parent_dir_name("cmakelists_path}")
       ans(project_name)
-      set(content "cmake_minimum_required(VERSION ${CMAKE_VERSION})\n\nproject(${project_name})")
+      set(content "cmake_minimum_required(VERSION ${CMAKE_VERSION})\n\nproject(${project_name})\n## <section name=\"targets\">\n## </section>\n")
 
     else()
       fread("${cmakelists_path}")
@@ -28,7 +31,7 @@ function(test)
     map_set(${cmakelists} begin ${begin})
     map_set(${cmakelists} end ${end} )
     map_set(${cmakelists} path "${cmakelists_path}")
-    
+    popd()
     return_ref(cmakelists)
   endfunction()
 
@@ -44,72 +47,6 @@ function(test)
   endfunction()
 
 
-  function(token_range_section_find range section_name)
-    set(section_begin_comment "# <section name=\"${section_name}\"> ##")
-    set(section_end_comment "# </section> ##")
-
-    string_regex_escape("${section_begin_comment}")
-    ans(section_begin_regex)
-    
-    string_regex_escape("${section_end_comment}")
-    ans(section_end_regex)
-
-    set(section_begin_regex "^${section_begin_regex}$")
-    set(section_end_regex "^${section_end_regex}$")
-
-    list_extract(range begin end)
-    print_vars(begin end)
-    cmake_token_range_find_next_by_type("${range}" "^line_comment$" "${section_begin_regex}")
-    ans(section_begin_token)
-    if(NOT section_begin_token)
-      message(no begin)
-      return()
-    endif()
-    
-    cmake_token_range_find_next_by_type("${section_begin_token};${end}" "^line_comment$" "${section_end_regex}")
-    ans(section_end_token)
-    if(NOT section_end_token)
-      message(no end)
-      return()
-    endif()
-    map_tryget(${section_begin_token} next)
-    ans(section_begin_token)
-    map_tryget(${section_begin_token} next)
-    ans(section_begin_token)
-    return(${section_begin_token} ${section_end_token})
-  endfunction()
-
-  cmake_tokens("
-asd()
-## lolo
-bsd()
-  ## <section name=\"karlo\"> ##
-    message(hello karlo)
-
-dkdkdkd()
-  
-  ## </section> ##
-  ## <section name=\"karlo2\"> ##
-
-    message(hello karlo2)
-
-    asdasd(asdasd)
-    ## kakaka
-  muuu()## </section> ##
-
-    ")
-  ans_extract(range)
-  
-  token_range_section_find("${range}" "karlo2")
-  ans(section)
-  print_vars(section)
-  cmake_token_range_serialize("${section}")
-  ans(res)
-
-  _message("${res}")
-
-
-  return()
 
   function(cmakelists_add_target cmakelists type name)
     if(NOT "${type}" MATCHES "^(library)|(executable)$")
@@ -119,17 +56,67 @@ dkdkdkd()
     map_tryget(${cmakelists} begin)
     ans(begin)
 
-    cmake_token_range_find_next_by_type("^line_comment$" "^# <section>${name}</section> ##$")
-    ans(section_begin)
-    
-    if(section_begin) 
-      message(FATAL_ERROR "the target already exists")
-    endif()   
+    cmake_token_range_comment_section_find("${begin}" "target:${name}")
+    ans(target_section)
+
+    if(target_section)
+      error("section already exists target:${name}")
+      return()
+    endif()
+
+    cmake_token_range_comment_section_find("${begin}" "targets")
+    ans(targets_section)
+
+    if(NOT targets_section)
+      error("no targets section exists in cmake file")
+      return()
+    endif()
 
 
-    cmake_token_range_find_next_by_type("^line_comment$" "^# <section>targets</section> ##$")
+
+    cmake_token_range_replace("${targets_section}" 
+"##   <section name=\"target:${name}\">
+set(sources)
+set(link_libraries)
+set(include_directories)
+add_${type}(${name} \${sources})
+target_link_libraries(${name} \${link_libraries})
+target_include_directories(${name} \${include_directories})
+##   </section>
+")
+
+  endfunction()
+
+  function(cmakelists_target_add_source_files cmakelists target_name)
+    map_tryget(${cmakelists} begin)
+    ans(begin)
+
+    cmake_token_range_comment_section_find("${begin}" "target:${target_name}")
+    ans(target_section)
+    if(NOT target_section)
+      error("could not find section 'target:${target_name}'")
+      return()
+    endif()
+    map_tryget(${cmakelists} path)
+    ans(path)
+    pushd("${path}" --force)
+    foreach(file ${ARGN})
+      path_qualify(file)
+      if(NOT EXISTS "${file}")
+        fwrite("${file}" "")
+      endif()
+    endforeach()
+
+    cmake_invocation_argument_list_find("${target_section}" "^set$"  "^source($|;)")
+    ans(variable_invocation)
 
 
+    print_vars(variable_invocation)
+
+    #cmake_invocation_get_arguments_list()
+    #cmake_invocation_set_arguments()
+
+    popd()
 
   endfunction()
 
@@ -140,6 +127,9 @@ dkdkdkd()
   ans(cmakelists)
 
 
+  cmakelists_add_target(${cmakelists} library my_lib)
+
+  cmakelists_target_add_source_files("${cmakelists}" "my_lib" "hihi.cpp" "huhu.h")
 
   cmakelists_close(${cmakelists})
 

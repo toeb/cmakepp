@@ -146,10 +146,6 @@
 		{
 			"follow_symlinks": true,
 			"path": "."
-		},
-		{
-			"follow_symlinks": true,
-			"path": "C:\\Users\\Tobi\\Documents\\projects\\cgen"
 		}
 	],
 	"settings":

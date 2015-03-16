@@ -3,10 +3,11 @@
 ## returns the arguments for the specified invocation
 ## the optional regex can be used to check the argument list for a value
 ##
-function(cmake_invocation_argument_list_find begin identifier )
+function(cmake_invocation_argument_list_find range identifier )
   set(regex ${ARGN})
-  cmake_tokens("${begin}")
+  cmake_tokens("${range}")
   ans_extract(current_invocation)
+
   ans(rest)
 
   while(true)
@@ -16,7 +17,7 @@ function(cmake_invocation_argument_list_find begin identifier )
       break()  
     endif()
 
-    cmake_token_range_find_invocations("${identifier}" "${current_invocation}" "" 1)
+    cmake_token_range_find_invocations( "${current_invocation}" "${identifier}"  1)
     ans(current_invocation)
     if(NOT current_invocation)
       break()

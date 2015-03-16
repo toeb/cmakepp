@@ -17,7 +17,7 @@
     command_line_args_combine(${command_arguments})
     ans(command_arguments_string)
 
-    set(command_string "${command} ${command_arguments_string}")
+    set(command_string "\"${command}\" ${command_arguments_string}")
 
     map_tryget(${start_info} working_directory)
     ans(working_directory)
@@ -41,7 +41,7 @@
     ## output pid to file output command_string to 
     fwrite_temp("
       @echo off
-      cd ${working_directory}
+      cd \"${working_directory}\"
       wmic process get parentprocessid,name|find \"WMIC\" > ${pidfile}
       ${command_string} > ${outputfile} 2> ${errorfile}
       echo %errorlevel% > ${returncodefile}

@@ -35,6 +35,6 @@ function(cmake_invocation_set_arguments invocation)
   list_peek_back(argument_tokens)
   ans(replace_last)
 
-  token_range_replace("${begin}" "${end}" "${replace_first}" "${replace_last}")
+  cmake_token_range_replace_range("${begin};${end}" "${replace_first}" "${replace_last}")
   return()
 endfunction()
