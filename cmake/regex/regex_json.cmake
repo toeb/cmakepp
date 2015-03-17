@@ -8,7 +8,7 @@ macro(regex_json)
     set(regex_json_null_literal "null")
     set(regex_json_literal "(${regex_json_string_literal})|(${regex_json_number_literal})|${regex_json_bool_literal}|(${regex_json_null_literal})")
   
-    set(regex_json_string_token "\"([^\"\\]|(\\\\\")|(\\\\.))*\"")
+    set(regex_json_string_token "\"(([\\][\\]\")|(\\\\.)|[^\"\\])*\"")
 
     set(regex_json_number_token "[0-9\\.eE\\+\\-]+")
     set(regex_json_bool_token "(true)|(false)")

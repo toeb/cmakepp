@@ -1,6 +1,15 @@
 function(test)
 
+  ## empty
+  json_deserialize("")
+  ans(res)
+  assert(NOT res)
 
+
+  ## empty string
+  json_deserialize("\"\"")
+  ans(res)
+  assert(NOT res)
 
 
 
@@ -14,6 +23,11 @@ function(test)
   ans(res)
   assert("${res}" STREQUAL "\"")
 
+  ## escape backslash quote escapes
+  json_deserialize("\"\\\\\"\"")
+  ans(res)
+  string(REPLACE "\\" "1" res "${res}")
+  assert("${res}" STREQUAL "1\"")
 
   ## escaped backlshash
   json_deserialize("\"\\\\\"")
@@ -37,6 +51,12 @@ function(test)
   json_deserialize("\"[]\"")
   ans(res)
   assert("${res}" STREQUAL "[]")
+
+
+  ## null
+  json_deserialize("null")
+  ans(res)
+  assert(NOT res)
 
   ## deserailzie number
   json_deserialize("123")
@@ -181,6 +201,25 @@ return()
 
 
 
-#  json_print(${res})
+  
+  ## issue #48
+  json_deserialize("
+{
+  \"name\": \"library\",
+  \"version\": \"1.0.0\",  
+  \"platforms\": {
+          \"windows-x86_64\": {
+              \"env\":\"intel12.1\", \"binpath\": \"\", \"libpath\": \"win64/intel12.1\" 
+          },
+          \"linux-x86_64\": {
+              \"env\":\"gnu4.8\", \"binpath\": \"\", \"libpath\": \"\"
+          }
+    }
+
+}
+
+    ")
+  ans(res)
+json_print("${res}")
 
 endfunction()
