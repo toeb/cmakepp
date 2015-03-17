@@ -1,9 +1,9 @@
 
 
 function(cmake_string_to_json str)
+  string_decode_semicolon("${str}")
+  ans(str)
   string(REPLACE "\\" "\\\\" str "${str}")
-
-
   string(REPLACE "\"" "\\\"" str "${str}")
   string(REPLACE "\n" "\\n" str "${str}")
   string(REPLACE "\t" "\\t" str "${str}")

@@ -23,6 +23,5 @@ function(test)
   package_source_resolve_github("toeb")
   ans(res)
   assert(NOT res)
-
   
 endfunction()
