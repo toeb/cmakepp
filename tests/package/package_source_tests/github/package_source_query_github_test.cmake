@@ -18,7 +18,7 @@ function(test)
   ans(res)
   assert(res)
   assert(${res} CONTAINS "github:toeb/cmakepp")
-  
+
   package_source_query_github("toeb/*")
   ans(res)
   assert(res)

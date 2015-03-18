@@ -7,5 +7,9 @@ macro(project_constants)
     set(project_constants_dependency_dir "packages")
     set(project_constants_config_dir ".cps")
     set(project_constants_project_file "${project_constants_config_dir}/project.scmake")
+
+
+
   endif()
 endmacro()
+

@@ -1,9 +1,9 @@
 
   function(json_string_to_cmake str)
     # remove trailing and leading quotation marks
-    string_slice("${str}" 1 -2)
-    ans(str)
     if("${str}" MATCHES "\"(.*)\"")
+      set(str "${CMAKE_MATCH_1}")
+      ## escape semicolon
       string(REPLACE "\\\\;" ";" str "${CMAKE_MATCH_1}")
     endif()
 

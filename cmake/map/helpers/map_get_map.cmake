@@ -15,3 +15,4 @@ function(map_get_map map key)
   endif()
   return_ref(res)
 endfunction()
+

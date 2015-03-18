@@ -82,7 +82,7 @@ function(message)
 	endif()
 	# check if deep message are to be ignored
 	if(NOT MESSAGE_DEPTH LESS 0)
-		if(${message_indent_level} GREATER ${MESSAGE_DEPTH})
+		if("${message_indent_level}" GREATER "${MESSAGE_DEPTH}")
 			return()
 		endif()
 	endif()

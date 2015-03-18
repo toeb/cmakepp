@@ -24,6 +24,8 @@ function(package_source_resolve_git uri)
   json_deserialize("${package_descriptor_content}")
   ans(package_descriptor)
 
+ # print_vars(uri.uri package_descriptor_content)
+
   map_tryget(${uri} file_name)
   ans(default_id)
 

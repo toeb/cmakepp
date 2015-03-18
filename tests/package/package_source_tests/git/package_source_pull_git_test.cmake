@@ -6,7 +6,6 @@ function(test)
   ans(res)
   assert(res)
   assert(EXISTS "${test_dir}/clone3/README.md")
-  print_vars(res.package_descriptor)
   assertf("{res.package_descriptor.license}" STREQUAL "MIT")
 
 

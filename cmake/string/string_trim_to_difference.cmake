@@ -3,6 +3,7 @@
 function(string_trim_to_difference lhs rhs)
   string_overlap("${${lhs}}" "${${rhs}}")
   ans(overlap)
+
   string_take(${lhs} "${overlap}")
   string_take(${rhs} "${overlap}")
   set("${lhs}" "${${lhs}}" PARENT_SCOPE)

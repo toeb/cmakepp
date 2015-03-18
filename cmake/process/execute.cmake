@@ -50,7 +50,6 @@ function(execute)
 
   process_start_info_new(${args})
   ans(start_info)
-  
 
 ##debug here
   #print_vars(start_info.command start_info.command_arguments)

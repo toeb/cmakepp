@@ -1,6 +1,5 @@
 function(test)
 
-
   pushd(localrepo --create)
     git(init)
     fwrite("README.md" "hello")
@@ -61,10 +60,6 @@ function(test)
   ans(res)
   assert(res)
   
-  package_source_query_git("https://github.com/toeb/cutil.git")
-  ans(res)
-  assert(res)
-
   package_source_query_git("https://github.com/toeb/cmakepp")
   ans(res)
   assert(res)

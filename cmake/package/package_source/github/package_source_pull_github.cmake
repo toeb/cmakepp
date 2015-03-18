@@ -1,6 +1,8 @@
 ## package_source_pull_github(<~uri> <?target_dir>) -> <package handle>
 function(package_source_pull_github uri)
   set(args ${ARGN})
+  uri_coerce(uri)
+  log("pulling {uri.uri}" --trace --function package_source_pull_github)  
 
   ## get package descriptor 
   package_source_resolve_github("${uri}")
@@ -25,7 +27,6 @@ function(package_source_pull_github uri)
   ## alternatives git_url/clone_url
   map_tryget(${repo_descriptor} clone_url)
   ans(clone_url)
-
 
   package_source_pull_git("${clone_url}" "${target_dir}")
   ans(scm_package_handle)

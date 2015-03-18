@@ -41,7 +41,7 @@
         ans(error)
         if(error)
           rm("${repo_cache_dir}")
-          message(FATAL_ERROR "hg could not clone ${remote_uri}")
+          message(FATAL_ERROR "hg could not clone ${remote_uri} - failed with ${error}")
         endif()
       endif()
 
