@@ -1,7 +1,8 @@
-## `()-><void>`
+## `(<range:<cmake token range>> <replace_range:<cmake token range>>)-><cmake token range>`
 ## 
 ## replaces the specified range with the specified replace range
-function(cmake_token_range_replace_range range replace_range)
+## returns the replace range
+function(cmake_token_range_replace range replace_range)
   cmake_token_range("${range}")
   ans_extract(start end)
   cmake_token_range("${replace_range}")
@@ -12,5 +13,7 @@ function(cmake_token_range_replace_range range replace_range)
   map_set(${replace_start} previous ${previous})
   map_set(${end} previous ${replace_end})
   map_set(${replace_end} next ${end})
-  return()
+  return(${replace_start} ${replace_end})
 endfunction()
+
+

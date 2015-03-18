@@ -1,5 +1,11 @@
 
-function(cmakelists_add_target cmakelists type name)
+function(cmakelists_target_create cmakelists type name)
+  set(args ${ARGN})
+  list_extract_flag(args --create)
+  ans(create)
+  if(NOT create)
+    message(FATAL_ERROR "does not support anythiung else than --create currently")
+  endif()
   if(NOT "${type}" MATCHES "^(library)|(executable)$")
     message(FATAL_ERROR "invalid target type: ${type}")
   endif()
@@ -7,15 +13,16 @@ function(cmakelists_add_target cmakelists type name)
   map_tryget(${cmakelists} begin)
   ans(begin)
 
-  cmake_token_range_comment_section_find("${begin}" "target:${name}")
+
+  cmake_token_range_comment_section_navigate("${begin}" "targets.${name}")
   ans(target_section)
 
   if(target_section)
-    error("section already exists target:${name}")
+    error("section already exists '${name}'")
     return()
   endif()
 
-  cmake_token_range_comment_section_find("${begin}" "targets")
+  cmake_token_range_comment_section_navigate("${begin}" "targets")
   ans(targets_section)
 
   if(NOT targets_section)
@@ -24,12 +31,13 @@ function(cmakelists_add_target cmakelists type name)
   endif()
 
   list_extract(targets_section section_begin section_end)
+  
   map_tryget(${section_end} previous)
   ans(insertion_point)
 
   cmake_token_range_replace("${insertion_point};${section_end}" 
 "
-##   <section name=\"target:${name}\">
+##   <section name=\"${name}\">
 set(sources)
 set(link_libraries)
 set(include_directories)

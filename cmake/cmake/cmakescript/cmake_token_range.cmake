@@ -1,4 +1,3 @@
-
   function(cmake_token_range )    
     cmake_tokens("${ARGN}")
     ans(range)

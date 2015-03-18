@@ -6,13 +6,13 @@
 ## output:
 ##  varA: '1' varB: 'abc'
 function(print_vars)
-  set(args "${ARGN}")
-  list_extract_flag(args --plain)
-  ans(plain)
+  set(__print_vars_args "${ARGN}")
+  list_extract_flag(__print_vars_args --plain)
+  ans(__print_vars_plain)
   set(__str)
-  foreach(arg ${args})
-    assign(____cur = ${arg})
-    if(NOT plain)
+  foreach(__print_vars_arg ${__print_vars_args})
+    assign(____cur = ${__print_vars_arg})
+    if(NOT __print_vars_plain)
       json("${____cur}")
       ans(____cur)
     else()
@@ -21,7 +21,7 @@ function(print_vars)
 
     string_shorten("${____cur}" "300")
     ans(____cur)
-    set(__str "${__str} ${arg}: ${____cur}")
+    set(__str "${__str} ${__print_vars_arg}: ${____cur}")
 
   endforeach()
   message("${__str}")

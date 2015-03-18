@@ -3,9 +3,13 @@ function(cmake_token_range_invocations_filter range)
   arguments_encoded_list2(1 ${ARGC})
   ans(args)
 
-  cmake_token_range("${range}")
-  ans_extract(current end)
+  list_extract_flag_name(args --reverse)
+  ans(reverse)
 
+  cmake_token_range("${range}")
+  ans(range)
+  list_extract(range begin end)
+  set(current ${begin})
   list_extract_labelled_keyvalue(args --skip)
   ans(skip)
   list_extract_labelled_keyvalue(args --take)
@@ -14,15 +18,17 @@ function(cmake_token_range_invocations_filter range)
     set(take -1)
   endif()
 
+
   set(result)
   while(take AND current)
-
-    cmake_token_range_filter("${current};${end}" {type} STREQUAL "command_invocation" --take 1)
+    cmake_token_range_filter("${current};${end}" {type} STREQUAL "command_invocation" --take 1 ${reverse})
     ans(invocation_token)
     if(NOT invocation_token)
       break()
     endif()
-
+    if(reverse)
+      set(end)
+    endif()
     cmake_token_range_filter("${invocation_token};${end}" {type} STREQUAL "nesting" --take 1)
     ans(arguments_begin_token)
 
@@ -44,6 +50,8 @@ function(cmake_token_range_invocations_filter range)
 
     eval_predicate(${args})
     ans(predicate_holds)
+    #print_vars(invocation_token.type invocation_token.value predicate_holds args)
+
     ## check if invocation matches the custom predicate
     ## skip and take the specific invocations
     if(predicate_holds)
@@ -65,8 +73,12 @@ function(cmake_token_range_invocations_filter range)
       endif() 
     endif() 
 
-
-    set(current ${arguments_after_end_token})
+    if(reverse)
+      map_tryget(${invocation_token} previous )
+      ans(end)
+    else()
+      set(current ${arguments_after_end_token})
+    endif()
   endwhile()
   return_ref(result)
 endfunction()

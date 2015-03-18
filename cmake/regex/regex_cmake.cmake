@@ -59,7 +59,9 @@ macro(regex_cmake)
 
 
   set(regex_cmake_flag "-?-?[A-Za-z_][A-Za-z0-9_\\-]*")
-
+  set(regex_cmake_double_dash_flag "\\-\\-[a-zA-Z0-9][a-zA-Z0-9\\-]*")
+  set(regex_cmake_single_dash_flag "\\-[a-zA-Z0-9][a-zA-Z0-9\\-]*")
+  
 ## todo: quoted, unquoated, etc
   set(regex_cmake_argument_string ".*")
   set(regex_cmake_command_invocation "(${regex_cmake_space})*(${regex_cmake_identifier})(${regex_cmake_space})*\\((${regex_cmake_argument_string})\\)")

@@ -8,7 +8,7 @@
     map_tryget(${target_descriptor} target_name)
     ans(target_name)
 
-    cmake_token_range_comment_section_find("${begin}" "target:${target_name}")
+    cmake_token_range_comment_section_navigate("${begin}" "target.${target_name}")
     ans(target_section)
     if(NOT target_section)
       error("no managed target section found for {target_name}")

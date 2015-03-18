@@ -135,7 +135,6 @@ function(cmake_tokens_parse code)
   endwhile()
   cmake_token_eof()
   ans(eof)
-
   if(previous)
     map_set(${previous} next ${eof})
     map_set(${eof} previous ${previous})

@@ -16,4 +16,12 @@ function(test)
   assert(${res} EQUALS asdasd dkdkdkdd) 
   
 
+  cmake_token_range_filter_values("a b c d" type MATCHES "argument" --take 1 --skip 1 --reverse)
+  ans(res)
+  assert("${res}" STREQUAL "c")
+
+
+
+  
+
 endfunction()

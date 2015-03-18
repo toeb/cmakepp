@@ -19,7 +19,6 @@ function(list_modify __list_name)
   list_extract_flag(args --remove-duplicates)
   ans(remove_duplicates)
 
-
   set(value ${${__list_name}})
 
   list(LENGTH value length)
