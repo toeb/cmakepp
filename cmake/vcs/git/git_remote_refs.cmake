@@ -3,19 +3,16 @@
 function(git_remote_refs uri)
   git_uri("${uri}")
   ans(uri)
-  git(ls-remote ${uri} --process-handle)
-  ans(result)
 
-  map_tryget(${result} exit_code)
-  ans(error)
-  map_tryget(${result} stdout)
-  ans(res)
+  git_lean(ls-remote ${uri})
+  ans_extract(error)
+  ans(stdout)
 
   if(error)
     return()
   endif()
 
-  string_split( "${res}" "\n")
+  string_split( "${stdout}" "\n")
   ans(lines)
   set(res)
   foreach(line ${lines})

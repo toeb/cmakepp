@@ -7,9 +7,9 @@
     list_extract_flag(args --package-handle)
     ans(return_package_handle)
 
-    uri("${uri}")
-    ans(uri)
+    uri_coerce(uri)
 
+    log("git_package_source: querying for {uri.uri}" --trace)
 
 
     uri_qualify_local_path("${uri}")
@@ -25,6 +25,7 @@
 
     ## remote does not exist
     if(NOT remote_exists)
+      log("git_package_source: remote '{remote_uri}' does not exist")
       return()
     endif()
 
@@ -42,6 +43,7 @@
     if(NOT "${rev}_" STREQUAL "_")
       ## todo validate rev furhter??
       if(NOT "${rev}" MATCHES "^[a-fA-F0-9]+$")
+         error("git_package_source: invalid revision for {uri.uri}: '{rev}'")
         return()
       endif()
 
@@ -83,6 +85,7 @@
       ans(scm_descriptor)
       assign(rev = scm_descriptor.ref.revision)
       set(result "${remote_uri}?rev=${rev}")
+      log("git_package_source: query {uri.uri} found {result}" --trace)
       if(return_package_handle)
         set(package_handle)
         assign(!package_handle.uri = result)

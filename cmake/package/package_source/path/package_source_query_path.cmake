@@ -24,8 +24,9 @@ function(package_source_query_path uri)
     return()
   endif()
 
-  assign(query = uri.query)
-  if(NOT "_${query}" MATCHES "(^_$)|(_hash=[0-9a-zA-Z]+)")
+  map_import_properties(${uri} query)
+  
+ if(NOT "_${query}" MATCHES "(^_$)|(_hash=[0-9a-zA-Z]+)")
     error("path package source only accepts a hash query in the uri.")
     return()
   endif()
@@ -34,28 +35,34 @@ function(package_source_query_path uri)
   uri_to_localpath("${uri}")
   ans(path)
 
-  path("${path}")
-  ans(path)
+  path_qualify(path)
 
   if(NOT IS_DIRECTORY "${path}")
     return()
   endif()
 
+  ## old style package descriptor
+  json_read("${path}/package.cmake")
+  ans(package_descriptor)
+  if(NOT package_descriptor)
+    ## tries to open the package descriptor
+    ## in any other format
+    fopen_data("${path}/package")
+    ans(package_descriptor)
+  endif()
+  
+
 
   ## compute hash
   set(content)
 
-  set(package_descriptor)
-  if(EXISTS "${path}/package.cmake")
-    json_read("${path}/package.cmake")
-    ans(package_descriptor)
-  endif()
 
   
   assign(default_id = uri.last_segment)
   map_defaults("${package_descriptor}" "{id:$default_id,version:'0.0.0'}")
   ans(package_descriptor)
   assign(content = package_descriptor.content)
+
   if(content)
     pushd("${path}")
       checksum_glob_ignore(${content})
@@ -65,7 +72,6 @@ function(package_source_query_path uri)
     checksum_dir("${path}")
     ans(hash)
   endif()
-
   assign(expected_hash = uri.params.hash)
 
   if(expected_hash AND NOT "${hash}" STREQUAL "${expected_hash}")

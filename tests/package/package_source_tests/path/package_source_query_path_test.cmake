@@ -12,7 +12,7 @@ function(test)
 
   fwrite("test/p4/hello.txt" "hello")
 
-  fwrite("test/p5/package.cmake" "{\"content\":[\"**\", \"!hello2.txt\", \"--recurse\"]}" --json)
+  fwrite("test/p5/package.cmake" "{\"content\":[\"**\", \"!hello2.txt\", \"--recurse\"]}")
   fwrite("test/p5/hello.txt" "hello")
   fwrite("test/p5/hello2.txt" "hello")
 

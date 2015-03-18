@@ -11,8 +11,3 @@ function(cmakepp_on_materialized_hook project_handle package_handle)
   package_handle_invoke_hook("${package_handle}" cmakepp.hooks.on_materialized ${project_handle} ${package_handle})
 endfunction()
 
-## register listener for the project_on_package_materialized event 
-## which directly after a package is installed in a project
-## this code is executed as soon as cmakepp has finisehd loading
-task_enqueue("[]()event_addhandler(project_on_package_materialized cmakepp_on_materialized_hook)")
-

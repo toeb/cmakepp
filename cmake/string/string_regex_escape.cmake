@@ -5,7 +5,3 @@
     string(REGEX REPLACE "(\\/|\\]|\\.|\\[|\\*|\\$|\\^|\\-|\\+|\\?)" "\\\\\\1" str "${str}")
     return_ref(str)
   endfunction()
-
-
-  ## faster
-

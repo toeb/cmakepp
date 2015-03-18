@@ -2,7 +2,7 @@ function(test)
 
   
 
-  json_string_to_cmake("\"\\\\\;\"")
+  json_string_to_cmake("\";\"")
   ans(res)
   string(REPLACE ";" "1" res "${res}")
   assert("${res}" STREQUAL "1")
@@ -54,7 +54,7 @@ function(test)
   string(ASCII 13 cr)
   string(ASCII 10 lf)
   string(ASCII 9 ht)
-  json_string_to_cmake("\"\\\"\\\\\\b\\f\\r\\t\\n\\\\\;a\"")
+  json_string_to_cmake("\"\\\"\\\\\\b\\f\\r\\t\\n;a\"")
   ans(res)
   string(REPLACE ";" "1" res "${res}")
   assert("${res}" STREQUAL "\"\\${bs}${ff}${cr}${ht}${lf}1a")

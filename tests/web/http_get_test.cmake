@@ -21,7 +21,8 @@ function(test)
   assertf("{content.args.val1}" EQUAL 1)
   assertf("{content.args.val2}" EQUAL 2)
 
-
+  ## fails if you have  a router that displays a custom search page 
+  ## when it cannot resolve the host.  (*** t-online)
   http_get("http://notahost.tld" --silent-fail)
   ans(res)
   assert(NOT res)

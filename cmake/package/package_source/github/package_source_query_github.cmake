@@ -20,9 +20,14 @@ function(package_source_query_github uri)
   ## parse uri and extract the two first segments 
   uri_coerce(uri)
 
+  log("querying for '{uri.uri}'" --trace --function package_source_query_github)
+
 
   assign(scheme = uri.scheme)
-  if(NOT "${scheme}_" STREQUAL "_" AND NOT "${scheme}" STREQUAL "github")
+  uri_check_scheme("${uri}" "github?")
+  ans(scheme_ok)
+  if(NOT scheme_ok)
+    log("invalid schmeme: '{uri.scheme}'" --trace --function package_source_query_github)
     return()
   endif()
 
@@ -82,20 +87,21 @@ function(package_source_query_github uri)
   else()
     ## no user (not queried) too many results
   endif()
+  list(LENGTH package_handles count) 
+  log("'{uri.uri}' resulted in {count} dependable uris" --trace --function package_source_query_github)
 
+  if(return_package_handle)
+    set(uris ${package_handles})
+    set(package_handles)
+    foreach(github_url ${uris})
+      set(package_handle)
+      assign(!package_handle.uri = github_url)
+      assign(!package_handle.query_uri = uri.uri)
+      list(APPEND package_handles ${package_handle})
+    endforeach()
+    return_ref(package_handles)
+  endif()
 
-
-    if(return_package_handle)
-      set(uris ${package_handles})
-      set(package_handles)
-      foreach(github_url ${uris})
-        set(package_handle)
-        assign(!package_handle.uri = github_url)
-        assign(!package_handle.query_uri = uri.uri)
-        list(APPEND package_handles ${package_handle})
-      endforeach()
-      return_ref(package_handles)
-    endif()
     return_ref(package_handles)
 
 endfunction()

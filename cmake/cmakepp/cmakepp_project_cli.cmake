@@ -6,10 +6,17 @@ function(cmakepp_project_cli)
   #ans(args)
   set(args ${ARGN})
 
-  list_extract_flag(args -v)
+  list_extract_any_flag(args -g --global)
+  ans(global)
+
+
+  list_extract_any_flag(args -v --verbose)
   ans(verbose)
 
+
   if(verbose)
+
+    event_addhandler("on_log_message" "[](entry)print_vars(entry)")
     event_addhandler("project_on_opening" "[](proj) message(FORMAT '{event.event_id}: {proj.content_dir}'); message(PUSH)")
     event_addhandler("project_on_opened" "[](proj) message(FORMAT '{event.event_id}')")
     event_addhandler("project_on_loading" "[](proj) message(FORMAT '{event.event_id}'); message(PUSH)")
@@ -41,9 +48,17 @@ function(cmakepp_project_cli)
   list_extract_labelled_value(args --project)
   ans(project_dir)
 
-  project_open("${project_dir}")
-  ans(project)
-
+  if(global)
+    dir_ensure_exists("~/.cmakepp")
+    project_open("~/.cmakepp")
+    ans(project)
+    assign(project.project_descriptor.is_global = 'true')
+  else()
+    project_open("${project_dir}")
+   ans(project)
+  
+  endif()
+  
   map_tryget(${project} project_descriptor)
   ans(project_descriptor)
   map_tryget(${project_descriptor} package_source)
@@ -65,9 +80,15 @@ function(cmakepp_project_cli)
 
 
   if("${cmd}" STREQUAL "get")
-    list_pop_front(args)
-    ans(path)
-    assign(res = "project.${path}")
+
+    if("${args}" MATCHES "(.+)\\((.*)\\)$")
+      set(path "${CMAKE_MATCH_1}")
+      set(call (${CMAKE_MATCH_2}))
+    else()
+      set(call)
+      set(path ${args})
+    endif()
+    assign(res = "project.${path}" ${call})
   elseif("${cmd}" STREQUAL "set")
     list_pop_front(args)
     ans(path)
@@ -94,7 +115,7 @@ function(cmakepp_project_cli)
     assign(res = "project.${path}")
 
   elseif("${cmd}" STREQUAL "run")
-    package_handle_invoke_hook("${project}" cmakepp.hooks.run "${project}" "${project}")
+    package_handle_invoke_hook("${project}" cmakepp.hooks.run "${project}" "${project}" ${args})
     ans(res)
   else()
     call("project_${cmd}"("${project}" ${args}))

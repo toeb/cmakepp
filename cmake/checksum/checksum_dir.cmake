@@ -11,7 +11,6 @@
     path_qualify(dir)
 
     file(GLOB_RECURSE files RELATIVE "${dir}" "${dir}/**")
-
     checksum_files("${dir}" ${files} ${algorithm})
     return_ans()
   endfunction()

@@ -1,0 +1,37 @@
+## `(<cmakelists> <file>... [--create-files] )->`
+## qualifies the paths relative to the cmaklists file path
+function(cmakelists_paths cmakelists)
+  set(args ${ARGN})
+  list_extract_flag(args --create-files)
+  ans(create_files)
+  list_extract_flag(arsg --create-dirs)
+  ans(create_dir)
+  list_extract_flag(args --glob)
+  ans(glob)
+
+  
+
+  map_tryget(${cmakelists} path)
+  ans(cmakelists_path)
+  path_parent_dir("${cmakelists_path}")
+  ans(cmakelists_dir)
+  set(files)
+
+  if(glob)
+    glob(${args})
+    ans(args)
+  else()
+    paths(${args})
+    ans(args)
+  endif()
+  foreach(file ${args})
+    if(create_dirs AND NOT EXISTS "${file}")
+      mkdir("${file}")
+    elseif(create_files AND NOT EXISTS "${file}")
+      fwrite("${file}" "")
+    endif()
+    path_relative("${cmakelists_dir}" "${file}")
+    ans_append(files)
+  endforeach()
+  return_ref(files)
+endfunction()
