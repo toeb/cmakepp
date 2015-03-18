@@ -2,7 +2,6 @@
 
 ## A CMake Enhancement Suite
 [![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)](https://travis-ci.org/toeb/cmakepp)
-[![Appveyor branch](https://img.shields.io/appveyor/ci/toeb/cmakepp.svg)](https://ci.appveyor.com/project/toeb/cmakepp)
 [![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)](https://github.com/toeb/cmakepp/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/network)
 [![GitHub issues](https://img.shields.io/github/issues/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/issues)
@@ -33,7 +32,7 @@ You have multiple options to install `cmakepp` the only prerequisite for all opt
 
 ## <a name="install_console"></a> Install by Console
 
-For ease of use I provide you with simple copy paste code for your console of choice.  These scripts download the `install.cmake` file and execute it.  This file in turn downloads `cmakepp` and adds itself to your os (creating aliases and setting a environment variable - which allow you to use [icmake](#icmake) and [cmakepp cli](#cmake_cli) from the console).
+For ease of use I provide you with simple copy paste code for your console of choice.  These scripts download the `install.cmake` file and execute it.  This file in turn downloads `cmakepp` and adds itself to your os (creating aliases and setting a environment variable - which allow you to use [icmakepp](#icmakepp) and [cmakepp cli](#cmake_cli) from the console).
 
 *Bash*
 ```
@@ -77,7 +76,7 @@ include("cmakepp.cmake")
 cmake -P ./cmakepp.cmake cmakepp_setup_environment
 ```
 
-After You run this and relogin/repoen your console/resource your .bashrc you will have access to the alias `cmakepp`, `icmake`, `pkg`. Also the environment variable `CMAKEPP_PATH` will be set to the location were `cmakepp.cmake` resides.
+After You run this and relogin/repoen your console/resource your .bashrc you will have access to the alias `cmakepp`, `icmakepp`, `pkg`, `cml`. Also the environment variable `CMAKEPP_PATH` will be set to the location were `cmakepp.cmake` resides.
 
 
 # Testing
@@ -241,38 +240,38 @@ This is possible by overwriting CMakes default return() function with a macro. I
 <%=cmakepp_cli(uri http+https://toeb:pass@@www.example.com/path/to/file.ext?key=value&key2.subkey=value2 --silent --select "scheme: @@scheme key2.subkey: @@params.key2.subkey")%>
 ```
 
-## <a name="icmake"></a>Interactive CMake Shell
+## <a name="icmakepp"></a>Interactive CMake Shell
 
-If you want to learn try or learn cmake and `cmakepp` you can use the interactive cmake shell by launching `cmake -P icmake.cmake` which gives you a prompt with the all functions available in `cmakepp` and cmake in general.
+If you want to learn try or learn cmake and `cmakepp` you can use the interactive cmake shell by launching `cmake -P icmakepp.cmake` which gives you a prompt with the all functions available in `cmakepp` and cmake in general.
 
-`icmake` allows you to enter valid cmake and also a more lazily you can neglect to enter the parentheses around functions e.g. `cd my/path ` -> `cd(my/path)`
+`icmakepp` allows you to enter valid cmake and also a more lazily you can neglect to enter the parentheses around functions e.g. `cd my/path ` -> `cd(my/path)`
 
 Since console interaction is complicated with cmake and cmake itself is not very general purpose by design the interactive cmake shell is not as user friendly as it should be.  If you input an error the shell will terminate because cmake terminates. This problem might be addressed in the future (I have an idea however not the time to implement and test it)
 Example:
 ```
-> ./icmake.sh
-icmake> cd /usr/tobi
+> ./icmakepp.sh
+icmakepp> cd /usr/tobi
 "/usr/tobi"
-icmake> pwd
+icmakepp> pwd
 "/usr/tobi"
-icmake> @@echo off
+icmakepp> @@echo off
 echo is now off
-icmake> pwd
-icmake> message("${ANS}")
+icmakepp> pwd
+icmakepp> message("${ANS}")
 /usr/tobi
-icmake> @@echo on
+icmakepp> @@echo on
 echo is now on
-icmake> function(myfunc name)\  # <-- backslash allows multiline input
+icmakepp> function(myfunc name)\  # <-- backslash allows multiline input
           message("hello ${name}") \
           obj("{name: $name}")\
           ans(person)\
           return(${person})\
         endfunction()
 "/usr/tobi"                 # <-- the last output of any function is always repeated. 
-icmake> myfunc Tobi
+icmakepp> myfunc Tobi
 hello Tobi          # <-- output in function using message
 {"name":"Tobi"}       # <-- json serialized return value of function
-icmake> quit
-icmake is quitting
+icmakepp> quit
+icmakepp is quitting
 > 
 ```
