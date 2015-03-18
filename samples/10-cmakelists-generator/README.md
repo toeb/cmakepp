@@ -12,21 +12,19 @@ With this sample I want to show you how you can manipulate a `CMakeList.txt` usi
 ## Step 1 - Starting from Scratch
 
 The first thing to do is to create an initial `CMakeLists.txt` file in the directory of your project.
+
 ```bash
-# create a new directory 
+# create a new directory
 ./> mkdir my_project
 ./> cd my_project
-my_project/> cml initpopd()
+my_project/> cml init 
 ```
 
 These commands result in a new CMakeLists file in the current directory.  The projects name is derived by taking the parent directory's name.  As you can see the code is just vanilla cmake and you can modify it manually as ever you see fit.
 
 *CMakeLists.txt*: 
 ```cmake
-cmake_minimum_required(VERSION 3.2.1)
-
-project(my_project)
-
+<file does not exist>
 ```
 
 ## Step 2 - Adding a target
@@ -35,22 +33,15 @@ The first thing you might want to do is to add a target.  Let's say we want a li
 
 ```bash
 # add the target 
-my_project/> cml target add my_lib
-my_project/> cml target add my_exe executable
+./> cml target add my_lib
+./> cml target add my_exe executable
 ```
 
 Now you can see the scaffolding for a cmake  library and executable target inside the `CMakeLists.txt`.  You might have also noticed that what was generated is not a valid `CMakeLists.txt` because there are not source files specified for the lib and the exe.  However this only causes an error if you generate it.  So we need to add source files which leads us to the next section.
 
 *CMakeLists.txt*: 
 ```cmake
-cmake_minimum_required(VERSION 3.2.1)
-
-project(my_project)
-
-add_library(my_lib)
-
-add_executable(my_exe)
-
+<file does not exist>
 ```
 
 
@@ -61,39 +52,26 @@ Using the command line tool you can easily add files, folders and values to the 
 
 ```bash
 ## add source files to the my_lib target from a subdirectory (the files have to exist) 
-my_project/src/my_lib/> cml target my_lib sources append my_lib.cpp
+src/my_lib/> cml target my_lib sources append my_lib.cpp
 
 ## add source file from another directory using a glob expression 
-my_project/includes/my_lib_inc/> cml target my_lib sources append my_lib*.h
+includes/my_lib_inc/> cml target my_lib sources append my_lib*.h
 
 ## add source file to my_exe 
-my_project/> cml target my_exe sources append src/main.cpp
+./> cml target my_exe sources append src/main.cpp
 
 ## add an include directory to the my_lib target
-my_project/include/> cml target my_lib includes append my_lib_inc
+include/> cml target my_lib includes append my_lib_inc
 
 ## add my_lib dependency to my_exe
-my_project/include/> cml target my_exe links append my_lib
+include/> cml target my_exe links append my_lib
 ```
 
 
 All these modifications culminate in the `CMakelists.txt` as follows:
 *CMakeLists.txt*: 
 ```cmake
-cmake_minimum_required(VERSION 3.2.1)
-
-project(my_project)
-
-add_library(my_lib
-  src/my_lib/my_lib.cpp
-  includes/my_lib_inc/my_lib1.h
-  includes/my_lib_inc/my_lib2.h
-)
-target_include_directories(my_lib PUBLIC include/my_lib_inc)
-
-add_executable(my_exe src/main.cpp)
-target_link_libraries(my_exe my_lib)
-
+<file does not exist>
 ```
 
 
@@ -104,15 +82,15 @@ Now we have a working CMake project with two targets of which one depends on the
 This step is just for completeness sake. Do as you would normally do with any cmake project.
 
 ```bash
-my_project/> mkdir build
-my_project/> cd build
-my_project/build/> cmake ..
+./> mkdir build
+./> cd build
+template_shell(cmake ..)
 ```
 
 ## Conclusion
 
 
-As you can see I have added alot of funcitonality to `cmakepp` which allows you to use cmake script reflection to modify cmake code.  Of course there are Caveats - like speed:  A command call can take upwards of a second or 2 for a normal sized `CMakeLists.txt` because the token parser and the search procedures all are `O(n)` (`n` being the number of tokens parsed). Also If there are som spectacular strings (something very escapy) inside the cmake code it is possible that they might not parsed correctly but those are bugs which I can squash as soon as they are found.
+As you can see I have added alot of funcitonality to `cmakepp` which allows you to use cmake script reflection to modify cmake code.  Of course there are Caveats - like speed:  A command call can take upwards of a second or 2 for a normal sized `CMakeLists.txt` because the token parser and the search procedures all are `O(n)` (`n` being the number of tokens parsed). Also If there are som spectacular strings (something very escap`y) inside the cmake code it is possible that they might not parsed correctly but those are bugs which I can squash as soon as they are found.
 
 This functionality is very intereting to me beacuse programmatically altering cmake files will allow you (and me) to create project scaffolders and generators (like yeoman for web/javascript) which give you an easy start with any new cmake based project.  The final destination for this is to have generator templates which scaffold your whole project and create standard/vanilla cmake files. Especially combination with my package manager this can become very powerful.
 

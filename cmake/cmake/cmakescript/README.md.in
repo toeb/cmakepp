@@ -1,0 +1,32 @@
+# `CMake` script parsing and token handling
+
+CMake's language lends itself to be parsed and tokenized easily. The [specification](http://www.cmake.org/cmake/help/v3.0/manual/cmake-language.7.html#syntax) shows which tokens are available.  Since the functioal blocks of CMake only are `command_invocations`s the language is very very simple.  The only complexity that cmake has is the nested parenthesis inside a `command_invocation`.  
+
+My parser takes any cmake code (the version is still to be determined as for example bracket arguments are not supported but bracket comments are) and creates a list of tokens.  These tokens are also part of a linked list and defined as follows:
+
+```
+<cmake token>: {
+    type:<token type>
+    value: <string>
+    literal_value: <string>
+    line: <uint>
+    column: <uint>
+    length: <uint>
+    *next :<cmake token>
+    *previous: <cmake token>
+}
+<nesting token> ::= <cmake token> v {
+    type: "nesting",
+    value: "(",
+    literal_value: "(",
+    end: <nesting end token>
+}
+<nesting end token> ::= <cmake token> v {
+    type: "nesting_end",
+    value: ")",
+    literal_value: ")",
+    begin: <nesting begin token>
+}
+```
+
+

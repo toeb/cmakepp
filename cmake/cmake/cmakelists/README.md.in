@@ -1,0 +1,21 @@
+# CMakeLists Reflection
+
+
+<%
+  set(function_files
+    cmakelists_open.cmake
+    cmakelists_close.cmake
+  )
+    assign(function_files[] = glob("**.cmake" --relative --recurse))
+%>
+
+
+### Function List
+
+@markdown_template_function_list(${function_files}) 
+
+### Function Descriptions
+
+@markdown_template_function_descriptions(${function_files}) 
+
+

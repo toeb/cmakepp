@@ -15,13 +15,14 @@ With this sample I want to show you how you can manipulate a `CMakeList.txt` usi
 ## Step 1 - Starting from Scratch
 
 The first thing to do is to create an initial `CMakeLists.txt` file in the directory of your project.
+<%pushd()%>
 ```bash
-# create a new directory <%pushd()%>
+# create a new directory
 @template_shell(mkdir my_project)
 @template_shell(cd my_project)
-@template_shell(cml init) <%popd()%>
+@template_shell(cml init) 
 ```
-
+<%popd()%>
 These commands result in a new CMakeLists file in the current directory.  The projects name is derived by taking the parent directory's name.  As you can see the code is just vanilla cmake and you can modify it manually as ever you see fit.
 
 @markdown_include_sourcecode(CMakeLists.txt cmake)
@@ -89,13 +90,13 @@ This step is just for completeness sake. Do as you would normally do with any cm
 ```bash
 @template_shell(mkdir build)
 @template_shell(cd build)
-@template_shell(cmake ..)
+template_shell(cmake ..)
 ```
 <%popd()%>
 ## Conclusion
 
 
-As you can see I have added alot of funcitonality to `cmakepp` which allows you to use cmake script reflection to modify cmake code.  Of course there are Caveats - like speed:  A command call can take upwards of a second or 2 for a normal sized `CMakeLists.txt` because the token parser and the search procedures all are `O(n)` (`n` being the number of tokens parsed). Also If there are som spectacular strings (something very escapy) inside the cmake code it is possible that they might not parsed correctly but those are bugs which I can squash as soon as they are found.
+As you can see I have added alot of funcitonality to `cmakepp` which allows you to use cmake script reflection to modify cmake code.  Of course there are Caveats - like speed:  A command call can take upwards of a second or 2 for a normal sized `CMakeLists.txt` because the token parser and the search procedures all are `O(n)` (`n` being the number of tokens parsed). Also If there are som spectacular strings (something very escap`y) inside the cmake code it is possible that they might not parsed correctly but those are bugs which I can squash as soon as they are found.
 
 This functionality is very intereting to me beacuse programmatically altering cmake files will allow you (and me) to create project scaffolders and generators (like yeoman for web/javascript) which give you an easy start with any new cmake based project.  The final destination for this is to have generator templates which scaffold your whole project and create standard/vanilla cmake files. Especially combination with my package manager this can become very powerful.
 
