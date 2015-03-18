@@ -1,7 +1,6 @@
-
 ## `(<where:<cmake token>> <cmake token range> )-><token range>`
 ##
-## inserts the specified token range into before <where>
+## inserts the specified token range before <where>
 function(cmake_token_range_insert where what)
   cmake_token_range("${what}")
   ans_extract(begin end)

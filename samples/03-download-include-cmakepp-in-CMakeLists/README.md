@@ -18,8 +18,8 @@ sample folder/> cd build
 # generate the project
 sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin .. 
 -- Building for: Visual Studio 12 2013
--- The C compiler identification is ;MSVC 18.0.31101.0
--- The CXX compiler identification is ;MSVC 18.0.31101.0
+-- The C compiler identification is ;MSVC 18.0.31010.0
+-- The CXX compiler identification is ;MSVC 18.0.31010.0
 -- Check for working C compiler using: Visual Studio 12 2013
 -- Check for working C compiler using: Visual Studio 12 2013 -- works
 -- Detecting C compiler ABI info
@@ -28,9 +28,11 @@ sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin-DCMAKE_RUNTIME_
 -- Check for working CXX compiler using: Visual Studio 12 2013 -- works
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktemp_vrF7d/build
+-- Build files have been written to: C:/Temp/cutil/temp/mktemp_2QrNe/build
 
 # build the configured project
 sample_folder/build/> cmake --build . 

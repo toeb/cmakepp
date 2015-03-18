@@ -2,7 +2,7 @@
 function(cmake_token_range_targets_filter range target_name)
   cmake_token_range("${range}")
   ans(range)
-  cmake_token_range_invocations_filter("${range}" 
+  cmake_invocation_filter_token_range("${range}" 
     invocation_identifier MATCHES "^(add_custom_target)|(add_test)|(add_library)|(add_executable)|(target_link_libraries)|(target_include_directories)|(target_compile_options)|(target_compile_definitions)$" 
     AND invocation_arguments MATCHES "^${target_name}(;|$)"
     )

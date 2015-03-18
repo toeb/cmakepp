@@ -22,6 +22,7 @@ Look through the files in the package.  Most functions will be commented and the
 
 * [Buildserver](cmake/buildserver/README.md)
 * [Creating Checksums](cmake/checksum/README.md)
+* [CMake handling functions](cmake/cmake/README.md)
 * [Collections](cmake/collections/README.md)
 * [Date/Time](cmake/datetime/README.md)
 * [Events](cmake/events/README.md)
@@ -39,7 +40,6 @@ Look through the files in the package.  Most functions will be commented and the
 * [Windows Registry](cmake/reg/README.md)
 * [Parsing and handling semantic versions](cmake/semver/README.md)
 * [String Functions](cmake/string/README.md)
-* [Targets](cmake/targets/README.md)
 * [Templating ](cmake/templating/README.md)
 * [Uniform Resource Identifiers (URIs)](cmake/uri/README.md)
 * [HTTP Client](cmake/web/README.md)
@@ -50,6 +50,10 @@ Look through the files in the package.  Most functions will be commented and the
 # Samples 
 
 I have developed some samples to show off `cmakepp`'s capabilities. Here you can find an overview of these samples
+
+https://github.com/open-source-parsers/jsoncpp/archive/1.6.0.tar.gz
+https://github.com/leethomason/tinyxml2/archive/2.2.0.tar.gz
+https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
 
 
 
@@ -63,7 +67,8 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 * [Creating a Compressed Package](samples/04-create-simple-compressed-package/README.md)
 * [Creating and Installing a Package with an Install Hook](samples/05-create-install-simple-package-with-install-script/README.md)
 * [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
-* [Using the package cli](samples/08-packaging-sample/README.md)
+* [Working with Packages](samples/09-using-real-world-packages/README.md)
+* [Using the `CMakeLists` Generator - CMake Reflection](samples/10-cmakelists-generator/README.md)
 
 
 
@@ -292,9 +297,9 @@ This is possible by overwriting CMakes default return() function with a macro. I
  "headers":{
   "Accept":"*/*",
   "Host":"httpbin.org",
-  "User-Agent":"curl/7.16.1"
+  "User-Agent":"curl/7.38.0"
  },
- "origin":"108.61.76.12",
+ "origin":"85.180.210.38",
  "url":"http://httpbin.org/get?key=value"
 }
 

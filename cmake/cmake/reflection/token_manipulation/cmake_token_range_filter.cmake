@@ -1,4 +1,13 @@
-
+## `(<cmake token range> <predicate> [--reverse] [--skip <uint>] [--take <uint>])-><cmake token>...`
+##
+## filters the specified token range for tokens matching the predicate (access to value and type)
+## e.g. `cmake_token_range_filter("set(a b c d)" type MATCHES "^argument$" AND value MATCHES "[abd]" --reverse --skip 1 --take 1 )` 
+## <% 
+##   cmake_token_range_filter("set(a b c d)" type MATCHES "^argument$" AND value MATCHES "[abd]" --reverse --skip 1 --take 1 ) 
+##   ans(res)
+##   #template_out_json(${res})
+## %>
+## 
 function(cmake_token_range_filter range )
   arguments_encoded_list2(1 ${ARGC})
   ans(args)

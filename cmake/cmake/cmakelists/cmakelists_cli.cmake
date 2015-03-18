@@ -6,8 +6,15 @@
 ##  * 
 ## *commands*:
 ##  * `init` saves an initial cmake file at the current location
-##  * `target <target name> <target command> | "add" <target name>`
-##    * `add <target name>` adds the specified target to the end of the cmakelists file
+##  * `target <target name> <target command> | "add" <target name>` target commands:
+##    * `add` adds the specified target to the end of the cmakelists file
+##    * `sources "append"|"set"|"remove" <glob expression>...` adds appends,sets, removes the source files specified by glob expressions to the specified target
+##    * `includes "append"|"set"|"remove" <path>....` adds the specified directories to the target_include_directories of the specified target
+##    * `links "append"|"set"|"remove" <target name>...` adds the specified target names to the target_link_libraries of the specified target
+##    * `type <target type>` sets the type of the specified target to the specified target type
+##    * `rename <target name>` renames the specified target 
+## 
+## `<target type> ::= "library"|"executable"|"custom_target"|"test"`  
 function(cmakelists_cli)
   set(args ${ARGN})
   list_pop_front(args)
@@ -24,11 +31,10 @@ function(cmakelists_cli)
   ans(cmakelists)
 
   if(NOT cmakelists AND "${command}" STREQUAL "init")
-    path_parent_dir_name(".")
+    path_parent_dir_name(CMakeLists.txt)
     ans(project_name)
     cmakelists_new("cmake_minimum_required(VERSION ${CMAKE_VERSION})\n\nproject(${project_name})\n\n")
     ans(cmakelists)
-    print_vars(cmakelists.path)
   elseif(NOT cmakelists)
     error("no CMakeLists.txt file found in current or parent directories" --function cmakelists_cli)
     return()
@@ -56,6 +62,32 @@ function(cmakelists_cli)
     if(NOT command)
       cmakelists_targets(${cmakelists} ${target_name})
       ans(result)
+    elseif("${command}" STREQUAL "rename")
+      list_pop_front(args)
+      ans(name)
+      cmakelists_target(${cmakelists} "${target_name}")
+      ans(target)
+      if(NOT target)
+          message(FATAL_ERROR FORMAT "no single target found for ${target_name} in {cmakelists.path}")
+      endif()
+      map_set(${target} target_name "${name}")
+      cmakelists_target_update("${cmakelists}" "${target}")
+      set(save true)
+      set(result ${target})
+
+    elseif("${command}" STREQUAL "type")
+      list_pop_front(args)
+      ans(type)
+      cmakelists_target(${cmakelists} "${target_name}")
+      ans(target)
+      if(NOT target)
+          message(FATAL_ERROR "no single target found for ${target_name}")
+      endif()
+      map_set(${target} target_type "${type}")
+      cmakelists_target_update("${cmakelists}" "${target}")
+      set(save true)
+      set(result ${target})
+
     elseif("${command}" STREQUAL add)
       list_extract(args target_type)
       set(save true)
@@ -140,7 +172,8 @@ function(cmakelists_cli)
   endif()
 
   if(save)
-      cmakelists_close(${cmakelists})
+
+    cmakelists_close(${cmakelists})
   endif()
   return_ref(result)
 endfunction()

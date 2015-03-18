@@ -530,9 +530,9 @@ To communicate with you processes you can use any of the following well known me
  "command_arguments":[
   "-E",
   "echo",
-  "asdbsd"
+  "asd;bsd"
  ],
- "working_directory":"C:/Users/Tobi/Documents/projects/cmakepp/cmake/process",
+ "working_directory":"E:/projects/cmakepp/cmake/process",
  "timeout":"-1"
 }` 
 

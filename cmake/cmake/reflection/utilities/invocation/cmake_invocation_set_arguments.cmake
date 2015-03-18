@@ -1,7 +1,7 @@
 ## `(<command invocation token> <values: <any...>>)-><void>`
 ##
 ## replaces the arguments for the specified invocation by the
-## specified values
+## specified values. The values are quoted if necessary
 function(cmake_invocation_token_set_arguments invocation_token)
   cmake_invocation_get_arguments_range("${invocation_token}")
   ans_extract(begin end)

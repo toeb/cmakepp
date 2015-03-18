@@ -1,3 +1,6 @@
+## `(<cmake token range>)-><void>`
+##
+## removes the specified token range from the linked list
 function(cmake_token_range_remove range)
   list_extract(range begin end)
   map_tryget("${begin}" previous)

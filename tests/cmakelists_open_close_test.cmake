@@ -11,19 +11,11 @@ function(test)
   cmakelists_open()
   ans(cmakelists)
 
-
-  json_print(${cmakelists})
-
-
-  
+  rm(CMakeLists.txt)
 
 
-  message("${my_path}")
-
-  assert(cmakelists)
-
-return()
-
+  cmakelists_new("")
+  ans(cmakelists)
 
   cmakelists_close(${cmakelists})
   assert(EXISTS CMakeLists.txt)

@@ -1,5 +1,24 @@
-
-function(cmake_token_range_invocations_filter range)
+## `(<cmake token range> <predicate> [--skip <uint>] [--take <uint>] [--reverse])-><cmake invocation>...`
+##
+## searches for invocations matching the predicate allowing to skip and take a certain amount of matches
+## also allows reverse serach when specifying the corresponding flag.
+##
+## the predicate is the same as what one would write into an if clause allows access to the following variables:
+## * invocation_identifier
+## * invocation_arguments
+## e.g. `invocation_identifier MATCHES "^add_.*$"` would return only invocations starting with add_
+## also see `eval_predicate`
+## ```
+## <cmake invocation> ::= {
+##    invocation_identifier: <string>      # the name of the invocation
+##    invocation_arguments: <string>...    # the arguments of the invocation
+##    invocation_token: <cmake token>      # the token representing the invocation
+##    arguments_begin_token: <cmake token> # the begin of the arguments of the invocation (after the opening parenthesis)
+##    arguments_end_token: <cmake token>   # the end of the arguments of the invocation (the closing parenthesis)
+## }
+## ```
+##
+function(cmake_invocation_filter_token_range range)
   arguments_encoded_list2(1 ${ARGC})
   ans(args)
 

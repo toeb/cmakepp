@@ -1,7 +1,7 @@
 function(cmake_token_range_variable range var_name)
   set(args ${ARGN})
 
-  cmake_token_range_invocations_filter("${range}" 
+  cmake_invocation_filter_token_range("${range}" 
     invocation_identifier STREQUAL "set" 
     AND invocation_arguments MATCHES "^${var_name}"  
     --take 1 

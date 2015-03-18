@@ -46,6 +46,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_fill](#map_fill)
 * [map_flatten](#map_flatten)
 * [map_from_keyvaluelist](#map_from_keyvaluelist)
+* [map_get_default](#map_get_default)
 * [map_get_map](#map_get_map)
 * [map_has_all](#map_has_all)
 * [map_has_any](#map_has_any)
@@ -345,6 +346,17 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 ## <a name="map_from_keyvaluelist"></a> `map_from_keyvaluelist`
 
+
+
+
+
+## <a name="map_get_default"></a> `map_get_default`
+
+ `(<map> <key> <any...>)-><any...>`
+
+ returns the value stored in map.key or 
+ sets the value at map.key to ARGN and returns 
+ the value
 
 
 

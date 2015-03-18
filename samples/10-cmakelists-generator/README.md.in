@@ -1,4 +1,4 @@
-# Using the `CMakeLists` Generator
+# Using the `CMakeLists` Generator - CMake Reflection
 
 The basic `CMakeLists.txt` files for cmake based projects are usually very simple. Their generation lends itself to be automated and for this purpose I developed a parser for `cmake script` which allows you to manipulate it programmatically within cmake itself. You can find all necessary functions in 
 [here](/cmake/cmakescript/README.md).
@@ -15,14 +15,14 @@ With this sample I want to show you how you can manipulate a `CMakeList.txt` usi
 ## Step 1 - Starting from Scratch
 
 The first thing to do is to create an initial `CMakeLists.txt` file in the directory of your project.
-<%pushd()%>
+
 ```bash
 # create a new directory
 @template_shell(mkdir my_project)
 @template_shell(cd my_project)
 @template_shell(cml init) 
 ```
-<%popd()%>
+
 These commands result in a new CMakeLists file in the current directory.  The projects name is derived by taking the parent directory's name.  As you can see the code is just vanilla cmake and you can modify it manually as ever you see fit.
 
 @markdown_include_sourcecode(CMakeLists.txt cmake)
@@ -45,7 +45,6 @@ Now you can see the scaffolding for a cmake  library and executable target insid
 ## Step 3 - Adding source files, include directories and dependencies
 
 Using the command line tool you can easily add files, folders and values to the targets.  The corresponding properties are automatically created or removed. Be sure to add at least something as sources.
-
 <%pushd()%>
 ```bash
 ## add source files to the my_lib target from a subdirectory (the files have to exist) <%
@@ -83,25 +82,39 @@ All these modifications culminate in the `CMakelists.txt` as follows:
 
 Now we have a working CMake project with two targets of which one depends on the other. This now only only has to be compiled.
 
-## Step 4 - Generating the Project
+## Step 4 - Renaming Targets and Changing their Type
+
+Renaming targets and changing their type is also a breeze with the reflection tool.  Let's rename the change the type `my_exe` to `library` and rename it to `the_executable`:
+
+```
+@template_shell(cml target my_exe rename the_executable)
+@template_shell(cml target the_executable type library)
+```
+@markdown_include_sourcecode(CMakeLists.txt)
+
+## Step 5 - Generating the Project
 
 This step is just for completeness sake. Do as you would normally do with any cmake project.
-<%pushd()%>
 ```bash
 @template_shell(mkdir build)
 @template_shell(cd build)
-template_shell(cmake ..)
+@template_shell(cmake ..)
+@template_shell(cmake --build .)
+## show that the project generated correctly (in my case for Visual Studio)
+@template_shell(ls --echo)
 ```
-<%popd()%>
+
+Now the project is ready for use.
+
 ## Conclusion
 
 
-As you can see I have added alot of funcitonality to `cmakepp` which allows you to use cmake script reflection to modify cmake code.  Of course there are Caveats - like speed:  A command call can take upwards of a second or 2 for a normal sized `CMakeLists.txt` because the token parser and the search procedures all are `O(n)` (`n` being the number of tokens parsed). Also If there are som spectacular strings (something very escap`y) inside the cmake code it is possible that they might not parsed correctly but those are bugs which I can squash as soon as they are found.
+As you can see I have added alot of funcitonality to `cmakepp` which allows you to use cmake script reflection to modify cmake code.  Of course there are Caveats - like speed:  A command call can take upwards of a second or 2 for a normal sized `CMakeLists.txt` because the token parser and the search procedures all are `O(n)` (`n` being the number of tokens parsed). Also If there are some spectacular strings (something very escapey) inside the cmake code it is possible that they might not parsed correctly but those are bugs which I can squash as soon as they are found.
 
-This functionality is very intereting to me beacuse programmatically altering cmake files will allow you (and me) to create project scaffolders and generators (like yeoman for web/javascript) which give you an easy start with any new cmake based project.  The final destination for this is to have generator templates which scaffold your whole project and create standard/vanilla cmake files. Especially combination with my package manager this can become very powerful.
+This functionality is very intereting to me because programmatically altering cmake files will allow you (and me) to create project scaffolders and generators (like yeoman for web/javascript) which give you an easy start with any new cmake based project. Since it is written in pure cmake this is platform independent and could even be used by IDE extensions to update the CMakeLists file. The final destination for this is to have generator templates which scaffold your whole project and create standard/vanilla cmake files. Especially combination with my/a package manager this can become very powerful.
 
 Future developement will allow more complete and easier use of the command line client - more powerfull commands, automatic deductions, formatting, ...
 
-
+Also note that this sample was generated using the `cmakepp`'s [templating engine](/cmake/templating/README.md.in) and the commands and results between the prose are all generated which allows this text to be kept up to date with developement. 
 
 <%poptmp()%>

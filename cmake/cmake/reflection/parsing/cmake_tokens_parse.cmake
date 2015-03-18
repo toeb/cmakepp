@@ -1,7 +1,7 @@
-## `(<cmake code> [--extended])-><cmake ast>`
+## `(<cmake code> [--extended])-><cmake token>...`
 ##
-## this function parses cmake code and returns a ast 
-## because of cmakes simple syntax this ast is actually just a token list 
+## this function parses cmake code and returns a list linked list of tokens 
+##
 ## ```
 ## <token> ::= { 
 ##  type: "command_invocation"|"bracket_comment"|"line_comment"|"quoted_argument"|"unquoted_argument"|"nesting"|"nesting_end"|"file"

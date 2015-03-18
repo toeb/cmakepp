@@ -1,6 +1,6 @@
 ## `(<any>...)-><cmake escaped>...`
 ##
-## quotes all arguments which need quoting 
+## quotes all arguments which need quoting ## todo allpw encoded lists
 function(cmake_arguments_quote_if_necessary)
   regex_cmake()
   set(result)

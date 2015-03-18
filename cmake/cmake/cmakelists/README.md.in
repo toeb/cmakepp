@@ -1,6 +1,8 @@
 # CMakeLists Reflection
 
 
+Based on the cmake reflection functions I developed I added clases which help you to analyze and modify CMakeLists files without changing custom modifications.  All changes done by these functions are based on token manipulation. 
+
 <%
   set(function_files
     cmakelists_open.cmake
@@ -10,11 +12,11 @@
 %>
 
 
-### Function List
+## Function List
 
 @markdown_template_function_list(${function_files}) 
 
-### Function Descriptions
+## Function Descriptions
 
 @markdown_template_function_descriptions(${function_files}) 
 

@@ -1,36 +1,12 @@
 # CMakeLists Reflection
 
-This is my documentation 
 
-
-
-    gay
-
-    gay
-
-    gay
-
-    gay
-
-    gay
-
-    gay
-
-    gay
-
-    gay
-
-    gay
-
-    gay
-
-    gay
+Based on the cmake reflection functions I developed I added clases which help you to analyze and modify CMakeLists files without changing custom modifications.  All changes done by these functions are based on token manipulation. 
 
 
 
 
-
-### Function List
+## Function List
 
 
 * [cmakelists_open](#cmakelists_open)
@@ -47,7 +23,7 @@ This is my documentation
 * [cmakelists_variable](#cmakelists_variable)
 * [cml](#cml) 
 
-### Function Descriptions
+## Function Descriptions
 
 ## <a name="cmakelists_open"></a> `cmakelists_open`
 
@@ -79,8 +55,15 @@ This is my documentation
   * 
  *commands*:
   * `init` saves an initial cmake file at the current location
-  * `target <target name> <target command> | "add" <target name>`
-    * `add <target name>` adds the specified target to the end of the cmakelists file
+  * `target <target name> <target command> | "add" <target name>` target commands:
+    * `add` adds the specified target to the end of the cmakelists file
+    * `sources "append"|"set"|"remove" <glob expression>...` adds appends,sets, removes the source files specified by glob expressions to the specified target
+    * `includes "append"|"set"|"remove" <path>....` adds the specified directories to the target_include_directories of the specified target
+    * `links "append"|"set"|"remove" <target name>...` adds the specified target names to the target_link_libraries of the specified target
+    * `type <target type>` sets the type of the specified target to the specified target type
+    * `rename <target name>` renames the specified target 
+ 
+ `<target type> ::= "library"|"executable"|"custom_target"|"test"`  
 
 
 
@@ -154,6 +137,9 @@ This is my documentation
 
 ## <a name="cmakelists_targets"></a> `cmakelists_targets`
 
+ `(target_name:<regex>)-><cmake target>`
+
+ returns all targets whose name match the specified regular expression
 
 
 
@@ -171,6 +157,10 @@ This is my documentation
 
 ## <a name="cmakelists_variable"></a> `cmakelists_variable`
 
+ `(<cmakelists> <variable path>)-><any>...`
+ 
+ see list_modify
+ modifies a variable returns the value of the variable
 
 
 

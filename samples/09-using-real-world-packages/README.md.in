@@ -2,32 +2,4 @@
 
 <%
 
-  rm(-r tmp)
-  pushd(--create tmp/myproj)
-    cmakelists_open()
-    ans(cmakelists)
-
-    cmakelists_target_create(${cmakelists} library my_lib)
-    cmakelists_target_create(${cmakelists} executable my_exe)
-
-    cmakelists_target_link_libraries(${cmakelists} my_exe my_lib 
-        --set
-        --remove-duplicates
-        )
-    pushd(--create src)
-    cmakelists_target_sources(${cmakelists} my_lib 
-        file1.cpp
-        file3.cpp
-        file2.cpp
-        file4.cpp
-        --sort
-        --create-files
-        --set)
-
-    popd()
-
-
-    cmakelists_close(${cmakelists})
-  popd()
-
 %>
