@@ -57,5 +57,5 @@ function(project_read)
 
 
 
-  return(project_handle)
+  return_ref(project_handle)
 endfunction()

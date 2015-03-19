@@ -72,7 +72,6 @@ function(cmakepp_project_cli)
     ans(project)
   endif()
 
-
   map_tryget(${project} project_descriptor)
   ans(project_descriptor)
   map_tryget(${project_descriptor} package_source)
@@ -85,8 +84,8 @@ function(cmakepp_project_cli)
   endif()
 
 
-
-  if("${cmd}" STREQUAL "get")
+  if("${cmd}" STREQUAL "init")
+  elseif("${cmd}" STREQUAL "get")
 
     if("${args}" MATCHES "(.+)\\((.*)\\)$")
       set(path "${CMAKE_MATCH_1}")
@@ -129,7 +128,7 @@ function(cmakepp_project_cli)
     ans(res)
   endif()
 
-  project_close(${project})
+  project_write(${project})
   return_ref(res)
 
 endfunction()
