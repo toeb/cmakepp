@@ -56,21 +56,21 @@ function(package_dependency_symlinker project package)
         ## project 
         ## package
         format("${link}")
-        ans(link)
+        ans(relative_link)
         format("${target}")
-        ans(target)
+        ans(relative_target)
 
-        path_qualify_from("${content_dir}" "${link}")
+        path_qualify_from("${content_dir}" "${relative_link}")
         ans(link)
 
         map_tryget(${dependency} content_dir)
         ans(dependency_content_dir)
 
-        path_qualify_from("${dependency_content_dir}" "${target}")
+        path_qualify_from("${dependency_content_dir}" "${relative_target}")
         ans(target)
         ## creates or destroys the link
         if(unlink)
-         log("unlinking '${link}' from '${target}'")
+         log("unlinking '${link}' from '${target}' ({package.uri})" --function package_dependency_symlinker)
           unlink("${link}")
         else()
           ## ensure that directory exists
@@ -78,11 +78,11 @@ function(package_dependency_symlinker project package)
           if(NOT EXISTS "${dir}")
             mkdir("${dir}")
           endif()
-          log("linking '${link}' to '${target}'")
+          log("linking '${link}' to '${target}' ({package.uri})" --function package_dependency_symlinker)
           ln("${target}" "${link}")
           ans(success)
           if(NOT success)
-           log("failed to lin '${link}' to '${target}'")
+           error("failed to link '${link}' to '${target}' ({package.uri})" --function package_dependency_symlinker)
           endif()
         endif()
 

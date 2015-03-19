@@ -1,5 +1,40 @@
 # Working with Packages
 
 <%
+  rm(tmp -r) 
+  pushd(tmp --create) 
+%>
+
+
+
+<%
+
+function(cmakelists_target_sources_create cmakelists target)
+    set(args ${ARGN})
+        
+    cmakelists_target("${cmakelists}" "${target}")
+    ans(target)
+
+    if(NOT target)
+        return()
+    endif()
+
+    cmakelists_paths(${args})
+    ans(paths)
+    foreach(file ${paths})
+        if(NOT EXISTS "${file}")
+            fwrite("${file}")
+        endif()
+    endforeach()
+
+    map_append_unique(${target} target_source_files ${paths})
+    return(${target})
+endfunction()
+
+
 
 %>
+
+
+
+<% popd() %>

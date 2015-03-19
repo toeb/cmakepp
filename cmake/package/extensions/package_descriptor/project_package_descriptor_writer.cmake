@@ -32,6 +32,7 @@ function(project_package_descriptor_writer project)
 
 
   if(package_descriptor)
+    log("writing package descriptor to '${package_descriptor_file}'" --function project_package_descriptor_reader)
     fwrite_data("${package_descriptor_file}" ${package_descriptor})
   endif()
 

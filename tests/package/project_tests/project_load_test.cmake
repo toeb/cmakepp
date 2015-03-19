@@ -22,7 +22,7 @@ function(test)
   ### load default non existing project
 
   ## arrange
-  project_new()
+  project_open()
   ans(project)
 
 
@@ -42,7 +42,7 @@ function(test)
   ### load non existing project with custom config
 
   ## arrange
-  project_new()
+  project_open()
   ans(project)
 
 
@@ -90,7 +90,7 @@ function(test)
   ans(managed_source)
 
   assign(success = managed_source.push(${path_source} pkg1))
-  project_new()
+  project_open()
   ans(project)
 
 

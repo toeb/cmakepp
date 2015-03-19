@@ -4,10 +4,11 @@
 ##
 ## **events**
 ##  * `project_on_closing(<project handle>)`
+##  * `project_on_close(<project handle>)`
 ##  * `project_on_closed(<project handle>)`
-##  * see `project_unload`
-##  * see `project_load`
 function(project_close project_handle)
+  project_state_assert("${project_handle}" "open")
+
   event_emit(project_on_closing ${project_handle})
 
   map_tryget(${project_handle} content_dir)
@@ -17,9 +18,7 @@ function(project_close project_handle)
 
   pushd("${project_content_dir}" --create)
 
-    ## remove every package handles content_dir
-    ## as persisting it would cause the project to
-    ## become unportable
+    ## ensure portability by removing content_dir which is an absolute path
     assign(package_handles = project_handle.project_descriptor.package_materializations)
     map_values(${package_handles})
     ans(package_handles)
@@ -31,14 +30,14 @@ function(project_close project_handle)
     assign(project_file = project_handle.project_descriptor.project_file)
     path_qualify(project_file)
 
-    fwrite_data("${project_file}" "${project_handle}")
-    
-    map_set(${project_handle} content_dir ${project_content_dir})
+    map_remove("${project}" content_dir)
+
   popd()
 
+  project_state_change("${project_handle}" "closed")
 
   event_emit(project_on_closed ${project_handle})
 
+  project_state_assert("${project_handle}" "close")
   return_ref(project_file)
 endfunction()
-

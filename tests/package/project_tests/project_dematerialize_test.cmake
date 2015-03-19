@@ -3,7 +3,7 @@ function(test)
   mock_package_source(mock A B C)
   ans(package_source)
 
-  project_open()
+  project_read()
   ans(project)
 
   assign(project.project_descriptor.package_source = package_source)

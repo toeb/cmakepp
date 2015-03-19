@@ -50,15 +50,29 @@ function(cmakepp_project_cli)
 
   if(global)
     dir_ensure_exists("~/.cmakepp")
-    project_open("~/.cmakepp")
+    project_read("~/.cmakepp")
     ans(project)
     assign(project.project_descriptor.is_global = 'true')
   else()
-    project_open("${project_dir}")
-   ans(project)
-  
+    project_read("${project_dir}")
+    ans(project)
+  endif()
+
+  list_pop_front(args)
+  ans(cmd)
+
+  if(NOT cmd)
+    set(cmd run)
   endif()
   
+  if("${cmd}" STREQUAL "init")
+    list_pop_front(args)
+    ans(path)
+    project_open("${path}")
+    ans(project)
+  endif()
+
+
   map_tryget(${project} project_descriptor)
   ans(project_descriptor)
   map_tryget(${project_descriptor} package_source)
@@ -69,14 +83,7 @@ function(cmakepp_project_cli)
     ans(package_source)
     map_set(${project_descriptor} package_source ${package_source})
   endif()
-  list_pop_front(args)
-  ans(cmd)
 
-
-
-  if(NOT cmd)
-    set(cmd run)
-  endif()
 
 
   if("${cmd}" STREQUAL "get")

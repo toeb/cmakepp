@@ -52,25 +52,8 @@ To work with the project I provide you with the following functions.
 
 * [project_open](#project_open)
 * [project_close](#project_close)
-* [project_install](#project_install)
-* [project_materialize](#project_materialize)
-* [project_dematerialize](#project_dematerialize)
-* [project_change_dependencies](#project_change_dependencies)
-* [project_materialize_dependencies](#project_materialize_dependencies)
-* [package_materialization_check](#package_materialization_check)
-* [project_constants](#project_constants)
-* [project_derive_package_content_dir](#project_derive_package_content_dir)
-* [project_descriptor_new](#project_descriptor_new)
-* [project_handle](#project_handle)
-* [project_handle_default](#project_handle_default)
-* [project_load](#project_load)
-* [project_loader](#project_loader)
-* [project_materialization_check](#project_materialization_check)
-* [project_materializer](#project_materializer)
-* [project_package_ready_state_update](#project_package_ready_state_update)
-* [project_save](#project_save)
-* [project_unload](#project_unload)
-* [project_unloader](#project_unloader)
+* [project_read](#project_read)
+* [project_write](#project_write)
 
 
 ## The Project Lifecycle
@@ -78,7 +61,7 @@ To work with the project I provide you with the following functions.
 
 * `closed`
     - The project handle does not exist / or should not be used
-    - `project_open` `->` `opening`
+    - `project_read` `->` `opening`
 
 * `opening` 
     - `-> opened, loaded`
@@ -167,6 +150,48 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 ## <a name="project_open"></a> `project_open`
 
+ `(<content_dir> [<~project handle>])-><project handle>` 
+
+ opens the specified project by setting default values for the existing or new project handle and setting its content_dir property to the fully qualified path specified.
+ if no project handle was given a new one is created.
+ if the state of the project handle is `unknown` it was never opened before. It is first transitioned to `closed` after emitting the `project_on_new` event.
+ then the project handle is transitioned from `closed` to `open` first the `project_on_opening` event is emitted followed by `project_on_open`.  Afterwards the state is changed to `open` and then the `project_on_opened` event us emitted.  
+ returns the project handle of the project on success. fails if the project handle is in a state other than `unknown` or `closed`. 
+
+ **events**
+  * `project_on_new(<project handle>)`
+  * `project_on_opening(<project handle>)`
+  * `project_on_open(<project handle>)`
+  * `project_on_opened(<project handle>)`
+  * `project_on_state_enter(<project handle>)`
+  * `project_on_state_leave(<project handle>)`
+
+ **assumes** 
+ * `project_handle.project_descriptor.state` is either `unknown`(null) or `closed`
+ 
+ **ensures**
+ * `content_dir` is set to the absolute path of the project
+ * `project_descriptor.state` is set to `open`
+
+
+
+
+## <a name="project_close"></a> `project_close`
+
+ `(<project handle>)-><project file:<path>>`
+
+ closes the specified project
+
+ **events**
+  * `project_on_closing(<project handle>)`
+  * `project_on_close(<project handle>)`
+  * `project_on_closed(<project handle>)`
+
+
+
+
+## <a name="project_read"></a> `project_read`
+
  `(<package handle> | <project dir> | <project file>)-><project handle>`
  
   Opens a project at `<project dir>` which defaults to the current directory (see `pwd()`). 
@@ -189,271 +214,9 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 
 
-## <a name="project_close"></a> `project_close`
-
- `(<project handle>)-><project file:<path>>`
-
- closes the specified project
-
- **events**
-  * `project_on_closing(<project handle>)`
-  * `project_on_closed(<project handle>)`
-  * see `project_unload`
-  * see `project_load`
-
-
-
-
-## <a name="project_install"></a> `project_install`
-
- `()->`
-
- performs the install operation which first optionally changes the dependencies and then materializes
-
-
-
-
-## <a name="project_materialize"></a> `project_materialize`
-
- `(<project handle> <volatile uri> <target dir>?)-><package handle>?`
-
- materializes a package for the specified project.
- if the package is already materialized the existing materialization handle
- is returned
- the target dir is treated relative to project root. if the target_dir
- is not given a target dir will be derived e.g. `<project root>/packages/mypackage-0.2.1-alpha`
-
- returns the package handle on success
- 
- **events**: 
- * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
- * `[pwd=target_dir]project_on_package_materialized(<project handle> <package handle>)`
-
- **sideffects**:
- * `IN` takes the package from the cache if it exits
- * adds the specified package to the `package cache` if it does not exist 
- * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
- * `package_handle.materialization_descriptor = <materialization handle>`
-
- ```
- <materialization handle> ::= {
-   content_dir: <path> # path relative to project root
-   package_handle: <package handle>
- }
- ```
-
-
-
-
-## <a name="project_dematerialize"></a> `project_dematerialize`
-
- `(<project handle> <package uri>)-><package handle>`
-
- **sideeffects**
- * removes `project_handle.project_descriptor.package_installations.<package_uri>` 
- * removes `package_handle.materialization_descriptor`
- 
-
- **events**:
- * `[pwd=package content dir]project_on_package_dematerializing(<project handle> <package handle>)`
- * `[pwd=package content dir]project_on_package_dematerialized(<project handle> <package handle>)`
- 
-
-
-
-
-## <a name="project_change_dependencies"></a> `project_change_dependencies`
-
- `(<project handle> <action...>)-><dependency changeset>`
-
- changes the dependencies of the specified project handle
- expects the project_descriptor to contain a valid package source
- returns the dependency changeset 
- **sideffects**
- * adds new '<dependency configuration>' `project_handle.project_descriptor.installation_queue`
- **events**
- * `project_on_dependency_configuration_changed(<project handle> <changeset>)` is called if dpendencies need to be changed
-
-
-
-
-## <a name="project_materialize_dependencies"></a> `project_materialize_dependencies`
-
- `(<project handle>)-><materialization handle>...`
-
-
- **returns**
- * the `materialization handle`s of all changed packages
-
- **sideffects**
- * see `project_materialize`
- * see `project_dematerialize`
-
- **events**
- * `project_on_dependencies_materializing(<project handle>)`
- * `project_on_dependencies_materialized(<project handle>)`
- * events from `project_materialize` and project `project_dematerialize`
-
-
-
-
-## <a name="package_materialization_check"></a> `package_materialization_check`
-
- `(<project handle> <materialization handle>)-><bool>`
- 
- checks wether an expected materialization actually exists and is valid
- return true if it is
-
-
-
-
-## <a name="project_constants"></a> `project_constants`
-
- `()->() *package constants are set` 
-
- defines constants which are used in project management
-
-
-
-
-## <a name="project_derive_package_content_dir"></a> `project_derive_package_content_dir`
-
- `(<project handle> <package handle>)-><path>`
-
-  creates a path which tries to be unqiue for the specified pcakge in the project
-
-
-
-
-
-## <a name="project_descriptor_new"></a> `project_descriptor_new`
-
-
-
-
-
-## <a name="project_handle"></a> `project_handle`
-
- `(...)-><project handle>` 
-
- returns a project handle for the different input data
-
-
-
-
-## <a name="project_handle_default"></a> `project_handle_default`
-
- `()-><project handle>`
- 
- creates the default project handle:
- ```
- {
-   uri:'project:root',
-   package_descriptor: {}
-   project_descriptor: {
-     package_cache:{}
-     package_materializations:{}
-     dependency_configuration:{}
-     dependency_dir: '${project_constants_dependency_dir}'
-     config_dir: "${project_constants_config_dir}"
-     project_file: "${project_constants_project_file}"
-     package_descriptor_file: <null>
-   }
- }
- ```
-
-
-
-
-## <a name="project_load"></a> `project_load`
-
- `(<project>)-><bool>`
-
-  extract dfs algorithm, extreact dependency_load function which works for single dependencies
- 
- loads the specified project and its dependencies
-  
- **events**
- * `project_on_loading`
- * `project_on_loaded`
- * `project_on_package_loading`
- * `project_on_package_loaded`
- * `project_on_package_reload`
- * `project_on_package_cycle`
-
-
-
-
-## <a name="project_loader"></a> `project_loader`
-
-
-
-
-
-## <a name="project_materialization_check"></a> `project_materialization_check`
-
- `(<project handle>)-><materialization handle>...`
-
- **events**
- * `project_on_package_materialization_missing`
-
- **sideffects**
- * removes missing materializations from `project_descriptor.package_materializations`
- * removes missing materializations from `package_handle.materialization_descriptor`
-
- checks all materializations of a project 
- if a materialization is missing it is removed from the 
- map of materializations
- returns all invalid materialization handles
-
-
-
-
-## <a name="project_materializer"></a> `project_materializer`
-
-
-
-
-
-## <a name="project_package_ready_state_update"></a> `project_package_ready_state_update`
-
- `(<project package> <package handle>)-><void>` 
-
- updates all dependencies starting at package
- **sideffects**
- * 
- **events**
- * project_on_package_all_dependencies_materialized(<project handle> <package handle>)
- * project_on_package_and_all_dependencies_materialized(<project handle> <package handle>)
-
-
-
-
-## <a name="project_save"></a> `project_save`
+## <a name="project_write"></a> `project_write`
 
  saves the project 
- will unload the project and reload the project
-
-
-
-
-## <a name="project_unload"></a> `project_unload`
-
- `(<project>)-><bool>`
-
- unloads the specified project and its dependencies
-  
- **events**
- * `project_on_unloading`  called before an packages is unloaded
- * `project_on_unloaded`  called after all packages were unloaded
- * `project_on_package_unloading` called before the package's dependencies are unloaded 
- * `project_on_package_unloaded` called after the package's dependencies are unloaded
-
-
-
-
-## <a name="project_unloader"></a> `project_unloader`
-
 
 
 

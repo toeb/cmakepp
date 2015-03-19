@@ -9,7 +9,7 @@ function(test)
   ans(context)
   assign(!package_source.metadata.A.cmakepp.hooks.on_ready = "'[]() map_append(${context} ready {{ARGN}})'")
   
-  project_open()
+  project_read()
   ans(project)
   assign(project.project_descriptor.package_source = package_source)
   assign(!project.package_descriptor.cmakepp.hooks.on_ready = "'[]() map_append(${context} ready {{ARGN}})'")

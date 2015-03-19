@@ -1,0 +1,11 @@
+
+function(project_state_get project_handle)
+  if(NOT project_handle)
+    return(invalid)
+  endif()
+  assign(state = project_handle.project_descriptor.state)
+  if("${state}_" STREQUAL "_")
+    return(unknown)
+  endif()
+  return_ref(state)
+endfunction()

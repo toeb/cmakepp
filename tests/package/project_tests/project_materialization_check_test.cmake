@@ -2,7 +2,7 @@ function(test)
 
 
   ## create a project and install two dependencies
-  project_open()
+  project_read()
   ans(project)
   mock_package_source("mock" A B C)
   ans(package_source)
@@ -15,7 +15,7 @@ function(test)
   ## check that when project is opened no materialization is missing
   events_track("project_on_package_ready" project_on_package_unready)
   ans(tracker)
-  project_open()
+  project_read()
   ans(project)
   assertf("{tracker.project_on_package_ready}" ISNULL)
   assertf("{tracker.project_on_package_unready}" ISNULL)
@@ -29,7 +29,7 @@ function(test)
     project_on_package_dematerializing
     )
   ans(tracker)
-  project_open()
+  project_read()
   ans(project)
   assertf("{tracker.project_on_package_dematerialized}" ISNOTNULL)
   assertf("{tracker.project_on_package_dematerializing}" ISNOTNULL)

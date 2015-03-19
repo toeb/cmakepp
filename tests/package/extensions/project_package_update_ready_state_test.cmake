@@ -1,6 +1,6 @@
 function(test)
 
-  project_open()
+  project_read()
   ans(project)
 
   mock_package_source("mock" 

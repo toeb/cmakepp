@@ -1,6 +1,6 @@
 function(test)
 
-  project_open()
+  project_read()
   ans(project)
 
 
@@ -56,7 +56,7 @@ function(test)
 
 
 
-  project_open()
+  project_read()
   ans(project)
   assign(project.project_descriptor.package_source = package_source)
   project_change_dependencies(${project} "A {content_dir:'asd'}")

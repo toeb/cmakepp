@@ -43,8 +43,9 @@ function(package_file_generator project package)
 
 
     format("${file_name}")
-    ans(file_name)
-    path_qualify_from("${content_dir}" "${file_name}") 
+    ans(relative_file_name)
+
+    path_qualify_from("${content_dir}" "${relative_file_name}") 
     ans(file_name)
 
     set(custom_command false)
@@ -67,7 +68,7 @@ function(package_file_generator project package)
       template_run("${file_content}")
       ans(file_content)
     endif()
-
+    log("generating file '${relative_file_name}' for '{package.uri}'" --function package_file_generator)
     fwrite("${file_name}" "${file_content}")
 
 
