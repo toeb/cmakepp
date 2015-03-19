@@ -50,9 +50,7 @@ Look through the files in the package.  Most functions will be commented and the
 
 I have developed some samples to show off `cmakepp`'s capabilities. Here you can find an overview of these samples
 
-https://github.com/open-source-parsers/jsoncpp/archive/1.6.0.tar.gz
-https://github.com/leethomason/tinyxml2/archive/2.2.0.tar.gz
-https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
+
 
 
 
