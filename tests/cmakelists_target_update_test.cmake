@@ -60,10 +60,32 @@ function(test)
   assert("${res}" MATCHES "aiosgduioagshdu")
   assert("${res}" MATCHES "hihi_target")
 
-  message("${res}")
 
 
+  cmakelists_new("${res}")
+  ans(cmakelists)
 
+  cmakelists_target(${cmakelists} "hihi_target")
+  ans(target)
+
+
+  map_set(${target} target_type library)
+  map_set(${target} target_name other_target)
+
+  cmakelists_target_update("${cmakelists}" "${target}")
+
+
+  cmakelists_serialize("${cmakelists}")
+  ans(res)
+  cmakelists_new("${res}")
+  ans(cmakelists)
+  cmakelists_target(${cmakelists} "hihi_target")
+  ans(target)
+  assert(NOT target)
+
+  cmakelists_target(${cmakelists} "other_target")
+  ans(target)
+  assert(target)
 
 
 

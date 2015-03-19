@@ -61,11 +61,16 @@ To work with the project I provide you with the following functions.
 * [project_constants](#project_constants)
 * [project_derive_package_content_dir](#project_derive_package_content_dir)
 * [project_descriptor_new](#project_descriptor_new)
+* [project_handle](#project_handle)
+* [project_handle_default](#project_handle_default)
 * [project_load](#project_load)
+* [project_loader](#project_loader)
 * [project_materialization_check](#project_materialization_check)
+* [project_materializer](#project_materializer)
 * [project_package_ready_state_update](#project_package_ready_state_update)
 * [project_save](#project_save)
 * [project_unload](#project_unload)
+* [project_unloader](#project_unloader)
 
 
 ## The Project Lifecycle
@@ -175,9 +180,8 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
  
  **events**
  * `project_on_opening(<project handle>)` emitted when the `<project handle>` exists but nothing is loaded yet
+ * `project_on_open(<project handle>)` emitted  so that custom handlers can perform actions like loading, initializing, etc
  * `project_on_opened(<project handle>)` emitted after the project was checked and loaded
- * events emitted by `project_load`
- * events emitted by `project_materialization_check`
  * events have access to the follwowing in their scope: 
    * `project_dir:<qualified path>` the location of this projects root directory
    * `project_handle:<project handle>` the handle to the project 
@@ -328,6 +332,39 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 
 
+## <a name="project_handle"></a> `project_handle`
+
+ `(...)-><project handle>` 
+
+ returns a project handle for the different input data
+
+
+
+
+## <a name="project_handle_default"></a> `project_handle_default`
+
+ `()-><project handle>`
+ 
+ creates the default project handle:
+ ```
+ {
+   uri:'project:root',
+   package_descriptor: {}
+   project_descriptor: {
+     package_cache:{}
+     package_materializations:{}
+     dependency_configuration:{}
+     dependency_dir: '${project_constants_dependency_dir}'
+     config_dir: "${project_constants_config_dir}"
+     project_file: "${project_constants_project_file}"
+     package_descriptor_file: <null>
+   }
+ }
+ ```
+
+
+
+
 ## <a name="project_load"></a> `project_load`
 
  `(<project>)-><bool>`
@@ -347,6 +384,12 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 
 
+## <a name="project_loader"></a> `project_loader`
+
+
+
+
+
 ## <a name="project_materialization_check"></a> `project_materialization_check`
 
  `(<project handle>)-><materialization handle>...`
@@ -362,6 +405,12 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
  if a materialization is missing it is removed from the 
  map of materializations
  returns all invalid materialization handles
+
+
+
+
+## <a name="project_materializer"></a> `project_materializer`
+
 
 
 
@@ -392,13 +441,19 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
  `(<project>)-><bool>`
 
- loads the specified project and its dependencies
+ unloads the specified project and its dependencies
   
  **events**
  * `project_on_unloading`  called before an packages is unloaded
  * `project_on_unloaded`  called after all packages were unloaded
  * `project_on_package_unloading` called before the package's dependencies are unloaded 
  * `project_on_package_unloaded` called after the package's dependencies are unloaded
+
+
+
+
+## <a name="project_unloader"></a> `project_unloader`
+
 
 
 

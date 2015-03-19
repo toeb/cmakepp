@@ -44,6 +44,8 @@ This is done by creating a hash from the input string and using it as a cache ke
 * [json](#json)
 * [json2](#json2)
 * [json2_definition](#json2_definition)
+* [json3_cached](#json3_cached)
+* [json4](#json4)
 * [json_deserialize](#json_deserialize)
 * [json_escape](#json_escape)
 * [json_extract_string_value](#json_extract_string_value)
@@ -75,8 +77,30 @@ This is done by creating a hash from the input string and using it as a cache ke
 
 
 
+## <a name="json3_cached"></a> `json3_cached`
+
+
+
+
+
+## <a name="json4"></a> `json4`
+
+
+
+
+
 ## <a name="json_deserialize"></a> `json_deserialize`
 
+ `(<json code>)->{}`
+
+ deserializes the specified json code. In combination with json there are a few things
+ that need mention:
+ * semicolons.  If you use semicolons in json then they will be deserialized as
+   ASCII 31 (Unit Separator) which allows cmake to know the difference to the semicolons in a list
+   if you want semicolons to appear in cmake then use a json array. You can always use `string_decode_semicolon()`
+   to obtain the string as it was in json
+   eg. `[1,2,3] => 1;2;3`  `"1;2;3" => 1${semicolon_code}2${semicolon_code}3`
+ 
 
 
 

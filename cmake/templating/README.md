@@ -98,7 +98,7 @@ I am writing you from within a template file!  Here are some things I like:
 
 
 Thanks for Reading! Write me at toeb@thetoeb.de
-(path of this file: C:/Users/Tobi/Documents/projects/cmakepp/cmake/templating/README.md.in)
+(path of this file: E:/projects/cmakepp/cmake/templating/README.md.in)
 ```
 
 ## Implementation

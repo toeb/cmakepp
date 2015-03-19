@@ -33,6 +33,7 @@ However using the `list` function that `CMake` provides it is possible to add al
 * [list_extract_flag_name](#list_extract_flag_name)
 * [list_extract_labelled_keyvalue](#list_extract_labelled_keyvalue)
 * [list_extract_labelled_value](#list_extract_labelled_value)
+* [list_extract_matches](#list_extract_matches)
 * [list_find](#list_find)
 * [list_find_any](#list_find_any)
 * [list_find_flags](#list_find_flags)
@@ -48,6 +49,7 @@ However using the `list` function that `CMake` provides it is possible to add al
 * [list_iterator_next](#list_iterator_next)
 * [list_length](#list_length)
 * [list_max](#list_max)
+* [list_modify](#list_modify)
 * [list_normalize_index](#list_normalize_index)
 * [list_parse_descriptor](#list_parse_descriptor)
 * [list_peek_back](#list_peek_back)
@@ -303,6 +305,16 @@ However using the `list` function that `CMake` provides it is possible to add al
 
 
 
+## <a name="list_extract_matches"></a> `list_extract_matches`
+
+ `(<&> <regex>...)-><any...>`
+
+ removes all matches from the list and returns them
+ sideffect: matches are removed from list
+
+
+
+
 ## <a name="list_find"></a> `list_find`
 
 
@@ -413,6 +425,12 @@ However using the `list` function that `CMake` provides it is possible to add al
 
  returns the maximum value in the list 
  using the specified comparerer function
+
+
+
+
+## <a name="list_modify"></a> `list_modify`
+
 
 
 

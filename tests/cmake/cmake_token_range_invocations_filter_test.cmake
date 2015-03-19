@@ -1,6 +1,6 @@
 function(test)
 
-  cmake_token_range_invocations_filter("
+  cmake_invocation_filter_token_range("
     asd(a)
     bsd(a)
     bsd(b)
@@ -11,7 +11,7 @@ function(test)
   assertf({res[0].invocation_arguments} STREQUAL "b")
 
 
-  cmake_token_range_invocations_filter("
+  cmake_invocation_filter_token_range("
     asd(a)
     bsd(a)
     bsd(b)
@@ -22,7 +22,7 @@ function(test)
   assertf({res[0].invocation_arguments} STREQUAL "a")
   return()
 
-  cmake_token_range_invocations_filter("function(ddd)\nasd(dasd)\nendfunction()\nset(a b c d e f g)" true --skip 1 --take 2)
+  cmake_invocation_filter_token_range("function(ddd)\nasd(dasd)\nendfunction()\nset(a b c d e f g)" true --skip 1 --take 2)
   ans(res)
   assertf("{res[0].invocation_identifier}" STREQUAL asd)
   assertf("{res[0].invocation_token.value}" STREQUAL "asd" )
@@ -31,7 +31,7 @@ function(test)
   assertf("{res[1].invocation_arguments}" ISNULL)
 
 
-  cmake_token_range_invocations_filter("function(ddd)\nasd(dasd)\nendfunction()\nset(a b c d e f g)" {invocation_identifier} STREQUAL "asd")
+  cmake_invocation_filter_token_range("function(ddd)\nasd(dasd)\nendfunction()\nset(a b c d e f g)" {invocation_identifier} STREQUAL "asd")
   ans(res)
   assertf("{res[0].invocation_identifier}" STREQUAL asd)
 
