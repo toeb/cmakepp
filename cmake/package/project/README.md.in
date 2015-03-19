@@ -58,6 +58,7 @@ To keep the project functions open for extension but closed for modification I c
 
 The very root of the project lifecycle are the `project_open` and `project_close` functions:
 
+![Project Lifecycle](project_open.png)
 
 
 

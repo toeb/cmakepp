@@ -3,16 +3,55 @@
 
 ## Motivation
 
-Package or Dependency management is not a new Idea.  Most Build systems for other languages have some kind of support for automatically handling packages.
+Managing packages which are not part of you own source tree is a troubling task when it needs to work on all platforms and without hassle. For many programming languages there exist tools which handle the search, retrieval and management of packages.  For `CMake` there exists something rudimentary like `Modules`, `Config` and `ExternalProject`.  However these are do not really  manage a dependency graph and or not formulated all too concisely.  
 
-## Concept
+I was inspired by the greate dependency managers for `node.js` and `C#/.net` npm and nuget.  (Also similar: maven, pip, apt-get, ...)  They really make it easy to use and share packages.  Also the talk about ryppl at Meeting C++ was very interesting on how to handle dependencies.
 
-* slides from ryppl
-* reddit thread
-* ...
+I however wanted a dependency manager which works with out-of-the-box cmake and does not have any initial dependencies.  
+
+The reason to use cmake as the basis is because of its platform independence and its characteristic as the root dependency of everything (you can use cmake to build everything on almost every platform).  I coerced cmake into a usable form by providing a lot of missing functionality and am able to use this as a base for package management. 
+
+## Requirements
+
+I require decentralized package sources - git, svn, hg,svn, github, bitbucket, archives, remote archives, local folders, ....  I do not want a central service as it does not reflect how c++ projects are organized at the moment.  Also I want to have the possibility of adding new package sources as the need for them arises (apt-get, brew, convention based (like cmake's module files)). These package sources only perform two things: search and retrieval.  They take a normalized input in uri form which can identify any package in the world and return metadata and content in a consistent interface.  This part of the dependency management is implemented in my [package source functions](#).
+
+The dependency management of which `project functions` are the client interface is required to be completely separated from the `<package source>`s. It shall use the metadata provided by the package sources to calculate a dependency configuration (with complex constraints like versioning, incompatibilities, optional dependencies, OS and location based constraints ...) and manages the materialization and dematerialization of these packages while still being easily extensible.
+
+The `project functions` need to be usable from within any cmake script so that build automization becomes possible while also providing an easy to use and intuitive command line client that the dev can use to control his or her project.
+
+## Design Choices
+
+The project functions are based on a `project handle` which is also a `package handle` as use by the package sources.  The `project handle` contains all information about a project and needs to be serializable. Also it may be extended by custom data.
+
+```
+<project handle> ::= <package handle> v { # see package sources for information
+  uri: "project:root"
+  content_dir: <absolute path> also called the `project_dir`
+  project_descriptor: <project descriptor> 
+  package_descriptor: <package descriptor> # see package sources for information
+  materialization_descriptor: <materialization descriptor> # stores information on were and how data of the package is stored
+  ...
+}
+##all <relative path>s are relative to the `project_dir` unless stated otherwise
+<project descriptor> ::= {
+  state: <project state>
+  project_file: <relative path> = ".cps/project.scmake" # file which stores the project
+  dependency_dir: <relative path> = "packages" # folder in which dependencies are going to be stored.
+  config_dir: <relative path> = ".cps" # a folder which contains configuration files hidden from the user and pertaining to dependency managment
+  package_cache: {} # object which caches all package handles
+  package_materializations: {} # object which caches all materialization descriptors
+}
+```
+
+To keep the project functions open for extension but closed for modification I chose to use an event system to emit events to which extensions can react and modify the project and package handles according to their requirements.  The project lifecycle is defined by these events.  The state of the project always needs to be correct which is why I also use a state machine to manage it.
+
+### The Project Lifecycle
+
+The very root of the project lifecycle are the `project_open` and `project_close` functions:
+
+![Project Lifecycle](project_open.png)
 
 
-## State of the Art
 
 
 
