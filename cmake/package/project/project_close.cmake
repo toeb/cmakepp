@@ -7,7 +7,7 @@
 ##  * `project_on_close(<project handle>)`
 ##  * `project_on_closed(<project handle>)`
 function(project_close project_handle)
-  project_state_assert("${project_handle}" "open")
+  project_state_assert("${project_handle}" "opened")
 
   event_emit(project_on_closing ${project_handle})
 
@@ -38,6 +38,6 @@ function(project_close project_handle)
 
   event_emit(project_on_closed ${project_handle})
 
-  project_state_assert("${project_handle}" "close")
+  project_state_assert("${project_handle}" "^closed$")
   return_ref(project_file)
 endfunction()

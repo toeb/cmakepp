@@ -58,32 +58,4 @@ function(project_read)
 
 
   return(project_handle)
-  project_open(${ARGN})
-  ans(project_handle)
-  if(NOT project_handle)
-    message(FATAL_ERROR "failed to open project handle")
-  endif()
-
-
-
-
-  return(${project_handle})
-
-  ## setup scope
-  map_tryget(${project_handle} content_dir)
-  ans(project_dir)
-  set(project_handle ${project_handle})
-
-  ## open starting - emit events
-  event_emit(project_on_opening ${project_handle})
-  
-  ## perform open (calls all registered events for project open)
-  ##
-  ## which perform other actions like loading
-  event_emit(project_on_open ${project_handle})
-
-  ## open complete
-  event_emit(project_on_opened ${project_handle})
-
-  return_ref(project_handle)
 endfunction()

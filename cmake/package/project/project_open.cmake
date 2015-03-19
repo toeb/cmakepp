@@ -60,9 +60,9 @@ function(project_open content_dir)
   
   ## open
   event_emit(project_on_open ${project_handle})
-  project_state_change("${project_handle}" open)
+  project_state_change("${project_handle}" opened)
 
-  project_state_assert("${project_handle}" "^(open)$")
+  project_state_assert("${project_handle}" "^(opened)$")
   ## open complete
   event_emit(project_on_opened ${project_handle})
 

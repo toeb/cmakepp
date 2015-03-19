@@ -5,88 +5,93 @@
 
 Managing packages which are not part of you own source tree is a troubling task when it needs to work on all platforms and without hassle. For many programming languages there exist tools which handle the search, retrieval and management of packages.  For `CMake` there exists something rudimentary like `Modules`, `Config` and `ExternalProject`.  However these are do not really  manage a dependency graph and or not formulated all too concisely.  
 
-I was inspired by the greate dependency managers for `node.js` and `C#/.net` npm and nuget.  (Also similar: maven, pip, apt-get, ...)  They really make it easy to use and share packages.  Also the talk about ryppl at Meeting C++ was very interesting on how to handle dependencies.
+I was inspired by great dependency managers like `npm` and `nuget`.  (Also: `maven`, `pip`, `apt-get`, ...)  They really make it easy to use and share packages.  Also the ideas behind `ryppl` were very interesting to me.
 
 I however wanted a dependency manager which works with out-of-the-box cmake and does not have any initial dependencies.  
 
-The reason to use cmake as the basis is because of its platform independence and its characteristic as the root dependency of everything (you can use cmake to build everything on almost every platform).  I coerced cmake into a usable form by providing a lot of missing functionality and am able to use this as a base for package management. 
+The reason to use cmake as the basis is because of its platform independence and because it can be viewed as the root dependency of everything (you can use cmake to build everything on almost every platform).  I coerced cmake into a usable form for a complex dependency manager by providing a lot of missing functionality. 
 
 ## Requirements
 
-I require decentralized package sources - git, svn, hg,svn, github, bitbucket, archives, remote archives, local folders, ....  I do not want a central service as it does not reflect how c++ projects are organized at the moment.  Also I want to have the possibility of adding new package sources as the need for them arises (apt-get, brew, convention based (like cmake's module files)). These package sources only perform two things: search and retrieval.  They take a normalized input in uri form which can identify any package in the world and return metadata and content in a consistent interface.  This part of the dependency management is implemented in my [package source functions](#).
+I require decentralized package sources - git, svn, hg,svn, github, bitbucket, archives, remote archives, local folders, ....  I do not want a central service as it does not reflect how c++ projects are organized at the moment.  Also I want to have the possibility of adding new package sources as the need for them arises (apt-get, brew, convention based (like cmake's module files),... ). These package sources only perform two things: search and retrieval.  They take a normalized input in `uri` form which can identify any package in the world and return metadata and content in a consistent interface.  This part of the dependency management is implemented in my [package source functions](../package_source).
 
-The dependency management of which `project functions` are the client interface is required to be completely separated from the `<package source>`s. It shall use the metadata provided by the package sources to calculate a dependency configuration (with complex constraints like versioning, incompatibilities, optional dependencies, OS and location based constraints ...) and manages the materialization and dematerialization of these packages while still being easily extensible.
+The dependency management part is required to be completely separated from the `<package source>`s. It shall use the metadata provided by the package sources to calculate a dependency configuration (with complex constraints like versioning, incompatibilities, optional dependencies, OS and location based constraints ...) and manages the materialization and dematerialization of these packages while still being easily extensible.
 
 The `project functions` need to be usable from within any cmake script so that build automization becomes possible while also providing an easy to use and intuitive command line client that the dev can use to control his or her project.
 
 ## Design Choices
 
-The project functions are based on a `project handle` which is also a `package handle` as use by the package sources.  The `project handle` contains all information about a project and needs to be serializable. Also it may be extended by custom data.
+The project functions are based on a `project handle` which is also a `package handle` as use by the package sources.  The `project handle` contains all information about a project and needs to be serializable and portable. Also it may be extended by custom data.
+
+To keep the project functions open for extension but closed for modification I chose to use an event system to emit events to which extensions can react and modify the project and package handles according to their requirements.  The project lifecycle is defined by these events.  The state of the project always needs to be correct which is why I also use a state machine to manage it.
+
+### Datatypes:
 
 ```
 <project handle> ::= <package handle> v { # see package sources for information
-  uri: "project:root"
+  uri: "project:root" # your project is always addressable as "project:root"
   content_dir: <absolute path> also called the `project_dir`
   project_descriptor: <project descriptor> 
   package_descriptor: <package descriptor> # see package sources for information
   materialization_descriptor: <materialization descriptor> # stores information on were and how data of the package is stored
   ...
 }
+```
+
+The project descriptor contains data which describes the state of the project. 
+```
 ##all <relative path>s are relative to the `project_dir` unless stated otherwise
-<project descriptor> ::= {
-  state: <project state>
-  project_file: <relative path> = ".cps/project.scmake" # file which stores the project
-  dependency_dir: <relative path> = "packages" # folder in which dependencies are going to be stored.
-  config_dir: <relative path> = ".cps" # a folder which contains configuration files hidden from the user and pertaining to dependency managment
-  package_cache: {} # object which caches all package handles
-  package_materializations: {} # object which caches all materialization descriptors
-}
-```
-
-To keep the project functions open for extension but closed for modification I chose to use an event system to emit events to which extensions can react and modify the project and package handles according to their requirements.  The project lifecycle is defined by these events.  The state of the project always needs to be correct which is why I also use a state machine to manage it.
-
-### The Project Lifecycle
-
-The very root of the project lifecycle are the `project_open` and `project_close` functions:
-
-![Project Lifecycle](project_open.png)
-
-
-
-
-
-## Implementation
-
-Working with dependencies implies that you are using a dependency graph. The root node from which you work is what I call the `project`.  
-
-The `project` is represented by the `project_handle` which is a `package_handle` and behaves as expected in all situations except that it has also has property called `project_descriptor` which contains project specific information.  The `project_descriptor` contains the whole object graph consisting of every `package handle` used in the project and all their properties.  Every `package_handle` (which is identified by an `package_uri`) is unique and only one reference will exist for it inside a project.  This while object graph is serialized and deserialized using the `scmake` serialization format (see `cmake_serialize` `cmake_deserialize`) which is able to persist the data including cycles and is quite fast (in comparison with other serializers).  It is important that the no data is added to the object graph which is not serializable.
-
-The `project_descriptor` is contains the following:
-
-```
 <project descriptor> ::= {
    package_cache: { <admissable uri> : <package handle> } # contains all packages known to project
    package_source: <package source> a package source object used to retrieve package metadata and files.
    package_materializations: { <package uri> : <package handle> } # contains all materialized packages.
    dependency_configuration: { <package_uri> : <bool> } # the currently configured dependencies
    dependencies: { <package uri>:<package handle> } # all dependencies that this project has including transient dependencies. 
-   dependency_dir: <path = "packages"> # path relative to project root which is used as a the default dependency locations
-   config_dir: <path = ".cps"> # the locations of the configuration folder 
-   project_file: <path = ".cps/project.scmake"> # the location of the project's config file
-   package_descriptor_file: <path>?  # if specified the path of the package descriptor.  This will be read or written when project is opened or closes
+   dependency_dir: <relative path = "packages"> # path relative to project root which is used as a the default dependency locations
+   config_dir: <relative path = ".cps"> # the locations of the configuration folder 
+   project_file: <relative path = ".cps/project.scmake"> # the location of the project's config file
+   package_descriptor_file: <relative path>?  # if specified the path of the package descriptor.  This will be read or written when project is opened or closes
+   ...
 }
 ```
 
-## The Commmand Line Interface
 
-Of course using the package functionality is possbile by using a command line interface.  It allows you to use the functions specified bellow and loads and stores you project automatically.  
+### The Project Lifecycle
+
+The project lifecycle is at its base very simple with just four states:
+
+![Project Lifecycle](project_lifecycle.png)
+
+
+When a new project handle is created it is in the `unknown` state and will first be set to `closed` before entering the lifecycle.  The project handle can only be persisted and read when it is in the `closed` state otherwise it is considered to be in an inconsistent state.
 
 
 
+## Implementation
 
-## Function List
+### The Commmand Line Interface
 
-To work with the project I provide you with the following functions.
+The command line interface wraps these functions and provides an alias which you can use from your console of choice.  Its usage is described here:
+
+```
+```
+
+
+### Opening and Closing a project
+
+When a project is opened the following will happen (the ovals are states and the boxes are events that are emitted):
+
+![project_open](project_open.png)
+
+
+Closing happens in a inverse fashion but will never result in an unknown state:
+
+![project_close](project_close.png)
+
+
+Two wrappers for open and close exist: `project_read` and `project_write` which makes it easier to open a project file and save. It is also noteworthy to say that project close removes any none portable data and project open restores it.
+
+Here is the list of functions
 
 
 * [project_open](#project_open)
@@ -94,56 +99,25 @@ To work with the project I provide you with the following functions.
 * [project_read](#project_read)
 * [project_write](#project_write)
 
+### The Project is `opened`
 
-## The Project Lifecycle
- 
+When the project is `opened` it is possible to modify and work with it. The functions which are available are as follows:
 
-* `closed`
-    - The project handle does not exist / or should not be used
-    - `project_read` `->` `opening`
-
-* `opening` 
-    - `-> opened, loaded`
-* `unloaded`
-    - `project_load -> loading`
-* `loading`   
-* `loaded`
-    - `project_unload -> unloading`     
-    - `project_close -> closing`     
-* `materializing`
-    - all dependencies are loaded
-    - all materializations which are not dependencies are also loaded
-* `openend` 
-    - everything `of opening` 
-* `closing`
+#### Materialization
 
 
-The project's lifecycle is also characterized  by the events that are emitted.  
-The key to understanding the project lifecycle lies within these events.
+* [project_materialize](#project_materialize)
+* [project_dematerialize](#project_dematerialize)
+* [project_materialize_dependencies](#project_materialize_dependencies)
 
 
-* `project_on_opening(<project handle>)` called after project handle is created.  Called before project is loaded. 
-* `project_on_opened` called after project handle is created and project is loaded. 
-* `project_on_loading` called before any dependencies are loaded
-* `project_on_loaded` called after all dependencies and project was loaded
-* `project_on_package_loading` called before packages's dependencies are loaded.
-* `project_on_package_loaded` called after package's dependencies are loaded.  
-* `project_on_package_reload` called when a package was already loaded but is the dependency of another package
-* `project_on_package_cycle` called `project_load` when a dependency cycle is detected. 
-* `project_on_package_materialized` called by `project_materialize` before package content is pulled.  
-* `project_on_package_materialized` called by `project_materialize` after the package content is pulled.   
-* `project_on_dependency_configuration_changed` called by `project_change_dependencies` when the dependency after the dependency configuration was changed.
-* `project_on_dependencies_materializing` called by `project_materialize_dependencies` before any dependencies are materialized/dematerialized
-* `project_on_dependencies_materialized` called after all dependencies where successfully materialized/dematerialized
-* `project_on_package_dematerializing` called by `project_dematerialize` before the package content is removed
-* `project_on_package_dematerialized` called by `project_dematerialize` after the package content was removed
-* `project_on_unloading` called by `project_unload`, `project_close` before any dependencies are unloaded
-* `project_on_unloaded` called by `project_unload`, `project_close` after all dependencies are unloaded
-* `project_on_package_unloading` called by `project_unload` before any of `package`'s  dependencies were unloaded
-* `project_on_package_unloaded` called by `project_unload` after all of `package`'s dependencies were unloaded 
-* `project_on_closing` called before the project is `closed` and before it is `unloaded`
-* `project_on_closed` called after the project was `closed` and all packages where `unloaded`
+#### Dependency Management
 
+
+* [project_change_dependencies](#project_change_dependencies)
+
+
+## Extensions to the Project Lifecycle
 
 ## `cmakepp` integration
 
@@ -164,26 +138,6 @@ Hooks are invoked for every package which allows it to react to the project life
 * `package_descriptor.cmakepp.hooks.on_ready` is invoked when all become ready and the package itself is materialized
 * `package_descriptor.cmakepp.hooks.on_unready` is invoked if any dependency becomes unready
 
-#### States
-
-
-
-* `unloaded`
-  - `on_loaded -> loaded`
-* `loaded`, `unready`
-  - `on_dematerializing -> unloading`
-  - `on_ready -> loaded, ready`
-* `loaded`, `ready`
-  - `on_unready -> loaded, unready`
-  - `on_dematerializing -> unloading`
-* `unloading`
-  - `on_unloading -> unloaded`
-
-
-
-## Caveats
-
-Speed.  `CMake` is slow.  And there are still alot of optimization possibilities in `cmakepp`.  Don't be mad if you wait much longer than other dependency managers.
 
 ## Function Descriptions
 
@@ -256,6 +210,90 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 ## <a name="project_write"></a> `project_write`
 
  saves the project 
+
+
+
+
+## <a name="project_materialize"></a> `project_materialize`
+
+ `(<project handle> <volatile uri> <target dir>?)-><package handle>?`
+
+ materializes a package for the specified project.
+ if the package is already materialized the existing materialization handle
+ is returned
+ the target dir is treated relative to project root. if the target_dir
+ is not given a target dir will be derived e.g. `<project root>/packages/mypackage-0.2.1-alpha`
+
+ returns the package handle on success
+ 
+ **events**: 
+ * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
+ * `[pwd=target_dir]project_on_package_materialized(<project handle> <package handle>)`
+
+ **sideffects**:
+ * `IN` takes the package from the cache if it exits
+ * adds the specified package to the `package cache` if it does not exist 
+ * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
+ * `package_handle.materialization_descriptor = <materialization handle>`
+
+ ```
+ <materialization handle> ::= {
+   content_dir: <path> # path relative to project root
+   package_handle: <package handle>
+ }
+ ```
+
+
+
+
+## <a name="project_dematerialize"></a> `project_dematerialize`
+
+ `(<project handle> <package uri>)-><package handle>`
+
+ **sideeffects**
+ * removes `project_handle.project_descriptor.package_installations.<package_uri>` 
+ * removes `package_handle.materialization_descriptor`
+ 
+
+ **events**:
+ * `[pwd=package content dir]project_on_package_dematerializing(<project handle> <package handle>)`
+ * `[pwd=package content dir]project_on_package_dematerialized(<project handle> <package handle>)`
+ 
+
+
+
+
+## <a name="project_materialize_dependencies"></a> `project_materialize_dependencies`
+
+ `(<project handle>)-><materialization handle>...`
+
+
+ **returns**
+ * the `materialization handle`s of all changed packages
+
+ **sideffects**
+ * see `project_materialize`
+ * see `project_dematerialize`
+
+ **events**
+ * `project_on_dependencies_materializing(<project handle>)`
+ * `project_on_dependencies_materialized(<project handle>)`
+ * events from `project_materialize` and project `project_dematerialize`
+
+
+
+
+## <a name="project_change_dependencies"></a> `project_change_dependencies`
+
+ `(<project handle> <action...>)-><dependency changeset>`
+
+ changes the dependencies of the specified project handle
+ expects the project_descriptor to contain a valid package source
+ returns the dependency changeset 
+ **sideffects**
+ * adds new '<dependency configuration>' `project_handle.project_descriptor.installation_queue`
+ **events**
+ * `project_on_dependency_configuration_changed(<project handle> <changeset>)` is called if dpendencies need to be changed
 
 
 
