@@ -18,7 +18,8 @@
         ans(value)
         
       else()
-        set(key "${query}")
+   # _message("line ${line}")
+        set(key "${line}")
         set(type "KEY")
         set(value "")
         set(value_name "")
