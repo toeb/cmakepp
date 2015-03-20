@@ -1,8 +1,8 @@
 
   function(ast_parse_token )#definition stream create_node definition_id
     #message(FORMAT "trying to parse {definition.name}")
-   # ref_print("${definition}")
-   # ref_print(${definition})
+   # address_print("${definition}")
+   # address_print(${definition})
 
     token_stream_take(${stream} ${definition})
     ans(token)

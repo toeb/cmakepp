@@ -1,9 +1,9 @@
 
-  function(ref_push_back ref)
-    ref_get(${ref})
+  function(address_push_back ref)
+    address_get(${ref})
     ans(value)
     list_push_back(value "${ARGN}")
     ans(res)
-    ref_set(${ref} ${value})
+    address_set(${ref} ${value})
     return_ref(res)
   endfunction()

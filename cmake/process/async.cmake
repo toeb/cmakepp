@@ -24,7 +24,7 @@
         cd(\"${pwd}\")
         ${arguments}
         ans(arguments)
-        ref_get(\"\${arguments}\")
+        address_get(\"\${arguments}\")
         ans(arguments)
         function_import(\"${callable}\" as __async_call)
         message(\${arguments})

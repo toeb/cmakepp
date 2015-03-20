@@ -76,7 +76,7 @@
     endmacro()
 
     function(sequence_new)
-      ref_isvalid("${ARGN}")
+      is_address("${ARGN}")
       ans(isref)
       if(NOT isref)
         map_new()

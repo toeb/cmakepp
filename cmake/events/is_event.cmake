@@ -4,7 +4,7 @@
 ## an event is a ref which is callable and has an event_id
 ##
 function(is_event event)
-  ref_isvalid("${event}")
+  is_address("${event}")
   ans(is_ref)
   if(NOT is_ref)
     return()

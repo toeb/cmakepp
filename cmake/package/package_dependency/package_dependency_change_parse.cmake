@@ -18,7 +18,7 @@ function(package_dependency_change_parse)
     set(action add)
   endif()
 
-  ref_isvalid(${action})
+  is_address(${action})
   ans(isref)  
   if(isref)
     set(action add ${action})

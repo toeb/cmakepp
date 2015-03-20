@@ -4,7 +4,7 @@ function(obj_get_test)
 
 
 # get simple
-ref_new()
+address_new()
 ans(obj)
 obj_set(${obj} k1 v1)
 obj_get(${obj} k1)
@@ -13,7 +13,7 @@ assert("${res}" STREQUAL "v1")
 
 
 # get non existing
-ref_new()
+address_new()
 ans(obj)
 obj_get(${obj} k1)
 ans(res)

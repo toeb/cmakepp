@@ -4,6 +4,6 @@
     ans(rest)
     string_encode_semicolon("${line}${rest}")
     ans(line)
-    ref_append("${listing}" "${line}")
+    address_append("${listing}" "${line}")
     return()
   endfunction()

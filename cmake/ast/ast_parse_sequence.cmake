@@ -11,7 +11,7 @@ function(ast_parse_sequence )#definition stream create_node definition_id
     message(FATAL_ERROR "expected a sequence or a rsequence")
   endif()
   # deref ref array
-#  ref_get(${sequence} )
+#  address_get(${sequence} )
 #  ans(sequence)
   
   # save current stream
@@ -27,7 +27,7 @@ function(ast_parse_sequence )#definition stream create_node definition_id
     ast_parse(${stream} "${def}")
     ans(res)
     if(res) 
-      map_isvalid(${res} )
+      is_map(${res} )
       ans(ismap)
       if(ismap)
         list(APPEND ast_sequence ${res})

@@ -3,7 +3,7 @@
 ## to work (like template_out())
 ##
 function(template_begin)
-  ref_new()
+  address_new()
   ans(ref)
   set(__template_output_stream ${ref} PARENT_SCOPE)
 endfunction()

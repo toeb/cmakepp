@@ -3,7 +3,7 @@
 ## * pid
 ## * status
 function(process_handle handlish)
-  map_isvalid("${handlish}")
+  is_map("${handlish}")
   ans(ismap)
 
   if(ismap)

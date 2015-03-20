@@ -4,7 +4,7 @@
 function(log_print)
   set(limit ${ARGN})
 
-  ref_get(log_record)
+  address_get(log_record)
   ans(entries)
 
   list(LENGTH entries len)

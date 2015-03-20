@@ -1,15 +1,15 @@
 function(language name)
   map_new()
   ans(language_map)
-  ref_set(language_map "${language_map}")
+  address_set(language_map "${language_map}")
 
 
 function(language name)
   ## get cached language
-  ref_get(language_map)
+  address_get(language_map)
   ans(language_map)
 
-  map_isvalid("${name}")
+  is_map("${name}")
   ans(ismp)
   if(ismp)
     map_tryget(${name}  initialized)

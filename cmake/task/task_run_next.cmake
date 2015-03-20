@@ -1,7 +1,7 @@
 
 # invokes a single task
 function(task_run_next)
-  ref_get(__initial_invoke_later_list)
+  address_get(__initial_invoke_later_list)
   ans(tasks)
   foreach(task ${tasks})
     string_decode_semicolon("${task}")

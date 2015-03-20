@@ -26,6 +26,6 @@ function(val)
     return()
   endif()
   ## todo check if map 
-  ref_append("${current_ref}" ${args})
+  address_append("${current_ref}" ${args})
   return_ref(args)
 endfunction()

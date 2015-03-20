@@ -70,7 +70,7 @@ function(test)
     value(${ARGN})
     ans(extension)
     print_vars(extension)
-    ref_isvalid("${extension}")
+    is_address("${extension}")
     ans(is_ref)
 
     if(NOT is_ref)

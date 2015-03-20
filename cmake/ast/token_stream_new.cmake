@@ -4,7 +4,7 @@
     ans(token_definitions)
    # messagE("new token strean ${token_definitions}")
 
-    #ref_print(${language})
+    #address_print(${language})
 
     tokens_parse("${token_definitions}" "${str}")
     ans(tokens)

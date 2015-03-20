@@ -10,7 +10,7 @@ function(test)
 
   ans(res)
   assert(res)
-  map_isvalid(${res} )
+  is_map(${res} )
   ans(ismap)
   assert(ismap)
   

@@ -4,7 +4,7 @@
 ##
 ##
 function(log_record_clear)
-  ref_set(log_record)
+  address_set(log_record)
   return()
 endfunction()
 

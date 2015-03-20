@@ -36,7 +36,7 @@ function(package_dependency_symlinker project package)
       map_tryget(${constraints} symlink)
       ans(symlink)
 
-      ref_isvalid("${symlink}")
+      is_address("${symlink}")
       ans(isref)
       if(NOT isref)
         set(single_link "${symlink}")

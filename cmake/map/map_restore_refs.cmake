@@ -4,9 +4,9 @@
     ans(ref_ids)
 
     function(map_restore_find_refs cancel node)
-      ref_isvalid(${node})
+      is_address(${node})
       ans(isref)
-      map_isvalid(${node})
+      is_map(${node})
       ans(ismap)
 
       if(ismap)

@@ -32,7 +32,7 @@ function(test)
 	# 	element(END)
 	# element(END lst)
 
-	#ref_get(${lst} )
+	#address_get(${lst} )
 	#ans(lst)
 	map_select( "from a in lst select {a.k1}{a.k2}")
 	ans(res)

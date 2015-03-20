@@ -7,7 +7,7 @@ function(semver_constraint constraint_ish)
     return_ref(constraint_ish)
   endif()
 
-  map_isvalid(${constraint_ish})
+  is_map(${constraint_ish})
   ans(ismap)
   if(ismap)
     return()

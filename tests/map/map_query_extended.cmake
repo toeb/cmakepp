@@ -8,7 +8,7 @@ set(listD 1 5 5 5 3)
 map_query( "from a in listA, b in listB,c in listC, d in listD where {a} STREQUAL {b} AND {b} STREQUAL {c} AND {d} STREQUAL {c} select new { \"lol\":\"{a}\"}")
 ans(res)
 foreach(r ${res})
-	ref_print(${r})
+	address_print(${r})
 endforeach()
 return()
 

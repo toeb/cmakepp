@@ -1,7 +1,7 @@
 
   function(parse_regex rstring)
     # deref rstring
-    ref_get(${rstring})
+    address_get(${rstring})
     ans(str)
    # message("string ${str}")
     # get regex from defintion
@@ -55,7 +55,7 @@
         set(match "")
     endif()
     # if success set rstring to rest of string
-    ref_set(${rstring} "${str}")
+    address_set(${rstring} "${str}")
 
     # return matched element
     return_ref(match)

@@ -50,7 +50,7 @@
       ## read all package indices
       file(GLOB folders RELATIVE "${directory}" "${directory}/*")
 
-      map_isvalid("${query}")
+      is_map("${query}")
       ans(ismap)
     
       ## query may be a * which returns all packages 

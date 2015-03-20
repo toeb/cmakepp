@@ -33,20 +33,20 @@ function(map_query query)
 		if(${current_where})
 			map_transform( "${select}")
 			ans(selection)
-			ref_append(${map_query_result} "${selection}")
+			address_append(${map_query_result} "${selection}")
 		endif()
 
 	endfunction()
 
 	# create a ref where the result is stored
-	ref_new()
+	address_new()
 	ans(map_query_result)
 	map_foreach(map_query_foreach_action "${sources}")
 	
 	# get the result
-	ref_get(${map_query_result} )
+	address_get(${map_query_result} )
 	ans(res)
-	ref_delete(${map_query_result})
+	address_delete(${map_query_result})
 
 	return_ref(res)
 	

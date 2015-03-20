@@ -3,7 +3,7 @@ function(map_clone_deep original)
   map_clone_shallow("${original}")
   ans(result)
     
-  map_isvalid("${result}" )
+  is_map("${result}" )
   ans(ismap)
   if(ismap) 
     map_keys("${result}" )

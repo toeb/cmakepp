@@ -1,3 +1,3 @@
-function(ref_delete ref)
+function(address_delete ref)
 	set_property(GLOBAL PROPERTY "${ref}")
 endfunction()

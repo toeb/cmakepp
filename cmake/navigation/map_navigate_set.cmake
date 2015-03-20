@@ -51,7 +51,7 @@ function(map_navigate_set navigation_expression)
 
 		#message("current ${current}, parts: ${parts}, current_part: ${part}, current_index ${index} current_type : ${index_type}")
 		# first one could not be ref so create ref and set output
-		ref_isvalid("${current}")
+		is_address("${current}")
 		ans(isref)
 		
 		if(NOT isref)

@@ -1,6 +1,6 @@
 
   function(query_literal_regex input)
-    ref_isvalid("${input}")
+    is_address("${input}")
     ans(is_ref)
     if(is_ref)
       map_import_properties(${input} 

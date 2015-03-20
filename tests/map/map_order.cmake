@@ -33,12 +33,12 @@ function(test)
 
 
 	foreach(it ${lst})
-		ref_print(${it})
+		address_print(${it})
 	endforeach()
 	map_order(lst cmp_lst)
 
 	foreach(it ${lst})
-		ref_print(${it})
+		address_print(${it})
 	endforeach()
 
 endfunction()

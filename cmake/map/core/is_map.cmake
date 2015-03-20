@@ -1,12 +1,12 @@
 # returns true if ref is a valid reference and its type is 'map'
-function(map_isvalid  ref )
+function(is_map  ref )
 
-	ref_isvalid("${ref}")
+	is_address("${ref}")
 	ans(isref)
 	if(NOT isref)
 		return(false)
 	endif()
-	ref_gettype("${ref}")
+	address_type_get("${ref}")
   ans(type)
 	if(NOT "${type}" STREQUAL "map")
 		return(false)

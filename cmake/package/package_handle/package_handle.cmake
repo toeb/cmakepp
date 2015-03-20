@@ -7,7 +7,7 @@
 
     path_qualify(content_dir)
 
-    map_isvalid("${pd}")
+    is_map("${pd}")
     ans(ismap)
     if(ismap AND content_dir AND IS_DIRECTORY "${content_dir}")
       return(${ARGN})
