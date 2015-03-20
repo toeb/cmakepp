@@ -2,7 +2,9 @@
   ## 
   function(package_source_query_archive uri)
     set(args ${ARGN})
-    
+        
+    log("querying for local archive at {uri.uri}" --trace --function package_source_query_archive)
+
     list_extract_flag(args --package-handle)
     ans(return_package_handle)
 
@@ -27,6 +29,7 @@
     ans(is_archive)
 
     if(NOT is_archive)
+        log("'{local_path}' is not an archive" --trace --function package_source_query_archive)
       return()
     endif()
 
@@ -47,9 +50,8 @@
     uri_format("${qualified_uri}")
     ans(resource_uri)
 
-
     set(package_uri "${resource_uri}?hash=${hash}")
-
+    log("found archive package at '{uri.uri}'" --function package_source_query_archive --trace)
     if(return_package_handle)
         set(package_handle)
         assign(!package_handle.uri = package_uri)
@@ -60,6 +62,8 @@
         assign(!package_handle.archive_descriptor.pwd = pwd())
         return_ref(package_handle)
     endif()
+
+
 
     return_ref(package_uri)
   endfunction()

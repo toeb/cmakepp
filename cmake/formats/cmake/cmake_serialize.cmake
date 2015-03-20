@@ -35,7 +35,7 @@
       ans(refstring)
       
       map_append_string(${context} qm 
-"set_property(GLOBAL APPEND PROPERTY \"${keystring}\" \"${map_element_key}\")
+"set_property(GLOBAL APPEND PROPERTY \"${keystring}.__keys__\" \"${map_element_key}\")
 set_property(GLOBAL PROPERTY \"${refstring}\")
 ")
     endfunction()

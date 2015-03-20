@@ -27,6 +27,14 @@ function(test)
   ans(expected_checksum_3)
 
 
+  package_source_resolve_archive("archive2-3.2.1.tgz")
+  ans(res)
+  assert(res) 
+
+
+
+
+
   ## test that query result can be resolved
   package_source_query_archive("${test_dir}/archive3.tgz")
   ans(uri)
@@ -45,14 +53,6 @@ function(test)
   
 
 
-  package_source_resolve_archive("archive2-3.2.1.tgz")
-  ans(res)
-  assert(res) 
-
-
-
-
-
 
   package_source_resolve_archive("${test_dir}/archive1.tgz")
   ans(res)
@@ -60,6 +60,9 @@ function(test)
   assertf("{res.package_descriptor.id}" STREQUAL "archive1")
   assertf("{res.package_descriptor.version}" STREQUAL "0.0.0")
   assertf("{res.uri}" MATCHES "^file:///")
+
+
+
 
 
   package_source_resolve_archive("lalala")

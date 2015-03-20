@@ -8,6 +8,4 @@ function(project_materializer project)
     ans(project_uri)
     project_materialize(${project} "${project_uri}")
   endif()
-
-
 endfunction()
