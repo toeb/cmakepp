@@ -15,12 +15,12 @@
 ## 
 ##
 ## events:  
-function(cmakepp_on_loaded_hook project_handle package_handle)
+function(on_loaded_hook project_handle package_handle)
   
 
 
   ## call on_load hook
-  package_handle_invoke_hook(${package_handle} cmakepp.hooks.on_load ${project_handle} ${package_handle})
+  package_handle_invoke_hook(${package_handle} hooks.on_load ${project_handle} ${package_handle})
 endfunction()
 
 

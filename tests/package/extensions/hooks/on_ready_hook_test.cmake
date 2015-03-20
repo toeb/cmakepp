@@ -7,12 +7,12 @@ function(test)
 
   
   ans(context)
-  assign(!package_source.metadata.A.cmakepp.hooks.on_ready = "'[]() map_append(${context} ready {{ARGN}})'")
+  assign(!package_source.metadata.A.hooks.on_ready = "'[]() map_append(${context} ready {{ARGN}})'")
   
-  project_read()
+  project_open(.)
   ans(project)
   assign(project.project_descriptor.package_source = package_source)
-  assign(!project.package_descriptor.cmakepp.hooks.on_ready = "'[]() map_append(${context} ready {{ARGN}})'")
+  assign(!project.package_descriptor.hooks.on_ready = "'[]() map_append(${context} ready {{ARGN}})'")
   
 
   project_change_dependencies(${project} A)

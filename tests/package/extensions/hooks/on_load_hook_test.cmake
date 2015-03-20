@@ -10,11 +10,10 @@ function(test)
     cmake:{
       export:['cmake/**.cmake', '!cmake/pkg1_func3.cmake']
     },
-    cmakepp:{
-      hooks:{
-        on_load:'[](a1 a2) map_set(${context} on_load_called true {{a1}} {{a2}})'
-      }
+    hooks:{
+      on_load:'[](a1 a2) map_set(${context} on_load_called true {{a1}} {{a2}})'
     }
+  
   }" --json)
   fwrite("pkg1/cmake/pkg1_func1.cmake" "
     function(pkg1_func1)

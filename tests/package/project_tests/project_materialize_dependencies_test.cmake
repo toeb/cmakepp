@@ -1,6 +1,6 @@
 function(test)
 
-  project_read()
+  project_open("")
   ans(project)
 
   assign(project.project_descriptor.package_source 

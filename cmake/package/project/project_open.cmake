@@ -5,6 +5,9 @@
 ## if the state of the project handle is `unknown` it was never opened before. It is first transitioned to `closed` after emitting the `project_on_new` event.
 ## then the project handle is transitioned from `closed` to `open` first the `project_on_opening` event is emitted followed by `project_on_open`.  Afterwards the state is changed to `open` and then the `project_on_opened` event us emitted.  
 ## returns the project handle of the project on success. fails if the project handle is in a state other than `unknown` or `closed`. 
+## 
+## *note* that the default project does not contain a package source. it will have to be configured once manually for every new project
+##
 ##
 ## **events**
 ##  * `project_on_new(<project handle>)`
@@ -13,6 +16,7 @@
 ##  * `project_on_opened(<project handle>)`
 ##  * `project_on_state_enter(<project handle>)`
 ##  * `project_on_state_leave(<project handle>)`
+##  * extensions also emit events.
 ##
 ## **assumes** 
 ## * `project_handle.project_descriptor.state` is either `unknown`(null) or `closed`

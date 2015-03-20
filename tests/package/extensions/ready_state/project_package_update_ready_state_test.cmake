@@ -1,6 +1,6 @@
 function(test)
 
-  project_read()
+  project_open(.)
   ans(project)
 
   mock_package_source("mock" 
@@ -56,9 +56,6 @@ function(test)
     )
 
 
-  #project_materialize_dependencies(${project})
-
-  #project_dematerialize(${project} "mock:E")
 
 
 

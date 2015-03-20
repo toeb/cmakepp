@@ -7,12 +7,12 @@ function(test)
 
   
   ans(context)
-  assign(!package_source.metadata.A.cmakepp.hooks.on_unready = "'[]() map_append(${context} unready {{ARGN}})'")
+  assign(!package_source.metadata.A.hooks.on_unready = "'[]() map_append(${context} unready {{ARGN}})'")
   
-  project_read()
+  project_open(.)
   ans(project)
   assign(project.project_descriptor.package_source = package_source)
-  assign(!project.package_descriptor.cmakepp.hooks.on_unready = "'[]() map_append(${context} unready {{ARGN}})'")
+  assign(!project.package_descriptor.hooks.on_unready = "'[]() map_append(${context} unready {{ARGN}})'")
   
 
   project_install(${project} A)

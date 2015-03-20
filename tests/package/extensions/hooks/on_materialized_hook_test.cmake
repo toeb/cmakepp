@@ -7,11 +7,9 @@ function(test)
   ## create a simple package which exports cmake files
   ## and register the on_load hook
   fwrite_data("pkg1/package.cmake" "{
-    cmakepp:{
       hooks:{
         on_materialized:'cmake/on_materialized.cmake'
       }
-    }
   }" --json)
 
   fwrite("pkg1/cmake/on_materialized.cmake" "

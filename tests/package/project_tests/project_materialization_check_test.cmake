@@ -2,14 +2,14 @@ function(test)
 
 
   ## create a project and install two dependencies
-  project_read()
+  project_open("")
   ans(project)
   mock_package_source("mock" A B C)
   ans(package_source)
   assign(project.project_descriptor.package_source = package_source )
 
   project_install(${project} "A" "B")
-  project_close(${project})
+  project_write(${project})
 
 
   ## check that when project is opened no materialization is missing

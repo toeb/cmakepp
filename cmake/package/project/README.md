@@ -25,6 +25,16 @@ The project functions are based on a `project handle` which is also a `package h
 
 To keep the project functions open for extension but closed for modification I chose to use an event system to emit events to which extensions can react and modify the project and package handles according to their requirements.  The project lifecycle is defined by these events.  The state of the project always needs to be correct which is why I also use a state machine to manage it.
 
+### The Project Lifecycle
+
+The project lifecycle is at its base very simple with just five states:
+
+![Project Lifecycle](project_lifecycle.png)
+
+
+When a new project handle is created it is in the `unknown` state and will first be set to `closed` before entering the lifecycle.  The project handle can only be persisted and read when it is in the `closed` state otherwise it is considered to be in an inconsistent state.
+
+
 ### Datatypes:
 
 ```
@@ -56,15 +66,6 @@ The project descriptor contains data which describes the state of the project.
 ```
 
 
-### The Project Lifecycle
-
-The project lifecycle is at its base very simple with just four states:
-
-![Project Lifecycle](project_lifecycle.png)
-
-
-When a new project handle is created it is in the `unknown` state and will first be set to `closed` before entering the lifecycle.  The project handle can only be persisted and read when it is in the `closed` state otherwise it is considered to be in an inconsistent state.
-
 
 
 ## Implementation
@@ -77,7 +78,7 @@ The command line interface wraps these functions and provides an alias which you
 ```
 
 
-### Opening and Closing a project
+### Opening and Closing a Project
 
 When a project is opened the following will happen (the ovals are states and the boxes are events that are emitted):
 
@@ -106,6 +107,9 @@ When the project is `opened` it is possible to modify and work with it. The func
 #### Materialization
 
 
+A project can materialize and dematerialize packages which may or may not be dependencies. What this means is that adding or removing a dependency is not the same thing as materializing and dematerializing a dependency. This split between materialization and dependency management may seem strange at first but it allows you more manual control.
+
+
 * [project_materialize](#project_materialize)
 * [project_dematerialize](#project_dematerialize)
 * [project_materialize_dependencies](#project_materialize_dependencies)
@@ -113,11 +117,62 @@ When the project is `opened` it is possible to modify and work with it. The func
 
 #### Dependency Management
 
+The actual dependency manager I implemented is based on every package defining its dependency constraints which are then combined into a large boolean satisfyability problem.  The solution to this problem is called the dependency configuration.  The big advantage that using a SAT solver over a topological order is that it allows cyclomatic dependendencies and can solve ambiguous dependencies (it actually just has to find one set of dependencies which work).  The dependency configuration then a  simple map which maps `{ <package uri> : <bool> }` 
+
+The following figure illustrates a problem which will be solved by the SAT solver.  The packages dependencies specified in the packages all have constraints which can be fulfilled by multiple instances of package B.  However there is a consensus candidate which will solve the problem for all packages in the dependency graph:
+
+![Multi Constraints](dependency_graph_1.png)
+
+
+
+
+A package dependency is defined as follows: 
+
+```
+<package dependency> ::= { <admissable uri> : <package constraint> }
+## example:
+{ 'github:toeb/cmakepp':true }
+{ 'http://www.cmake.org/files/v3.2/cmake-3.2.1.tar.gz':false }
+{ 'bitbucket:toeb/test_repo_hg':null}
+{ 'github:toeb/cppdynamic':{ ... } }
+```
+
+
+These package dependencies can be combined:
+
+```
+<package dependencies> ::= <package dependency> v <package dependency>
+```
+
+##### Package Constraints
+A package constraint is defined as follows:
+```
+<package constraint> ::= <true> | <false> | <null> | <complex package constraint>
+<complex package constraint> ::= {
+  ... values that configure or constrain the packges ...
+}
+```
+
+The simple constraints are easy to explain:
+* `true` the dependency is necessary. any `package uri` which is identified by  the `admissable uri`  will fullfill the dependency for the current package.
+* `false` any `package_uri` identified by the `admissable uri` is incompatible with the current package.
+* `null` any `package uri` identified by `admissable uri` can be optionally installed. (same as complex contstraint `{is_optional:true}`)
+*  `{ ... }` complex constraints are not completely implemented yet (only `is_optional`) but I plan to add version constraints, installation location constraints, os dependencies, dependency descriptor modifications. Also may contain any other proeprties which can be used by extensions to configure that particular project/package/package dependency.  See for example the `package symlinker` extension. 
+
+
+###### Functions 
+
 
 * [project_change_dependencies](#project_change_dependencies)
 
 
 ## Extensions to the Project Lifecycle
+
+In the metadata for every package (ie the `package_descriptor`)
+
+### `CMake` extension
+
+You 
 
 ## `cmakepp` integration
 
@@ -126,7 +181,7 @@ When the project is `opened` it is possible to modify and work with it. The func
 * `package_descriptor.cmakepp.create_files : { <filename> : <filecontent> }` all keys specified here will be created in the `package`'s `content_dir` with the specified content. This is useful if you want to define a package completely in a `package descriptor`
 * `package_descriptor.cmakepp.export : <glob ignore expression>` includes all the files specified by the glob ignore expression in cmake allowing your package to provide cmake macros and functions to other packages.  **WARNING** cmake only has one function scope so you need to be careful that you do not overwrite any functions which are needed elsewhere.  The best practice would be for you to add a namespace string before each function name e.g. `mypkg_myfunction`.  
 
-### `cmakepp` Hooks
+### Package `hooks`
 
 Hooks are invoked for every package which allows it to react to the project lifecycle  more easily.  These hooks are called using `package_handle_invoke_hook`. You can use any function that you defined in your `cmakepp.export`s (except if stated otherwise) and also specify a file relative to the `package`'s root direcotry. 
 
@@ -150,6 +205,9 @@ Hooks are invoked for every package which allows it to react to the project life
  if the state of the project handle is `unknown` it was never opened before. It is first transitioned to `closed` after emitting the `project_on_new` event.
  then the project handle is transitioned from `closed` to `open` first the `project_on_opening` event is emitted followed by `project_on_open`.  Afterwards the state is changed to `open` and then the `project_on_opened` event us emitted.  
  returns the project handle of the project on success. fails if the project handle is in a state other than `unknown` or `closed`. 
+ 
+ *note* that the default project does not contain a package source. it will have to be configured once manually for every new project
+
 
  **events**
   * `project_on_new(<project handle>)`
@@ -158,6 +216,7 @@ Hooks are invoked for every package which allows it to react to the project life
   * `project_on_opened(<project handle>)`
   * `project_on_state_enter(<project handle>)`
   * `project_on_state_leave(<project handle>)`
+  * extensions also emit events.
 
  **assumes** 
  * `project_handle.project_descriptor.state` is either `unknown`(null) or `closed`
