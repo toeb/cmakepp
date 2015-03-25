@@ -15,7 +15,7 @@ function(package_dependency_resolve_and_satisfy package_source root_handle)
   ans(package_graph)
 
   ## run dependency problem
-  package_dependency_problem_run("${package_graph}" "${root_handle}" --cache ${cache})
+  package_dependency_problem_run("${package_graph}" "${root_handle}")
   ans(dependency_problem)
   
   return_ref(dependency_problem)

@@ -1,7 +1,7 @@
 
 function(package_dependency_problem_run package_graph root_handle)
 
-  package_dependency_problem("${package_graph}" "${root_handle}" ${ARGN})
+  package_dependency_problem("${package_graph}" "${root_handle}")
   ans(dependency_problem)
 
 

@@ -10,8 +10,7 @@
 ##  **sideffects**
 ## *sets the `dependencies` property of all `package handle`s to the configured dependency using `package_dependency_configuration_set`.
 ##  
-function(package_dependency_configuration package_source root_handle)
-  
+function(package_dependency_configuration package_source root_handle)  
   package_dependency_resolve_and_satisfy("${package_source}" "${root_handle}" ${ARGN})
   ans(dependency_problem)
 
@@ -20,7 +19,7 @@ function(package_dependency_configuration package_source root_handle)
   ans(dp_result)
   map_tryget(${dp_result} atom_assignments)
   ans(assignments)
-  
+
   return_ref(assignments)
 endfunction()
 

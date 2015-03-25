@@ -3,12 +3,6 @@
 ## creates a package dependency problem context
 function(package_dependency_problem package_graph root_handle)
   set(args ${ARGN})
-  list_extract_labelled_value(args --cache)
-  ans(cache)
-  if(NOT cache)
-    map_new()
-    ans(cache)
-  endif()
 
   set(constraint_handlers 
     package_dependency_constraint_required

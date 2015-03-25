@@ -24,6 +24,8 @@ function(test)
   project_change_dependencies(${project} "A")
   ans(res)
 
+
+
   timer_start(t1)
   project_materialize(${project} project:root)
   project_materialize(${project} A)
@@ -39,6 +41,8 @@ function(test)
   timer_print_elapsed(t1)
   map_tryget(${context} messages)
   ans(messages)
+
+  json_print(${messages})
 
   assert(${messages} EQUALS 
     "ready: mock:D"    
