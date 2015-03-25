@@ -3,25 +3,29 @@
 ## creates cnf clauses for all dependencies in dependency graph
 ## 
 ##
-function(package_dependency_clauses package_graph root_handle)
-  sequence_new()
-  ans(clauses)
+function(package_dependency_clauses dependency_problem) 
+  map_tryget(${dependency_problem} package_graph)
+  ans(package_graph)
 
-  map_tryget(${root_handle} uri)
-  ans(dependee_uri)
 
-  ## add root uri to clauses - because the root uri is always reqireud
-  sequence_add(${clauses} "${dependee_uri}")
-  
   map_values("${package_graph}")
   ans(package_handles)
 
+  set(derived_constraints)
   ## loop through all package handles in dependency graph 
   ## and add their dependency clauses to clauses sequence
   foreach(package_handle ${package_handles})      
-    package_dependency_clauses_add_all("${clauses}" "${package_handle}")
+    package_dependency_constraint_derive_all("${dependency_problem}" "${package_handle}")
+    ans_append(derived_constraints)
   endforeach()
 
+  set(clauses)
+  foreach(constraint ${derived_constraints})
+    map_tryget(${constraint} clauses)
+    ans_append(clauses)
+  endforeach()
+
+  
 
   return_ref(clauses)
 endfunction()

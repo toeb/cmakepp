@@ -6,7 +6,7 @@ function(project_derive_package_content_dir project_handle package_handle)
 
   format("{package_handle.package_descriptor.id}")
   ans(package_id)
-  string_normalize(${package_id})
+  string_normalize("${package_id}")
   ans(package_id)
 
   assign(uri = package_handle.uri)

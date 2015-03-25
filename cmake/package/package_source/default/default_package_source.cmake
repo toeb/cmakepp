@@ -15,6 +15,9 @@ function(default_package_source)
     webarchive_package_source()
     ans_append(sources)
 
+    host_package_source()
+    ans_append(sources)
+
     find_package(Git)
     find_package(Hg)
     find_package(Subversion)

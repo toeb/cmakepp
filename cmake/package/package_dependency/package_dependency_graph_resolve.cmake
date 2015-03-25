@@ -40,6 +40,13 @@ function(package_dependency_graph_resolve package_source)
     ans(cache)
   endif()
 
+  ## add the root nodes of the graph into the cache
+  foreach(package_handle ${package_handles})
+    map_tryget(${package_handle} uri)
+    ans(package_uri)
+    map_set("${cache}" "${package_uri}" "${package_handle}")
+  endforeach()
+
 
   ## create context
   map_new()

@@ -11,35 +11,18 @@
 ## *sets the `dependencies` property of all `package handle`s to the configured dependency using `package_dependency_configuration_set`.
 ##  
 function(package_dependency_configuration package_source root_handle)
-  set(args ${ARGN})
-  ## get cache if available - else create a new one
-  list_extract_labelled_value(args --cache)
-  ans(cache)
-  if(NOT cache)
-    ## cache map 
-    map_new()
-    ans(cache)
-  endif()
-
-
-  map_tryget(${root_handle} uri)
-  ans(root_uri)
-  map_set("${cache}" "${root_uri}" "${root_handle}")
-
-  ## returns a map of package_uri -> package_handle
-  package_dependency_graph_resolve("${package_source}" ${root_handle} --cache ${cache}) 
-  ans(package_graph)
   
-  ## creates a package configuration which can be rused to install / uninstall 
-  ## dependencies
-  package_dependency_graph_satisfy("${package_graph}" ${root_handle})
-  ans(configuration)
+  package_dependency_resolve_and_satisfy("${package_source}" "${root_handle}" ${ARGN})
+  ans(dependency_problem)
 
-  if(configuration)  
-    map_values(${package_graph})
-    ans(package_handles)
-    package_dependency_configuration_set(${configuration} ${package_handles})
-  endif()
-
-  return_ref(configuration)
+  ## get the assignments
+  map_tryget(${dependency_problem} dp_result)
+  ans(dp_result)
+  map_tryget(${dp_result} atom_assignments)
+  ans(assignments)
+  
+  return_ref(assignments)
 endfunction()
+
+
+

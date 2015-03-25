@@ -72,6 +72,11 @@ function(cmakepp_project_cli)
     ans(project)
   endif()
 
+  if(NOT project)
+    error("no project available")
+    return()
+  endif()
+
   map_tryget(${project} project_descriptor)
   ans(project_descriptor)
   map_tryget(${project_descriptor} package_source)

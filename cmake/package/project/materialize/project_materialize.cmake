@@ -120,7 +120,8 @@ function(project_materialize project_handle package_uri)
 
     call(package_source.pull("${package_uri}" "${package_content_dir}"))
     ans(pull_handle)
-
+    ## todo content dir might not be the same
+    
     if(NOT pull_handle)
       map_remove(${package_handle} materialization_descriptor)
       popd()

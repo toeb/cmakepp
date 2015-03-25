@@ -1,0 +1,10 @@
+
+  function(package_source_rate_uri_host uri)
+    uri_coerce(uri)
+    uri_check_scheme("${uri}" host)
+    ans(ok)
+    if(NOT ok)
+      return(0)
+    endif()
+    return(999)
+  endfunction()
