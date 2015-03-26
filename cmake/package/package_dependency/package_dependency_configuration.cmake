@@ -20,6 +20,14 @@ function(package_dependency_configuration package_source root_handle)
   map_tryget(${dp_result} atom_assignments)
   ans(assignments)
 
+  map_tryget(${dependency_problem} package_graph)
+  ans(package_graph)
+  map_values("${package_graph}")
+  ans(package_handles)
+
+  ## update the package handles
+  package_dependency_configuration_set("${assignments}" ${package_handles})
+
   return_ref(assignments)
 endfunction()
 
