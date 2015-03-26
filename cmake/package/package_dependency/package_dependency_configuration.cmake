@@ -25,9 +25,10 @@ function(package_dependency_configuration package_source root_handle)
   map_values("${package_graph}")
   ans(package_handles)
 
-  ## update the package handles
-  package_dependency_configuration_set("${assignments}" ${package_handles})
-
+  if(assignments)
+    ## update the package handles
+    package_dependency_configuration_set("${assignments}" ${package_handles})
+  endif()
   return_ref(assignments)
 endfunction()
 
