@@ -91,7 +91,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_check](#map_check)
 * [map_decycle](#map_decycle)
 * [map_exists](#map_exists)
-* [map_format](#map_format)
+* [format](#format)
 * [map_graphsearch](#map_graphsearch)
 * [map_import_properties](#map_import_properties)
 * [map_match_obj](#map_match_obj)
@@ -653,7 +653,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
-## <a name="map_format"></a> `map_format`
+## <a name="format"></a> `format`
 
 
 

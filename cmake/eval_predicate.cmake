@@ -10,7 +10,6 @@
 
     cmake_arguments_quote_if_necessary(${arguments})
     ans(arguments)
-
     set(predicate)
     foreach(arg ${arguments})
       encoded_list_decode("${arg}")
@@ -18,7 +17,9 @@
       set(predicate "${predicate} ${arg}")
     endforeach()
 
-    #_message("${predicate}")
+
+
+   # _message("${predicate}")
     set(code "
       if(${predicate})
         set_ans(true)
@@ -26,8 +27,8 @@
         set_ans(false)
       endif()
     ")
+   # _message("${code}")
 
-  #  _message("${code}")
     eval("${code}")
     return_ans()
   endfunction()

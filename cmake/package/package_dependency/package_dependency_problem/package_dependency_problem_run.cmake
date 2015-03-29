@@ -1,7 +1,10 @@
-
+## `(<package graph> <root_handle:<package handle>>)-><package dependency problem>`
+##
+## runs the the package dependency problem just using the package graph and the root handle as input
+## returns the completed package dependency problem
 function(package_dependency_problem_run package_graph root_handle)
 
-  package_dependency_problem("${package_graph}" "${root_handle}")
+  package_dependency_problem_new("${package_graph}" "${root_handle}")
   ans(dependency_problem)
 
 

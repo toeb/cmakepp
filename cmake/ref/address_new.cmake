@@ -1,6 +1,5 @@
 function(address_new)
-	address_set(":0" 0)
-	
+	address_set(":0" 0)	
 	function(address_new)
 		address_get(":0" )
 		ans(index)
@@ -33,3 +32,16 @@ function(address_new)
 	address_new(${ARGN})
 	return_ans()
 endfunction()
+
+## faster
+macro(address_new)
+	set_property(GLOBAL PROPERTY ":0" 0)
+	macro(address_new)
+		get_property(__ans GLOBAL PROPERTY ":0")
+		math(EXPR __ans "${__ans} + 1")
+		set_property(GLOBAL PROPERTY ":0" "${__ans}")
+		set_property(GLOBAL PROPERTY ":${__ans}")
+		set(__ans ":${__ans}")
+	endmacro()
+	address_new(${ARGN})
+endmacro()

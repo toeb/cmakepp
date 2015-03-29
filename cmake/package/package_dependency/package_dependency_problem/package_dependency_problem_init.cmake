@@ -1,5 +1,8 @@
-
+## `(<package dependency problem>)-><bool>`
+##
 ## initializes the dependency problem after it was configured
+## derives the constraints and clauses and adds them to the dependency problem
+## returns true on success
 function(package_dependency_problem_init dependency_problem)
   is_address("${dependency_problem}")
   ans(is_ok)
@@ -9,7 +12,7 @@ function(package_dependency_problem_init dependency_problem)
 
   ## create boolean satisfiablitiy problem 
   ## by getting all clauses
-  package_dependency_clauses(${dependency_problem})
+  package_dependency_constraint_derive_all(${dependency_problem})
   ans(clauses)
   map_set(${dependency_problem} clauses "${clauses}")  
 
@@ -22,7 +25,7 @@ function(package_dependency_problem_init dependency_problem)
     sequence_add(${cnf_clauses} ${literals})
     ## debug output
     string(REPLACE ";" "|" literals "${literals}")
-    message(FORMAT "{clause.reason}.  derived clause: ({literals})")
+    log("{clause.reason}.  derived clause: ({literals})" --trace --function package_dependency_problem_init)
   endforeach()
 
   ## create cnf

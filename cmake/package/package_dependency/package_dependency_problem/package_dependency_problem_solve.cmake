@@ -1,8 +1,8 @@
-
-
+## `(<package dependency problem>)-><bool>` 
+##
+## solves the dependency problem by running the sat solver
+## returns true on success
 function(package_dependency_problem_solve dependency_problem)
-
-
   map_tryget(${dependency_problem} cnf)
   ans(cnf)
 

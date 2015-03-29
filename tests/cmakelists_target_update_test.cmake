@@ -1,6 +1,7 @@
 function(test)
 
 
+
   cmakelists_new("
     add_library(my_lib source1.c)
     target_link_libraries(my_lib lib2)

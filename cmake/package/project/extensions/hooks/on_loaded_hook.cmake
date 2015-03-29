@@ -18,7 +18,7 @@
 function(on_loaded_hook project_handle package_handle)
   
 
-
+  log("invoking on loaded hook for {package_handle.uri}" --trace --function on_loaded_hook)
   ## call on_load hook
   package_handle_invoke_hook(${package_handle} hooks.on_load ${project_handle} ${package_handle})
 endfunction()

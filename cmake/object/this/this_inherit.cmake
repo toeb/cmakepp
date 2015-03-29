@@ -2,7 +2,7 @@
 # if base is a function / constructor then a base object will be constructed and set
 # as the prototy of this
 function(this_inherit baseType)
-	type_get( ${baseType})
+	obj_type_get( ${baseType})
 	ans(base)
 	obj_getprototype(${this})
 	ans(prototype)
@@ -19,10 +19,4 @@ function(this_inherit baseType)
 	if(instance)
 		set(this "${instance}" PARENT_SCOPE)
 	endif()
-endfunction()
-
-
-## todo
-function(obj_inherit)
-
 endfunction()

@@ -18,7 +18,6 @@ macro(map_get __map_get_map __map_get_key)
     get_property(__map_get_property_exists GLOBAL PROPERTY "${__map_get_property_ref}" SET)
     if(NOT __map_get_property_exists)
       json_print("${__map_get_map}")
-
       message(FATAL_ERROR "map '${__map_get_map}' does not have key '${__map_get_key}'")    
     endif()
   endif()  

@@ -15,6 +15,7 @@
       map_push_back(${context} refstack ${ref})
       map_append_string(${context} qm 
 "math(EXPR ref \"\${base} + ${ref}\")
+set_property(GLOBAL PROPERTY \":\${ref}.__keys__\" \"\")
 ")
     endfunction()
 

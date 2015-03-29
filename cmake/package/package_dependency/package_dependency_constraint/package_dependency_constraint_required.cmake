@@ -17,7 +17,7 @@ function(package_dependency_constraint_required
   map_values(${possible_dependencies})
   ans(dependencies)
 
-  package_dependency_constraint("required" "${dependee}")
+  package_dependency_constraint_new("required" "${dependee}")
   ans(constraint)
 
   ## either depndee is not installed 
@@ -28,7 +28,7 @@ function(package_dependency_constraint_required
   endforeach()
 
 
-  package_dependency_constraint_clause(
+  package_dependency_constraint_clause_new(
     ${constraint}
     "{dependee.uri} => {admissable_uri} requires one of {possible_dependencies.__keys__}" 
     ${clause})

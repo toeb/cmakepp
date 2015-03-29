@@ -14,7 +14,7 @@ function(package_dependency_constraint_optional
   endif()
 
 
-  package_dependency_constraint("optional" "${dependee_handle}")
+  package_dependency_constraint_new("optional" "${dependee_handle}")
   ans(constraint)
 
   return(${constraint})

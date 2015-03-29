@@ -1,6 +1,12 @@
-## `()->`
+## `(<change action>...)-> <packag dependency changeset>`
 ##
-##
+## ```
+## <package dependency changeset> ::= {
+##   <admissable_uri> : <change action>
+## }
+## ```
+## parses a changeset from the specified console friendly input arguments
+## 
 function(package_dependency_changeset_parse)
   map_new()
   ans(changeset)

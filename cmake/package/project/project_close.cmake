@@ -1,6 +1,7 @@
 ## `(<project handle>)-><project file:<path>>`
 ##
-## closes the specified project
+## closes the specified project.  All eventhandlers will be notified will emit their own events as well.
+## after the project is closed it SHOULD NOT be modified.
 ##
 ## **events**
 ##  * `project_on_closing(<project handle>)`

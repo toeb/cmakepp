@@ -16,7 +16,7 @@ function(cmakepp_project_cli)
 
   if(verbose)
 
-    event_addhandler("on_log_message" "[](entry)print_vars(entry)")
+    event_addhandler("on_log_message" "[](entry)message(FORMAT '{entry.function}: {entry.message}')")
     event_addhandler("project_on_opening" "[](proj) message(FORMAT '{event.event_id}: {proj.content_dir}'); message(PUSH)")
     event_addhandler("project_on_opened" "[](proj) message(FORMAT '{event.event_id}')")
     event_addhandler("project_on_loading" "[](proj) message(FORMAT '{event.event_id}'); message(PUSH)")

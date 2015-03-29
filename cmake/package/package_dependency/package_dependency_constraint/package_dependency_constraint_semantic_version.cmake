@@ -1,3 +1,5 @@
+## `()->`
+## 
 ## constrains the semantic version of a dependency
 function(package_dependency_constraint_semantic_version
   dependency_problem 
@@ -22,7 +24,7 @@ function(package_dependency_constraint_semantic_version
 
 
   ## create the package constraint to return 
-  package_dependency_constraint("semantic_version" "${dependee}")
+  package_dependency_constraint_new("semantic_version" "${dependee}")
   ans(constraint)
 
 
@@ -42,7 +44,7 @@ function(package_dependency_constraint_semantic_version
 
     ## if incompatible add incompatibility
     if(NOT holds)
-      package_dependency_constraint_clause(
+      package_dependency_constraint_clause_new(
         ${constraint}
         "{dependee.uri} => {admissable_uri}: is incompatible with {dependency.uri} because version constraint '${version_constraint}' does not hold for '${version}'"
         "!${dependee}"

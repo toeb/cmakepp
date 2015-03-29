@@ -16,13 +16,13 @@ function(package_dependency_constraint_incompatible
   endif()
 
 
-  package_dependency_constraint("incompatible" "${dependee}")
+  package_dependency_constraint_new("incompatible" "${dependee}")
   ans(constraint)
 
   map_values(${possible_dependencies})
   ans(dependencies)
   foreach(dependency ${dependencies})
-    package_dependency_constraint_clause(
+    package_dependency_constraint_clause_new(
       ${constraint}
       "'{dependee.uri}' is incompatible with '{dependency.uri}'" 
       "!${dependee}" "!${dependency}")

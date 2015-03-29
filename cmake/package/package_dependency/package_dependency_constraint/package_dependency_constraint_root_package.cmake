@@ -31,10 +31,10 @@ function(package_dependency_constraint_root_package
 
 
 
-  package_dependency_constraint("root_package" "${dependee_handle}")
+  package_dependency_constraint_new("root_package" "${dependee_handle}")
   ans(constraint)
 
-  package_dependency_constraint_clause(
+  package_dependency_constraint_clause_new(
     ${constraint}
     "root package is always required" 
     "${dependee_handle}")

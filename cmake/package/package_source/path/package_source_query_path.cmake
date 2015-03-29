@@ -41,6 +41,7 @@ function(package_source_query_path uri)
     return()
   endif()
 
+
   ## old style package descriptor
   json_read("${path}/package.cmake")
   ans(package_descriptor)
