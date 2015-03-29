@@ -7,6 +7,7 @@
     path("${path}")
     ans(path)
     file(STRINGS "${path}" lines)  
-    string(CONCAT res ${lines})
+    string(REPLACE ";" "" res "${lines}")
+   # string(CONCAT res ${lines})
     return_ref(res)
   endfunction()

@@ -75,7 +75,7 @@ function(test)
   ans(cloned)
   assert(EQUALS ${cloned}  list value)
 
-  address_new( custom_type)
+  address_new()
   ans(uut_ref)
   address_set(${uut_ref} hello)
 
@@ -86,9 +86,6 @@ function(test)
   address_get(${cloned} )
   ans(res)
   assert(DEREF "${res}" STREQUAL "hello")
-  address_type_get(${cloned})
-  ans(type)
-  assert(${type} STREQUAL custom_type)
 
   map_clone("${uut_ref}" DEEP)
   ans(cloned)
@@ -97,9 +94,6 @@ function(test)
   address_get(${cloned} )
   ans(res)
   assert(DEREF "${res}" STREQUAL "hello")
-  address_type_get(${cloned})
-  ans(type)
-  assert(${type} STREQUAL custom_type)
 
 
 
