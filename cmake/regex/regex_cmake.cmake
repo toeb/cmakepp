@@ -14,6 +14,7 @@ macro(regex_cmake)
 
 
 
+
   ## tokens
 
   # line comment
@@ -34,6 +35,7 @@ macro(regex_cmake)
 
   # quoted_argment
   set(regex_quoted_argument "\"([^\"\\]|([\\][\"])|([\\][\\])|([\\]))*\"")
+  set(regex_quoted_argument_group "\"(([^\"\\]|([\\][\"])|([\\][\\])|([\\]))*)\"")
   
   # unquoted_argument
   set(regex_unquoted_argument "[^#\\\\\" \t\n\\(\\)]+")
