@@ -34,7 +34,7 @@ function(test)
   assert("${res}" STREQUAL "hello you")
 
 
-  curry3(() => ref_setnew("/0"))
+  curry3(() => address_set_new("/0"))
   ans(res)
   assert(res)
 

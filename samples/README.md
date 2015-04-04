@@ -2,6 +2,10 @@
 
 I have developed some samples to show off `cmakepp`'s capabilities. Here you can find an overview of these samples
 
+https://github.com/open-source-parsers/jsoncpp/archive/1.6.0.tar.gz
+https://github.com/leethomason/tinyxml2/archive/2.2.0.tar.gz
+https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
+
 
 
 
@@ -14,7 +18,8 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 * [Creating a Compressed Package](04-create-simple-compressed-package/README.md)
 * [Creating and Installing a Package with an Install Hook](05-create-install-simple-package-with-install-script/README.md)
 * [Installing and Using Projects with vanilla `CMake`](06-vanilla-cmake-project-with-install/README.md)
-* [Using the package cli](08-packaging-sample/README.md)
+* [Working with Packages](09-using-real-world-packages/README.md)
+* [Using the `CMakeLists` Generator - CMake Reflection](10-cmakelists-generator/README.md)
 
 
 

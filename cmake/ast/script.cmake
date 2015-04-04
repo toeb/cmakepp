@@ -64,7 +64,7 @@ function(script str)
 
     endif()
 
-  map_isvalid("${global}" )
+  is_map("${global}" )
     ans(ismap)
     if(NOT ismap)
       map_new()

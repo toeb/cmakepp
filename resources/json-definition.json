@@ -9,7 +9,7 @@
     },
     {
       "name":"create input ref",
-      "function":"ref_setnew(/0)",
+      "function":"address_set_new(/0)",
       "input":["input"],
       "output":["input_ref"]
     }

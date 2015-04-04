@@ -43,7 +43,7 @@ end()
 # get the result
 ans(themap)
 # print the result
-ref_print(${themap})
+address_print(${themap})
 ```
 
 *Output* 

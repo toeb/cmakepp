@@ -3,7 +3,7 @@
 function(mime_type_from_file_content file)
   path_qualify(file)
   if(NOT EXISTS "${file}")
-
+    return()
   endif()
 
 

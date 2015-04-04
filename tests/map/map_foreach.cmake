@@ -11,10 +11,10 @@ function(test)
   ans(map)
 
 
-  ref_new()
+  address_new()
   ans(myref)
-  map_foreach("${map}" "[](key val)ref_append({{myref}} {{key}} {{val}})")
-  ref_get(${myref})
+  map_foreach("${map}" "[](key val)address_append({{myref}} {{key}} {{val}})")
+  address_get(${myref})
   ans(vals)
 
   assert(EQUALS ${vals} a 1 b 2 c 3)

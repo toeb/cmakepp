@@ -16,7 +16,7 @@
     #message("evaluator prefix ${ast_evaluators}... ${ARGN}")
     map_get(${ast}  types)
     ans(types)
-    map_isvalid("${ast_evaluators}" )
+    is_map("${ast_evaluators}" )
     ans(ismap)
     while(true)
       list_pop_front( types)    

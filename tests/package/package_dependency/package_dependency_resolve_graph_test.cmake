@@ -69,8 +69,6 @@ function(test)
     ans(res)
     timer_print_elapsed(package_dependency_graph_resolve)
 
-    #map_print(${res})
-    #print_vars(cache)
     map_new()
     ans(result)
     map_set(${result} cache ${cache})

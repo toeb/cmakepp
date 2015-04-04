@@ -28,9 +28,9 @@ function(event_emit event)
   set(previous_handlers)
   # loop aslong as new event handlers are appearing
   # 
-  ref_new()
+  address_new()
   ans(__current_event_cancel)
-  ref_set(${__current_event_cancel} false)
+  address_set(${__current_event_cancel} false)
   while(true)
     ## 
     map_tryget(${event} handlers)
@@ -50,7 +50,7 @@ function(event_emit event)
       ans(success)
       list(APPEND result "${success}")
       ## check if cancel is requested
-      ref_get(${__current_event_cancel})
+      address_get(${__current_event_cancel})
       ans(break)
       if(break)
         return_ref(result)

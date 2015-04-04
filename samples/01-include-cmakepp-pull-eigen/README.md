@@ -17,11 +17,11 @@ sample folder/> mkdir build
 sample folder/> cd build                # creates a build folder 
 sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=bin ..          # generates the project configuration specified that the executable will be in the build/bin folder
 -- Building for: Visual Studio 12 2013
--- Found Git: C:/Program Files (x86)/Git/cmd/git.exe (found version "1.9.4.msysgit.2") 
--- Found Hg: C:/Program Files/Mercurial/hg.exe (found version "3.2.1") 
--- Found Subversion: C:/Program Files (x86)/Subversion/bin/svn.exe (found version "1.8.11") 
--- The C compiler identification is ;MSVC 18.0.31101.0
--- The CXX compiler identification is ;MSVC 18.0.31101.0
+-- Found Git: C:/Program Files (x86)/Git/cmd/git.exe (found version "1.9.0.msysgit.0") 
+-- Found Hg: C:/Program Files/Mercurial/hg.exe (found version "3.0") 
+-- Found Subversion: C:/Program Files/SlikSvn/bin/svn.exe (found version "1.8.11") 
+-- The C compiler identification is ;MSVC 18.0.31010.0
+-- The CXX compiler identification is ;MSVC 18.0.31010.0
 -- Check for working C compiler using: Visual Studio 12 2013
 -- Check for working C compiler using: Visual Studio 12 2013 -- works
 -- Detecting C compiler ABI info
@@ -30,9 +30,11 @@ sample folder/build/> cmake -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_RUNTIME
 -- Check for working CXX compiler using: Visual Studio 12 2013 -- works
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/temp/cutil/temp/mktemp_j7CIS/build
+-- Build files have been written to: C:/Temp/cutil/temp/mktemp_idzo0/build
 
 sample folder/build/> cmake --build .   # builds the generated project 
 ... CMake build output ...

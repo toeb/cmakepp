@@ -23,7 +23,7 @@ function(path_to_map map path)
       return()
     endif()
 
-    map_isvalid("${current_map}")
+    is_map("${current_map}")
     ans(ismap)
 
     if(NOT ismap)

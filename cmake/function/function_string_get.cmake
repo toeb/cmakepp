@@ -12,11 +12,11 @@ function(function_string_get func)
 	
 	is_function_ref(is_ref "${func}")
 	if(is_ref)
-		ref_isvalid(${func} )
+		is_address(${func} )
 		ans(is_ref_ref)
 
 		if(is_ref_ref)
-			ref_get(${func} )
+			address_get(${func} )
 			ans(res)
 			return_ref(res)
 			return()

@@ -6,6 +6,7 @@
 
 * [Buildserver](buildserver/README.md)
 * [Creating Checksums](checksum/README.md)
+* [CMake handling functions](cmake/README.md)
 * [Collections](collections/README.md)
 * [Date/Time](datetime/README.md)
 * [Events](events/README.md)
@@ -23,7 +24,6 @@
 * [Windows Registry](reg/README.md)
 * [Parsing and handling semantic versions](semver/README.md)
 * [String Functions](string/README.md)
-* [Targets](targets/README.md)
 * [Templating ](templating/README.md)
 * [Uniform Resource Identifiers (URIs)](uri/README.md)
 * [HTTP Client](web/README.md)

@@ -5,7 +5,7 @@
   function(glob_expression_parse)
     set(args ${ARGN})
 
-    map_isvalid("${args}")
+    is_map("${args}")
     ans(ismap)
     if(ismap)
       return_ref(args)

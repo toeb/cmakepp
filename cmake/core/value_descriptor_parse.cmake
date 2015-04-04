@@ -18,7 +18,7 @@ function(value_descriptor_parse id)
     # it might be a map
     list_peek_front(args)
     ans(first)
-    map_isvalid("${first}" )
+    is_map("${first}" )
     ans(ismap)
 
     if(ismap)

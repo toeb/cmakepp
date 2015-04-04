@@ -4,7 +4,7 @@
 ## valid package soruces are returned
 ## valid package source types are created and returned
 function(package_source source)
-  map_isvalid("${source}")
+  is_map("${source}")
   ans(ismap)
   if(ismap)
     return_ref(source)

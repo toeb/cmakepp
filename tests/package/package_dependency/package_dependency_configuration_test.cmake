@@ -44,7 +44,6 @@ function(test)
     ans(project_descriptor)
 
     #print_vars(project_descriptor)
-
     package_dependency_configuration(${package_source} ${project_descriptor})
     ans(res)
     timer_print_elapsed(dep_sat)

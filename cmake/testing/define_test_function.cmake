@@ -1,4 +1,6 @@
 
+
+  ## deprecated
   function(define_test_function name parse_function_name)
     set(args ${ARGN})
     list(LENGTH args arg_len)

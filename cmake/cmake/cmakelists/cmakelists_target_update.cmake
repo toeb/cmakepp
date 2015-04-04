@@ -1,9 +1,13 @@
-## updates the tokens to reflect changes in the target
+## `(<cmakelists> <cmake target>)-><bool>`
+## 
+## updates the cmakelists tokens to reflect changes in the target
+## @todo extrac functions
+## 
 function(cmakelists_target_update cmakelists target)
   cmakelists_target("${cmakelists}" "${target}")
   ans(target)
   if(NOT target)
-    return()
+    return(false)
   endif()
 
   map_tryget(${target} target_invocations)
@@ -13,7 +17,7 @@ function(cmakelists_target_update cmakelists target)
   ans(target_name)
   if(NOT target_name)
     error("target name not specified" --function cmakelists_target_update)
-    return()
+    return(false)
   endif()
   
   map_tryget(${target} target_type)

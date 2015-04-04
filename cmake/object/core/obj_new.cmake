@@ -8,15 +8,12 @@ function(obj_new)
 	endif()
 	
 
-	if(NOT COMMAND "${constructor}")
-	
+	if(NOT COMMAND "${constructor}")	
 		message(FATAL_ERROR "obj_new: invalid type defined: ${constructor}, expected a cmake function")
 	endif()
 
-	type_get(${constructor})
+	obj_type_get(${constructor})
 	ans(base)
-	map_get_special(${base} constructor)
-	ans(constr)
 
 	map_new()
 	ans(instance)

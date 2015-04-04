@@ -23,12 +23,12 @@ function(test)
 
   ## this idlecallback displays updating status on the console
   ## it uses the ref 'ticks' to count the numbber of times the idle callback was called
-  ref_set(ticks 0)
+  address_set(ticks 0)
   function(my_idle_callback)
-    ref_get(ticks)
+    address_get(ticks)
     ans(ticks)
     math(EXPR ticks "${ticks} + 1")
-    ref_set(ticks ${ticks})
+    address_set(ticks ${ticks})
 
     progress_string("${finished_count}" "${process_count}" "${ticks}")
     ans(status)

@@ -1,7 +1,7 @@
 
   function(handler_request)
     set(request "${ARGN}")
-    map_isvalid("${request}")
+    is_map("${request}")
     ans(is_map)
 
     if(NOT is_map)

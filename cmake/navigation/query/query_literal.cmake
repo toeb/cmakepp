@@ -18,7 +18,7 @@ function(query_literal)
       return()
     endif()
 
-    ref_isvalid("${query_literal_instance}")
+    is_address("${query_literal_instance}")
     ans(is_ref)
 
     if(is_ref)

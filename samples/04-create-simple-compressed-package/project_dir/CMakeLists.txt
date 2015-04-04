@@ -8,7 +8,7 @@
     ## opens the project in the current source dir
     ## this loads all installed packages 
     ## also giving you access to exported cmake functions 
-    project_open(--force)
+    project_read(--force)
     
 
     ## the following code creates a simple cmake classic project 

@@ -15,7 +15,7 @@ function(semver_parse version_string)
   return()
 
   return()
-  map_isvalid("${version_string}" )
+  is_map("${version_string}" )
   ans(ismap)
   if(ismap)
     semver_format(version_string ${version_string})

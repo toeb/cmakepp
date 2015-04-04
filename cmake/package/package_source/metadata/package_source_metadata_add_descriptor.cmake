@@ -41,6 +41,7 @@
     if(make_current OR NOT has_current)
       map_set(${metadata} ${id} ${package_descriptor})
     endif()  
+    map_set(${metadata} "${id}@${version}" ${package_descriptor})
     
     return_ref(package_descriptor)
   endfunction()

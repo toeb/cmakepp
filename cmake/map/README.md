@@ -4,7 +4,7 @@
 
 Maps are very versatile and are missing dearly from CMake in my opinion. Maps are references as is standard in many languages. They are signified by having properties which are adressed by keys and can take any value.
 
-Due to the "variable variable" system (ie names of variables are string which can be generated from other variables) it is very easy to implement the map system. Under the hood a value is mapped by calling `ref_set(${map}.${key})`.  
+Due to the "variable variable" system (ie names of variables are string which can be generated from other variables) it is very easy to implement the map system. Under the hood a value is mapped by calling `address_set(${map}.${key})`.  
 
 
 
@@ -21,7 +21,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_get](#map_get)
 * [map_get_special](#map_get_special)
 * [map_has](#map_has)
-* [map_isvalid](#map_isvalid)
+* [is_map](#is_map)
 * [map_keys](#map_keys)
 * [map_new](#map_new)
 * [map_remove](#map_remove)
@@ -46,6 +46,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_fill](#map_fill)
 * [map_flatten](#map_flatten)
 * [map_from_keyvaluelist](#map_from_keyvaluelist)
+* [map_get_default](#map_get_default)
 * [map_get_map](#map_get_map)
 * [map_has_all](#map_has_all)
 * [map_has_any](#map_has_any)
@@ -90,7 +91,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_check](#map_check)
 * [map_decycle](#map_decycle)
 * [map_exists](#map_exists)
-* [map_format](#map_format)
+* [format](#format)
 * [map_graphsearch](#map_graphsearch)
 * [map_import_properties](#map_import_properties)
 * [map_match_obj](#map_match_obj)
@@ -178,7 +179,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
-## <a name="map_isvalid"></a> `map_isvalid`
+## <a name="is_map"></a> `is_map`
 
 
 
@@ -345,6 +346,17 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 ## <a name="map_from_keyvaluelist"></a> `map_from_keyvaluelist`
 
+
+
+
+
+## <a name="map_get_default"></a> `map_get_default`
+
+ `(<map> <key> <any...>)-><any...>`
+
+ returns the value stored in map.key or 
+ sets the value at map.key to ARGN and returns 
+ the value
 
 
 
@@ -641,7 +653,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
-## <a name="map_format"></a> `map_format`
+## <a name="format"></a> `format`
 
 
 

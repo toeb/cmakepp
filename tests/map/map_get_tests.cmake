@@ -17,10 +17,4 @@ function(Test)
   assert("${res}" STREQUAL NO)
 
 
-  return()
-
-  nav("a.x" 0)
-  map_get("${a}"  "${x}")
-  ans(res)
-  assert("${res}" STREQUAL 0)
 endfunction()

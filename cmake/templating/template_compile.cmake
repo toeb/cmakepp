@@ -90,9 +90,9 @@ function(template_compile input)
   string(REPLACE "${shorthand_indicator_code}" "${shorthand_indicator}" fragments "${fragments}")
   
   
-  ref_new()
+  address_new()
   ans(result)
-  ref_append_string("${result}" "template_begin()")
+  address_append_string("${result}" "template_begin()")
 
   #set(result)
   foreach(fragment ${fragments})
@@ -129,20 +129,20 @@ function(template_compile input)
 
       endif()
       
-      ref_append_string("${result}" "\n${code}")
+      address_append_string("${result}" "\n${code}")
 
     else()
       ## handle literal fragment
       cmake_string_escape("${fragment}")
       ans(fragment)
-      ref_append_string("${result}" "\ntemplate_out(\"${fragment}\")")
+      address_append_string("${result}" "\ntemplate_out(\"${fragment}\")")
     endif()
   endforeach()
 
-  ref_append_string("${result}" "\n template_end()")
+  address_append_string("${result}" "\n template_end()")
 
 
-  ref_get(${result})
+  address_get(${result})
   ans(res)
   return_ref(res)
 endfunction()

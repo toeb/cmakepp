@@ -15,6 +15,7 @@
       map_push_back(${context} refstack ${ref})
       map_append_string(${context} qm 
 "math(EXPR ref \"\${base} + ${ref}\")
+set_property(GLOBAL PROPERTY \":\${ref}.__keys__\" \"\")
 ")
     endfunction()
 
@@ -35,7 +36,7 @@
       ans(refstring)
       
       map_append_string(${context} qm 
-"set_property(GLOBAL APPEND PROPERTY \"${keystring}\" \"${map_element_key}\")
+"set_property(GLOBAL APPEND PROPERTY \"${keystring}.__keys__\" \"${map_element_key}\")
 set_property(GLOBAL PROPERTY \"${refstring}\")
 ")
     endfunction()

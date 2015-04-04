@@ -20,7 +20,7 @@ function(type_def)
     endif()
 
 
-    map_isvalid("${type}")
+    is_map("${type}")
     ans(ismap)
     if(ismap)
       map_tryget(${type} type_name)
@@ -41,7 +41,7 @@ function(type_def)
       
       map_tryget("${type}" properties)
       ans(props)
-      map_isvalid("${props}")
+      is_map("${props}")
       ans(ismap)
       if(ismap)
         map_iterator("${props}")

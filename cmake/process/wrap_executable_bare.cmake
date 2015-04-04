@@ -7,6 +7,7 @@ function(wrap_executable_bare alias executable)
     function(${alias})
       pwd()
       ans(cwd)
+      #message(\"\${ARGN}\")
       execute_process(COMMAND \"${executable}\" ${ARGN} \${ARGN}
         WORKING_DIRECTORY  \"\${cwd}\"
         OUTPUT_VARIABLE stdout 

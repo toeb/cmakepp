@@ -57,7 +57,7 @@ function(test)
     else()
       set(${__lvalue}.has_prop true)
     endif()
-    map_isvalid("${${${__lvalue}.ref}}")
+    is_map("${${${__lvalue}.ref}}")
     ans(${__lvalue}.is_map)
   endmacro()
 

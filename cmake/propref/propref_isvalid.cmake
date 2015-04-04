@@ -1,6 +1,6 @@
- function(propref_isvalid propref)
+ function(propis_address propref)
     string_split_at_last(ref prop "${propref}" ".")
-    ref_isvalid("${ref}")
+    is_address("${ref}")
     ans(isref)
     if(NOT isref)
       return(false)

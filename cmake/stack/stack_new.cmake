@@ -1,6 +1,6 @@
 
   function(stack_new)
-    ref_new(stack)
+    address_new(stack)
     ans(stack)   
     map_set_hidden("${stack}" front 0)
     map_set_hidden("${stack}" back 0)

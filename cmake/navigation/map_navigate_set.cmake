@@ -3,7 +3,7 @@ function(map_navigate_set navigation_expression)
 	set(args)
 	if(_FORMAT)
 		foreach(arg ${_UNPARSED_ARGUMENTS})
-			map_format( "${arg}")
+			format( "${arg}")
 			ans(formatted_arg)
 			list(APPEND args "${formatted_arg}")
 		endforeach()
@@ -51,7 +51,7 @@ function(map_navigate_set navigation_expression)
 
 		#message("current ${current}, parts: ${parts}, current_part: ${part}, current_index ${index} current_type : ${index_type}")
 		# first one could not be ref so create ref and set output
-		ref_isvalid("${current}")
+		is_address("${current}")
 		ans(isref)
 		
 		if(NOT isref)

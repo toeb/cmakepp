@@ -41,14 +41,14 @@ function(map_equal lhs rhs)
 
 	# else lhs and rhs might be maps
 	# if they are not return false
-	map_isvalid(${lhs})
+	is_map(${lhs})
 	ans(lhs_ismap)
 
 	if(NOT lhs_ismap)
 		return(false)
 	endif()
 
-	map_isvalid(${rhs})	
+	is_map(${rhs})	
 	ans(rhs_ismap)
 
 	if(NOT rhs_ismap)

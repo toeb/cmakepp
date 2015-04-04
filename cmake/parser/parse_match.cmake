@@ -1,6 +1,6 @@
 
   function(parse_match rstring)
-    ref_get(${rstring})
+    address_get(${rstring})
     ans(str)
 
     map_get(${definition} search)
@@ -23,7 +23,7 @@
       return()
     endif()
 
-    ref_set(${rstring} "${str}")
+    address_set(${rstring} "${str}")
 
     return_ref(match)
   endfunction()
