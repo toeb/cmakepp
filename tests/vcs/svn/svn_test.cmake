@@ -17,7 +17,7 @@ function(test)
   ans(res)
   string(STRIP "${res}" res)
 
-  assert("${res}" STREQUAL "${Subversion_VERSION_SVN}")
+  assert("${res}" MATCHES "${Subversion_VERSION_SVN}")
 
 
 endfunction()

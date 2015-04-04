@@ -3,7 +3,7 @@
 function(request_handler handler)
   data("${handler}")
   ans(handler)
-  map_isvalid(${handler})
+  is_map(${handler})
   ans(is_map)
   
   if(is_map)  

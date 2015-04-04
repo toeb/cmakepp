@@ -16,7 +16,7 @@ function(cmakepp_project_cli)
 
   if(verbose)
 
-    event_addhandler("on_log_message" "[](entry)print_vars(entry)")
+    event_addhandler("on_log_message" "[](entry)message(FORMAT '{entry.function}: {entry.message}')")
     event_addhandler("project_on_opening" "[](proj) message(FORMAT '{event.event_id}: {proj.content_dir}'); message(PUSH)")
     event_addhandler("project_on_opened" "[](proj) message(FORMAT '{event.event_id}')")
     event_addhandler("project_on_loading" "[](proj) message(FORMAT '{event.event_id}'); message(PUSH)")
@@ -50,15 +50,33 @@ function(cmakepp_project_cli)
 
   if(global)
     dir_ensure_exists("~/.cmakepp")
-    project_open("~/.cmakepp")
+    project_read("~/.cmakepp")
     ans(project)
     assign(project.project_descriptor.is_global = 'true')
   else()
-    project_open("${project_dir}")
-   ans(project)
-  
+    project_read("${project_dir}")
+    ans(project)
+  endif()
+
+  list_pop_front(args)
+  ans(cmd)
+
+  if(NOT cmd)
+    set(cmd run)
   endif()
   
+  if("${cmd}" STREQUAL "init")
+    list_pop_front(args)
+    ans(path)
+    project_open("${path}")
+    ans(project)
+  endif()
+
+  if(NOT project)
+    error("no project available")
+    return()
+  endif()
+
   map_tryget(${project} project_descriptor)
   ans(project_descriptor)
   map_tryget(${project_descriptor} package_source)
@@ -69,17 +87,10 @@ function(cmakepp_project_cli)
     ans(package_source)
     map_set(${project_descriptor} package_source ${package_source})
   endif()
-  list_pop_front(args)
-  ans(cmd)
 
 
-
-  if(NOT cmd)
-    set(cmd run)
-  endif()
-
-
-  if("${cmd}" STREQUAL "get")
+  if("${cmd}" STREQUAL "init")
+  elseif("${cmd}" STREQUAL "get")
 
     if("${args}" MATCHES "(.+)\\((.*)\\)$")
       set(path "${CMAKE_MATCH_1}")
@@ -122,7 +133,7 @@ function(cmakepp_project_cli)
     ans(res)
   endif()
 
-  project_close(${project})
+  project_write(${project})
   return_ref(res)
 
 endfunction()

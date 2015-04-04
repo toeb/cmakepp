@@ -1,5 +1,5 @@
  function(parse_ref rstring)
-    ref_get(${rstring})
+    address_get(${rstring})
     ans(str)
     string_take_regex(str ":[a-zA-Z0-9_-]+")
     ans(match)
@@ -7,7 +7,7 @@
       return()
     endif()
   #  message("match ${match}")
-    ref_isvalid("${match}")
+    is_address("${match}")
     ans(isvalid)
 
     if(NOT  isvalid)
@@ -19,11 +19,11 @@
     map_tryget(${definition} matches)
     ans(matches)
     #json_print(${matches})
-    map_isvalid(${matches})
+    is_map(${matches})
     ans(ismap)
 
     if(NOT ismap)
-      ref_get(${match})
+      address_get(${match})
       ans(ref_value)
 
       if("${matches}" MATCHES "${ref_value}")
@@ -45,6 +45,6 @@
         endif()
       endforeach()
     endif()
-    ref_set(${rstring} "${str}")
+    address_set(${rstring} "${str}")
     return_ref(match)
   endfunction()

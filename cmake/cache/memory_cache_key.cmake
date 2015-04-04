@@ -1,6 +1,6 @@
 
   function(memory_cache_key cache_key)
-    ref_isvalid("${cache_key}")
+    is_address("${cache_key}")
     ans(isref)
     if(isref)
       json("${cache_key}")

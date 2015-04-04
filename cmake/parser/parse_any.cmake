@@ -3,10 +3,10 @@
     map_get(${definition} any)
     ans(any)
 
-    ref_isvalid("${any}")
+    is_address("${any}")
     ans(isref)
     if(isref)
-      ref_get(${any})
+      address_get(${any})
       ans(any)
     endif()
     # loop through defintions and take the first one that works

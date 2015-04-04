@@ -54,7 +54,7 @@ function(message)
 
 	## format
 	if(_FORMAT)
-		map_format( "${text}")
+		format( "${text}")
 		ans(text)
 	endif()
 

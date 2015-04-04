@@ -1,6 +1,6 @@
 
 function(command_line)
-  map_isvalid("${ARGN}")
+  is_map("${ARGN}")
   ans(ismap)
   if(ismap)
     map_has("${ARGN}" command)

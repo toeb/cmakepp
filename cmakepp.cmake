@@ -47,15 +47,15 @@ function(cmakepp_config key)
 endfunction()
 
 ## create invoke later functions 
-function(task_enqueue callable)
-  ## semicolon encode before string_encode_semicolon exists
-  string(ASCII  31 us)
-  string(REPLACE ";" "${us}" callable "${callable}")
-  set_property(GLOBAL APPEND PROPERTY __initial_invoke_later_list "${callable}") 
-  return()
-endfunction()
+# function(task_enqueue callable)
+#   ## semicolon encode before string_encode_semicolon exists
+#   string(ASCII  31 us)
+#   string(REPLACE ";" "${us}" callable "${callable}")
+#   set_property(GLOBAL APPEND PROPERTY __initial_invoke_later_list "${callable}") 
+#   return()
+# endfunction()
 
-  
+include("${cmakepp_base_dir}/cmake/task/task_enqueue.cmake")
 
 ## includes all cmake files of cmakepp 
 include("${cmakepp_base_dir}/cmake/core/require.cmake")
@@ -63,7 +63,7 @@ include("${cmakepp_base_dir}/cmake/core/require.cmake")
 require("${cmakepp_base_dir}/cmake/*.cmake")
 
 ## include task_enqueue last
-include("${cmakepp_base_dir}/cmake/task/task_enqueue")
+include("${cmakepp_base_dir}/cmake/task/task_enqueue.cmake")
 
 ## setup global variables to contain command_line_args
 parse_command_line(command_line_args "${command_line_args}") # parses quoted command line args
@@ -115,7 +115,10 @@ config_setup("cmakepp_config" ${cmakepp_config_definition})
 
 
 ## run all currently enqueued tasks
-task_run_all()
+set(cmakepp_is_loaded true)
+task_enqueue("[]()") ## dummy
+tqr()
+
 
 ## check if in script mode and script file is equal to this file
 ## then invoke either cli mode

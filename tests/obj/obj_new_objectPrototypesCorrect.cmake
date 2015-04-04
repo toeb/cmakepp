@@ -19,8 +19,8 @@ function(test)
 	obj_new( ClassBB)
 	ans(objB)
 
-	ref_print(${objA})
-	ref_print(${objB})
+	address_print(${objA})
+	address_print(${objB})
 
 
 

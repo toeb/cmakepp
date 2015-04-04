@@ -60,7 +60,7 @@ function(dfs_callback callback)
   function(dfs_callback_inner node)
  
 
-    map_isvalid("${node}")
+    is_map("${node}")
     ans(ismap)
     if(NOT ismap)
       list(LENGTH node list_length)

@@ -3,9 +3,9 @@ function(test)
 
 
 
-  ref_set(myref a b c d e f g h i j k )
+  address_set(myref a b c d e f g h i j k )
   function(test_query_input)
-    ref_pop_front(myref)
+    address_pop_front(myref)
     ans(res)
     message_indent_push(0)
     message("> ${res}")

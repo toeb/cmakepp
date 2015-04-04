@@ -23,7 +23,7 @@
 
     map_tryget(${metadata} ${ids})
     ans(package_descriptors)
-
+    
     set(result)
     foreach(package_descriptor ${package_descriptors})
       map_import_properties(${package_descriptor} id version)
@@ -48,33 +48,4 @@
 
 
 
-    if("${ids}" STREQUAL "*")
-      map_keys(${metadata})
-      ans(ids)
-    endif()
-
-
-
-
-    set(result)
-    foreach(id ${ids})
-      map_tryget("${metadata}" "${id}")
-      ans(package_descriptor)
-
-      if(package_descriptor)
-        set(package_uri "${source_name}:${id}")
-        if(NOT return_package_handle)
-          list(APPEND result ${package_uri})
-        else()
-          map_clone_deep(${package_descriptor})
-          ans(package_descriptor)
-          set(package_handle)
-          assign(!package_handle.uri = package_uri)
-          assign(!package_handle.query_uri = uri.uri)
-          assign(!package_handle.package_descriptor = package_descriptor)
-          list(APPEND result ${package_handle})    
-        endif()
-      endif()
-    endforeach()
-    return_ref(result)
   endfunction()

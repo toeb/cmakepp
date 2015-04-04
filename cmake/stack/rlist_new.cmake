@@ -1,5 +1,5 @@
 function(rlist_new)
-    ref_new(rlist)
+    address_new(rlist)
     ans(rlist)
     map_set_hidden(${queue} front 0)
     map_set_hidden(${queue} back 0)

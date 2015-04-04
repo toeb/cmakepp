@@ -1,9 +1,9 @@
 
   function(parse_sequence rstring) 
     # create a copy from rstring 
-    ref_get(${rstring})
+    address_get(${rstring})
     ans(str)
-    ref_setnew("${str}")
+    address_set_new("${str}")
     ans(str)
 
     # get sequence definitions
@@ -14,7 +14,7 @@
     ans(sequence_keys)
 
     function(eval_sequence_expression rstring key res_map expression set_map)
-      map_isvalid("${expression}")
+      is_map("${expression}")
       ans(ismap)
 
       if(ismap)
@@ -157,9 +157,9 @@
 
 
     # if every element was  found set rstring to rest of string
-    ref_get(${str})
+    address_get(${str})
     ans(str)
-    ref_set(${rstring} "${str}")
+    address_set(${rstring} "${str}")
 
     # return result
     return_ref(result_map)

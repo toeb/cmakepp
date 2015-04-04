@@ -46,7 +46,7 @@ function(assert)
 	endif()
 
 	if(_DEREF)
-		#map_format( "${_UNPARSED_ARGUMENTS}")
+		#format( "${_UNPARSED_ARGUMENTS}")
 		format("${_UNPARSED_ARGUMENTS}")
 		ans(_UNPARSED_ARGUMENTS)
 	endif()

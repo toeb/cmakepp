@@ -18,6 +18,7 @@ env:
     # BII_PASSWORD=<hidden>
     - secure: "iRtdWDDNUAlA1H9nAblf+P/RWhGlygYtLf9bGV9MGQh55M0CgW4GRvIx8ErjTtXwkXgGtS0HxtRvgrvh8H/Wp3stqoqW2OSX0x+a3zlNmkwWv9TA827qD3O5mmNobZeK/m0iDUxq/7AsKNHBW4gliNOSQ9DcXLOxpRYrpo0mrVo="
   matrix:
+    - CMAKE_DIR="v3.2" CMAKE_VERSION="3.2.1" 
     - CMAKE_DIR="v3.1" CMAKE_VERSION="3.1.2" 
     - CMAKE_DIR="v3.0" CMAKE_VERSION="3.0.1" 
     - CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.12.2"

@@ -14,7 +14,7 @@
 ## }
 ## ```
 function(cmakelists_target cmakelists target)
-  ref_isvalid("${target}")
+  is_address("${target}")
   ans(is_ref)
   if(is_ref)
     return(${target})

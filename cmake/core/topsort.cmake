@@ -38,7 +38,7 @@ function(topsort get_hash expand)
       map_set("${visited}" "${hash}" permanent)
 
       # add to front of result
-      ref_prepend("${result}" "${node}")
+      address_push_front("${result}" "${node}")
     endif()
     return(false)
   endfunction()
@@ -46,7 +46,7 @@ function(topsort get_hash expand)
 
   map_new()
   ans(visited)
-  ref_new()
+  address_new()
   ans(result)
 
   # select unmarked node and visit
@@ -69,7 +69,7 @@ function(topsort get_hash expand)
 
   endforeach()
 #  message("done")
-  ref_get(${result})
+  address_get(${result})
 
   return_ans()
 endfunction()

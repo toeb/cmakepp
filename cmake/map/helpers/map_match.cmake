@@ -34,10 +34,10 @@
       return(true)
     endif() 
 
-    map_isvalid("${rhs}")
+    is_map("${rhs}")
     ans(rhs_ismap)
 
-    map_isvalid("${lhs}")
+    is_map("${lhs}")
     ans(lhs_ismap)
 
   

@@ -11,4 +11,4 @@ environment:
     secure: 0vOTPwzzwTN7gcI9p+HW1OXK9TgJRYGqRf2Svw2WZCE=
 build: off
 test_script:
-- ps: cmake -P build/script.cmake
+- ps: #cmake -P build/script.cmake

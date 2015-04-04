@@ -3,7 +3,7 @@
   function(property_def prop)
     data("${prop}")
     ans(prop)
-    map_isvalid("${prop}")
+    is_map("${prop}")
     ans(ismap)
 
     if(ismap)

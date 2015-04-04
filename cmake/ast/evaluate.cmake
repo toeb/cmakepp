@@ -4,7 +4,7 @@
     ans(language)
 
     set(scope ${ARGN})
-    map_isvalid("${scope}" )
+    is_map("${scope}" )
     ans(ismap)
     if(NOT ismap)
       map_new()
@@ -24,7 +24,7 @@
     ast("${str}" ${language} "${expr}")
     #return("gna")
     ans(ast) 
-   # ref_print(${ast})
+   # address_print(${ast})
     ast_eval(${ast} ${context} ${language})
     ans(res)
     if(NOT ismap)

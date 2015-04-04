@@ -9,7 +9,7 @@
 ## ``` 
 ##
 function(package_dependency_changeset)
-  ref_isvalid("${ARGN}")
+  is_address("${ARGN}")
   ans(isref)
   if(isref)
     return(${ARGN})

@@ -3,7 +3,7 @@
 ## returns the last log entry which is an error
 ## 
 function(log_last_error_entry)
-  ref_get(log_record)
+  address_get(log_record)
   ans(log_record)
   set(entry)
   while(true)

@@ -13,7 +13,6 @@ function(index_range start_index end_index)
   if(${end_index} LESS ${start_index})
     set(increment -1)
     math(EXPR end_index "${end_index} + 1")
-
   else()
     set(increment 1)
     math(EXPR end_index "${end_index} - 1")

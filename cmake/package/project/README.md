@@ -3,125 +3,176 @@
 
 ## Motivation
 
-Package or Dependency management is not a new Idea.  Most Build systems for other languages have some kind of support for automatically handling packages.
+Managing packages which are not part of you own source tree is a troubling task when it needs to work on all platforms and without hassle. For many programming languages there exist tools which handle the search, retrieval and management of packages.  For `CMake` there exists something rudimentary like `Modules`, `Config` and `ExternalProject`.  However these are do not really  manage a dependency graph and or not formulated all too concisely.  
 
-## Concept
+I was inspired by great dependency managers like `npm` and `nuget`.  (Also: `maven`, `pip`, `apt-get`, ...)  They really make it easy to use and share packages.  Also the ideas behind `ryppl` were very interesting to me.
 
-* slides from ryppl
-* reddit thread
-* ...
+I however wanted a dependency manager which works with out-of-the-box cmake and does not have any initial dependencies.  
+
+The reason to use cmake as the basis is because of its platform independence and because it can be viewed as the root dependency of everything (you can use cmake to build everything on almost every platform).  I coerced cmake into a usable form for a complex dependency manager by providing a lot of missing functionality. 
+
+## Requirements
+
+I require decentralized package sources - git, svn, hg,svn, github, bitbucket, archives, remote archives, local folders, ....  I do not want a central service as it does not reflect how c++ projects are organized at the moment.  Also I want to have the possibility of adding new package sources as the need for them arises (apt-get, brew, convention based (like cmake's module files),... ). These package sources only perform two things: search and retrieval.  They take a normalized input in `uri` form which can identify any package in the world and return metadata and content in a consistent interface.  This part of the dependency management is implemented in my [package source functions](../package_source).
+
+The dependency management part is required to be completely separated from the `<package source>`s. It shall use the metadata provided by the package sources to calculate a dependency configuration (with complex constraints like versioning, incompatibilities, optional dependencies, OS and location based constraints ...) and manages the materialization and dematerialization of these packages while still being easily extensible.
+
+The `project functions` need to be usable from within any cmake script so that build automization becomes possible while also providing an easy to use and intuitive command line client that the dev can use to control his or her project.
+
+## Design Choices
+
+The project functions are based on a `project handle` which is also a `package handle` as use by the package sources.  The `project handle` contains all information about a project and needs to be serializable and portable. Also it may be extended by custom data.
+
+To keep the project functions open for extension but closed for modification I chose to use an event system to emit events to which extensions can react and modify the project and package handles according to their requirements.  The project lifecycle is defined by these events.  The state of the project always needs to be correct which is why I also use a state machine to manage it.
+
+### The Project Lifecycle
+
+The project lifecycle is at its base very simple with just five states:
+
+![Project Lifecycle](project_lifecycle.png)
 
 
-## State of the Art
+When a new project handle is created it is in the `unknown` state and will first be set to `closed` before entering the lifecycle.  The project handle can only be persisted and read when it is in the `closed` state otherwise it is considered to be in an inconsistent state.
 
 
-
-## Implementation
-
-Working with dependencies implies that you are using a dependency graph. The root node from which you work is what I call the `project`.  
-
-The `project` is represented by the `project_handle` which is a `package_handle` and behaves as expected in all situations except that it has also has property called `project_descriptor` which contains project specific information.  The `project_descriptor` contains the whole object graph consisting of every `package handle` used in the project and all their properties.  Every `package_handle` (which is identified by an `package_uri`) is unique and only one reference will exist for it inside a project.  This while object graph is serialized and deserialized using the `scmake` serialization format (see `cmake_serialize` `cmake_deserialize`) which is able to persist the data including cycles and is quite fast (in comparison with other serializers).  It is important that the no data is added to the object graph which is not serializable.
-
-The `project_descriptor` is contains the following:
+### Datatypes:
 
 ```
+<project handle> ::= <package handle> v { # see package sources for information
+  uri: "project:root" # your project is always addressable as "project:root"
+  content_dir: <absolute path> also called the `project_dir`
+  project_descriptor: <project descriptor> 
+  package_descriptor: <package descriptor> # see package sources for information
+  materialization_descriptor: <materialization descriptor> # stores information on were and how data of the package is stored
+  ...
+}
+```
+
+The project descriptor contains data which describes the state of the project. 
+```
+##all <relative path>s are relative to the `project_dir` unless stated otherwise
 <project descriptor> ::= {
    package_cache: { <admissable uri> : <package handle> } # contains all packages known to project
    package_source: <package source> a package source object used to retrieve package metadata and files.
    package_materializations: { <package uri> : <package handle> } # contains all materialized packages.
    dependency_configuration: { <package_uri> : <bool> } # the currently configured dependencies
    dependencies: { <package uri>:<package handle> } # all dependencies that this project has including transient dependencies. 
-   dependency_dir: <path = "packages"> # path relative to project root which is used as a the default dependency locations
-   config_dir: <path = ".cps"> # the locations of the configuration folder 
-   project_file: <path = ".cps/project.scmake"> # the location of the project's config file
-   package_descriptor_file: <path>?  # if specified the path of the package descriptor.  This will be read or written when project is opened or closes
+   dependency_dir: <relative path = "packages"> # path relative to project root which is used as a the default dependency locations
+   config_dir: <relative path = ".cps"> # the locations of the configuration folder 
+   project_file: <relative path = ".cps/project.scmake"> # the location of the project's config file
+   package_descriptor_file: <relative path>?  # if specified the path of the package descriptor.  This will be read or written when project is opened or closes
+   ...
 }
 ```
 
-## The Commmand Line Interface
-
-Of course using the package functionality is possbile by using a command line interface.  It allows you to use the functions specified bellow and loads and stores you project automatically.  
 
 
 
+## Implementation
 
-## Function List
+### The Commmand Line Interface
 
-To work with the project I provide you with the following functions.
+The command line interface wraps these functions and provides an alias which you can use from your console of choice.  Its usage is described here:
+
+```
+```
+
+
+### Opening and Closing a Project
+
+When a project is opened the following will happen (the ovals are states and the boxes are events that are emitted):
+
+![project_open](project_open.png)
+
+
+Closing happens in a inverse fashion but will never result in an unknown state:
+
+![project_close](project_close.png)
+
+
+Two wrappers for open and close exist: `project_read` and `project_write` which makes it easier to open a project file and save. It is also noteworthy to say that project close removes any none portable data and project open restores it.
+
+Here is the list of functions
 
 
 * [project_open](#project_open)
 * [project_close](#project_close)
-* [project_install](#project_install)
+* [project_read](#project_read)
+* [project_write](#project_write)
+
+### The Project is `opened`
+
+When the project is `opened` it is possible to modify and work with it. The functions which are available are as follows:
+
+#### Materialization
+
+
+A project can materialize and dematerialize packages which may or may not be dependencies. What this means is that adding or removing a dependency is not the same thing as materializing and dematerializing a dependency. This split between materialization and dependency management may seem strange at first but it allows you more manual control.
+
+
 * [project_materialize](#project_materialize)
 * [project_dematerialize](#project_dematerialize)
-* [project_change_dependencies](#project_change_dependencies)
 * [project_materialize_dependencies](#project_materialize_dependencies)
-* [package_materialization_check](#package_materialization_check)
-* [project_constants](#project_constants)
-* [project_derive_package_content_dir](#project_derive_package_content_dir)
-* [project_descriptor_new](#project_descriptor_new)
-* [project_handle](#project_handle)
-* [project_handle_default](#project_handle_default)
-* [project_load](#project_load)
-* [project_loader](#project_loader)
-* [project_materialization_check](#project_materialization_check)
-* [project_materializer](#project_materializer)
-* [project_package_ready_state_update](#project_package_ready_state_update)
-* [project_save](#project_save)
-* [project_unload](#project_unload)
-* [project_unloader](#project_unloader)
 
 
-## The Project Lifecycle
- 
+#### Dependency Management
 
-* `closed`
-    - The project handle does not exist / or should not be used
-    - `project_open` `->` `opening`
+The actual dependency manager I implemented is based on every package defining its dependency constraints which are then combined into a large boolean satisfyability problem.  The solution to this problem is called the dependency configuration.  The big advantage that using a SAT solver over a topological order is that it allows cyclomatic dependendencies and can solve ambiguous dependencies (it actually just has to find one set of dependencies which work).  The dependency configuration then a  simple map which maps `{ <package uri> : <bool> }` 
 
-* `opening` 
-    - `-> opened, loaded`
-* `unloaded`
-    - `project_load -> loading`
-* `loading`   
-* `loaded`
-    - `project_unload -> unloading`     
-    - `project_close -> closing`     
-* `materializing`
-    - all dependencies are loaded
-    - all materializations which are not dependencies are also loaded
-* `openend` 
-    - everything `of opening` 
-* `closing`
+The following figure illustrates a problem which will be solved by the SAT solver.  The packages dependencies specified in the packages all have constraints which can be fulfilled by multiple instances of package B.  However there is a consensus candidate which will solve the problem for all packages in the dependency graph:
+
+![Multi Constraints](dependency_graph_1.png)
 
 
-The project's lifecycle is also characterized  by the events that are emitted.  
-The key to understanding the project lifecycle lies within these events.
 
 
-* `project_on_opening(<project handle>)` called after project handle is created.  Called before project is loaded. 
-* `project_on_opened` called after project handle is created and project is loaded. 
-* `project_on_loading` called before any dependencies are loaded
-* `project_on_loaded` called after all dependencies and project was loaded
-* `project_on_package_loading` called before packages's dependencies are loaded.
-* `project_on_package_loaded` called after package's dependencies are loaded.  
-* `project_on_package_reload` called when a package was already loaded but is the dependency of another package
-* `project_on_package_cycle` called `project_load` when a dependency cycle is detected. 
-* `project_on_package_materialized` called by `project_materialize` before package content is pulled.  
-* `project_on_package_materialized` called by `project_materialize` after the package content is pulled.   
-* `project_on_dependency_configuration_changed` called by `project_change_dependencies` when the dependency after the dependency configuration was changed.
-* `project_on_dependencies_materializing` called by `project_materialize_dependencies` before any dependencies are materialized/dematerialized
-* `project_on_dependencies_materialized` called after all dependencies where successfully materialized/dematerialized
-* `project_on_package_dematerializing` called by `project_dematerialize` before the package content is removed
-* `project_on_package_dematerialized` called by `project_dematerialize` after the package content was removed
-* `project_on_unloading` called by `project_unload`, `project_close` before any dependencies are unloaded
-* `project_on_unloaded` called by `project_unload`, `project_close` after all dependencies are unloaded
-* `project_on_package_unloading` called by `project_unload` before any of `package`'s  dependencies were unloaded
-* `project_on_package_unloaded` called by `project_unload` after all of `package`'s dependencies were unloaded 
-* `project_on_closing` called before the project is `closed` and before it is `unloaded`
-* `project_on_closed` called after the project was `closed` and all packages where `unloaded`
+A package dependency is defined as follows: 
 
+```
+<package dependency> ::= { <admissable uri> : <package constraint> }
+## example:
+{ 'github:toeb/cmakepp':true }
+{ 'http://www.cmake.org/files/v3.2/cmake-3.2.1.tar.gz':false }
+{ 'bitbucket:toeb/test_repo_hg':null}
+{ 'github:toeb/cppdynamic':{ ... } }
+```
+
+
+These package dependencies can be combined:
+
+```
+<package dependencies> ::= <package dependency> v <package dependency>
+```
+
+##### Package Constraints
+A package constraint is defined as follows:
+```
+<package constraint> ::= <true> | <false> | <null> | <complex package constraint>
+<complex package constraint> ::= {
+  ... values that configure or constrain the packges ...
+}
+```
+
+The simple constraints are easy to explain:
+* `true` the dependency is necessary. any `package uri` which is identified by  the `admissable uri`  will fullfill the dependency for the current package.
+* `false` any `package_uri` identified by the `admissable uri` is incompatible with the current package.
+* `null` any `package uri` identified by `admissable uri` can be optionally installed. (same as complex contstraint `{is_optional:true}`)
+*  `{ ... }` complex constraints are not completely implemented yet (only `is_optional`) but I plan to add version constraints, installation location constraints, os dependencies, dependency descriptor modifications. Also may contain any other proeprties which can be used by extensions to configure that particular project/package/package dependency.  See for example the `package symlinker` extension. 
+
+
+###### Functions 
+
+
+* [project_change_dependencies](#project_change_dependencies)
+
+
+## Extensions to the Project Lifecycle
+
+In the metadata for every package (ie the `package_descriptor`)
+
+### `CMake` extension
+
+You 
 
 ## `cmakepp` integration
 
@@ -130,7 +181,7 @@ The key to understanding the project lifecycle lies within these events.
 * `package_descriptor.cmakepp.create_files : { <filename> : <filecontent> }` all keys specified here will be created in the `package`'s `content_dir` with the specified content. This is useful if you want to define a package completely in a `package descriptor`
 * `package_descriptor.cmakepp.export : <glob ignore expression>` includes all the files specified by the glob ignore expression in cmake allowing your package to provide cmake macros and functions to other packages.  **WARNING** cmake only has one function scope so you need to be careful that you do not overwrite any functions which are needed elsewhere.  The best practice would be for you to add a namespace string before each function name e.g. `mypkg_myfunction`.  
 
-### `cmakepp` Hooks
+### Package `hooks`
 
 Hooks are invoked for every package which allows it to react to the project lifecycle  more easily.  These hooks are called using `package_handle_invoke_hook`. You can use any function that you defined in your `cmakepp.export`s (except if stated otherwise) and also specify a file relative to the `package`'s root direcotry. 
 
@@ -142,30 +193,56 @@ Hooks are invoked for every package which allows it to react to the project life
 * `package_descriptor.cmakepp.hooks.on_ready` is invoked when all become ready and the package itself is materialized
 * `package_descriptor.cmakepp.hooks.on_unready` is invoked if any dependency becomes unready
 
-#### States
-
-
-
-* `unloaded`
-  - `on_loaded -> loaded`
-* `loaded`, `unready`
-  - `on_dematerializing -> unloading`
-  - `on_ready -> loaded, ready`
-* `loaded`, `ready`
-  - `on_unready -> loaded, unready`
-  - `on_dematerializing -> unloading`
-* `unloading`
-  - `on_unloading -> unloaded`
-
-
-
-## Caveats
-
-Speed.  `CMake` is slow.  And there are still alot of optimization possibilities in `cmakepp`.  Don't be mad if you wait much longer than other dependency managers.
 
 ## Function Descriptions
 
 ## <a name="project_open"></a> `project_open`
+
+ `(<content_dir> [<~project handle>])-><project handle>` 
+
+ opens the specified project by setting default values for the existing or new project handle and setting its content_dir property to the fully qualified path specified.
+ if no project handle was given a new one is created.
+ if the state of the project handle is `unknown` it was never opened before. It is first transitioned to `closed` after emitting the `project_on_new` event.
+ then the project handle is transitioned from `closed` to `open` first the `project_on_opening` event is emitted followed by `project_on_open`.  Afterwards the state is changed to `open` and then the `project_on_opened` event us emitted.  
+ returns the project handle of the project on success. fails if the project handle is in a state other than `unknown` or `closed`. 
+ 
+ *note* that the default project does not contain a package source. it will have to be configured once manually for every new project
+
+
+ **events**
+  * `project_on_new(<project handle>)`
+  * `project_on_opening(<project handle>)`
+  * `project_on_open(<project handle>)`
+  * `project_on_opened(<project handle>)`
+  * `project_on_state_enter(<project handle>)`
+  * `project_on_state_leave(<project handle>)`
+  * extensions also emit events.
+
+ **assumes** 
+ * `project_handle.project_descriptor.state` is either `unknown`(null) or `closed`
+ 
+ **ensures**
+ * `content_dir` is set to the absolute path of the project
+ * `project_descriptor.state` is set to `open`
+
+
+
+
+## <a name="project_close"></a> `project_close`
+
+ `(<project handle>)-><project file:<path>>`
+
+ closes the specified project
+
+ **events**
+  * `project_on_closing(<project handle>)`
+  * `project_on_close(<project handle>)`
+  * `project_on_closed(<project handle>)`
+
+
+
+
+## <a name="project_read"></a> `project_read`
 
  `(<package handle> | <project dir> | <project file>)-><project handle>`
  
@@ -189,26 +266,9 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 
 
-## <a name="project_close"></a> `project_close`
+## <a name="project_write"></a> `project_write`
 
- `(<project handle>)-><project file:<path>>`
-
- closes the specified project
-
- **events**
-  * `project_on_closing(<project handle>)`
-  * `project_on_closed(<project handle>)`
-  * see `project_unload`
-  * see `project_load`
-
-
-
-
-## <a name="project_install"></a> `project_install`
-
- `()->`
-
- performs the install operation which first optionally changes the dependencies and then materializes
+ saves the project 
 
 
 
@@ -262,21 +322,6 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 
 
-## <a name="project_change_dependencies"></a> `project_change_dependencies`
-
- `(<project handle> <action...>)-><dependency changeset>`
-
- changes the dependencies of the specified project handle
- expects the project_descriptor to contain a valid package source
- returns the dependency changeset 
- **sideffects**
- * adds new '<dependency configuration>' `project_handle.project_descriptor.installation_queue`
- **events**
- * `project_on_dependency_configuration_changed(<project handle> <changeset>)` is called if dpendencies need to be changed
-
-
-
-
 ## <a name="project_materialize_dependencies"></a> `project_materialize_dependencies`
 
  `(<project handle>)-><materialization handle>...`
@@ -297,163 +342,17 @@ Speed.  `CMake` is slow.  And there are still alot of optimization possibilities
 
 
 
-## <a name="package_materialization_check"></a> `package_materialization_check`
+## <a name="project_change_dependencies"></a> `project_change_dependencies`
 
- `(<project handle> <materialization handle>)-><bool>`
- 
- checks wether an expected materialization actually exists and is valid
- return true if it is
+ `(<project handle> <action...>)-><dependency changeset>`
 
-
-
-
-## <a name="project_constants"></a> `project_constants`
-
- `()->() *package constants are set` 
-
- defines constants which are used in project management
-
-
-
-
-## <a name="project_derive_package_content_dir"></a> `project_derive_package_content_dir`
-
- `(<project handle> <package handle>)-><path>`
-
-  creates a path which tries to be unqiue for the specified pcakge in the project
-
-
-
-
-
-## <a name="project_descriptor_new"></a> `project_descriptor_new`
-
-
-
-
-
-## <a name="project_handle"></a> `project_handle`
-
- `(...)-><project handle>` 
-
- returns a project handle for the different input data
-
-
-
-
-## <a name="project_handle_default"></a> `project_handle_default`
-
- `()-><project handle>`
- 
- creates the default project handle:
- ```
- {
-   uri:'project:root',
-   package_descriptor: {}
-   project_descriptor: {
-     package_cache:{}
-     package_materializations:{}
-     dependency_configuration:{}
-     dependency_dir: '${project_constants_dependency_dir}'
-     config_dir: "${project_constants_config_dir}"
-     project_file: "${project_constants_project_file}"
-     package_descriptor_file: <null>
-   }
- }
- ```
-
-
-
-
-## <a name="project_load"></a> `project_load`
-
- `(<project>)-><bool>`
-
-  extract dfs algorithm, extreact dependency_load function which works for single dependencies
- 
- loads the specified project and its dependencies
-  
- **events**
- * `project_on_loading`
- * `project_on_loaded`
- * `project_on_package_loading`
- * `project_on_package_loaded`
- * `project_on_package_reload`
- * `project_on_package_cycle`
-
-
-
-
-## <a name="project_loader"></a> `project_loader`
-
-
-
-
-
-## <a name="project_materialization_check"></a> `project_materialization_check`
-
- `(<project handle>)-><materialization handle>...`
-
- **events**
- * `project_on_package_materialization_missing`
-
+ changes the dependencies of the specified project handle
+ expects the project_descriptor to contain a valid package source
+ returns the dependency changeset 
  **sideffects**
- * removes missing materializations from `project_descriptor.package_materializations`
- * removes missing materializations from `package_handle.materialization_descriptor`
-
- checks all materializations of a project 
- if a materialization is missing it is removed from the 
- map of materializations
- returns all invalid materialization handles
-
-
-
-
-## <a name="project_materializer"></a> `project_materializer`
-
-
-
-
-
-## <a name="project_package_ready_state_update"></a> `project_package_ready_state_update`
-
- `(<project package> <package handle>)-><void>` 
-
- updates all dependencies starting at package
- **sideffects**
- * 
+ * adds new '<dependency configuration>' `project_handle.project_descriptor.installation_queue`
  **events**
- * project_on_package_all_dependencies_materialized(<project handle> <package handle>)
- * project_on_package_and_all_dependencies_materialized(<project handle> <package handle>)
-
-
-
-
-## <a name="project_save"></a> `project_save`
-
- saves the project 
- will unload the project and reload the project
-
-
-
-
-## <a name="project_unload"></a> `project_unload`
-
- `(<project>)-><bool>`
-
- unloads the specified project and its dependencies
-  
- **events**
- * `project_on_unloading`  called before an packages is unloaded
- * `project_on_unloaded`  called after all packages were unloaded
- * `project_on_package_unloading` called before the package's dependencies are unloaded 
- * `project_on_package_unloaded` called after the package's dependencies are unloaded
-
-
-
-
-## <a name="project_unloader"></a> `project_unloader`
-
+ * `project_on_dependency_configuration_changed(<project handle> <changeset>)` is called if dpendencies need to be changed
 
 
 

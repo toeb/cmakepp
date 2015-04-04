@@ -6,7 +6,7 @@
 function(map_get_map map key)
   map_tryget(${map} ${key})
   ans(res)
-  ref_isvalid("${res}")
+  is_address("${res}")
   ans(ismap)
   if(NOT ismap)
     map_new()

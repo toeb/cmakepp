@@ -22,6 +22,9 @@ function(package_dependency_resolve package_source  package_handle )
     message(FATAL_ERROR "no package handle specified")
   endif()
 
+  map_get_map(${package_handle} dependency_descriptor)
+  ans(dependency_descriptor)
+
 
   ## get the dependencies specified in package_handle's package_descriptor
   ## it does not matter if the package_descriptor does not exist
@@ -48,6 +51,7 @@ function(package_dependency_resolve package_source  package_handle )
   package_source_query_resolve_all("${package_source}" ${admissable_uris} --cache ${cache})
   ans(dependencies)
 
+  ## todo replace first with latter
   map_set(${package_handle} dependencies ${dependencies})
 
   ## loop through all admissable uris 

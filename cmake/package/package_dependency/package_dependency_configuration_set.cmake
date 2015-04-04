@@ -6,6 +6,9 @@
 ## for every admissable_uri. before the dependencies property maps admissable_uri x {package uri x package handle}
 ##
 function(package_dependency_configuration_set configuration)
+  if(NOT configuration)
+    message(FATAL_ERROR "package_dependency_configuration_set: expected a valid configuration map")
+  endif()
   set(package_handles ${ARGN})
 
   foreach(package_handle ${package_handles})
@@ -25,7 +28,6 @@ function(package_dependency_configuration_set configuration)
         foreach(possible_dependency ${possible_dependencies})
           map_tryget(${possible_dependency} uri)
           ans(possible_dependency_uri)
-
           map_has(${configuration} ${possible_dependency_uri})
           ans(has_uri)
           if(has_uri)

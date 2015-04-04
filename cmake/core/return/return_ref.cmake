@@ -4,3 +4,4 @@ macro(return_ref __return_ref_ref)
   set(__ans "${${__return_ref_ref}}" PARENT_SCOPE)
   _return()
 endmacro()
+

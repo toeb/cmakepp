@@ -10,9 +10,9 @@
     ans(separator)         
 
     # create copy of input string
-    ref_get(${rstring})
+    address_get(${rstring})
     ans(str)
-    ref_setnew("${str}")
+    address_set_new("${str}")
     ans(str)
 
     if(begin)
@@ -64,9 +64,9 @@
     endwhile()    
 
     # set rstring
-    ref_get(${str})
+    address_get(${str})
     ans(str)
-    ref_set(${rstring} "${str}")
+    address_set(${rstring} "${str}")
     
     list(LENGTH return_list len)
     if(NOT len)

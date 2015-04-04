@@ -26,7 +26,7 @@
 
       list_pop_front(current_lengths )
       ans(current_length)
-      map_isvalid("${${arg}}")
+      is_map("${${arg}}")
       ans(ismap)
       if(ismap)
         map_tryget(${${arg}} ${i})

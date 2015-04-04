@@ -16,9 +16,9 @@ function(map_merge )
 			map_tryget(${map}  ${key})
 			ans(val)
 
-			map_isvalid("${existing_val}" )
+			is_map("${existing_val}" )
 			ans(existing_ismap)
-			map_isvalid("${val}" )
+			is_map("${val}" )
 			ans(new_ismap)
 
 			if(new_ismap AND existing_ismap)

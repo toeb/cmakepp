@@ -8,7 +8,6 @@ function(package_source_resolve_archive uri)
     ## query for uri and return if no single uri is found
     package_source_query_archive("${uri}" --package-handle)
     ans(package_handle)
-
     list(LENGTH package_handle uri_count)
     if(NOT uri_count EQUAL 1)
       error("archive package source could not resolve a single immutable package for {uri.uri}")

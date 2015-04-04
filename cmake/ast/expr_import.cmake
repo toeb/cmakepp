@@ -4,7 +4,7 @@ function(expr_import str function_name)
   set_ans("")
   eval("
 function(${function_name})
-  map_isvalid(\"${global}\" )
+  is_map(\"${global}\" )
   ans(ismap)
   if(NOT ismap)
     map_new()

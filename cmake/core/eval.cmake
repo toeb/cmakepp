@@ -10,12 +10,11 @@ function(eval __eval_code)
   ans(__eval_temp_file)
 
 
-# speedup: statically write filename so eval boils down to 2 function calls
-# no need to keep __ans
+# speedup: statically write filename so eval boils down to 3 function calls
  file(WRITE "${__eval_temp_file}" "
 function(eval __eval_code)
-  file(WRITE \"${__eval_temp_file}\" \"\${__eval_code}\")
-  include(\"${__eval_temp_file}\")
+  file(WRITE ${__eval_temp_file} \"\${__eval_code}\")
+  include(${__eval_temp_file})
   set(__ans \${__ans} PARENT_SCOPE)
   #return_ans()
 endfunction()

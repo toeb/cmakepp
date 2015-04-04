@@ -1,7 +1,7 @@
 
 
   function(listing_compile listing)
-    ref_get("${listing}")
+    address_get("${listing}")
     ans(code)
     set(indent_on while if function foreach macro else elseif)
     set(unindent_on endwhile endif endfunction endforeach endmacro else elseif)

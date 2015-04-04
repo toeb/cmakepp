@@ -4,6 +4,7 @@
 ## the extension is returned
 function(mime_type file)
   path_qualify(file)
+
   if(NOT EXISTS "${file}")
     return(false)
   endif()

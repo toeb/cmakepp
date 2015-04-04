@@ -1,4 +1,18 @@
-## `()-> { os:{name:<name>, version:<version>} , processor:}`
+## `()-> <environment>`
+##
+## ```
+## <environment descriptor> ::= {
+##  host_name: <string> # Computer Name
+##  processor: <string> # processor identification string
+##  architecture: "32"|"64" # processor architecture
+##  os:<operating system descriptor>
+## }
+## <operating system descriptor> ::= {
+##  name: <string>
+##  version: <string>
+##  family: "Windows"|"Unix"|"MacOS"|...  
+## }
+## ```
 ## 
 ## returns the environment of cmake
 ## the results are cached (--update-cache if necesssary)
@@ -32,7 +46,7 @@ function(cmake_environment)
         foreach(var \${vars})
           map_set(\${result} \${var} \${\${var}})
         endforeach()
-        qm_write(\"${output_file}\" \"\${result}\")
+        cmake_write(\"${output_file}\" \"\${result}\")
       ")  
 
 
@@ -46,13 +60,29 @@ function(cmake_environment)
       poptmp()
       message(FATAL_ERROR "${stdout}")
     endif()
-    qm_read(${output_file})
+    cmake_read(${output_file})
     ans(res)
     poptmp()
     set(result)
+    
+    site_name(host_name)
+    assign(!result.host_name = host_name)     
+    assign(!result.architecture = res.CMAKE_HOST_SYSTEM_PROCESSOR) 
+    
+  #  map_tryget(${res} CMAKE_SIZEOF_VOID_P)
+   # ans(byte_size_voidp)
+   # math(EXPR architecture "${byte_size_voidp} * 8")
+   # assign(!result.architecture = architecture)
+    
     assign(!result.os.name = res.CMAKE_HOST_SYSTEM_NAME)   
     assign(!result.os.version = res.CMAKE_HOST_SYSTEM_VERSION) 
-    assign(!result.processor = res.CMAKE_HOST_SYSTEM_PROCESSOR)      
+    if(WIN32)
+      assign(!result.os.family = 'Windows')   
+    elseif(MAC)
+      assign(!result.os.family = 'MacOS')   
+    elseif(UNIX)
+      assign(!result.os.family = 'Unix')  
+    endif()
     return_ref(result)
   endfunction()
   
