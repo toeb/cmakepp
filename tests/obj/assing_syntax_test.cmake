@@ -21,7 +21,7 @@ function(test)
   test_uut("" "null")
   test_uut("null" "'null'")
   test_uut("abc def" "abc def")
-  test_uut("{'__$type__':'exception'}" [) # => error  invalid token
+  test_uut("{'__$type__':'exception'}" "[") # => error  invalid token
   test_uut("{'__$type__':'exception'}" ,) # => error  invalid token
 
 
