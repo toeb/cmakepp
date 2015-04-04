@@ -1,10 +1,17 @@
 function(test)
 
+
+  #event_addhandler(on_exception "[](ex) print_vars(ex)")
+
   define_test_function2(test_uut eval_expr2 interpret_literal "")
 
   ## literal test
+  test_uut("{'__$type__':'exception'}")
   test_uut("" "")
   test_uut("a" "a") 
+  test_uut("" "''") 
+  test_uut("" "\"\"") 
+  test_uut("a b c" "a b c") ## sepearated arg
   test_uut("a" "'a'") 
   test_uut("a" "\"a\"") 
   test_uut("{'__$type__':'exception'}" a b) # => error only single token allowed
@@ -14,14 +21,19 @@ function(test)
   test_uut("" "null")
   test_uut("null" "'null'")
   test_uut("abc def" "abc def")
+  test_uut("{'__$type__':'exception'}" [) # => error  invalid token
+  test_uut("{'__$type__':'exception'}" ,) # => error  invalid token
+
 
 
   
   define_test_function2(test_uut eval_expr2 interpret_literals "")
 
   ## literals test
+  test_uut("{'__$type__':'exception'}") # no token => excpetion
   test_uut("abc" a b c)
   test_uut("abc d" 'a' \"b\" "c d")
+  test_uut("{'__$type__':'exception'}" 'a' ( \"b\" "c d")) #invalid tokens
 
 
 
@@ -31,15 +43,63 @@ function(test)
   define_test_function2(test_uut eval_expr2 interpret_scope_rvalue "")
 
   set(the_var 123)
-  test_uut("123" "$the_var")
 
   set(the_other_var)
-  test_uut("" $the_other_var)
+
+  test_uut("{'__$type__':'exception'}") ## no tokens
+  test_uut("{'__$type__':'exception'}" "the_other_var") ## no dollar symbol
+  test_uut("{'__$type__':'exception'}" "$") ## no identifier or paren
+  test_uut("" "$[the_other_var]") ## ok - no value
+  test_uut("" "$(the_other_var)") ## ok - no value
+  test_uut("" "$the_other_var") ## ok - no value
+  test_uut("" "$'the_other_var'") ## ok - no value
+  test_uut("" "$\"the_other_var\"") ## ok - no value
+  test_uut("123" "$the_var")
+  test_uut("123" "$(the_var)") ## ok
+  test_uut("123" "$[the_var]") ## ok
+   # test_uut("123" "$.the_var") ## ok should be ok
+
+  ## navigation rvalue
+  obj("{
+    b:1,
+    c:{
+      d:2,
+      e:[
+        {f:3},
+        {g:4},
+        5,
+        6,
+        {h:7}
+      ]
+    },
+    i:[8,9,10],
+    j:{},
+    k:[]
+  }")
+  ans(a)
+  
+  define_test_function2(test_uut eval_expr2 interpret_navigation_rvalue "")
+
+  test_uut("{'__$type__':'exception'}")
+  test_uut("{'__$type__':'exception'}" "a") # too few tokens
+  test_uut("{'__$type__':'exception'}" "[abc]") # too few tokens
+  test_uut("{'__$type__':'exception'}" "abc" "abc") # missing dot
+  test_uut("{'__$type__':'exception'}" ".abc") # no lvalue 
+  test_uut("" "a.abc") # ok 
+  test_uut("" "a[abc]") # ok 
+  test_uut("1" "$a.b") 
+  test_uut("1" "$a[b]") 
+  test_uut("1" "$a['b']") 
+  test_uut("1" "$a[\"b\"]") 
+  test_uut("2" "$a.c.d")
+  test_uut("2" "$a[c][d]")
+  test_uut("2" "$[a][c][d]")
+  test_uut("8;9;10" "$a.i")
 
 
 
-
-
+  define_test_function2(test_uut eval_expr2 interpret_call "")
+  
 
 
 return()

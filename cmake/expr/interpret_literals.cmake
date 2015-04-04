@@ -1,4 +1,7 @@
 function(interpret_literals tokens)
+  if(NOT tokens)
+    throw("expected at least one token" --function interpret_literals)
+  endif()
   set(code)
   set(literals)
   set(argument)
@@ -8,7 +11,7 @@ function(interpret_literals tokens)
     if(NOT literal)
       ## something other than a literal 
       ## causes this not to be a literal
-      return()
+      throw("tokens contained an invalid token: {token}" --function interpret_literals)
     endif()
 
     #print_vars(literal.type literal.argument literal.code)

@@ -14,6 +14,15 @@ function(catch)
     _return()
   endif()
 
+  address_pop_back(unhandled_exceptions)
+  address_push_back(handled_exceptions ${exception})
+
+  ## a single argument is interpreted as a variable
+  if(${ARGC} EQUAL 1)
+    ## maybe handle callable here as well?
+    set(${ARGV0} ${exception} PARENT_SCOPE)
+    return()
+  endif()
 
   arguments_anonymous_function(0 ${ARGC})
   ans(exception_handler)

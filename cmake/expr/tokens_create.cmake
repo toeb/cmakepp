@@ -4,6 +4,10 @@
     list(LENGTH typelist token_count)
     math(EXPR last_index "${token_count} - 1")
 
+    if(NOT token_count)
+      return()
+    endif()
+
     map_new()
     ans(current_nesting)
     map_set("${current_nesting}" nesting_type root)

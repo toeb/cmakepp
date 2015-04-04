@@ -1,16 +1,14 @@
 function(interpret_navigation_rvalue tokens)
-  if(NOT tokens)
-    message("no tokens")
-    return()
-
+  list(LENGTH tokens token_count)
+  if(${token_count} LESS 2)
+    throw("expected at least two tokens (got {token_count})" --function interpret_navigation_rvalue)
   endif()
 
   list_pop_back(tokens)
   ans(rhs_token)
 
   if(NOT tokens)
-    message("no lhs tokens")
-    return()
+    throw("expected at least two tokens (got {token_count})" --function interpret_navigation_rvalue)
   endif()
 
   map_tryget("${rhs_token}" type)
@@ -26,12 +24,11 @@ function(interpret_navigation_rvalue tokens)
     map_tryget("${dot}" type)
     ans(type)
     if(NOT "${type}" STREQUAL "dot")
-      return()
+      throw("expected second to last token to be a `.`" --function interpret_navigation_rvalue)
     endif()  
     
     if(NOT tokens)
-     message("no lhs tokens")
-      return()
+      throw("no lvalue tokens" --function interpret_navigation_rvalue)
     endif()
 
     interpret_literal("${rhs_token}")

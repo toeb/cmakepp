@@ -2,8 +2,10 @@ function(test)
 
   function(testf)
     if(ARGN)
+      message(mu)
       return(ok)
     else()
+      message(hu)
       throw("damnit")
     endif()
   endfunction()
@@ -24,6 +26,7 @@ function(test)
   ans(is_exception)
   assert(is_exception)
   assertf("{res.message}" STREQUAL damnit)
+  
 
 
 
@@ -42,7 +45,8 @@ function(test)
   assert("${res}" STREQUAL "was_exception")
 
 
-  ## exception exception
+  ## exception thrown inside exception
+  ## 
 
   testf(false)
   ans(ex1)

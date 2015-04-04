@@ -1,8 +1,9 @@
 
 function(interpret_scope_rvalue tokens)
+  #print_vars(tokens)
   list(LENGTH tokens count)
   if(NOT ${count} EQUAL 2)
-    return()
+    throw("expected 2 tokens (got {count}) " --function interpret_scope_rvalue)    
   endif()
 
   list(GET tokens 0 dollar)
@@ -12,8 +13,14 @@ function(interpret_scope_rvalue tokens)
   map_tryget("${dollar}" type)
   ans(type)
   if(NOT "${type}" STREQUAL "dollar")
-    return()
+    throw("expected a `$` as first token " --function interpret_scope_rvalue)
   endif()
+
+
+  if(NOT identifier_token)
+    throw("could find identifier" --function interpret_scope_rvalue)
+  endif()
+
 
   map_tryget("${identifier_token}" type)
   ans(type)
@@ -23,12 +30,15 @@ function(interpret_scope_rvalue tokens)
     interpret_literal("${identifier_token}")
     ans(identifier)
   elseif("${type}" STREQUAL "paren")
-    interpret_rvalue("${identifier_token}")
+    interpret_paren("${identifier_token}")
     ans(identifier)
+  elseif("${type}" STREQUAL "bracket")
+    interpret_bracket("${identifier_token}")
+    ans(identifier)
+  
   endif()
-
   if(NOT identifier)
-    return()
+    throw("could interpret identifier" --function interpret_scope_rvalue)
   endif()
 
   map_tryget("${identifier}" code)
