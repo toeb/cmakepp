@@ -1,26 +1,32 @@
 
 function(interpret_call tokens)
   if(NOT tokens)
-    return()
+    throw("no tokens specified" --function interpret_call)
   endif()
   
   list_pop_back(tokens)
   ans(paren)
-
-  if(NOT tokens)
-    return()
-  endif()
 
 
   map_tryget("${paren}" type)
   ans(type)
 
   if(NOT "${type}" STREQUAL "paren")
-    return()
+    throw("no value for left hand side" --function interpret_call)
   endif()
+
+
+  if(NOT tokens)
+    throw("no value for left hand side" --function interpret_call)
+  endif()
+
+
 
   interpret_rvalue("${tokens}")
   ans(rvalue)
+  if(NOT rvalue)
+    throw("could not parse rvalue" --function interpret_call)
+  endif()
 
 
 
@@ -37,29 +43,61 @@ function(interpret_call tokens)
   interpret_paren("${paren}")
   ans(parameters)
 
+
   map_tryget("${parameters}" code)
-  ans(parameter_code)
+  ans(parameters_code)
 
-  map_tryget("${parameters}" argument)
-  ans(parameter_argument)
-
-
-  
-  next_id()
-  ans(id)
+  map_tryget("${parameters}" elements)
+  ans(parameter_rvalues)
 
 
+  set(invocation_arguments)
+  foreach(parameter_rvalue ${parameter_rvalues})
+    map_tryget("${parameter_rvalue}" type)
+    ans(parameter_rvalue_type)
+    
+    if("${parameter_rvalue_type}" STREQUAL "ellipsis")
+      map_tryget("${parameter_rvalue}" rvalue)      
+      ans(parameter_rvalue)
+      map_tryget("${parameter_rvalue}" argument)
+      ans(parameter_rvalue_argument)
+      set(invocation_arguments "${invocation_arguments} ${parameter_rvalue_argument}")
 
-  set(code "${rvalue_code}${parameter_code}")
+
+    else()
+      map_tryget("${parameter_rvalue}" argument)
+      ans(parameter_rvalue_argument)
+      if(rvalue_is_static)
+        set(invocation_arguments "${invocation_arguments} \"${parameter_rvalue_argument}\"")
+      else()
+        set(invocation_arguments "${invocation_arguments} \\\"${parameter_rvalue_argument}\\\"")
+
+      endif()
+    endif()
+
+
+
+  endforeach()
+  if(invocation_arguments)
+    string(SUBSTRING "${invocation_arguments}" 1 -1 invocation_arguments)
+  endif()
+
+next_id()
+ans(id)
+  set(code "${rvalue_code}${parameters_code}")
   if(rvalue_is_static)
-    set(code "${code}\n${rvalue_argument}(${parameter_argument})\n")
+    set(code "${code}\n${rvalue_argument}(${invocation_arguments})\n")
   else()
-    set(code "${code}\neval(\"${rvalue_argument}(${parameter_argument})\")\n")
+
+    set(code "${code}\neval(\"${rvalue_argument}(${invocation_arguments})\")\n")
   endif()
   set(code "${code}set(${id} \${__ans})\n")
 
 
-  #print_vars(in_call code rvalue_code parameter_code)
+  #message("${code}")
+
+
+  #print_vars(in_call code rvalue_code parameters_code)
   map_new()
   ans(ast)
 

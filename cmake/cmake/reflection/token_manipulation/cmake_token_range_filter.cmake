@@ -9,7 +9,7 @@
 ## %>
 ## 
 function(cmake_token_range_filter range )
-  arguments_encoded_list2(1 ${ARGC})
+  arguments_encoded_list(1 ${ARGC})
   ans(args)
   
   list_extract_flag(args --reverse)

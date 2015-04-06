@@ -1,6 +1,6 @@
 function(test)
   function(uut)
-    arguments_encoded_list(${ARGC})
+    arguments_encoded_list(0 ${ARGC})
     ans(args)
 
     process_start_info_new(${args})

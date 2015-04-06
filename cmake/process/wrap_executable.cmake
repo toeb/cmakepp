@@ -26,7 +26,7 @@
 # else only the application output will be returned 
 # and if the application terminates with an exit code != 0 a fatal error will be raised
 function(wrap_executable alias executable)
-  arguments_encoded_list(${ARGC})
+  arguments_encoded_list(0 ${ARGC})
   ans(arguments)
   # remove alias and executable
   list_pop_front(arguments)
@@ -34,7 +34,7 @@ function(wrap_executable alias executable)
 
   eval("  
     function(${alias})
-      arguments_encoded_list(\${ARGC})
+      arguments_encoded_list(0 \${ARGC})
       ans(arguments)
       execute(\"${executable}\" ${arguments} \${arguments})
       return_ans()

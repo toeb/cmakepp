@@ -1,4 +1,5 @@
-function(interpret_separation tokens separator_type)    
+function(interpret_separation tokens separator_type separator_char pre_element post_element)
+
     
     ## initialize variables
     set(elements)         # stores all single elements
@@ -16,13 +17,14 @@ function(interpret_separation tokens separator_type)
     foreach(token ${tokens})
       map_tryget("${token}" type)
       ans(type)
+     # print_vars(type)
       if("${token}" STREQUAL "end" OR "${type}" MATCHES "^(${separator_type})$")
+
         interpret_expression("${current_tokens}" ${ARGN})
         ans(element)
 
         if(NOT element)
-            message("failed to interpret element")
-            return()
+            throw("failed to interpret element")
         endif() 
         set(current_tokens)
         list(APPEND elements "${element}")
@@ -41,7 +43,7 @@ function(interpret_separation tokens separator_type)
         ans(element_argument)
 
         set(code "${code}${element_code}")
-        set(argument "${argument} ${element_argument}")
+        set(argument "${argument}${separator_char}${pre_element}${element_argument}${post_element}")
 
         if("${token}" STREQUAL "end")
           break()
@@ -50,10 +52,11 @@ function(interpret_separation tokens separator_type)
         list(APPEND current_tokens "${token}")
       endif()
     endforeach()
-    
-    # remove leading whitespace
-    string(SUBSTRING "${argument}" 1 -1 argument)
-
+    string(LENGTH argument argument_length)
+    if(argument_length)
+        # remove leading whitespace
+        string(SUBSTRING "${argument}" 1 -1 argument)
+    endif()
     map_new()
     ans(ast)
     map_set("${ast}" type separation)

@@ -19,7 +19,7 @@ function(execute)
   ans(lean)
 
 
-  arguments_encoded_list(${ARGC})
+  arguments_encoded_list(0 ${ARGC})
   ans(args)
 
   list_extract_flag(args --process-handle)

@@ -14,7 +14,8 @@ function(interpret_paren list_token)
   map_tryget("${list_token}" tokens)
   ans(tokens)
 
-  interpret_separation("${tokens}" "comma")
+
+  interpret_separation("${tokens}" "comma" " " "" "")
   ans(ast)
 
   map_set(${ast} type paren)
@@ -22,3 +23,5 @@ function(interpret_paren list_token)
   return(${ast})
 
 endfunction()
+
+

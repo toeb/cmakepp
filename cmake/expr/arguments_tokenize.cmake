@@ -1,5 +1,6 @@
 
 macro(arguments_tokenize first last)
+
   math(EXPR _last "${last} - 1")
   #_message("first ${first} last ${last} _last ${_last}")
   if(NOT ${first} GREATER ${_last})
@@ -7,13 +8,13 @@ macro(arguments_tokenize first last)
     foreach(i RANGE ${first} ${_last})
       set(input "${input}${ARGV${i}}")
     endforeach()
-  #  _message("'${input}'")
     string(REPLACE ";" "" input "${input}")
     string(REPLACE "(" "" input "${input}")
     string(REPLACE ")" "" input "${input}")
     string(REPLACE "[" "" input "${input}")
     string(REPLACE "]" "" input "${input}")
 
+   # _message("input '${input}'")
     ## tokenize the string
    # string(REPLACE "" ";;" input "${input}")
     set(token_chars "{},:=&\\*\\$\\.\\-\\+\\|\\^%#@!\\?\\/~<>")
@@ -23,7 +24,6 @@ macro(arguments_tokenize first last)
     
     string(REGEX MATCHALL "${token_regex}" token_strings "${input}")
     string(REGEX REPLACE "${token_regex}" "" error "${input}")
-    
    # messaGE("${token_strings}")
     if(NOT error)
 

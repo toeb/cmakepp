@@ -17,7 +17,7 @@
    # message("evaluated_arg_string ${evaluated_arg_string}")
     eval("
       function(${name} expected ${argstring})
-        arguments_encoded_list2(${arg_len} \${ARGC})
+        arguments_encoded_list(${arg_len} \${ARGC})
         ans(encoded_arguments)
         arguments_sequence(${arg_len} \${ARGC})
         ans(arguments_sequence)

@@ -1,5 +1,30 @@
 function(test)
 
+  define_test_function2(test_uut eval_expr2 interpret_assign "")
+
+
+
+  eval_expr2(interpret_assign "--print-code" "$a.b = 1")
+  ans(res)
+  assert("${res}" EQUAL 1)
+  assert("${a}" EQUAL 1)
+
+
+
+  eval_expr2(interpret_assign "" "$a = 1")
+  ans(res)
+  assert("${res}" EQUAL 1)
+  assert("${a}" EQUAL 1)
+
+
+
+
+
+
+  return()
+
+
+
 
   #event_addhandler(on_exception "[](ex) print_vars(ex)")
 
@@ -97,9 +122,68 @@ function(test)
   test_uut("8;9;10" "$a.i")
 
 
-
+  ## interpret call tests
   define_test_function2(test_uut eval_expr2 interpret_call "")
-  
+
+  test_uut("{'__$type__':'exception'}")  # no token
+  test_uut("{'__$type__':'exception'}" "")  # empty token
+  test_uut("{'__$type__':'exception'}" "abc")  # no paren -> no call 
+  test_uut("{'__$type__':'exception'}" "()")  # no lhs rvalue
+  test_uut("{'__$type__':'exception'}" "()()") ## illegal lhs rvalue  
+
+  function(my_func)
+    arguments_encoded_list(0 ${ARGC})
+    ans(result)
+    list(INSERT result 0 my_func)
+    return_ref(result)
+  endfunction()
+
+  string_codes()
+
+  ## static functions
+  test_uut("my_func" "my_func()")
+  test_uut("my_func;1" "my_func(1)")
+  test_uut("my_func;1;2" "my_func(1,2)")
+  test_uut("my_func;1;2;3" "my_func(1,2,3)")
+  test_uut("my_func;1;2${semicolon_code}3;4" "my_func(1,[2,3],4)") 
+  test_uut("my_func;my_func${semicolon_code}my_func" "my_func(my_func(my_func()))") #todo: elpises
+
+  ## elipsis
+  test_uut("my_func;1;2;3" "my_func(1,[ 2 , 3]...)")
+  test_uut("my_func;1;2${semicolon_code}3" "my_func(1,[ 2 , 3])")
+
+  ## dynamic function
+
+  set(thefunc my_func)
+  test_uut("my_func" "$thefunc()")
+  test_uut("my_func;1" "$thefunc(1)")
+  test_uut("my_func;1${semicolon_code}2;3${semicolon_code}4" "$thefunc([1,2],[3,4])")
+
+
+
+
+  ## intepret expressions
+  define_test_function2(test_uut eval_expr2 interpret_expressions "")
+
+  eval_expr2(interpret_expressions "" "a;b")
+  ans(res)
+  assert("${res}" STREQUAL b)
+
+
+  eval_expr2(interpret_expressions "" "a;b;c")
+  ans(res)
+  assert("${res}" STREQUAL c)
+
+  test_uut("{'__$type__':'exception'}")
+  test_uut("" "")
+  test_uut("a" "a")
+
+
+
+
+
+
+  return()
 
 
 return()

@@ -1,5 +1,5 @@
 macro(arguments_sequence __begin __end)
-  arguments_encoded_list2("${__begin}" "${__end}")
+  arguments_encoded_list("${__begin}" "${__end}")
   ans(__list)
   sequence_new()
   ans(__result)

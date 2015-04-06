@@ -1,7 +1,14 @@
+function(interpret_lvalue tokens argument)
+  interpret_scope_lvalue("${tokens}" "${argument}")
+  ans(ast)
+  if(ast)
+    return(${ast})
+  endif()
 
-
-
-  function(interpret_lvalue tokens argument)
-    interpret_scope_lvalue("${tokens}" "${argument}")
-    return_ans()
-  endfunction()
+  interpret_navigation_lvalue("${tokens}" "${argument}")
+  ans(ast)
+  if(ast)
+    return(${ast})
+  endif()
+  return()
+endfunction()
