@@ -22,6 +22,8 @@ function(interpret_literal token)
     endif()
     if("${result_value}" MATCHES "^(true)|(false)$")
       set(result_type bool)
+    elseif("${result_value}" MATCHES "^0|([1-9][0-9]*)$")
+      set(result_type number)
     elseif("${result_value}" STREQUAL "null")
       set(result_type null)
       set(result_value)
@@ -42,18 +44,27 @@ function(interpret_literal token)
   decode("${result_value}")
   ans(decoded_value)
 
+
   cmake_string_escape("${decoded_value}")
-  ans(cmake_escaped)
- # message("escaped '${cmake_escaped}'")
-  map_new()
+  ans(value)
+
+  next_id()
+  ans(ref)
+
+  set(code "set(${ref} \"${value}\")\n")
+
+
+  ast_new(
+    "${token}"
+    literal             # expression_type
+    "${result_type}"    # value_type
+    "${ref}"            # ref
+    "${code}"           # code
+    "${value}"          # value
+    "true"              # static
+    ""                  # children
+    )
   ans(ast)
-  map_set("${ast}" static true)
-  map_set("${ast}" type "${result_type}")
-  map_set("${ast}" expression literal)
-  map_set("${ast}" code "")
-  map_set("${ast}" argument "${cmake_escaped}")
-  map_set("${ast}" token "${token}") 
- # print_vars(result_type decoded_value token.value --plain)
-#  json_print(${ast})
+
   return(${ast})
 endfunction()

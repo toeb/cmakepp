@@ -24,20 +24,34 @@ function(interpret_ellipsis tokens)
   rethrow()
   ans(rvalue)
 
-  map_tryget("${rvalue}" code)
-  ans(rvalue_code)
-
-  map_tryget("${rvalue}" argument)
-  ans(rvalue_argument)
 
 
 
+  map_tryget("${rvalue}" ref)
+  ans(rvalue_ref)
 
-  map_new()
+  map_tryget("${rvalue}" value_type)
+  ans(rvalue_value_type)
+
+  map_tryget("${rvalue}" value)
+  ans(rvalue_value)
+
+  map_tryget("${rvalue}" static)
+  ans(rvalue_static)
+
+
+
+
+  ast_new(
+    "${tokens}"
+    ellipsis
+    "${rvalue_value_type}"
+    "${rvalue_ref}"
+    ""
+    "${rvalue_value}"
+    "${rvalue_static}"
+    "${rvalue}"
+    )
   ans(ast)
-  map_set("${ast}" type ellipsis)
-  map_set("${ast}" rvalue "${rvalue}")
-  map_set("${ast}" code "${code}")
-  map_set("${ast}" argument "${argument}")
   return_ref(ast)
 endfunction()

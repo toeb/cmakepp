@@ -30,81 +30,62 @@ function(interpret_call tokens)
 
 
 
-  map_tryget("${rvalue}" argument)
-  ans(rvalue_argument)
+  map_tryget("${rvalue}" value)
+  ans(rvalue_value)
 
-  map_tryget("${rvalue}" code)
-  ans(rvalue_code)
+  map_tryget(${paren} tokens)
+  ans(call_tokens)
 
-  map_tryget("${rvalue}" static)
-  ans(rvalue_is_static)
+  interpret_elements("${call_tokens}" "comma" "interpret_ellipsis;interpret_expression")
+  ans(parameters) 
 
-
-  interpret_paren("${paren}")
-  ans(parameters)
+  set(parameters_code)
 
 
-  map_tryget("${parameters}" code)
-  ans(parameters_code)
+  set(parameters_string)
+  foreach(parameter ${parameters})
 
-  map_tryget("${parameters}" elements)
-  ans(parameter_rvalues)
+    map_tryget("${parameter}" expression_type)
+    ans(parameter_expression_type)
 
-
-  set(invocation_arguments)
-  foreach(parameter_rvalue ${parameter_rvalues})
-    map_tryget("${parameter_rvalue}" type)
-    ans(parameter_rvalue_type)
-    
-    if("${parameter_rvalue_type}" STREQUAL "ellipsis")
-      map_tryget("${parameter_rvalue}" rvalue)      
-      ans(parameter_rvalue)
-      map_tryget("${parameter_rvalue}" argument)
-      ans(parameter_rvalue_argument)
-      set(invocation_arguments "${invocation_arguments} ${parameter_rvalue_argument}")
-
-
+    if("${parameter_expression_type}" STREQUAL "ellipsis")
+      map_tryget("${parameter}" children)
+      ans(parameter)
+      map_tryget("${parameter}" value)
+      ans(parameter_value)
+      set(parameters_string "${parameters_string} ${parameter_value}")
     else()
-      map_tryget("${parameter_rvalue}" argument)
-      ans(parameter_rvalue_argument)
-      if(rvalue_is_static)
-        set(invocation_arguments "${invocation_arguments} \"${parameter_rvalue_argument}\"")
-      else()
-        set(invocation_arguments "${invocation_arguments} \\\"${parameter_rvalue_argument}\\\"")
-
-      endif()
-    endif()
-
-
-
+      map_tryget("${parameter}" value)
+      ans(parameter_value)
+      set(parameters_string "${parameters_string} \\\"${parameter_ref}\\\"")
+    endif()   
   endforeach()
-  if(invocation_arguments)
-    string(SUBSTRING "${invocation_arguments}" 1 -1 invocation_arguments)
+
+  ## remove initial space
+  if(parameters)
+    string(SUBSTRING "${parameters_string}" 1 -1 parameters_string)
   endif()
 
-next_id()
-ans(id)
-  set(code "${rvalue_code}${parameters_code}")
-  if(rvalue_is_static)
-    set(code "${code}\n${rvalue_argument}(${invocation_arguments})\n")
-  else()
 
-    set(code "${code}\neval(\"${rvalue_argument}(${invocation_arguments})\")\n")
-  endif()
-  set(code "${code}set(${id} \${__ans})\n")
+  next_id()
+  ans(ref)
 
-
-  #message("${code}")
-
-
-  #print_vars(in_call code rvalue_code parameters_code)
-  map_new()
+  set(code "eval(\"${rvalue_value}(${parameters_string})\")\nans(${ref})\n")
+    
+  ast_new(
+    "${tokens}"
+    call
+    any
+    "${ref}"
+    "${code}"
+    "\${${ref}}"
+    false
+    "${rvalue};${parameters}"
+    )
   ans(ast)
 
-  map_set("${ast}" type call)
-  map_set("${ast}" argument "\${${id}}")
-  map_set("${ast}" code "${code}")
+
+  return_ref(ast)
 
 
-  return(${ast})
 endfunction()

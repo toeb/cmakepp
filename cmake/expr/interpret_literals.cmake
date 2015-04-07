@@ -3,8 +3,10 @@ function(interpret_literals tokens)
     throw("expected at least one token" --function interpret_literals)
   endif()
   set(code)
+
   set(literals)
-  set(argument)
+  set(value)
+  set(static_value)
   foreach(token ${tokens})
     interpret_literal("${token}")
     ans(literal)
@@ -14,20 +16,17 @@ function(interpret_literals tokens)
       throw("tokens contained an invalid token: {token}" --function interpret_literals)
     endif()
 
-    #print_vars(literal.type literal.argument literal.code)
+    #print_vars(literal.type literal.value literal.code)
 
     list(APPEND literals "${literal}")
 
     map_tryget("${literal}" code)
     ans(literal_code)
-    
-    set(code "${code}${literal_code}")
-
-    map_tryget("${literal}" argument)
-    ans(literal_argument)
-    set(argument "${argument}${literal_argument}")
+    map_tryget("${literal}" value)
+    ans(literal_value)
+    set(value "${value}${literal_value}")    
   endforeach()
- #   print_vars(argument )
+ #   print_vars(value )
 
   ## single literal is retunred directly
   ## 
@@ -36,13 +35,25 @@ function(interpret_literals tokens)
     return_ref(literals)
   endif()
 
-  ## else a string literal is uses
-  map_new()
+
+  next_id()
+  ans(ref)
+  
+  set(code "set(${ref} \"${value}\")\n")
+
+
+  ast_new(
+    "${tokens}"
+    literals            # expression type
+    composite_string    # value type
+    "${ref}"            # ref
+    "${code}"           # code
+    "${value}"          # value
+    true                # static
+    "${literals}"       # children
+    )
   ans(ast)
-  map_set("${ast}" type composite_string)
-  map_set("${ast}" literals ${literals})
-  map_set("${ast}" code "${code}")
-  map_set("${ast}" argument "${argument}")
-  map_set("${ast}" static true)
-  return(${ast})
+
+  return_ref(ast)
 endfunction()
+

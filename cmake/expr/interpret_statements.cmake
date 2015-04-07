@@ -1,4 +1,4 @@
-function(interpret_expressions tokens)
+function(interpret_statements tokens)
   interpret_separation("${tokens}" "semicolon" " " "" "")
   ans(separation)
 

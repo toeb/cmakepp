@@ -33,34 +33,34 @@ function(interpret_scope_rvalue tokens)
     interpret_paren("${identifier_token}" )
     ans(identifier)
   elseif("${type}" STREQUAL "bracket")
-    interpret_bracket("${identifier_token}")
+    interpret_list("${identifier_token}")
     ans(identifier)
-  
   endif()
   if(NOT identifier)
     throw("could interpret identifier" --function interpret_scope_rvalue)
   endif()
 
+
   map_tryget("${identifier}" code)
   ans(identifier_code)
-  map_tryget("${identifier}" argument)
-  ans(identifier_argument)
 
-  #print_vars(identifier.code identifier.argument)
+  map_tryget("${identifier}" value)
+  ans(value)
 
+  set(code)
 
-  set(code "${identifier_code}")
-  set(argument "\${${identifier_argument}}")
-
+  ast_new(
+    "${tokens}"
+    scope_rvalue
+    any
+    "${value}"
+    "${code}"
+    "\${${value}}" # value
+    "false" # static
+    "${identifier}" # children
+    )
   
-  map_new()
   ans(ast)
-  map_set("${ast}" type "scope_rvalue")
-  map_set("${ast}" argument "${argument}")
-  map_set("${ast}" code "${code}")
 
-  #print_vars(ast)
-
-  return(${ast})
-
+  return_ref(ast)
 endfunction()

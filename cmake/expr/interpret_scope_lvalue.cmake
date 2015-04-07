@@ -29,5 +29,6 @@ function(interpret_scope_lvalue tokens rvalue)
   map_set(${ast} argument "${rvalue_argument}")
   map_set(${ast} code "${code}")
   map_set(${ast} tokens ${tokens})
+  
   return(${ast})
 endfunction()

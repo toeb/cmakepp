@@ -25,7 +25,7 @@ function(interpret_rvalue tokens)
     return(${ast})
   endif()
 
-  interpret_bracket("${tokens}")
+  interpret_list("${tokens}")
   ans(ast)
   if(ast)
     return(${ast})
@@ -54,7 +54,7 @@ function(interpret_rvalue tokens)
     return(${ast})
   endif()
 
-  return()
+  throw("could not interpret rvalue" --function interpret_rvalue )
 endfunction()
 
 

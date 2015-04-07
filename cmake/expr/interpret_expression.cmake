@@ -4,7 +4,6 @@ function(interpret_expression tokens)
   interpret_assign("${tokens}")
   ans(ast)
   if(ast)
-
     return(${ast})
   endif()
 
@@ -13,5 +12,8 @@ function(interpret_expression tokens)
   if(ast)
     return(${ast})
   endif()
-  return_ans()
+
+
+
+  throw("could not intepret expression" --function interpret_expression)
 endfunction()

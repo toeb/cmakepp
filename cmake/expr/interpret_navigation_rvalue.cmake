@@ -16,7 +16,7 @@ function(interpret_navigation_rvalue tokens)
 
   if("${type}" STREQUAL "bracket")
     ## interpret range or interpret bracket
-    interpret_bracket("${rhs_token}")
+    interpret_list("${rhs_token}")
     ans(rhs)
   else()
     list_pop_back(tokens)
@@ -40,34 +40,36 @@ function(interpret_navigation_rvalue tokens)
 
   #print_vars(rhs.type rhs.argument rhs.code lhs.type lhs.argument lhs.code --plain)
 
-  map_tryget("${rhs}" code)
-  ans(rhs_code)
-  map_tryget("${rhs}"  argument)
-  ans(rhs_argument)
-  map_tryget("${lhs}" code)
-  ans(lhs_code)
+  map_tryget("${rhs}"  value)
+  ans(rhs_value)
 
-  map_tryget("${lhs}"  argument)
-  ans(lhs_argument)
+  map_tryget("${lhs}"  value)
+  ans(lhs_value)
 
   next_id()
-  ans(id)
+  ans(ref)
 
-  set(code "${lhs_code}${rhs_code}get_property(__ans GLOBAL PROPERTY \"${lhs_argument}.__object__\" SET)
+  set(code "get_property(__ans GLOBAL PROPERTY \"${lhs_value}.__object__\" SET)
 if(__ans)
   message(FATAL_ERROR object_get_not_supported_currently)
 else()
-  get_property(${id} GLOBAL PROPERTY \"${lhs_argument}.${rhs_argument}\")
+  get_property(${ref} GLOBAL PROPERTY \"${lhs_value}.${rhs_value}\")
 endif()    
 ")
-  set(argument "\${${id}}" )
 
-
-  map_new()
+  ast_new(
+    "${tokens}"
+    "navigation_rvalue"  
+    "any"           # return type
+    "${ref}"        # ref
+    "${code}"       # code
+    "\${${ref}}"    #value
+    "false"         #static
+    "${rhs};${lhs}"
+    )
   ans(ast)
-  map_set("${ast}" type "navigation")
-  map_set("${ast}" code "${code}")
-  map_set("${ast}" argument "${argument}")
+
+  map_set("${ast}" this_ref "${lhs_argument}")
 
   return_ref(ast)
 endfunction()

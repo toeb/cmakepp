@@ -39,6 +39,7 @@
         json_print(\${expected})  
       endif()
       assert(res MESSAGE "values do not match")
+      return_ref(result)
     )
     return()
   endfunction()
