@@ -21,15 +21,15 @@ function(interpret_list list_token)
 
 
   set(value)
-  set(static true)
+  set(const true)
   foreach(element ${elements})
     map_tryget("${element}" value)
     ans(element_value)
     set(value "${value};${element_value}")
-    map_tryget("${element}" static)
-    ans(is_static)
-    if(NOT is_static)
-      set(static false)
+    map_tryget("${element}" const)
+    ans(is_const)
+    if(NOT is_const)
+      set(const false)
     endif()
   endforeach()
 
@@ -42,7 +42,7 @@ function(interpret_list list_token)
   ans(ref)
   set(code "set(${ref} \"${value}\")\n")
 
-## expression_type value_type value ref code is_static)
+## expression_type value_type value ref code is_const)
    ast_new(
     "${list_token}"
     list   # expr type
@@ -50,7 +50,8 @@ function(interpret_list list_token)
     "${ref}"  # ref
     "${code}" # code
     "${value}"
-    "${static}"
+    "${const}"
+    "true"
     "${elements}"
 
     )

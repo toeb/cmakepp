@@ -4,7 +4,7 @@ function(interpret_separation tokens separator_type separator_char pre_element p
     ## initialize variables
     set(elements)         # stores all single elements
     set(current_tokens)   # set list of current tokens
-    set(static true)      # set if all elements are static
+    set(const true)      # set if all elements are const
     set(argument)         # set derived argument
     set(code)             # set derived code
 
@@ -29,11 +29,11 @@ function(interpret_separation tokens separator_type separator_char pre_element p
         set(current_tokens)
         list(APPEND elements "${element}")
 
-        map_tryget("${element}" static)
-        ans(is_static)
+        map_tryget("${element}" const)
+        ans(is_const)
 
-        if(NOT is_static)
-          set(static false)
+        if(NOT is_const)
+          set(const false)
         endif()
 
         map_tryget("${element}" code)
@@ -63,7 +63,7 @@ function(interpret_separation tokens separator_type separator_char pre_element p
     map_set("${ast}" elements "${elements}")
     map_set("${ast}" code "${code}")
     map_set("${ast}" argument "${argument}")
-    map_set("${ast}" static "${static}")
+    map_set("${ast}" const "${const}")
     return(${ast})
 endfunction()
 

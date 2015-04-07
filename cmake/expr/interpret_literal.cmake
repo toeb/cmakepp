@@ -61,7 +61,8 @@ function(interpret_literal token)
     "${ref}"            # ref
     "${code}"           # code
     "${value}"          # value
-    "true"              # static
+    "true"              # const
+    "true"
     ""                  # children
     )
   ans(ast)

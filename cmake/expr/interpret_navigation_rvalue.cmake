@@ -64,7 +64,8 @@ endif()
     "${ref}"        # ref
     "${code}"       # code
     "\${${ref}}"    #value
-    "false"         #static
+    "false"         #const
+    "false"
     "${rhs};${lhs}"
     )
   ans(ast)

@@ -33,21 +33,21 @@ function(interpret_call tokens)
   map_tryget("${rvalue}" value)
   ans(rvalue_value)
 
+  map_tryget("${rvalue}" const)
+  ans(rvalue_is_const)
+
   map_tryget(${paren} tokens)
   ans(call_tokens)
 
   interpret_elements("${call_tokens}" "comma" "interpret_ellipsis;interpret_expression")
   ans(parameters) 
 
-  set(parameters_code)
-
-
   set(parameters_string)
   foreach(parameter ${parameters})
 
     map_tryget("${parameter}" expression_type)
     ans(parameter_expression_type)
-
+    print_Vars(parameter.expression_type parameter.value)
     if("${parameter_expression_type}" STREQUAL "ellipsis")
       map_tryget("${parameter}" children)
       ans(parameter)
@@ -57,7 +57,7 @@ function(interpret_call tokens)
     else()
       map_tryget("${parameter}" value)
       ans(parameter_value)
-      set(parameters_string "${parameters_string} \\\"${parameter_ref}\\\"")
+      set(parameters_string "${parameters_string} \"${parameter_value}\"")
     endif()   
   endforeach()
 
@@ -70,8 +70,13 @@ function(interpret_call tokens)
   next_id()
   ans(ref)
 
-  set(code "eval(\"${rvalue_value}(${parameters_string})\")\nans(${ref})\n")
-    
+  if(rvalue_is_const)
+    set(code "${rvalue_value}(${parameters_string})\nans(${ref})\n")
+  else()
+    cmake_string_escape3("${parameters_string}")
+    ans(parameters_string)
+    set(code "eval(\"${rvalue_value}(${parameters_string})\")\nans(${ref})\n")
+  endif()
   ast_new(
     "${tokens}"
     call
@@ -79,6 +84,7 @@ function(interpret_call tokens)
     "${ref}"
     "${code}"
     "\${${ref}}"
+    false
     false
     "${rvalue};${parameters}"
     )

@@ -36,10 +36,11 @@ function(interpret_ellipsis tokens)
   map_tryget("${rvalue}" value)
   ans(rvalue_value)
 
-  map_tryget("${rvalue}" static)
-  ans(rvalue_static)
+  map_tryget("${rvalue}" const)
+  ans(rvalue_const)
 
-
+  map_tryget("${rvalue}" pure_value)
+  ans(rvalue_pure_value)
 
 
   ast_new(
@@ -49,7 +50,8 @@ function(interpret_ellipsis tokens)
     "${rvalue_ref}"
     ""
     "${rvalue_value}"
-    "${rvalue_static}"
+    "${rvalue_const}"
+    "${rvalue_pure_value}"
     "${rvalue}"
     )
   ans(ast)

@@ -47,6 +47,9 @@ function(interpret_scope_rvalue tokens)
   map_tryget("${identifier}" value)
   ans(value)
 
+  map_tryget("${identifier}" pure_value)
+  ans(pure_value)
+
   set(code)
 
   ast_new(
@@ -56,7 +59,8 @@ function(interpret_scope_rvalue tokens)
     "${value}"
     "${code}"
     "\${${value}}" # value
-    "false" # static
+    "false" # const
+    "${pure_value}"
     "${identifier}" # children
     )
   

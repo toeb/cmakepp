@@ -24,12 +24,15 @@ function(interpret_paren paren_token)
   map_tryget("${inner_expression}" value)
   ans(value)
 
-  map_tryget("${inner_expression}" static)
-  ans(static)
+  map_tryget("${inner_expression}" const)
+  ans(const)
 
   map_tryget("${inner_expression}" value_type)
   ans(value_type)
   
+  map_tryget("${inner_expression}" pure_value)
+  ans(pure_value)
+
   ast_new(
     "${paren_token}"
     "paren"
@@ -37,7 +40,8 @@ function(interpret_paren paren_token)
     "${ref}"
     "${code}"
     "${value}" #value
-    "${static}" # static/const
+    "${const}" # const
+    "${pure_value}" # pure value
     "${inner_expression}" # children
     )
   ans(ast)

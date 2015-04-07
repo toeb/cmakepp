@@ -37,11 +37,11 @@ before_install:
   - git config --global user.email "travis-ci@example.com"
   - git config --global user.name "Build Server"
 install:
-  - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh
-  - bii setup:cpp
-  - bii init
-  - bii open toeb/cmakepp
-  - rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp > /dev/null
+  #- wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh
+  #- bii setup:cpp
+  #- bii init
+  #- bii open toeb/cmakepp
+  #- rsync -av --exclude="blocks" --exclude="bii" --exclude=".git" --exclude=".gitignore" . blocks/toeb/cmakepp > /dev/null
   #- sudo apt-get install cmake
   #- cmake --version
   # install cmake --
@@ -61,8 +61,8 @@ script:
 
 after_success: 
  - "cmake -P build/after_success.cmake"
- - bii user toeb -p $BII_PASSWORD
- - bii publish toeb/cmakepp --tag STABLE
+ #- bii user toeb -p $BII_PASSWORD
+ #- bii publish toeb/cmakepp --tag STABLE
 after_failure: "cmake -P build/after_failure.cmake"
 after_script: "cmake -P build/after_script.cmake"
 branches:

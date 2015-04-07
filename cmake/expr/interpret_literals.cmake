@@ -6,7 +6,6 @@ function(interpret_literals tokens)
 
   set(literals)
   set(value)
-  set(static_value)
   foreach(token ${tokens})
     interpret_literal("${token}")
     ans(literal)
@@ -49,7 +48,8 @@ function(interpret_literals tokens)
     "${ref}"            # ref
     "${code}"           # code
     "${value}"          # value
-    true                # static
+    "true"              # const
+    "true"              # pure value
     "${literals}"       # children
     )
   ans(ast)
