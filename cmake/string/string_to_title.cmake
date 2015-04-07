@@ -3,25 +3,24 @@
 ## Transforms the input string to title case.
 ## Tries to be smart and keeps some words small.
 ##
-## **Examples**<%
-##  set(my_title "the function string_totitle works")
-##  string_totile("${my_title}")
-##  ans(res)
-## %>
+## **Examples**
+##  "the function string_totitle works"
+##  -> "The Function string_totitle Works"
 ##
 ##
-function(string_totitle str)
+function(string_to_title str)
   set(small a an and as at but by en for if in of on or the to via vs v v. vs. A An And As At But By En For If In Of On Or The To Via Vs V V. Vs.)
   set(other "[^ ]+")
   set(ws "[ ]+")
   set(is_subsentence true)
+  set(res "")
 
-  string_encode_list(${str})
+  encoded_list("${str}")
   ans(str_encoded)
   string(REGEX MATCHALL "(${ws})|(${other})" tokens "${str_encoded}")
   
   foreach(token ${tokens})
-    if("${token}" MATCHES  "^([^a-zA-Z0-9]*)([a-zA-Z])([a-z]*[']?[a-z]*)([:?!',]*)$")
+    if("${token}" MATCHES  "^([^a-zA-Z0-9]*)([a-zA-Z])([a-z]*[']?[a-z]*)([:?!',)]*)$")
       set(pre ${CMAKE_MATCH_1})
       set(first_letter ${CMAKE_MATCH_2})
       set(lc_letters ${CMAKE_MATCH_3})
@@ -30,9 +29,9 @@ function(string_totitle str)
       list(FIND small "${first_letter}${lc_letters}" index)
       if(index GREATER -1)
          if(is_subsentence)
-             string(TOUPPER ${first_letter} first_letter)
+          string(TOUPPER ${first_letter} first_letter)
         else()
-             string(TOLOWER ${first_letter} first_letter)
+          string(TOLOWER ${first_letter} first_letter)
         endif()
       else()
          string(TOUPPER ${first_letter} first_letter)
