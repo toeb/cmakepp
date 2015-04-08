@@ -10,5 +10,6 @@ function(interpret_lvalue tokens argument)
   if(ast)
     return(${ast})
   endif()
-  return()
+
+  throw("could not interpret lvalue")
 endfunction()

@@ -15,7 +15,7 @@ set(exception "{'__$type__':'exception'}")
   ##### runtime tests #####
 
   ## interpret call tests
-  define_test_function2(test_uut eval_expr2 interpret_call "--print-code")
+  define_test_function2(test_uut eval_expr2 interpret_call "")
 
 
   test_uut("${exception}")  # no token
@@ -25,22 +25,47 @@ set(exception "{'__$type__':'exception'}")
   test_uut("${exception}" "()()") ## illegal lhs rvalue  
  
 
-  ## static functions
+  ## static functions (calls the function directly)
+
+  ## static function empty parameters
   test_uut("my_func" "my_func()")
+  ## static function single const parameter
   test_uut("my_func;1" "my_func(1)")
+  ## stati function multiple const parameters
   test_uut("my_func;1;2" "my_func(1,2)")
+  ## static function 3 const parameters
   test_uut("my_func;1;2;3" "my_func(1,2,3)")
 
+  ## static function multiple const arguments, no spread 
   test_uut("my_func;1;2${semicolon_code}3;4" "my_func(1,[2,3],4)") 
+  ## static function non const arguments, no spread 
   test_uut("my_func;my_func${semicolon_code}my_func" "my_func(my_func(my_func()))") 
 
-  ## elipsis
-  test_uut("my_func;1;2;3" "my_func(1,[ 2 , 3]...)")
+  ## static function multiple arguments with spread (ellipsis `...`)
+  test_uut("my_func;1;2;3;4" "my_func(1,[ 2 , 3]...,4)")
+  
 
-  ## dynamic function
+  ## dynamic functions (uses eval to call function)
 
+  ## dynamic function no arguments
   test_uut("my_func" "$thefunc()")
+  ## dynamic function single const argument
   test_uut("my_func;1" "$thefunc(1)")
+  ## dynamic function multiple const arguments, no spread
   test_uut("my_func;1${semicolon_code}2;3${semicolon_code}4" "$thefunc([1,2],[3,4])")
+
+  ## unqoted string arguments
+  test_uut("my_func;hello" "$thefunc(hello)")
+  test_uut("my_func;helloworld" "$thefunc(hello world)")
+  test_uut("my_func;hello;world" "$thefunc(hello,world)")
+  test_uut("my_func;hello world" $thefunc( "hello world" ))
+  test_uut("my_func;hello world;hello person" $thefunc( "hello world" , "hello person" ))
+  
+  ## single  quoted string arguments
+  test_uut("my_func;\\" "$thefunc('\\')")
+  test_uut("my_func;\\" $thefunc('\\'))
+
+
+
 
 endfunction()

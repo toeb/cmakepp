@@ -20,11 +20,22 @@
       arguments_cmake_string(1 \${ARGC})
       ans(arguments)
 
+      set(scope)
+      if("\${expected}" MATCHES "^<(.+)>(.*)$")
+        set(scope \${CMAKE_MATCH_1})
+        set(expected \${CMAKE_MATCH_2})
+      endif()
+
+      obj("\${scope}")
+      ans(scope)
+
+
       address_get(${predefined_address})
       ans(predefined_args)
 
       set(__ans)
-      eval("${uut}(\${predefined_args} \${arguments})")
+      set(___code "${uut}(\${predefined_args} \${arguments})")
+      eval_ref(___code)
       ans(result)
 
       data("\${expected}")
@@ -39,6 +50,20 @@
         json_print(\${expected})  
       endif()
       assert(res MESSAGE "values do not match")
+
+      set(test_scope \${scope} PARENT_SCOPE)
+      map_keys(\${scope})
+      ans(keys)
+      foreach(key \${keys})
+        map_tryget(\${scope} "\${key}")
+        ans(current_value)
+
+        map_match("\${\${key}}" "\${current_value}")
+        ans(success)
+
+        assert(success MESSAGE "scope var '\${key}' (\${\${key}}) does not match expected value '\${current_value}'")
+      endforeach()
+
       return_ref(result)
     )
     return()

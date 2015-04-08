@@ -1,34 +1,75 @@
 ## interpret an lvalue
 ## needs a rvalue
 function(interpret_scope_lvalue tokens rvalue)
-  list_select_property(tokens type)
-  ans(types)
-
-  if(NOT "${types}" MATCHES "^dollar;(unquoted|paren)$")
-    return()
+  if(NOT rvalue)
+    throw("missing rvalue" --function interpret_scope_lvalue)
+  endif()
+  if(NOT tokens)
+    throw("missing tokens" --function interpret_scope_lvalue)
   endif()
 
-  list(GET tokens 1 lvalue)
-
-  interpret_literal("${lvalue}")
-  ans(lvalue)
-
-  map_tryget("${rvalue}" argument)
-  ans(rvalue_argument)
+  list(GET tokens 0 dollar_token)
+  map_tryget("${dollar_token}" type)
+  ans(dollar_token_type)
 
 
-  map_tryget("${lvalue}" argument)
-  ans(argument)
+  if(NOT "${dollar_token_type}" STREQUAL "dollar")
+    throw("first token is not the dollar token" --function interpret_scope_lvalue)
+  endif()
 
-  set(code "set(${argument} ${rvalue_argument} PARENT_SCOPE)\n")
+  set(identifier_token ${tokens})
+  list(REMOVE_AT identifier_token 0)
+  list(LENGTH identifier_token identifier_token_count)
+  if(NOT "${identifier_token_count}" EQUAL 1)
+    throw("expected one identifier token got ${identifier_token_count}" --function interpret_scope_lvalue)
+  endif()
 
-
-  map_new()
-  ans(ast)
-  map_set(${ast} type lvalue)
-  map_set(${ast} argument "${rvalue_argument}")
-  map_set(${ast} code "${code}")
-  map_set(${ast} tokens ${tokens})
   
-  return(${ast})
+  map_tryget("${identifier_token}" type)
+  ans(identifier_token_type)
+
+  interpret_rvalue("${identifier_token}")
+  rethrow()
+  ans(identifier)
+
+  map_tryget("${identifier}" expression_type)
+  ans(expression_type)
+  if(NOT "${expression_type}" MATCHES "(literal)|(paren)|(bracket)")
+    throw("invalid identifier : expected a rvalue literal|paren|bracket but got ${expression_type}")
+  endif()
+
+  map_tryget("${identifier}" value)
+  ans(identifier_value)
+
+  map_tryget("${rvalue}" value)
+  ans(value)
+
+
+  ## set both in scope and in parent scope
+  set(code "set(\"${identifier_value}\" ${value} PARENT_SCOPE)\nset(\"${identifier_value}\" ${value})\n")
+
+  # tokens 
+  # expression_type 
+  # value_type 
+  # ref 
+  # code
+  # value 
+  # const 
+  # pure_value
+  # children
+
+
+  ast_new(
+    "${tokens}"
+    "scope_lvalue"
+    "any"
+    "${identifier_value}"
+    "${code}"
+    "\${${identifier_value}}"
+    "false"
+    "false"
+    "${identifier}"
+    )
+  ans(ast)
+  return_ref(ast)
 endfunction()

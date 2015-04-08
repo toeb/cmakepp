@@ -1,72 +1,80 @@
-
-
 function(interpret_assign tokens)
-  list(REVERSE tokens)
-  set(rhs)
-  set(lhs)
+  set(rhs_tokens)
+  set(lhs_tokens ${tokens})
   set(equals_token)
-  foreach(token ${tokens})
+
+  while(lhs_tokens)
+    list_pop_back(lhs_tokens)
+    ans(token)
     map_tryget("${token}" type)
-    ans(type)
-    if(equals_token)
-      list(APPEND lhs ${token})
-    elseif("${type}" STREQUAL "equals")
-      set(equals_token ${token})
-    else()
-      list(APPEND rhs ${token})
+    ans(token_type)
+    if("${token_type}" STREQUAL "equals")
+      set(equals_token "${token}")
+      break()
     endif()
-  endforeach()
-  if(NOT rhs)
-    return()
-  endif()
-  if(NOT lhs)
-    return()
-  endif()
-  list(REVERSE rhs)
-  list(REVERSE lhs)
+    list(APPEND rhs_tokens ${token})
+  endwhile()
 
-  interpret_rvalue("${rhs}")
-  ans(rvalue)
-
-  if(NOT rvalue)
-    return()
+  if(NOT equals_token)
+    throw("missing equals token" --function interpret_assign)
   endif()
 
-
-  map_tryget("${rvalue}" argument)
-  ans(rvalue_argument)
-
-  interpret_lvalue("${lhs}" "${rvalue}")
-  ans(lvalue)
-
-  if(NOT lvalue)
-    return()
+  if(NOT lhs_tokens)
+    throw("missing left hand side" --function interpret_assign)
   endif()
 
-  map_tryget("${rvalue}" code)
-  ans(rvalue_code)
+  if(NOT rhs_tokens)
+    throw("missing right hand side" --function interpret_assign)
+  endif()
 
-  map_tryget("${lvalue}" id)
-  ans(id)
- 
-  map_tryget("${lvalue}" code)
-  ans(lvalue_code)
-
-  map_tryget("${lvalue}" argument)
-  ans(lvalue_argument)
-
-  set(code "${rvalue_code}${lvalue_code}")    
-  set(argument "${lvalue_argument}")
+  interpret_rvalue("${rhs_tokens}")
+  rethrow()
+  ans(rhs)
 
 
-  map_new()
+  interpret_lvalue("${lhs_tokens}" "${rhs}")
+  rethrow()
+  ans(lhs)
+
+
+
+  map_tryget("${lhs}" value)
+  ans(value)
+
+  map_tryget("${lhs}" ref)
+  ans(ref)
+
+  map_tryget("${lhs}" value_type)
+  ans(value_type)
+
+  map_tryget("${lhs}" const)
+  ans(const)
+
+  # tokens 
+  # expression_type 
+  # value_type 
+  # ref 
+  # code
+  # value 
+  # const 
+  # pure_value
+  # children
+
+  ast_new(
+    "${tokens}"
+    "assign"
+    "${value_type}"
+    "${ref}"
+    "${code}"
+    "${value}"
+    "${const}"
+    "false"
+    "${rhs};${lhs}"
+    )
   ans(ast)
-  map_set(${ast} type assign)
-  map_set(${ast} argument "${argument}")
-  map_set(${ast} code "${code}")
+
 
   return_ref(ast)
-
 endfunction()
 
 
