@@ -1,7 +1,7 @@
 function(test_execute_glob)
   timer_start(test_run)
   cd("${CMAKE_CURRENT_BINARY_DIR}")
-  glob(${ARGN})
+  glob_ignore(${ARGN})
   ans(test_files)
   list(LENGTH test_files len)
   ## sort the test files so that they are always executed in the same order
