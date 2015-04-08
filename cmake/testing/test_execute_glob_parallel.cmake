@@ -8,7 +8,7 @@ function(test_execute_glob_parallel)
 
   ## get all test files 
   cd("${CMAKE_CURRENT_BINARY_DIR}")
-  glob("${args}")
+  glob_ignore("${args}")
   ans(test_files)
 
 
