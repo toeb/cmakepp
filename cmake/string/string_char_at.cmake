@@ -14,7 +14,7 @@ function(string_char_at input index)
   string_normalize_index("${input}" ${index})
   ans(index)
   
-  if("${index}" LESS 0 OR ${index} EQUAL "${len}" OR ${index} GREATER ${len}) 
+  if(${index} LESS 0 OR ${index} EQUAL ${len} OR ${index} GREATER ${len}) 
     return()
   endif()
   
