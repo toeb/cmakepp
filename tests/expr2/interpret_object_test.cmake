@@ -4,7 +4,7 @@ function(test)
   
   set(exception "{'__$type__':'exception'}")
 
-  define_test_function2(test_uut eval_expr2 "interpret_object" "--ast")
+  define_test_function2(test_uut expr "interpret_object" "--ast")
   ## no tokens
   test_uut("${exception}") 
   ## too many tokens 
@@ -22,7 +22,7 @@ function(test)
 
 
   ## runtime tests
-  define_test_function2(test_uut eval_expr2 "interpret_object" "")
+  define_test_function2(test_uut expr "interpret_object" "")
 
   ## empty object
   test_uut("{}" "{}")

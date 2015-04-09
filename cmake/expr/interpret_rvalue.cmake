@@ -1,5 +1,5 @@
 
-
+## maybe use some kind of quick heuristic?
 function(interpret_rvalue tokens)
   interpret_paren("${tokens}")
   ans(ast)
@@ -24,7 +24,13 @@ function(interpret_rvalue tokens)
     return(${ast})
   endif()
 
-  interpret_literals("${tokens}")
+  interpret_literal("${tokens}")
+  ans(ast)
+  if(ast)
+    return(${ast})
+  endif()
+
+  interpret_interpolation("${tokens}")
   ans(ast)
   if(ast)
     return(${ast})
@@ -48,9 +54,24 @@ function(interpret_rvalue tokens)
     return(${ast})
   endif()
 
+
+
+  interpret_object("${tokens}")
+  ans(ast)
+  if(ast)
+    return(${ast})
+  endif()
+
+
   ## needs to come before navigation rvalue because $ needs to bind
   ## stronger
   interpret_scope_rvalue("${tokens}")
+  ans(ast)
+  if(ast)
+    return(${ast})
+  endif()
+
+  interpret_indexation("${tokens}")
   ans(ast)
   if(ast)
     return(${ast})
@@ -65,11 +86,6 @@ function(interpret_rvalue tokens)
 
 
 
-  interpret_object("${tokens}")
-  ans(ast)
-  if(ast)
-    return(${ast})
-  endif()
 
   throw("could not interpret rvalue" --function interpret_rvalue )
 endfunction()

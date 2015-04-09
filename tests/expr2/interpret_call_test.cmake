@@ -1,9 +1,8 @@
-
-function(test
-
+function(test)
 
 
-  
+
+
   set(exception "{'__$type__':'exception'}")
 
    function(my_func)
@@ -20,7 +19,7 @@ function(test
   ##### runtime tests #####
 
   ## interpret call tests
-  define_test_function2(test_uut eval_expr2 interpret_call "")
+  define_test_function2(test_uut expr interpret_call "")
 
 
   test_uut("${exception}")  # no token

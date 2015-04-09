@@ -7,7 +7,7 @@ function(test)
 
 
 
-  define_test_function2(test_uut eval_expr2 interpret_paren "--ast")
+  define_test_function2(test_uut expr interpret_paren "--ast")
 
 
   ## too few tokens

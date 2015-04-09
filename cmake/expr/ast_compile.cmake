@@ -11,7 +11,8 @@ function(ast_compile ast)
     return()
   endif()
 
-  set(code)
+  map_tryget("${ast}" pre_code)
+  ans(code)
 
   map_tryget("${ast}" children)
   ans(children)

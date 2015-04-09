@@ -49,12 +49,14 @@ function(interpret_ellipsis tokens)
     ellipsis
     "${rvalue_value_type}"
     "${rvalue_ref}"
-    ""
+    ""                      # code
     "${rvalue_value}"
     "${rvalue_const}"
     "${rvalue_pure_value}"
     "${rvalue}"
     )
+
+
   ans(ast)
   return_ref(ast)
 endfunction()

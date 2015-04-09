@@ -1,6 +1,6 @@
-function(interpret_literals tokens)
+function(interpret_interpolation tokens)
   if(NOT tokens)
-    throw("expected at least one token" --function interpret_literals)
+    throw("expected at least one token" --function interpret_interpolation)
   endif()
   set(code)
 
@@ -12,7 +12,7 @@ function(interpret_literals tokens)
     if(NOT literal)
       ## something other than a literal 
       ## causes this not to be a literal
-      throw("tokens contained an invalid token: {token}" --function interpret_literals)
+      throw("tokens contained an invalid token: {token}" --function interpret_interpolation)
     endif()
 
     #print_vars(literal.type literal.value literal.code)
