@@ -5,7 +5,7 @@ function(test)
 
   ## scope rvalue
 
-  define_test_function2(test_uut expr interpret_scope_rvalue "")
+  define_test_function2(test_uut expr_eval interpret_scope_rvalue "")
 
   set(the_var 123)
 

@@ -23,7 +23,7 @@ function(test)
   }")
   ans(a)
   
-  define_test_function2(test_uut expr interpret_navigation_rvalue "")
+  define_test_function2(test_uut expr_eval interpret_navigation_rvalue "")
   
   test_uut("1" "$a.b") 
   test_uut("${exception}")

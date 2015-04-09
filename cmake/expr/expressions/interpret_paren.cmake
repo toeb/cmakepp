@@ -1,5 +1,3 @@
-
-
 function(interpret_paren paren_token)
   list(LENGTH paren_token count)
   if(NOT "${count}" EQUAL 1)

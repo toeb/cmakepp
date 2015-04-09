@@ -4,7 +4,7 @@ function(test)
   ##### compile time tests ######
 
 
-  define_test_function2(test_uut expr interpret_list "--ast")
+  define_test_function2(test_uut expr_parse interpret_list "")
 
   # invalid too few tokens
   test_uut("${exception}")

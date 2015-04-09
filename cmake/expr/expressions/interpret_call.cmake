@@ -3,10 +3,9 @@ function(interpret_call tokens)
   if(NOT tokens)
     throw("no tokens specified" --function interpret_call)
   endif()
-  
+
   list_pop_back(tokens)
   ans(paren)
-
 
   map_tryget("${paren}" type)
   ans(type)
@@ -38,6 +37,7 @@ function(interpret_call tokens)
 
   map_tryget(${paren} tokens)
   ans(parameter_tokens)
+
 
   interpret_elements("${parameter_tokens}" "comma" "interpret_ellipsis;interpret_reference_parameter;interpret_expression")
   ans(parameter_asts) 

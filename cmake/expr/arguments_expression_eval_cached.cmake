@@ -1,0 +1,8 @@
+macro(arguments_expression_eval_cached type arguments argn start end)
+  arguments_expression_compile_cached("${type}" "${arguments}" "${argn}" "${start}" "${end}")  
+  if(__ans)
+    map_tryget("${__ans}" macro_identifier)
+    set(__ans "${__ans}()")
+    eval_ref(__ans)
+  endif()
+endmacro()

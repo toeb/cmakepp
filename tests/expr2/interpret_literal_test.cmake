@@ -5,7 +5,7 @@ function(test)
 
   ##### compile time tests ######
 
-  define_test_function2(test_uut expr interpret_literal "--ast")
+  define_test_function2(test_uut expr_parse interpret_literal "")
 
   ## 1 token required
   test_uut("${exception}") 
@@ -37,7 +37,7 @@ function(test)
 
   #event_addhandler(on_exception "[](ex) print_vars(ex)")
 
-  define_test_function2(test_uut expr interpret_literal "")
+  define_test_function2(test_uut expr_eval interpret_literal "")
 
   ## literal test
   test_uut("${exception}")

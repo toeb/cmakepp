@@ -1,9 +1,13 @@
 function(test)
 
-set(exception "{'__$type__':'exception'}")
+
+  
+  set(exception "{'__$type__':'exception'}")
+
+
 
   ##### compile time tests ######
-  define_test_function2(test_uut expr interpret_interpolation "--ast")
+  define_test_function2(test_uut expr_parse interpret_interpolation "")
   ## no token
   test_uut("${exception}") 
   ## single unquoted empty string
@@ -18,7 +22,7 @@ set(exception "{'__$type__':'exception'}")
 
   ##### runtime tests #####
 
-  define_test_function2(test_uut expr interpret_interpolation "")
+  define_test_function2(test_uut expr_eval interpret_interpolation "")
 
   ## literals test
 

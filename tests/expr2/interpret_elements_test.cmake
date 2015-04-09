@@ -5,7 +5,7 @@ set(exception "{'__$type__':'exception'}")
   ##### compile time tests ######
 
   ##  interpret elements
-  define_test_function2(test_uut expr interpret_elements "--ast;comma;interpret_interpolation")
+  define_test_function2(test_uut expr_parse interpret_elements "comma;interpret_interpolation")
 
 
   ## invalid token

@@ -1,5 +1,5 @@
 function(interpret_elements tokens separator_type element_types)
-
+    
   
   ## initialize variables
   set(elements)         # stores all single elements

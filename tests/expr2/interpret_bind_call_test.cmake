@@ -5,7 +5,7 @@ function(test)
 
 
   ## compile time test
-  define_test_function2(test_uut expr "interpret_bind_call" "--ast")
+  define_test_function2(test_uut expr_parse "interpret_bind_call" "--ast")
 
   ## no tokens
   test_uut("${exception}") 
@@ -32,7 +32,7 @@ function(test)
   ## valid  
 
   ## run time test
-  define_test_function2(test_uut expr "interpret_bind_call" "")
+  define_test_function2(test_uut expr_eval "interpret_bind_call" "")
   test_uut(3 "abc::string_length()")
 
 

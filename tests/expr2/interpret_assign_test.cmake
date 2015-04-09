@@ -3,29 +3,11 @@ function(test)
   set(exception "{'__$type__':'exception'}")
 
 
-  expr(interpret_literal "--ast" "a")
-  ans(rvalue)
-
-  define_test_function2(test_uut expr "interpret_scope_lvalue" "--ast;${rvalue}")
- # event_addhandler(on_exception "[](ex) print_vars(ex)")
-
-  ## no tokens
-  test_uut("${exception}")
-  ## not dollar token
-  test_uut("${exception}" a)
-  ## no identifier token 
-  test_uut("${exception}" $)
-  ## invalid identifier token
-  test_uut("${exception}" "$,")
-  ## valid
-  test_uut("{expression_type:'scope_lvalue'}" "$b")
-
   
 
-  return()
 
-
-  define_test_function2(test_uut expr "interpret_assign" "--print-code")
+return()
+  define_test_function2(test_uut expr_eval "interpret_assign" "")
  # event_addhandler(on_exception "[](ex) print_vars(ex)")
   
   test_uut("<{b:1}>1" "$['b'] = 1")

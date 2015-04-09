@@ -1,5 +1,8 @@
 function(test)
 
+
+return()
+
   ## runtime tests
   obj("{
     a:{

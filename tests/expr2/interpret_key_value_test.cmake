@@ -1,7 +1,7 @@
 function(test)
   set(exception "{'__$type__':'exception'}")
   
-  define_test_function2(test_uut expr "interpret_key_value" "--ast")
+  define_test_function2(test_uut expr_parse "interpret_key_value" "")
 
   ## no tokens
   test_uut("${exception}") 

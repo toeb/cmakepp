@@ -19,7 +19,7 @@ function(test)
   ##### runtime tests #####
 
   ## interpret call tests
-  define_test_function2(test_uut expr interpret_call "")
+  define_test_function2(test_uut expr_eval interpret_call "")
 
 
   test_uut("${exception}")  # no token
@@ -31,10 +31,10 @@ function(test)
 
   ## static functions (calls the function directly)
 
-  ## static function empty parameters
-  test_uut("my_func" "my_func()")
   ## static function single const parameter
   test_uut("my_func;1" "my_func(1)")
+  ## static function empty parameters
+  test_uut("my_func" "my_func()")  
   ## stati function multiple const parameters
   test_uut("my_func;1;2" "my_func(1,2)")
   ## static function 3 const parameters

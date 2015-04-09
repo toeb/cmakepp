@@ -6,7 +6,7 @@ function(test)
 
 
 
-  define_test_function2(test_uut expr interpret_ellipsis "--ast")
+  define_test_function2(test_uut expr_parse interpret_ellipsis "")
 
   ## no tokens fails
   test_uut("${exception}")

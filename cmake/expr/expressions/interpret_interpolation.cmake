@@ -3,9 +3,9 @@ function(interpret_interpolation tokens)
     throw("expected at least one token" --function interpret_interpolation)
   endif()
   set(code)
-
   set(literals)
   set(value)
+
   foreach(token ${tokens})
     interpret_literal("${token}")
     ans(literal)
@@ -53,7 +53,6 @@ function(interpret_interpolation tokens)
     "${literals}"       # children
     )
   ans(ast)
-
   return_ref(ast)
 endfunction()
 
