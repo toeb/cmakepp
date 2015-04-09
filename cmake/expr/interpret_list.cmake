@@ -51,9 +51,8 @@ function(interpret_list list_token)
     "${code}" # code
     "${value}"
     "${const}"
-    "true"
+    "false"      # pure_value
     "${elements}"
-
     )
   ans(ast)
   return_ref(ast)
