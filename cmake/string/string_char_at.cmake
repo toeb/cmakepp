@@ -5,18 +5,20 @@
 ##
 ## *Examples*
 ## ```cmake
-## string_char_at(3 "abcdefg")  # => "d"
-## string_char_at(-3 "abcdefg") # => "f"
+## string_char_at("abcdefg" 3)  # => "d"
+## string_char_at("abcdefg" -3) # => "f"
 ## ```
 ##
-function(string_char_at index input)
+function(string_char_at input index)
   string(LENGTH "${input}" len)
   string_normalize_index("${input}" ${index})
   ans(index)
-  if("${index}" LESS 0 OR ${index} EQUAL "${len}" OR ${index} GREATER ${len}) 
+  
+  if(${index} LESS 0 OR ${index} EQUAL ${len} OR ${index} GREATER ${len}) 
     return()
   endif()
+  
   string(SUBSTRING "${input}" ${index} 1 res)
+  
   return_ref(res)
-
 endfunction()
