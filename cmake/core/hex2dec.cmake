@@ -26,7 +26,7 @@ function(hex2dec str)
     math(EXPR len "${len} - 1")
     set(result 0)
     foreach(i RANGE 0 ${len})
-      string_char_at("${i}" "${str}")
+      string_char_at("${str}" "${i}")
       ans(c)
       
 
