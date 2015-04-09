@@ -1,0 +1,5 @@
+function(expr)
+  set(argn "${ARGN}")
+  arguments_expression_eval_cached("interpret_expression" "" argn 0 ${ARGC})
+  rethrow()
+endfunction()

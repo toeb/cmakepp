@@ -18,6 +18,7 @@ macro(arguments_expression_compile_cached type arguments argn start end)
         macro(${identifier})
           ${code}
           set(__ans ${value} PARENT_SCOPE)
+          set(__ans ${value})
         endmacro()
       ")
       eval("${macro}")

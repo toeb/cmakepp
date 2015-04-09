@@ -11,7 +11,7 @@ function(path_vary path)
   set(rnd)
   while(true)
     set(path "${base}/${name}${rnd}${ext}")
-
+    
     if(NOT EXISTS "${path}")
       return("${path}")
     endif()

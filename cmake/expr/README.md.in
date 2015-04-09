@@ -2,6 +2,21 @@
 
 _This Section is currently just a draft_
 
+<%
+function(markdown_expr_example str)
+    eval("expr(${str})")
+    ans(res)
+    is_address("${res}")
+    ans(is_address)
+    if(is_address)
+        json("${res}")
+        ans(res)
+    else()
+        set(res "`${res}`")
+    endif()
+    template_out("expr(${str}) => ${res}")
+endfunction()
+%>
 ## Motivation
 
 CMake's syntax is not sexy. It does not allow the developer rudimentary constructs which almost all other languages have.  But because CMake's language is astonishingly flexible I was able to create a lexer and parser and interpreter for a custom 100 % compatible syntax which (once "JIT compiled") is also fast.
@@ -12,9 +27,10 @@ CMake's syntax is not sexy. It does not allow the developer rudimentary construc
 The easiest way to introduce the new syntax and its usefulness is by example. So here it is (Note that these example are actually executed. Their syntax is correct)
 
 ```cmake
-
+<%>>markdown_expr_example "{a:a}"%>
+@template_out("${asd}")
 # use expr to compile and evaluate an expression:
-
+@markdown_expr_example("ab c" b c)
 ## set a to 1
 expr($a = 1)
 assert("${a}" EQUAL 1)

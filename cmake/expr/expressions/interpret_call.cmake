@@ -1,43 +1,36 @@
 
 function(interpret_call tokens)
-  if(NOT tokens)
+  set(callable_tokens ${tokens})
+  ## no tokens
+  if(NOT callable_tokens)
     throw("no tokens specified" --function interpret_call)
   endif()
 
-  list_pop_back(tokens)
-  ans(paren)
 
-  map_tryget("${paren}" type)
+  list_pop_back(callable_tokens)
+  ans(paren_token)
+
+  ## call must end with a invocation "("  ")"
+  map_tryget("${paren_token}" type)
   ans(type)
-
   if(NOT "${type}" STREQUAL "paren")
     throw("no value for left hand side" --function interpret_call)
   endif()
 
-
-  if(NOT tokens)
+  ## call must have callable
+  if(NOT callable_tokens)
     throw("no value for left hand side" --function interpret_call)
   endif()
 
-
-
-  interpret_rvalue("${tokens}")
+  interpret_rvalue("${callable_tokens}")
   ans(callable_ast)
   if(NOT callable_ast)
     throw("could not parse rvalue" --function interpret_call)
   endif()
 
-
-
-  map_tryget("${callable_ast}" value)
-  ans(rvalue_value)
-
-  map_tryget("${callable_ast}" const)
-  ans(rvalue_is_const)
-
-  map_tryget(${paren} tokens)
+  ## get parameters
+  map_tryget(${paren_token} tokens)
   ans(parameter_tokens)
-
 
   interpret_elements("${parameter_tokens}" "comma" "interpret_ellipsis;interpret_reference_parameter;interpret_expression")
   ans(parameter_asts) 

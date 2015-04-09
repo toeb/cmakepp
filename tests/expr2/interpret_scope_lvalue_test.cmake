@@ -1,8 +1,6 @@
 function(test)
 
-
   set(exception "{'__$type__':'exception'}")
-
 
   expr_parse(interpret_literal "" "a")
   ans(rvalue)
@@ -20,8 +18,5 @@ function(test)
   test_uut("${exception}" "$,")
   ## valid
   test_uut("{expression_type:'scope_lvalue'}" "$b")
-
-
-  
-  
+   
 endfunction()
