@@ -1,14 +1,14 @@
-## `(<index:<int>> <str:<string>> <char:<string>>)-><string>`
+## `(<str:<string>> <index:<int>> <char:<string>>)-><string>`
 ##
-## Sets the character at the specified position to the input 'char'. 
+## Sets the character at the specified position (index) to the input 'char'. 
 ## Indexing of strings starts at 0. Indices less than -1 are translated into "length - |index|"
 ## 
 ## **Examples**
 ##  set(str "example")
-##  string_set_char_at(0 "${str}" "E") # => "Example"
+##  string_set_char_at("${str}" 0 "E") # => "Example"
 ## 
 ##
-function(string_set_char_at index input char)
+function(string_char_at_set input index char)
   string(LENGTH "${input}" len)
   string_normalize_index("${input}" ${index})
   ans(index)
