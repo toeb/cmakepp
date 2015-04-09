@@ -33,6 +33,9 @@ function(interpret_paren paren_token)
   map_tryget("${inner_expression}" pure_value)
   ans(pure_value)
 
+  map_tryget("${inner_expression}" this)
+  ans(this)
+
   ast_new(
     "${paren_token}"
     "paren"
@@ -45,6 +48,7 @@ function(interpret_paren paren_token)
     "${inner_expression}" # children
     )
   ans(ast)
+  map_set("${ast}" this "${this}")
 
   return_ref(ast)
 

@@ -23,74 +23,33 @@ function(interpret_call tokens)
 
 
   interpret_rvalue("${tokens}")
-  ans(rvalue)
-  if(NOT rvalue)
+  ans(callable_ast)
+  if(NOT callable_ast)
     throw("could not parse rvalue" --function interpret_call)
   endif()
 
 
 
-  map_tryget("${rvalue}" value)
+  map_tryget("${callable_ast}" value)
   ans(rvalue_value)
 
-  map_tryget("${rvalue}" const)
+  map_tryget("${callable_ast}" const)
   ans(rvalue_is_const)
 
   map_tryget(${paren} tokens)
-  ans(call_tokens)
+  ans(parameter_tokens)
 
-  interpret_elements("${call_tokens}" "comma" "interpret_ellipsis;interpret_expression")
-  ans(parameters) 
+  interpret_elements("${parameter_tokens}" "comma" "interpret_ellipsis;interpret_reference_parameter;interpret_expression")
+  ans(parameter_asts) 
 
-  set(parameters_string)
-  foreach(parameter ${parameters})
-
-    map_tryget("${parameter}" expression_type)
-    ans(parameter_expression_type)
-    #print_Vars(parameter.expression_type parameter.value)
-    if("${parameter_expression_type}" STREQUAL "ellipsis")
-      map_tryget("${parameter}" children)
-      ans(parameter)
-      map_tryget("${parameter}" value)
-      ans(parameter_value)
-      set(parameters_string "${parameters_string} ${parameter_value}")
-    else()
-      map_tryget("${parameter}" value)
-      ans(parameter_value)
-      set(parameters_string "${parameters_string} \"${parameter_value}\"")
-    endif()   
-  endforeach()
-
-  ## remove initial space
-  if(parameters)
-    string(SUBSTRING "${parameters_string}" 1 -1 parameters_string)
-  endif()
-
-
+  ## create code for calling the function
   next_id()
   ans(ref)
+  interpret_call_create_code("${ref}" "${callable_ast}" "${parameter_asts}")
+  ans(code)
 
-  if(rvalue_is_const)
-    set(code "${rvalue_value}(${parameters_string})\nans(${ref})\n")
-  else()
 
-function(cmake_string_escape3 str)
-  if("${str}" MATCHES "[ \"\\(\\)#\\^\t\r\n\\]")
-    ## encoded list encode cmake string...
-    #string(REPLACE "\\" "\\\\" str "${str}")
-    string(REGEX REPLACE "([ \"\\(\\)#\\^])" "\\\\\\1" str "${str}")
-    string(REPLACE "\t" "\\t" str "${str}")
-    string(REPLACE "\n" "\\n" str "${str}")
-    string(REPLACE "\r" "\\r" str "${str}")  
-  endif()
-  return_ref(str)
-endfunction()
-
-    cmake_string_escape3("${parameters_string}")
-    ans(parameters_string)
-   # _message("${parameters_string}")
-    set(code "eval(\"${rvalue_value}(${parameters_string})\")\nans(${ref})\n")
-  endif()
+  ## return the ast
   ast_new(
     "${tokens}"
     call
@@ -100,7 +59,7 @@ endfunction()
     "\${${ref}}"
     false
     false
-    "${rvalue};${parameters}"
+    "${rvalue};${parameter_asts}"
     )
   ans(ast)
 
@@ -109,3 +68,5 @@ endfunction()
 
 
 endfunction()
+
+

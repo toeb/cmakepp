@@ -19,6 +19,7 @@ function(interpret_ellipsis tokens)
   if(NOT tokens)
     throw("no left hand rvalue")
   endif()
+  
 
   interpret_rvalue("${tokens}")
   rethrow()

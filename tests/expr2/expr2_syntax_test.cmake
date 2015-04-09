@@ -2,43 +2,16 @@ function(test)
   set(exception "{'__$type__':'exception'}")
   ##### runtime tests #####
 
+  return()
 
-
-  function(interpret_range tokens)
-    list_select_property(tokens type)
-    ans(token_types)
-    list_remove(token_types number dollar colon minus comma)
-    if(token_types)
-      throw("unexpected token types" --function interpret_range)
-    endif()
-
-
-
+  define_test_function2(test_uut eval_expr2 "interpret_rvalue_reference" "--ast")  
     
-    ast_new(
-      "${tokens}"         # tokens
-      "range"             # expression_type
-      ""                  # value_type
-      ""                  # ref
-      ""                  # code
-      ""                  # value
-      ""                  # const
-      ""                  # pure_value
-      ""                  # children
-      )
-    ans(ast)
-
-
-    return()
-    throw("not implemented")
-
-  endfunction()
-
-  define_test_function2(test_uut eval_expr2 "interpret_range" "--ast")
-
-
-
+  ## no tokens
   test_uut("${exception}")
+  ## no reference token
+  test_uut("${exception}" abc)
+
+
 
 
   return()
@@ -59,7 +32,7 @@ function(test)
     map_tryget("${tokens}" tokens)
     ans(inner_tokens)
 
-    interpret_elements("${inner_tokens}" "," "interpret_rvalue")
+    interpret_elements("${inner_tokens}" "comma" "interpret_rvalue")
     ans(elements)
 
     message("elements: ${elements}")
@@ -78,7 +51,7 @@ function(test)
       ""                  # value
       ""                  # const
       ""                  # pure_value
-      ""                  # children
+      "${children}"                  # children
       )
     ans(ast)
     return_ref(ast)
@@ -226,6 +199,48 @@ return()
 
 
 
+
+
+  function(interpret_range tokens)
+    list_select_property(tokens type)
+    ans(token_types)
+    list_remove(token_types number dollar colon minus comma)
+    if(token_types)
+      throw("unexpected token types" --function interpret_range)
+    endif()
+
+
+    
+    
+    ast_new(
+      "${tokens}"         # tokens
+      "range"             # expression_type
+      ""                  # value_type
+      ""                  # ref
+      ""                  # code
+      ""                  # value
+      ""                  # const
+      ""                  # pure_value
+      ""                  # children
+      )
+    ans(ast)
+
+
+    return()
+    throw("not implemented")
+
+  endfunction()
+
+  define_test_function2(test_uut eval_expr2 "interpret_range" "--ast")
+
+
+  ## invlaid token
+  test_uut("${exception}" abc)
+
+#  test_uut("${exception}")
+
+
+  return()
 
 
 

@@ -1,5 +1,6 @@
+
 function(test)
-set(exception "{'__$type__':'exception'}")
+  set(exception "{'__$type__':'exception'}")
 
    function(my_func)
     arguments_encoded_list(0 ${ARGC})

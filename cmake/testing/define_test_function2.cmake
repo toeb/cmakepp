@@ -5,6 +5,8 @@
     arguments_cmake_string(2 ${ARGC})
     ans(predefined_args)
 
+    #list_extract_flag(predefined_args --timer)
+    #ans(timer)
     ## store predefined_args in a ref which is restored 
     ## in function definition
     ## this is necessary because else the args would have to be escaped
@@ -19,6 +21,7 @@
     define_function("${function_name}" (expected)
       arguments_cmake_string(1 \${ARGC})
       ans(arguments)
+
 
       set(scope)
       if("\${expected}" MATCHES "^<(.+)>(.*)$")
@@ -35,6 +38,11 @@
 
       set(__ans)
       set(___code "${uut}(\${predefined_args} \${arguments})")
+      
+      if(use_timer)
+        set(___code "timer_start(t1)\n\${___code}\nans(result)\ntimer_print_elapsed(t1)\nreturn_ref(result)\n")
+      endif()
+      #print_Vars(___code)
       eval_ref(___code)
       ans(result)
 
