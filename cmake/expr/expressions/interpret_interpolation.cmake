@@ -1,3 +1,4 @@
+## parse elements with whitespace/newline as delimiter
 function(interpret_interpolation tokens)
   if(NOT tokens)
     throw("expected at least one token" --function interpret_interpolation)

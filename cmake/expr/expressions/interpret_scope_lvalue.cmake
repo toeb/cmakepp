@@ -1,8 +1,8 @@
 ## interpret an lvalue
 ## needs a rvalue
-function(interpret_scope_lvalue tokens rvalue)
-  if(NOT rvalue)
-    throw("missing rvalue" --function interpret_scope_lvalue)
+function(interpret_scope_lvalue tokens value_ast)
+  if(NOT value_ast)
+    throw("missing value_ast" --function interpret_scope_lvalue)
   endif()
   if(NOT tokens)
     throw("missing tokens" --function interpret_scope_lvalue)
@@ -25,9 +25,6 @@ function(interpret_scope_lvalue tokens rvalue)
   endif()
 
   
-  map_tryget("${identifier_token}" type)
-  ans(identifier_token_type)
-
   interpret_rvalue("${identifier_token}")
   rethrow()
   ans(identifier)
@@ -35,13 +32,13 @@ function(interpret_scope_lvalue tokens rvalue)
   map_tryget("${identifier}" expression_type)
   ans(expression_type)
   if(NOT "${expression_type}" MATCHES "(literal)|(paren)|(bracket)")
-    throw("invalid identifier : expected a rvalue literal|paren|bracket but got ${expression_type}")
+    throw("invalid identifier : expected a literal|paren|bracket as an identifier but got ${expression_type}")
   endif()
 
   map_tryget("${identifier}" value)
   ans(identifier_value)
 
-  map_tryget("${rvalue}" value)
+  map_tryget("${value_ast}" value)
   ans(value)
 
 

@@ -1,74 +1,93 @@
 # CMake Expression Syntax
 
-_This Section is currently just a draft_
+_This Document is currently just a draft_
 
-<%
-function(markdown_expr_example str)
-    eval("expr(${str})")
-    ans(res)
-    is_address("${res}")
-    ans(is_address)
-    if(is_address)
-        json("${res}")
-        ans(res)
-    else()
-        set(res "`${res}`")
-    endif()
-    template_out("expr(${str}) => ${res}")
-endfunction()
-%>
-## Motivation
+@markdown_section(expr_motivation "Motivation")
+
 
 CMake's syntax is not sexy. It does not allow the developer rudimentary constructs which almost all other languages have.  But because CMake's language is astonishingly flexible I was able to create a lexer and parser and interpreter for a custom 100 % compatible syntax which (once "JIT compiled") is also fast.
 
 
-## Example
+@markdown_section(expr_example "Example")
 
-The easiest way to introduce the new syntax and its usefulness is by example. So here it is (Note that these example are actually executed. Their syntax is correct)
+The easiest way to introduce the new syntax and its usefulness is by example. So here it is (Note that these example are actually executed during the generation of this document using my cmake template engine ([link](#)) so the result displayed is actually computed).
 
 ```cmake
-<%>>markdown_expr_example "{a:a}"%>
-@template_out("${asd}")
-# use expr to compile and evaluate an expression:
-@markdown_expr_example("ab c" b c)
-## set a to 1
-expr($a = 1)
-assert("${a}" EQUAL 1)
+# values
+## number
+<%>>markdown_eval expr(1)%> 
 
-## unset a
-expr("$a = null")
-assert(NOT SET a)
+## bool
+<%>>markdown_eval expr(true)%>
+<%>>markdown_eval expr(false)%>
+
+## null
+<%>>markdown_eval expr(null)%>
+
+## single quoted string
+<%>>markdown_eval expr("'hello world'")%> 
+<%>>markdown_eval expr("'null'")%> 
+
+## double quoted string
+<%>>markdown_eval expr("\"hello world\"")%>
+
+## separated string (a string which is a single argument)
+<%>>markdown_eval expr("hello world")%> 
+
+## unquoted
+<%>>markdown_eval expr(hello) %>
+
+## list
+<%>>markdown_eval expr([1,2,3]) %>
+
+## object 
+<%>>markdown_eval expr({first_name:Tobias, 'last_name': "Becker" }) %>
+
+## complex value
+<%>>markdown_eval expr({value:[1,{a:2,b:{c:[3,4,5],d:2}},{}]}) %>
+
+## concatenation 
+<%>>markdown_eval expr(hello world 1 null 2 'null' 3)%>
 
 
-## create an object
-expr($['a'] = { "last_name":Becker, first_name:'Tobias' })
-assertf({a.last_name} STREQUAL "Becker")
-assertf({a.first_name} STREQUAL "Tobias")
+# scope variables
+## variable
+<%>>markdown_eval set(my_var "hello world")
+expr($my_var)%>
 
+## variable scope variable 
+<%>>markdown_eval set(my_var "hello world")
+set(var_name my_var)
+expr($($var_name)) %>
 
-## call a function
-expr(message("hello world")) # prints `hello world`
+## assign scope variable
+<%>>markdown_eval expr($a = 1)
+assert("${a}" EQUAL 1) %>
 
-## call nested functions and assign a variable and print the result a function with first parameter binding
-function(say_my_name)
-    return("TobiAs")
+# function
+<%>>markdown_eval ## test function
+function(my_add lhs rhs)
+    math(EXPR sum "${lhs} + ${rhs}")
+    return("${sum}")
 endfunction()
-expr(message( ($a = say_my_name()::string_to_lower())::string_to_upper())) # prints `TOBIAS` 
-assert("${a}" STREQUAL "tobias")
+## call normal cmake function
+expr(my_add(1,2)) %>
+
+## use function invocation as argument (`f(g(x))`)
+<%>>markdown_eval expr(my_add(my_add(my_add(1,2),3),4))%>
+ 
+## use bind call which inserts the left hand value into a function as the first parameter 
+<%>>markdown_eval expr("hello there this is my new title"::string_to_title())%>
 
 
 ## more examples...
 
-
-
 ```
 
 
+@markdown_section(expr_definition "The Expression Language Definition")
 
-## The Expression Language Definition
-
-I mixed several indices and concepts from different languages which I like.  I am not a professional language designer so some decisions might seem strange but I am actually quite proud of how it turned out:
-
+I mixed several constructs and concepts from different languages which I like - the syntax should be familiar for someone who knows JavaScript and C++.  I am not a professional language designer so some decisions might seem strange however I have tested everything thouroughly.
 
 The examples are not cmake strings. They need to be escaped again in some cases
 ```
@@ -169,7 +188,6 @@ Expression | Token Count | Ast Nodes | Compile Time | Cached Compile Time |  Exe
 
 
 
-
 ## Still Open
 
 * derefernce 
@@ -195,9 +213,6 @@ Expression | Token Count | Ast Nodes | Compile Time | Cached Compile Time |  Exe
     - any
         + `??` null coalescing operator
     
-
-
-## Known Issues
 
 
 
