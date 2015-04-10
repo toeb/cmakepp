@@ -84,6 +84,49 @@ expr("hello there this is my new title"::string_to_title()) # => `Hello There Th
 
 ```
 
+## <a name="expr_functions"></a> Functions and Datatypes
+
+I provide the following functions for you to interact with `expr`.  
+
+
+
+* [expr](#expr)
+* [expr_eval](#expr_eval)
+* [expr_parse](#expr_parse)
+
+## <a name="expr"></a> `expr`
+
+ `(<expression>)-><any>`
+
+ parses, compiles and evaluates the specified expression. The compilation result
+ is cached (per cmake run)
+
+
+
+
+
+## <a name="expr_eval"></a> `expr_eval`
+
+ `(<expression type> <arguments:<any>...> <expression>)-><any> 
+
+ evaluets the specified expression using as the type of expression 
+ specified.  also passes allong arguments to the parser
+
+
+
+
+## <a name="expr_parse"></a> `expr_parse`
+
+ `(<expression type> <arguments:<any...>> <expression>)-><expr ast>`
+
+
+ parsers and caches the expression. returns the AST for the specified
+ expression.  See `ast_new`
+
+
+
+
+
 
 ## <a name="expr_definition"></a> The Expression Language Definition
 
@@ -215,7 +258,6 @@ Expression | Token Count | Ast Nodes | Compile Time | Cached Compile Time |  Exe
     
 
 
-## Known Issues
 
 
 

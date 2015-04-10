@@ -84,6 +84,14 @@ expr(my_add(1,2)) %>
 
 ```
 
+@markdown_section(expr_functions "Functions and Datatypes")
+
+I provide the following functions for you to interact with `expr`.  
+<% set(function_files expr.cmake expr_eval.cmake expr_parse.cmake) %>
+
+@markdown_template_function_list(${function_files})
+
+@markdown_template_function_descriptions(${function_files})
 
 @markdown_section(expr_definition "The Expression Language Definition")
 
@@ -213,6 +221,8 @@ Expression | Token Count | Ast Nodes | Compile Time | Cached Compile Time |  Exe
     - any
         + `??` null coalescing operator
     
+
+
 
 
 
