@@ -79,6 +79,12 @@ expr(my_add(1,2)) %>
 ## use bind call which inserts the left hand value into a function as the first parameter 
 <%>>markdown_eval expr("hello there this is my new title"::string_to_title())%>
 
+## combine all the things!
+
+ expr(
+    $func = 
+
+    )
 
 ## more examples...
 
