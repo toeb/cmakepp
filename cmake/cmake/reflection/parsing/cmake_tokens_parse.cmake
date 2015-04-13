@@ -26,8 +26,8 @@ function(cmake_tokens_parse code)
 
   regex_cmake()
 
-  set(line_counter 0)
-  set(column_counter 0)
+  set(line_counter 1)
+  set(column_counter 1)
   set(nestings)
   set(previous)
   set(tokens)

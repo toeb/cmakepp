@@ -48,6 +48,9 @@ function(cmake_invocation_filter_token_range range)
     if(reverse)
       set(end)
     endif()
+    
+    map_tryget("${invocation_token}" line)
+    ans(line)
     cmake_token_range_filter("${invocation_token};${end}" type STREQUAL "nesting" --take 1)
     ans(arguments_begin_token)
 
@@ -59,6 +62,7 @@ function(cmake_invocation_filter_token_range range)
     cmake_token_range_filter_values("${invocation_token};${arguments_after_end_token}" 
       type MATCHES "(command_invocation)|(nesting)|(argument)")
     ans(invocation)
+
 
 
     ## get invocation_identifier and invocation_arguments

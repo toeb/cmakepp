@@ -93,7 +93,15 @@ expr(my_add(1,2)) %>
 @markdown_section(expr_functions "Functions and Datatypes")
 
 I provide the following functions for you to interact with `expr`.  
-<% set(function_files expr.cmake expr_eval.cmake expr_parse.cmake) %>
+<% set(function_files 
+    expr.cmake 
+    expr_eval.cmake 
+    expr_parse.cmake
+    cmakepp_compile.cmake
+    cmakepp_compile_file.cmake
+    cmakepp_eval.cmake
+    cmakepp_include.cmake
+    ) %>
 
 @markdown_template_function_list(${function_files})
 
