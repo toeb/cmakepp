@@ -79,6 +79,26 @@ expr(my_add(my_add(my_add(1,2),3),4)) # => `10`
 ## use bind call which inserts the left hand value into a function as the first parameter 
 expr("hello there this is my new title"::string_to_title()) # => `Hello There This Is My New Title`
 
+## combine all the things!
+
+ expr(
+    $func = 
+
+    )
+
+
+## enabling cmakepp expressions for the current function scope
+function(my_test_function) 
+    ## here expressions ARE NOT evaluated yet
+    set(result "unevaluated $[hello world]")
+    ## this call causes cmakepp expressions to be evaluated for
+    ## in the current functions body
+    cmakepp_enable_expressions(${CMAKE_CURRENT_LIST_LINE})
+    ## here expressions ARE being evaluated
+    set(result "${result} evaluated: $[hello world]")
+    return(${result})
+endfunction()
+my_test_function() # => `unevaluated $[hello world] evaluated: helloworld`
 
 ## more examples...
 
@@ -93,6 +113,11 @@ I provide the following functions for you to interact with `expr`.
 * [expr](#expr)
 * [expr_eval](#expr_eval)
 * [expr_parse](#expr_parse)
+* [cmakepp_compile](#cmakepp_compile)
+* [cmakepp_compile_file](#cmakepp_compile_file)
+* [cmakepp_eval](#cmakepp_eval)
+* [cmakepp_include](#cmakepp_include)
+* [cmakepp_enable_expressions](#cmakepp_enable_expressions)
 
 ## <a name="expr"></a> `expr`
 
@@ -122,6 +147,65 @@ I provide the following functions for you to interact with `expr`.
 
  parsers and caches the expression. returns the AST for the specified
  expression.  See `ast_new`
+
+
+
+
+## <a name="cmakepp_compile"></a> `cmakepp_compile`
+
+ `(<cmakepp code>)-><cmake code>`
+
+ `<cmakepp code> ::= superset of cmake code with added expression syntax in $[...] `
+ 
+ compiles the specified cmakepp code to pure cmake code
+ replacing `$[...]` with the result of the cmakepp expression syntax (see `expr(...)`)
+ e.g.
+ ```
+ function(my_name)
+  return("tobi")
+ endfunction()
+  message("hello $[my_name()]::string_to_upper()") # prints `hello TOBI`
+ ```
+
+
+
+
+
+## <a name="cmakepp_compile_file"></a> `cmakepp_compile_file`
+
+ `(<cmakepp code file>)-><cmake code file>`
+
+ compiles the specified source file to enable expressions
+ the target file can be specified. by default a temporary file is created
+ todo:  cache result
+
+
+
+
+## <a name="cmakepp_eval"></a> `cmakepp_eval`
+
+ `(<cmakepp code>)-><any>`
+
+ evaluates the specified cmakepp code
+
+
+
+
+## <a name="cmakepp_include"></a> `cmakepp_include`
+
+ `()->`
+
+ includes the specified cmakepp file (compiling it)
+
+
+
+
+## <a name="cmakepp_enable_expressions"></a> `cmakepp_enable_expressions`
+
+ `(${CMAKE_CURRENT_LIST_LINE})-><any>`
+
+ this macro enables all expressions in the current scope
+ you need to pass `${CMAKE_CURRENT_LIST_LINE}` for this to work
 
 
 

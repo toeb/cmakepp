@@ -86,6 +86,20 @@ expr(my_add(1,2)) %>
 
     )
 
+
+## enabling cmakepp expressions for the current function scope
+<%>>markdown_eval function(my_test_function) 
+    ## here expressions ARE NOT evaluated yet
+    set(result "unevaluated $[hello world]")
+    ## this call causes cmakepp expressions to be evaluated for
+    ## in the current functions body
+    cmakepp_enable_expressions(${CMAKE_CURRENT_LIST_LINE})
+    ## here expressions ARE being evaluated
+    set(result "${result} evaluated: $[hello world]")
+    return(${result})
+endfunction()
+my_test_function()%>
+
 ## more examples...
 
 ```
@@ -101,6 +115,7 @@ I provide the following functions for you to interact with `expr`.
     cmakepp_compile_file.cmake
     cmakepp_eval.cmake
     cmakepp_include.cmake
+    cmakepp_enable_expressions.cmake
     ) %>
 
 @markdown_template_function_list(${function_files})

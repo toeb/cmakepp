@@ -8,7 +8,6 @@ function(cmake_token_range_insert where what)
   ans(previous)
 
   if(previous)
-    message("setting previous")
     map_set_hidden(${previous} next ${begin})
     map_set_hidden(${begin} previous ${previous})  
   endif()
