@@ -60,6 +60,7 @@ function(cmake_invocation_filter_token_range range)
       type MATCHES "(command_invocation)|(nesting)|(argument)")
     ans(invocation)
 
+
     ## get invocation_identifier and invocation_arguments
     set(invocation_arguments ${invocation})
     list_pop_front(invocation_arguments)
@@ -67,9 +68,15 @@ function(cmake_invocation_filter_token_range range)
     list_pop_front(invocation_arguments)
     list_pop_back(invocation_arguments)
     
-    eval_predicate(${args})
-    ans(predicate_holds)
-    #print_vars(invocation_identifier invocation_arguments predicate_holds)
+
+    list(LENGTH args predicate_exists)
+    if(predicate_exists)
+      eval_predicate(${args})
+      ans(predicate_holds)
+    else()
+      set(predicate_holds true)
+    endif()
+   # print_vars(invocation_identifier invocation_arguments predicate_holds)
     #print_vars(invocation_token.type invocation_token.value predicate_holds args)
 
     ## check if invocation matches the custom predicate

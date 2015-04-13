@@ -1,8 +1,15 @@
-
-
+function(next_id)
+  address_new()
+  ans(global_ref)
+  address_set("${global_ref}" 0)
+  eval("
   function(next_id)
-    map_tryget("${context}" current_id)
-    math(EXPR __ans "${__ans} + 1")
-    map_set(${context} current_id ${__ans})
-    return("_${__ans}")
+    address_get(${global_ref})
+    math(EXPR __ans \"\${__ans} + 1\")
+    address_set(${global_ref} \${__ans})
+    set(__ans \"_\${__ans}\" PARENT_SCOPE)
   endfunction()
+  ")
+  next_id()
+  return_ans()
+endfunction()
