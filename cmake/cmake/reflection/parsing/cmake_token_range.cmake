@@ -6,6 +6,7 @@
 ## if the input is a string it is assumed to be cmake code and parsed to return a token range
 function(cmake_token_range )    
   cmake_tokens("${ARGN}")
+  rethrow()
   ans(range)
   list_pop_front(range)
   ans(begin)

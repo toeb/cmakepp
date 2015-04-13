@@ -80,7 +80,7 @@ function(cmake_invocation_filter_token_range range)
     else()
       set(predicate_holds true)
     endif()
-   # print_vars(invocation_identifier invocation_arguments predicate_holds)
+    #print_vars(invocation_identifier invocation_arguments predicate_holds)
     #print_vars(invocation_token.type invocation_token.value predicate_holds args)
 
     ## check if invocation matches the custom predicate

@@ -1,4 +1,5 @@
 function(test)
+  set(exception "{'__$type__':'exception'}")
 
   function(test_cmake_parse_identity str)
     timer_start(cmake_tokens_parse)
@@ -34,6 +35,8 @@ function(test)
     map_set(${root} next ${first})
     return_ref(root)
   endfunction()
+
+  
   define_test_function(test_uut test_cmake_parse str)
   test_uut("{next:{value:'asd', type:'command_invocation'}}" "asd ()")
   test_uut("{next:{type:'nesting'}}" "()")

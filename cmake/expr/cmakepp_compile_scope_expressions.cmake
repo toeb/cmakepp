@@ -8,17 +8,23 @@ function(cmakepp_compile_scope_expressions line)
 
   ## convert code to tokens
   cmake_token_range("${cmake_code}")
+  rethrow()
   ans_extract(begin end)
 
   ## get the invocation from which called this function
   cmake_invocation_filter_token_range("${begin};${end}" \${line} EQUAL ${line})
   ans(invocation)
 
+  if(NOT invocation)
+    throw("could not find invocation at ${CMAKE_CURRENT_LIST_FILE}:${line}")
+  endif()
+
   ## get the first enabled token (after the invocation)
   map_tryget("${invocation}" arguments_end_token)
   ans(first_enabled_token)
   map_tryget("${first_enabled_token}" next)
   ans(first_enabled_token)
+
 
 
   set(current_begin ${first_enabled_token})  
@@ -31,7 +37,6 @@ function(cmakepp_compile_scope_expressions line)
     if(NOT invocation)
       break()
     endif()
-
     map_tryget("${invocation}" invocation_identifier)
     ans(invocation_identifier)
     ## extendable:  macro/endmacro while/endwhile (begin/end)
