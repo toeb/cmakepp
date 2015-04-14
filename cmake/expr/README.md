@@ -79,20 +79,12 @@ expr(my_add(my_add(my_add(1,2),3),4)) # => `10`
 ## use bind call which inserts the left hand value into a function as the first parameter 
 expr("hello there this is my new title"::string_to_title()) # => `Hello There This Is My New Title`
 
-## combine all the things!
-
- expr(
-    $func = 
-
-    )
-
-
 ## enabling cmakepp expressions for the current function scope
 function(my_test_function) 
     ## here expressions ARE NOT evaluated yet
     set(result "unevaluated $[hello world]")
     ## this call causes cmakepp expressions to be evaluated for
-    ## in the current functions body
+    ## the rest of the current function body
     cmakepp_enable_expressions(${CMAKE_CURRENT_LIST_LINE})
     ## here expressions ARE being evaluated
     set(result "${result} evaluated: $[hello world]")
@@ -113,7 +105,7 @@ I provide the following functions for you to interact with `expr`.
 * [expr](#expr)
 * [expr_eval](#expr_eval)
 * [expr_parse](#expr_parse)
-* [cmakepp_compile](#cmakepp_compile)
+* [cmakepp_expr_compile](#cmakepp_expr_compile)
 * [cmakepp_compile_file](#cmakepp_compile_file)
 * [cmakepp_eval](#cmakepp_eval)
 * [cmakepp_include](#cmakepp_include)
@@ -151,7 +143,7 @@ I provide the following functions for you to interact with `expr`.
 
 
 
-## <a name="cmakepp_compile"></a> `cmakepp_compile`
+## <a name="cmakepp_expr_compile"></a> `cmakepp_expr_compile`
 
  `(<cmakepp code>)-><cmake code>`
 
@@ -204,8 +196,19 @@ I provide the following functions for you to interact with `expr`.
 
  `(${CMAKE_CURRENT_LIST_LINE})-><any>`
 
- this macro enables all expressions in the current scope
  you need to pass `${CMAKE_CURRENT_LIST_LINE}` for this to work
+
+ this macro enables all expressions in the current scope
+ it will only work in a CMake file scioe or inside a cmake function scope.
+ You CANNOT use it in a loop, if statement, macro etc (everything that has a begin/end)
+ Every expression inside that scope (and its subscopes) will be evaluated.  
+
+ **Implementation Note**:
+ This is achieved by parsing the while cmake file (and thus potentially takes very long)
+ Afterwards the line which you pass as an argument is used to find the location of this macro
+ every argument for every following expression in the current code scope is scanned for
+ `$[...]` brackets which are in turn lexed,parsed and compiled (see `expr()`) and injected
+ into the code which is in turn included
 
 
 
@@ -227,28 +230,29 @@ The examples are not cmake strings. They need to be escaped again in some cases
 
 ## strings 
 <double quoted string> ::= """ <quoted string content> """
-    expr("\"\"")    => ``
-    expr("\"hello\"")   => `hello`
-    expr("\"\\' single quote\"")    => `' single quote`
-    expr"\"\\\" double quote\"" => `" double quote`
-    expr("\\ backslash")    => `\ backslash`
+    expr("\"\"") # => ``
+    expr("\"hello\"") # => `hello`
+    expr("\"\\' single quote\"") # => `' single quote`
+    expr("\"\\\" double quote\"") # => `" double quote`
+    expr("\"\\ backslash\"") # => `\ backslash`
 
-<double quoted string> ::= "'" <quoted string content> "'"
-    expr("''")    =>  ``
-    expr('')    =>  ``
-    expr("'hello'")   =>  `hello`
-    expr('hello')   =>  `hello`
-    expr("'\\' single quote'")    =>  `' single quote`
-    expr("'\\\" double quote'")
-    expr('\\ backslash')
-    expr('\" double quote')
+<single quoted string> ::= "'" <quoted string content> "'"
+    expr("''") # => ``
+    expr('') # => ``
+    expr("'hello'") # => `hello`
+    expr('hello') # => `hello`
+    expr("'hello world'") # => `hello world`
+    expr("'\\' single quote'") # => `' single quote`
+    expr("'\\\" double quote'") # => `" double quote`
+    expr("'\\\\ backslash'") # => `\\ backslash`
 
 <unquoted string> ::= 
-    ...
+    expr(hello) # => `hello`
+
 <separated string> ::= 
-    ""
-    "hello world"
-    ...
+    expr("") # => ``
+    expr("hello world") # => `hello world`
+    
 
 <string> ::= <double quoted string> | <single quoted string> | <unquoted string> | <separated string>
 
@@ -258,48 +262,124 @@ The examples are not cmake strings. They need to be escaped again in some cases
 ## of the specialized definitions
 <number> ::= /0|[1-9][0-9]*/
     number
-        0
-        1
-        912930
+        expr(0) # => `0`
+        expr(1) # => `1`
+        expr(912930) # => `912930`
     NOT number:
-        01
-        "'1'" 
-        "\"1\""
+        expr(01) # => `01`
+        expr('1') # => `1`
+        expr("\"1\"") # => `1`
 
 <bool> ::= "true" | "false"
     bool
-        true
-        false
+        expr(true) # => `true`
+        expr(false) # => `false`
     NOT bool
-        "'true'"
-        "\"false\""
+        expr('true') # => `true`
+        expr(\"false\") # => `false`
 
 <null> ::= "null"
     null
-        null
+        expr(null) # => ``
     NOT null
-        "'null'"
+        expr('null') # => `null`
 
 <literal> ::= <string>|<number>|<bool>|<null>
     valid literal
-        "hello world"
-        123
-        "'123'"
-        true
-        null
-        ""
-        abc
+        expr("hello world") # => `hello world`
+        expr(123) # => `123`
+        expr('123') # => `123`
+        expr(true) # => `true`
+        expr(null) # => ``
+        expr("") # => ``
+        expr(abc) # => `abc`
+
+<list> ::= "[" <empty> | (<value> ",")* <value> "]"
+    expr("[1,2,3,4]") # => `1;2;3;4`
+    expr("[1]") # => `1`
+    expr("[string_to_title('hello world'), 'goodbye world'::string_to_title()]") # => `Hello World;Goodbye World`
+
+<key value> ::= <value>:<value>
+<object property> ::= <key value> | <value>
+<object> ::= "{" <empty> | (<object property> ",")* <object property> "}"
+    expr({}) # => {} 
+    expr({a:b}) # => {"a":"b"} 
+    expr({a: ("hello world"::string_to_title())}) # => {"a":"Hello World"} 
+
+<paren> ::= "(" <value> ")"
+## ellipsis are treated differently in many situation
+## if used in a function parameter the arguments will be spread out
+## if used in a navigation or indexation expression the navigation or
+## indexation applied to every element in value
+<ellipsis> ::= <value> "..." 
+
+## if lvalue is <null> it is set to the default value (the default default value is a address/map)
+<default value> ::= <lvalue> "!" | "!" <value>  # specifying the default value
+
+<value> ::= <paren> |
+            | <value dereference>
+            | <value reference>
+            | <ellipsis>
+            | <literal>
+            | <interpolation>
+            | <bind call>
+            | <call>
+            | <list>
+            | <object>
+            | <scope variable>
+            | <indexation>
+            | <navigation>
+            | <paren>
+            | <default value>
+
+## a parameter can be a value or the returnvalue operator "$"
+## if the return value operator is specified the output of that parameter
+## is treated as the result of the function call 
+## this is usefull for using function which do not adhere to the
+## return value convention. If used multiple times inside a call
+## the results are accumulated.   
+<parameter> ::= <value> | "$" 
+
+<parameters> ::= "(" <empty> | (<parameter> "," )* <parameter>  ")"
+
+<normal call> ::= <value> <parameters>
+    expr(string_to_title("hello world")) # => `Hello World` 
+    expr("eval_math('3 + 4')") # => `7`
+
+## bind call binds the left hand value as the first parameter of the function
+<bind call> ::=  <value> "::" <value> <parameter>  
+    expr("hello world"::string_to_title()) # => `Hello World` 
+
+<call> ::= <normal call> | <bind call>
+
+<scope variable> ::= "$" <literal> 
+    set(my_var hello!) 
+    expr($my_var) # => `hello!` 
 
 
+<index> ::= "-"? <number> | "$" | "n"
+<increment> ::= "-"? <number>
+<range> ::= <empty> | <index> | <index> ":" <index> | <index> ":" <index> : <increment>
+
+<indexation parameter> ::= <range> | <value>
+<indexation parameters> ::= (<indexation parameter> ",")* <indexation parameter>
+<indexation> ::= <value>"[" <indexation parameters> "]"
+    expr("{a:1,b:2}['a','b']") # => `1;2` 
+    expr("[{a:1,b:2},{a:3,b:4}]...['a','b']") # => `1;3;2;4`
+
+<lvalue> ::= <scope variable> | <navigation> | <indexation>
 
 
-<value> ::= <paren>|<value dereference>|<value reference>|<ellipsis>|<literal>|<interpolation>|<bind call>|<call>|<list>|<object>|<scope variable>|<indexation>|<navigation>
+<assign> ::= <lvalue> "=" <value>
+    ## sets the scope variable my_value to 1
+    expr($my_value = 1)
+    expr($my_value) # => `1` 
+    ## coerces the scope value my_other_value to be an object
+    #expr($my_other_value!.a!.b = 123)
+    #expr($my_other_value) # => `` 
 
-## an interpolation combines multiple values into a single value
-<interpolation> ::= <value> * 
-    expr("a" "b" "c") => `abc`
 
-<expression> ::= <assign>|<value> 
+<expression> ::= <assign> | <value> 
 
 ```
 

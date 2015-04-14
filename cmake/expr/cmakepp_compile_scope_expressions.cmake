@@ -57,7 +57,7 @@ function(cmakepp_compile_scope_expressions line)
   ## get the code in the expression enabled range and compile it
   cmake_token_range_serialize("${first_enabled_token};${last_enabled_token}")
   ans(enabled_code)
-  cmakepp_compile("${enabled_code}")
+  cmakepp_expr_compile("${enabled_code}")
   ans(result)
 
   ## return the compiled code

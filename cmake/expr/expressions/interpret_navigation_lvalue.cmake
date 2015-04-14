@@ -4,10 +4,12 @@ function(interpret_navigation_lvalue tokens)
     throw("expected at least two tokens (got {token_count})" --function interpret_navigation_rvalue)
   endif()
 
-  list_pop_back(tokens)
+  set(lhs_tokens ${tokens})
+
+  list_pop_back(lhs_tokens)
   ans(rhs_token)
 
-  list_pop_back(tokens)
+  list_pop_back(lhs_tokens)
   ans(dot)
 
   map_tryget("${dot}" type)
@@ -16,55 +18,54 @@ function(interpret_navigation_lvalue tokens)
     throw("expected second to last token to be a `.`" --function interpret_navigation_rvalue)
   endif()  
   
-  if(NOT tokens)
+  if(NOT lhs_tokens)
     throw("no lvalue tokens" --function interpret_navigation_rvalue)
   endif()
 
   interpret_literal("${rhs_token}")
   ans(rhs)
 
-  interpret_rvalue("${tokens}")
+  map_tryget("${rhs}" value)
+  ans(rhs_value)
+
+
+  interpret_rvalue("${lhs_tokens}")
   ans(lhs)
 
-  #print_vars(rhs.type rhs.argument rhs.code lhs.type lhs.argument lhs.code --plain)
 
-  map_tryget("${rhs}" code)
-  ans(rhs_code)
-  map_tryget("${rhs}"  argument)
-  ans(rhs_argument)
-  map_tryget("${lhs}" code)
-  ans(lhs_code)
-
-  map_tryget("${lhs}"  argument)
-  ans(lhs_argument)
-
-  map_tryget(${assign_to} argument)
-  ans(assign_to_argument)
-
-  map_tryget(${assign_to} code)
-  ans(assign_to_code)
+  map_tryget("${lhs}" expression_type)
+  ans(lhs_type)
 
 
-  print_vars(lhs_argument rhs_argument assign_to)
-  set(code 
-"${lhs_code}${rhs_code}
-  is_address(\"${lhs_argument}\")
-  ans(is_address)
-  if(is_address)
-    map_set(\"${lhs_argument}\" \"${rhs_argument}\" ${assign_to_argument})
+
+  map_tryget("${lhs}" value)
+  ans(lhs_value)
+
+  next_id()
+  ans(ref)
+
+  set(pre_code)
+  set(code "map_tryget(${lhs_value} \"${rhs_value}\")\nans(${ref})\n")
+  if("${lhs_type}" STREQUAL ellipsis)
+    set(post_code "foreach(v ${lhs_value})\nmap_set(\"\${v}\" \"${rhs_value}\" \${${ref}})\nendforeach()\n")
+  else()
+    set(post_code "map_set(${lhs_value} \"${rhs_value}\" \${${ref}})\n")
   endif()
 
 
-
-")
-  set(argument "${assign_to_argument}" )
-
-
-  map_new()
+  ast_new(
+    "${tokens}"  # tokens 
+    "navigation_lvalue"      # expression_type 
+    "any"         # value_type 
+    "${ref}"      # ref 
+    "${code}"     # code
+    "\${${ref}}"  # value 
+    "false"      # const 
+    "false"          # pure_value
+    "${rhs};${lhs}"    # children
+    )
   ans(ast)
-  map_set("${ast}" type "navigation_lvalue")
-  map_set("${ast}" code "${code}")
-  map_set("${ast}" argument "${argument}")
-
+  map_set("${ast}" pre_code "${pre_code}")
+  map_set("${ast}" post_code "${post_code}")
   return_ref(ast)
 endfunction()

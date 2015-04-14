@@ -8,7 +8,7 @@ function(cmakepp_compile_file source)
 
   fread("${source}")
   ans(content)
-  cmakepp_compile("${content}")
+  cmakepp_expr_compile("${content}")
   ans(content)
   if(NOT target)
     fwrite_temp("${content}" cmakepp)

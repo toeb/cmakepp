@@ -3,15 +3,31 @@ function(test)
   set(exception "{'__$type__':'exception'}")
 
 
-  
 
 
-return()
+  define_test_function2(test_uut expr_parse "interpret_assign" "")
+
+
+
+  test_uut("{}" "$a....b = 1")
+  ans(res)
+  ast_reduce_code("${res}")
+  ans(code)
+  _message("${code}")
+
+
+
+
   define_test_function2(test_uut expr_eval "interpret_assign" "")
  # event_addhandler(on_exception "[](ex) print_vars(ex)")
-  
-  test_uut("<{b:1}>1" "$['b'] = 1")
-return()
+ 
+
+
+
+ map_new()
+ ans(abc)
+ test_uut("1" "$abc.b = 1")
+ assertf("{abc.b}" EQUAL 1)
 
   test_uut("<{a:1}>1" "$a = 1")
   test_uut("<{a:2}>2" "$a = 2")
@@ -19,6 +35,17 @@ return()
   test_uut("<{a:'abc'}>abc" "$a = 'abc'")
   test_uut("<{a:'abc'}>abc" "$a = \"abc\"")
 
+
+  set(a)
+  map_new()
+  ans_append(a)
+  map_new()
+  ans_append(a)
+  map_new()
+  ans_append(a)
+
+  test_uut("2" "$a....b = 2")
+  json_print(${a})
 
 
   return()

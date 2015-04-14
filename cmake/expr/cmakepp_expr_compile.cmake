@@ -12,7 +12,7 @@
 ##  message("hello $[my_name()]::string_to_upper()") # prints `hello TOBI`
 ## ```
 ##
-function(cmakepp_compile content)
+function(cmakepp_expr_compile content)
   cmake_token_range(" ${content}")##prepend whitespace (because of replace edgecase)
   ans(range)
 
@@ -99,7 +99,7 @@ function(cmakepp_compile content)
          ans(current_code)
          eval("expr_parse(interpret_expression \"\" ${current_code})")
          ans(ast)
-         ast_compile("${ast}")
+         ast_reduce_code("${ast}")
          ans(current_compiled_code)
          map_tryget("${ast}" value)
          ans(value)

@@ -1,9 +1,7 @@
 ## interpret an lvalue
 ## needs a rvalue
-function(interpret_scope_lvalue tokens value_ast)
-  if(NOT value_ast)
-    throw("missing value_ast" --function interpret_scope_lvalue)
-  endif()
+function(interpret_scope_lvalue tokens)
+  
   if(NOT tokens)
     throw("missing tokens" --function interpret_scope_lvalue)
   endif()
@@ -38,12 +36,11 @@ function(interpret_scope_lvalue tokens value_ast)
   map_tryget("${identifier}" value)
   ans(identifier_value)
 
-  map_tryget("${value_ast}" value)
-  ans(value)
 
+  set(code)
 
   ## set both in scope and in parent scope
-  set(code "set(\"${identifier_value}\" ${value} PARENT_SCOPE)\nset(\"${identifier_value}\" ${value})\n")
+  set(post_code "set(\"${identifier_value}\" \${${identifier_value}} PARENT_SCOPE)\n")
 
   # tokens 
   # expression_type 
@@ -68,5 +65,6 @@ function(interpret_scope_lvalue tokens value_ast)
     "${identifier}"
     )
   ans(ast)
+  map_set("${ast}" post_code "${post_code}")
   return_ref(ast)
 endfunction()

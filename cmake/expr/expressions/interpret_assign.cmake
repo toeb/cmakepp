@@ -31,11 +31,12 @@ function(interpret_assign tokens)
   rethrow()
   ans(rhs)
 
+  map_tryget("${rhs}" value)
+  ans(rhs_value)
 
-  interpret_lvalue("${lhs_tokens}" "${rhs}")
+  interpret_lvalue("${lhs_tokens}")
   rethrow()
   ans(lhs)
-
 
 
   map_tryget("${lhs}" value)
@@ -44,12 +45,15 @@ function(interpret_assign tokens)
   map_tryget("${lhs}" ref)
   ans(ref)
 
+
   map_tryget("${lhs}" value_type)
   ans(value_type)
 
   map_tryget("${lhs}" const)
   ans(const)
 
+
+  set(code "set(${ref} ${rhs_value})\n")
   # tokens 
   # expression_type 
   # value_type 
@@ -72,7 +76,6 @@ function(interpret_assign tokens)
     "${rhs};${lhs}"
     )
   ans(ast)
-
 
   return_ref(ast)
 endfunction()

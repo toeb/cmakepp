@@ -23,12 +23,21 @@ function(interpret_rvalue tokens)
   endif()
   ans_append(inner_exceptions)
 
+  interpret_default_value("${tokens}")
+  ans(ast)
+  if(ast)
+    return(${ast})
+  endif()
+  ans_append(inner_exceptions)
+
   interpret_ellipsis("${tokens}")
   ans(ast)
   if(ast)
     return(${ast})
   endif()
   ans_append(inner_exceptions)
+
+
 
   interpret_literal("${tokens}")
   ans(ast)
