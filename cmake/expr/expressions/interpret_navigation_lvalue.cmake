@@ -1,4 +1,4 @@
-function(interpret_navigation_lvalue tokens assign_to)
+function(interpret_navigation_lvalue tokens)
   list(LENGTH tokens token_count)
   if(${token_count} LESS 2)
     throw("expected at least two tokens (got {token_count})" --function interpret_navigation_rvalue)
@@ -7,33 +7,21 @@ function(interpret_navigation_lvalue tokens assign_to)
   list_pop_back(tokens)
   ans(rhs_token)
 
-  if(NOT tokens)
-    throw("expected at least two tokens (got {token_count})" --function interpret_navigation_rvalue)
-  endif()
+  list_pop_back(tokens)
+  ans(dot)
 
-  map_tryget("${rhs_token}" type)
+  map_tryget("${dot}" type)
   ans(type)
-
-  if("${type}" STREQUAL "bracket")
-    ## interpret range or interpret bracket
-    interpret_list("${rhs_token}")
-    ans(rhs)
-  else()
-    list_pop_back(tokens)
-    ans(dot)
-    map_tryget("${dot}" type)
-    ans(type)
-    if(NOT "${type}" STREQUAL "dot")
-      throw("expected second to last token to be a `.`" --function interpret_navigation_rvalue)
-    endif()  
-    
-    if(NOT tokens)
-      throw("no lvalue tokens" --function interpret_navigation_rvalue)
-    endif()
-
-    interpret_literal("${rhs_token}")
-    ans(rhs)
+  if(NOT "${type}" STREQUAL "dot")
+    throw("expected second to last token to be a `.`" --function interpret_navigation_rvalue)
+  endif()  
+  
+  if(NOT tokens)
+    throw("no lvalue tokens" --function interpret_navigation_rvalue)
   endif()
+
+  interpret_literal("${rhs_token}")
+  ans(rhs)
 
   interpret_rvalue("${tokens}")
   ans(lhs)

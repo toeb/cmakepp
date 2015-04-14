@@ -1,5 +1,15 @@
 
 
+# {
+#  start_code
+#  pre_code
+#  code
+#  post_code
+#  end_code
+#  children
+# }
+
+
 function(ast_compile ast)
   map_tryget("${ast}" const)
   ans(is_const)
@@ -16,6 +26,8 @@ function(ast_compile ast)
 
   map_tryget("${ast}" children)
   ans(children)
+
+
   foreach(child ${children})
     ast_compile("${child}")
     ans(child_code)
@@ -26,6 +38,9 @@ function(ast_compile ast)
   map_tryget("${ast}" code)
   ans(current_code)
   
+
+
+
   set(code "${code}${current_code}")
   return_ref(code)
 endfunction()
