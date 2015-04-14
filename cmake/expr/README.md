@@ -390,6 +390,8 @@ The examples are not cmake strings. They need to be escaped again in some cases
 Here is some performance data for the cmake expression syntax
 
 
+
+
 Expression | Token Count | Ast Nodes | Compile Time | Cached Compile Time |  Execution Time | Compile Statements
 `$the_object.e[0,1]...['a']` | 15 | 9 | 420 ms | 5 ms | 22
 
