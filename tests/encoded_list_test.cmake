@@ -2,7 +2,6 @@ function(test)
 
 
 
-
   encoded_list("a;b;c" "c;d;e")
   ans(res)
 
@@ -30,5 +29,10 @@ function(test)
   ans(el)
  
   assert("${el}" EQUALS "${inp}")
+
+
+
+
+
 
 endfunction()
