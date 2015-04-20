@@ -11,8 +11,7 @@ function(interpret_ellipsis tokens)
   list_select_property(dots type)
   ans(dot_types)
 
-  if(NOT "${dot_types}" STREQUAL "dot;dot;dot")
-    list(REVERSE dot_types)
+  if(NOT "${dot_types}" STREQUAL "dot;dot;dot")    
     throw("not ellipsis: ${dot_types}")
   endif()
 
