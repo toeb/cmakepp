@@ -11,8 +11,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 ### Function List
 
 
-* [bfs](#bfs)
-* [cmake_string_to_json](#cmake_string_to_json)
+* [is_map](#is_map)
 * [map_append](#map_append)
 * [map_append_string](#map_append_string)
 * [map_append_unique](#map_append_unique)
@@ -21,7 +20,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_get](#map_get)
 * [map_get_special](#map_get_special)
 * [map_has](#map_has)
-* [is_map](#is_map)
 * [map_keys](#map_keys)
 * [map_new](#map_new)
 * [map_remove](#map_remove)
@@ -39,8 +37,8 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_capture_new](#map_capture_new)
 * [map_clear](#map_clear)
 * [map_copy_shallow](#map_copy_shallow)
+* [map_count](#map_count)
 * [map_defaults](#map_defaults)
-* [map_edit](#map_edit)
 * [map_ensure](#map_ensure)
 * [map_extract](#map_extract)
 * [map_fill](#map_fill)
@@ -79,7 +77,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_push_back](#map_push_back)
 * [map_push_front](#map_push_front)
 * [map_rename](#map_rename)
-* [map_set_if_missing](#map_set_if_missing)
+* [map_set_default](#map_set_default)
 * [map_to_keyvaluelist](#map_to_keyvaluelist)
 * [map_to_valuelist](#map_to_valuelist)
 * [map_unpack](#map_unpack)
@@ -88,21 +86,8 @@ Due to the "variable variable" system (ie names of variables are string which ca
 * [map_iterator](#map_iterator)
 * [map_iterator_break](#map_iterator_break)
 * [map_iterator_next](#map_iterator_next)
-* [map_check](#map_check)
-* [map_decycle](#map_decycle)
-* [map_exists](#map_exists)
-* [format](#format)
-* [map_graphsearch](#map_graphsearch)
 * [map_import_properties](#map_import_properties)
 * [map_match_obj](#map_match_obj)
-* [map_order](#map_order)
-* [map_print](#map_print)
-* [map_print_format](#map_print_format)
-* [map_query](#map_query)
-* [map_restore_refs](#map_restore_refs)
-* [map_select](#map_select)
-* [map_transform](#map_transform)
-* [map_where](#map_where)
 * [map_clone](#map_clone)
 * [map_clone_deep](#map_clone_deep)
 * [map_clone_shallow](#map_clone_shallow)
@@ -115,14 +100,12 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 ### Function Descriptions
 
-## <a name="bfs"></a> `bfs`
+## <a name="is_map"></a> `is_map`
 
+ `(<any>...)-><bool>`
 
-
-
-
-## <a name="cmake_string_to_json"></a> `cmake_string_to_json`
-
+ returns true iff the specified value is a map
+ note to self: cannot make this a macro because string will be evaluated
 
 
 
@@ -179,12 +162,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
-## <a name="is_map"></a> `is_map`
-
-
-
-
-
 ## <a name="map_keys"></a> `map_keys`
 
 
@@ -193,6 +170,7 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 ## <a name="map_new"></a> `map_new`
 
+ optimized version
 
 
 
@@ -307,13 +285,16 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
+## <a name="map_count"></a> `map_count`
+
+ `(<map>)-><uint>`
+
+ returns the number of elements for the specified map
+
+
+
+
 ## <a name="map_defaults"></a> `map_defaults`
-
-
-
-
-
-## <a name="map_edit"></a> `map_edit`
 
 
 
@@ -564,8 +545,13 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
-## <a name="map_set_if_missing"></a> `map_set_if_missing`
+## <a name="map_set_default"></a> `map_set_default`
 
+ `()-><bool>`
+
+ sets the value of the specified prop if it does not exist
+ ie if map_has returns false for the specified property
+ returns true iff value was set
 
 
 
@@ -635,36 +621,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
 
 
-## <a name="map_check"></a> `map_check`
-
-
-
-
-
-## <a name="map_decycle"></a> `map_decycle`
-
-
-
-
-
-## <a name="map_exists"></a> `map_exists`
-
-
-
-
-
-## <a name="format"></a> `format`
-
-
-
-
-
-## <a name="map_graphsearch"></a> `map_graphsearch`
-
-
-
-
-
 ## <a name="map_import_properties"></a> `map_import_properties`
 
  imports the specified properties into the current scope
@@ -679,54 +635,6 @@ Due to the "variable variable" system (ie names of variables are string which ca
 
  returns true if actual has all properties (and recursive properties)
  that expected has
-
-
-
-
-## <a name="map_order"></a> `map_order`
-
-
-
-
-
-## <a name="map_print"></a> `map_print`
-
-
-
-
-
-## <a name="map_print_format"></a> `map_print_format`
-
-
-
-
-
-## <a name="map_query"></a> `map_query`
-
-
-
-
-
-## <a name="map_restore_refs"></a> `map_restore_refs`
-
-
-
-
-
-## <a name="map_select"></a> `map_select`
-
-
-
-
-
-## <a name="map_transform"></a> `map_transform`
-
-
-
-
-
-## <a name="map_where"></a> `map_where`
-
 
 
 

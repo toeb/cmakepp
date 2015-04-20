@@ -1,18 +1,22 @@
-# CMake Expression Syntax
-
-_This Document is currently just a draft_
+# `cmakepp` Expression Syntax
 
 ## <a name="expr_motivation"></a> Motivation
 
 
-CMake's syntax is not sexy. It does not allow the developer rudimentary constructs which almost all other languages have.  But because CMake's language is astonishingly flexible I was able to create a lexer and parser and interpreter for a custom 100 % compatible syntax which (once "JIT compiled") is also fast.
+"CMake's syntax is not sexy." Is a statement that probably everyone can understand. It does not allow the developer rudimentary constructs which almost all other languages have.  But because CMake's language is astonishingly flexible I was able to create a lexer and parser and interpreter for a custom 100 % compatible syntax which (once "JIT compiled") is also fast. Which I call `cmakepp expressions` or `expr` for short. I want to emphasise that this all is written in 100% compatible cmake and you can use it *without* the need to preprocess cmake files. 
 
 
 ## <a name="expr_example"></a> Example
 
-The easiest way to introduce the new syntax and its usefulness is by example. So here it is (Note that these example are actually executed during the generation of this document using my cmake template engine ([link](#)) so the result displayed is actually computed).
+The easiest way to introduce the new `expr` syntax and its usefulness is by example. So here it is (Note that these example are actually executed during the generation of this document using my cmake template engine ([link](#)) so the result displayed is actually computed).
+
+You can run these examples yourself - just look at the [installing cmakepp](#) section in `cmakepp`'s documentation.  (Which boils down to downloading a single file and including it)
 
 ```cmake
+
+## results of the evaluation are printed as normal strings or 
+## as json if the result contains an object (complex data)
+
 # values
 ## number
 expr(1) # => `1` 
@@ -79,7 +83,16 @@ expr(my_add(my_add(my_add(1,2),3),4)) # => `10`
 ## use bind call which inserts the left hand value into a function as the first parameter 
 expr("hello there this is my new title"::string_to_title()) # => `Hello There This Is My New Title`
 
-## enabling cmakepp expressions for the current function scope
+## **enabling cmakepp expressions for the current function or file scope**
+## All expressions before the call to `cmakepp_enable_expressions` are not 
+## evaluated as expressions.  All code after the call to 
+## `cmakepp_enable_expressions` is evaluated.  (also sub functions, but not includes)
+## This is a very hacky approach beacuse it works by parsing 
+## the and transpiling current file. It works in standard cases. In complex 
+## cases I suggest you rather define a new function which uses 
+## the `arguments_expression` macro which is more consistent in behaviour. 
+## Please consult the documentation of `cmakepp_enable_expressions` before 
+## using it. 
 function(my_test_function) 
     ## here expressions ARE NOT evaluated yet
     set(result "unevaluated $[hello world]")
@@ -92,8 +105,74 @@ function(my_test_function)
 endfunction()
 my_test_function() # => `unevaluated $[hello world] evaluated: helloworld`
 
-## more examples...
 
+## defining a cmake function which parses it parameters using `expr`
+## This a replacement for `cmake_parse_arguments` which is more mighty and
+## also very easy to use
+## 
+function(my_other_test_function) ## note: no arguments defined
+    ## 0 ${ARGC} specify the range of arguments of `my_other_test_function`
+    ## which are to be parsed.  The normal case is `0 ${ARGC}` however you can
+    ## also choose to mix cmake argument handling and expression arguments
+    ## here you can also specify arguments which are extracted
+    arguments_expression(0 ${ARGC} var_1 var_2 var_3)
+    
+    ## all arguments which are left unparsed are returned in encoded list 
+    ## format and need to be `encoded_list_decode`'d before they can be used
+    ans(unused_arguments)
+
+    set(result  "result of arguments_expression macro: \n")
+
+    set(counter 0)
+    foreach(unused_arg ${unused_arguments})
+        math(EXPR counter "${counter} + 1")
+        encoded_list_decode("${unused_arg}")
+        ans(decoded_unused_arg)
+        set(result "${result}unused_arg[${counter}]: '${decoded_unused_arg}'\n")        
+    endforeach()
+
+    ## defined arguments are available as scope variables
+    set(result "${result}var_1: ${var_1}\n")
+    set(result "${result}var_2: ${var_2}\n")
+    set(result "${result}var_3: ${var_3}\n")
+
+    ## named arguments which are not defined are not 
+    ## imported into the functions scope. They are still 
+    ## accessible through `arguments_expression_result` (a map)
+    format("var_4: {arguments_expression_result.var_4}\nvar_5:{arguments_expression_result.var_5}\n")
+    ans(formatted)
+    set(result "${result}${formatted}")
+
+    ## return the string
+    return_ref(result)
+endfunction()
+## Explanation of function call:
+## the first argument `[a,eval_math('3*5'),c]` is treated as a single list and 
+## put into `var_1`.  
+## the second argument is spread out (because of ellipsis `...` operation)
+## and therfore only the first value lands in `var_3` 
+## named vars have a higher precedence than positional vars therefore `var_2` 
+## contains `hello world`
+## unused named vars are ignored but can be still be accessed using the
+## `arguments_expression_result` variable which is automatically defined 
+## after calling the `arguments_expression` macro
+## please note that commas are important
+my_other_test_function(
+    [a,eval_math('3*5'),c],
+    [d,e]...,
+    var_2: "hello world" ,
+    f,[g,h],
+    var_4: "another value"
+)  # => `result of arguments_expression macro: 
+unused_arg[1]: 'e'
+unused_arg[2]: 'f'
+unused_arg[3]: 'g;h'
+var_1: a;15;c
+var_2: hello world
+var_3: d
+var_4: another value
+var_5:
+`
 ```
 
 ## <a name="expr_functions"></a> Functions and Datatypes
@@ -103,12 +182,7 @@ I provide the following functions for you to interact with `expr`.
 
 
 * [expr](#expr)
-* [expr_eval](#expr_eval)
-* [expr_parse](#expr_parse)
-* [cmakepp_expr_compile](#cmakepp_expr_compile)
-* [cmakepp_compile_file](#cmakepp_compile_file)
-* [cmakepp_eval](#cmakepp_eval)
-* [cmakepp_include](#cmakepp_include)
+* [arguments_expression](#arguments_expression)
 * [cmakepp_enable_expressions](#cmakepp_enable_expressions)
 
 ## <a name="expr"></a> `expr`
@@ -122,72 +196,23 @@ I provide the following functions for you to interact with `expr`.
 
 
 
-## <a name="expr_eval"></a> `expr_eval`
+## <a name="arguments_expression"></a> `arguments_expression`
 
- `(<expression type> <arguments:<any>...> <expression>)-><any> 
-
- evaluets the specified expression using as the type of expression 
- specified.  also passes allong arguments to the parser
+ `(<begin index> <end index> <parameter definition>...)-><any>...`
 
 
+ parses the arguments of the calling function cmakepp expressions
+ expects `begin index` to be the index of first function parameters (commonly 0)
+ and `end index` to be the index of the last function parameter to parse (commonly ${ARGC})
+ var args are named arguments which will be set to be available in the function scope
 
+ named arguments passed to function have a higher precedence than positional arguments 
 
-## <a name="expr_parse"></a> `expr_parse`
-
- `(<expression type> <arguments:<any...>> <expression>)-><expr ast>`
-
-
- parsers and caches the expression. returns the AST for the specified
- expression.  See `ast_new`
-
-
-
-
-## <a name="cmakepp_expr_compile"></a> `cmakepp_expr_compile`
-
- `(<cmakepp code>)-><cmake code>`
-
- `<cmakepp code> ::= superset of cmake code with added expression syntax in $[...] `
+ __sideffects__:
+ * `arguments_expression_result` is a address of an object containing all parsed data
+ * scope operations may modify the parent scope of the function
  
- compiles the specified cmakepp code to pure cmake code
- replacing `$[...]` with the result of the cmakepp expression syntax (see `expr(...)`)
- e.g.
- ```
- function(my_name)
-  return("tobi")
- endfunction()
-  message("hello $[my_name()]::string_to_upper()") # prints `hello TOBI`
- ```
 
-
-
-
-
-## <a name="cmakepp_compile_file"></a> `cmakepp_compile_file`
-
- `(<cmakepp code file>)-><cmake code file>`
-
- compiles the specified source file to enable expressions
- the target file can be specified. by default a temporary file is created
- todo:  cache result
-
-
-
-
-## <a name="cmakepp_eval"></a> `cmakepp_eval`
-
- `(<cmakepp code>)-><any>`
-
- evaluates the specified cmakepp code
-
-
-
-
-## <a name="cmakepp_include"></a> `cmakepp_include`
-
- `()->`
-
- includes the specified cmakepp file (compiling it)
 
 
 
@@ -217,10 +242,11 @@ I provide the following functions for you to interact with `expr`.
 
 ## <a name="expr_definition"></a> The Expression Language Definition
 
-I mixed several constructs and concepts from different languages which I like - the syntax should be familiar for someone who knows JavaScript and C++.  I am not a professional language designer so some decisions might seem strange however I have tested everything thouroughly.
+I mixed several constructs and concepts from different languages which I like - the syntax should be familiar for someone who knows JavaScript and C++.  I am not a professional language designer so some decisions might seem strange however I have tested everything thouroughly and am happy to fix any bugs.
 
-The examples are not cmake strings. They need to be escaped again in some cases
-```
+For better or worse here is the language definition which is still a work in progress.
+
+```cmake
 ## the forbidden chars are used by the tokenizer and using them will cause the world to explode. They are all valid ASCII codes < 32 and > 0 
 <forbidden char> ::=  SOH | NAK | US | STX | ETX | GS | FS | SO  
 <escapeable char> :: = "\" """ "'"  
@@ -313,8 +339,8 @@ The examples are not cmake strings. They need to be escaped again in some cases
 ## indexation applied to every element in value
 <ellipsis> ::= <value> "..." 
 
-## if lvalue is <null> it is set to the default value (the default default value is a address/map)
-<default value> ::= <lvalue> "!" | "!" <value>  # specifying the default value
+## if lvalue is <null> it is set to the default value (a new map)
+<default value> ::= <lvalue> "!" 
 
 <value> ::= <paren> |
             | <value dereference>
@@ -367,7 +393,7 @@ The examples are not cmake strings. They need to be escaped again in some cases
     expr("{a:1,b:2}['a','b']") # => `1;2` 
     expr("[{a:1,b:2},{a:3,b:4}]...['a','b']") # => `1;3;2;4`
 
-<lvalue> ::= <scope variable> | <navigation> | <indexation>
+<lvalue> ::= <scope variable> | <navigation> | <indexation> 
 
 
 <assign> ::= <lvalue> "=" <value>
@@ -385,48 +411,50 @@ The examples are not cmake strings. They need to be escaped again in some cases
 
 
 
-## Performance
 
-Here is some performance data for the cmake expression syntax
+## Caveats 
 
-
-
-
-Expression | Token Count | Ast Nodes | Compile Time | Cached Compile Time |  Execution Time | Compile Statements
-`$the_object.e[0,1]...['a']` | 15 | 9 | 420 ms | 5 ms | 22
+### Syntax
+The syntax is not implemented completely yet (missing return value token `$`).  There are some conflicts in operation precedence (which can currently be solved with parenthesis).  All Examples described here work however.
 
 
+### Speed
+Compiling these expressions is slow: a simple expression compiles in hundreds of milliseconds. Complex expressions can take several seconds.  However this is only when they are first encountered. afterwards the speed is fast even if the expressions are complex. Currently I cache the expressions everytime cmake starts. An example is when using `arguments_expression(...)` It takes up to 1000ms to compile 
 
-## Still Open
-
-* derefernce 
-* address of
-* out value
-    - `$` as result indicator
-    - 
-* lvalue range
-* lvalue range assign
-* lvalue range assign ellipsis
-* lambda
-* statements
-* closures
-* force path existance
-* operators
-    - *math* CMake needs a basic math system to be inplace `math(EXPR)` is really, really bad. 
-        + `+`
-        + `-`
-        + `*`
-        + `/`
-        + `%`
-    - string 
-    - any
-        + `??` null coalescing operator
-    
-
-
-
+```cmake
+my_other_test_function(
+    [a,eval_math('3*5'),c],
+    [d,e]...,
+    var_2: "hello world" ,
+    f,[g,h],
+    var_4: "another value"
+)
+```
+however execution time is less than 10 ms 
 
 
 ## Future Work
 
-When the syntax is complete and this feature works well the next step is to incorporate it into CMake using C code.  This will make everything much, much faster and will get rid of those hideous generator expressions.  Maybe even the whole cmake script language itself.
+### Syntax
+
+I still need to implement correct math in the expressions which is a big minus in cmake (anyone who every had to work with negative values knows what I mean).  Expressions like `(-$a + 33) / -12 ` should be simple enough to get to work.  
+
+The return token  `$` needs to work. currently I do not support it.
+
+Range based get and set needs to be implemented.   
+```
+# let a = [{b:'a'},{b:'b'},{b:'c'},{b:'d'}]
+# then 
+$a[1:2].b = [1,2]... 
+## should result in 
+# let a = [{b:'a'},{b:'1'},{b:'2'},{b:'d'}]
+```
+
+
+### Speed
+
+I still need to cache expressions between cmake runs which will decrease the time needed by alot (as expressions only need to be reevaluated whenever it changes)
+
+### Afterwards
+
+When the syntax is complete and this feature works well the next step is to incorporate it into CMake using C code which will significantly increase the speed.  This will make everything much, much faster and might even get rid of those hideous generator expressions. 

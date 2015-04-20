@@ -1,5 +1,6 @@
 function(test)
 
+return()
 
   timer_start(t1)
   hg_cached_clone("https://bitbucket.com/toeb/test_repo_hg" "clone1")

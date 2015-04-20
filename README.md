@@ -25,13 +25,14 @@ Look through the files in the package.  Most functions will be commented and the
 * [Collections](cmake/collections/README.md)
 * [Date/Time](cmake/datetime/README.md)
 * [Events](cmake/events/README.md)
+* [`cmakepp` Expression Syntax](cmake/expr/README.md)
 * [Filesystem](cmake/filesystem/README.md)
 * [Functions](cmake/function/README.md)
 * [Logging Functions](cmake/log/README.md)
 * [Maps - Structured Data in CMake](cmake/map/README.md)
 * [Navigation Functions](cmake/navigation/README.md)
 * [Objects ](cmake/object/README.md)
-* [Package Mangement](cmake/package/README.md)
+* [Dependency Management](cmake/package/README.md)
 * [User Data](cmake/persistence/README.md)
 * [Process Management](cmake/process/README.md)
 * [Quick Map Syntax](cmake/quickmap/README.md)
@@ -39,6 +40,7 @@ Look through the files in the package.  Most functions will be commented and the
 * [Windows Registry](cmake/reg/README.md)
 * [Parsing and handling semantic versions](cmake/semver/README.md)
 * [String Functions](cmake/string/README.md)
+* [Tasks and Promises](cmake/task/README.md)
 * [Templating ](cmake/templating/README.md)
 * [Uniform Resource Identifiers (URIs)](cmake/uri/README.md)
 * [HTTP Client](cmake/web/README.md)
@@ -50,7 +52,9 @@ Look through the files in the package.  Most functions will be commented and the
 
 I have developed some samples to show off `cmakepp`'s capabilities. Here you can find an overview of these samples
 
-
+https://github.com/open-source-parsers/jsoncpp/archive/1.6.0.tar.gz
+https://github.com/leethomason/tinyxml2/archive/2.2.0.tar.gz
+https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
 
 
 
@@ -66,6 +70,7 @@ I have developed some samples to show off `cmakepp`'s capabilities. Here you can
 * [Installing and Using Projects with vanilla `CMake`](samples/06-vanilla-cmake-project-with-install/README.md)
 * [Working with Packages](samples/09-using-real-world-packages/README.md)
 * [Using the `CMakeLists` Generator - CMake Reflection](samples/10-cmakelists-generator/README.md)
+* [Dynamic Calls, Return Values and Exceptions](samples/11-return-values-and-exceptions/README.md)
 
 
 
@@ -294,9 +299,9 @@ This is possible by overwriting CMakes default return() function with a macro. I
  "headers":{
   "Accept":"*/*",
   "Host":"httpbin.org",
-  "User-Agent":"curl/7.38.0"
+  "User-Agent":"curl/7.16.1"
  },
- "origin":"85.180.210.38",
+ "origin":"87.157.223.4",
  "url":"http://httpbin.org/get?key=value"
 }
 
