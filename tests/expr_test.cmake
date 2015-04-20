@@ -1,6 +1,7 @@
 function(test)
 
 
+
   # call
   set(callable_string "[](a b)return('{{a}}{{b}}')")
   script(" $callable_string(1,2)")

@@ -19,7 +19,7 @@
 ## ```
 ##
 function(cmake_invocation_filter_token_range range)
-  arguments_encoded_list2(1 ${ARGC})
+  arguments_encoded_list(1 ${ARGC})
   ans(args)
 
   list_extract_flag_name(args --reverse)
@@ -40,7 +40,7 @@ function(cmake_invocation_filter_token_range range)
 
   set(result)
   while(take AND current)
-    cmake_token_range_filter("${current};${end}" {type} STREQUAL "command_invocation" --take 1 ${reverse})
+    cmake_token_range_filter("${current};${end}" type STREQUAL "command_invocation" --take 1 ${reverse})
     ans(invocation_token)
     if(NOT invocation_token)
       break()
@@ -48,7 +48,10 @@ function(cmake_invocation_filter_token_range range)
     if(reverse)
       set(end)
     endif()
-    cmake_token_range_filter("${invocation_token};${end}" {type} STREQUAL "nesting" --take 1)
+    
+    map_tryget("${invocation_token}" line)
+    ans(line)
+    cmake_token_range_filter("${invocation_token};${end}" type STREQUAL "nesting" --take 1)
     ans(arguments_begin_token)
 
     map_tryget(${arguments_begin_token} end)
@@ -56,8 +59,11 @@ function(cmake_invocation_filter_token_range range)
     map_tryget(${arguments_end_token} next)
     ans(arguments_after_end_token)
 
-    cmake_token_range_filter_values("${invocation_token};${arguments_after_end_token}" {type} MATCHES "(command_invocation)|(nesting)|(argument)")
+    cmake_token_range_filter_values("${invocation_token};${arguments_after_end_token}" 
+      type MATCHES "(command_invocation)|(nesting)|(argument)")
     ans(invocation)
+
+
 
     ## get invocation_identifier and invocation_arguments
     set(invocation_arguments ${invocation})
@@ -67,8 +73,14 @@ function(cmake_invocation_filter_token_range range)
     list_pop_back(invocation_arguments)
     
 
-    eval_predicate(${args})
-    ans(predicate_holds)
+    list(LENGTH args predicate_exists)
+    if(predicate_exists)
+      eval_predicate(${args})
+      ans(predicate_holds)
+    else()
+      set(predicate_holds true)
+    endif()
+    #print_vars(invocation_identifier invocation_arguments predicate_holds)
     #print_vars(invocation_token.type invocation_token.value predicate_holds args)
 
     ## check if invocation matches the custom predicate

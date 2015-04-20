@@ -2,8 +2,6 @@
 ##
 ##
 function(curry_compile_encoded_list out_func)
-  #arguments_encoded_list(${ARGC})
-  #ans(arguments)
   set(arguments ${ARGN})
   string_codes()
   set(regex_evaluates_to "=>")
@@ -125,7 +123,7 @@ endfunction()
 
 ##
 function(curry_compile)
-  arguments_encoded_list(${ARGC})
+  arguments_encoded_list(0 ${ARGC})
   ans(arguments)
   curry_compile_encoded_list(__outfunc "${arguments}")
   return_ans()
@@ -133,7 +131,7 @@ endfunction()
 
 ##
 function(curry3)
-  arguments_encoded_list(${ARGC})
+  arguments_encoded_list(0 ${ARGC})
   ans(arguments)
   curry_compile_encoded_list(__outfunc "${arguments}")
   ans(code)

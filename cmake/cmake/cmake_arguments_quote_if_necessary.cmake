@@ -15,8 +15,6 @@ function(cmake_arguments_quote_if_necessary)
     set(arg "\"${arg}\"")
 
     list(APPEND result "${arg}")
-    #cmake_string_escape2("${arg}")
-    #ans_append(result)
     
   endforeach()
   return_ref(result)

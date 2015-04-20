@@ -9,7 +9,7 @@
 ## %>
 ## 
 function(cmake_token_range_filter range )
-  arguments_encoded_list2(1 ${ARGC})
+  arguments_encoded_list(1 ${ARGC})
   ans(args)
   
   list_extract_flag(args --reverse)
@@ -36,14 +36,17 @@ function(cmake_token_range_filter range )
     ans(value)
     map_tryget("${current}" type)
     ans(type)
+    map_tryget("${current}" line)
+    ans(line)
 
     eval_predicate(${predicate})
     ans(predicate_holds)
 
-    #print_vars(reverse predicate predicate_holds value type)
+    #print_vars(reverse line value type predicate predicate_holds value type )
     #string(REPLACE "{type}" "${type}" current _predicate "${args}")
     #string(REPLACE "{value}" "${value}" current_predicate "${current_predicate}")
     if(predicate_holds)
+    #print_vars(reverse line value type predicate predicate_holds value type )
 
       if(skip)
         math(EXPR skip "${skip} - 1")

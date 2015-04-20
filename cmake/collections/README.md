@@ -10,7 +10,31 @@ However using the `list` function that `CMake` provides it is possible to add al
 
 
 * [encoded_list](#encoded_list)
+* [encoded_list_append](#encoded_list_append)
+* [encoded_list_decode](#encoded_list_decode)
+* [encoded_list_get](#encoded_list_get)
+* [encoded_list_peek_back](#encoded_list_peek_back)
+* [encoded_list_peek_front](#encoded_list_peek_front)
+* [encoded_list_pop_back](#encoded_list_pop_back)
+* [encoded_list_pop_front](#encoded_list_pop_front)
+* [encoded_list_remove_at](#encoded_list_remove_at)
+* [encoded_list_remove_item](#encoded_list_remove_item)
+* [encoded_list_set](#encoded_list_set)
+* [encoded_list_to_cmake_string](#encoded_list_to_cmake_string)
+* [is_encoded_list](#is_encoded_list)
 * [index_range](#index_range)
+* [linked_list_insert_after](#linked_list_insert_after)
+* [linked_list_insert_before](#linked_list_insert_before)
+* [linked_list_new](#linked_list_new)
+* [linked_list_node_new](#linked_list_node_new)
+* [linked_list_peek_back](#linked_list_peek_back)
+* [linked_list_peek_front](#linked_list_peek_front)
+* [linked_list_pop_back](#linked_list_pop_back)
+* [linked_list_pop_front](#linked_list_pop_front)
+* [linked_list_push_back](#linked_list_push_back)
+* [linked_list_push_front](#linked_list_push_front)
+* [linked_list_remove](#linked_list_remove)
+* [linked_list_replace](#linked_list_replace)
 * [list_after](#list_after)
 * [list_all](#list_all)
 * [list_any](#list_any)
@@ -40,6 +64,7 @@ However using the `list` function that `CMake` provides it is possible to add al
 * [list_fold](#list_fold)
 * [list_get](#list_get)
 * [list_get_labelled_value](#list_get_labelled_value)
+* [list_get_lean](#list_get_lean)
 * [list_intersect](#list_intersect)
 * [list_intersect_args](#list_intersect_args)
 * [list_isempty](#list_isempty)
@@ -80,6 +105,7 @@ However using the `list` function that `CMake` provides it is possible to add al
 * [list_unique](#list_unique)
 * [list_where](#list_where)
 * [list_without_range](#list_without_range)
+* [is_range](#is_range)
 * [list_range_get](#list_range_get)
 * [list_range_indices](#list_range_indices)
 * [list_range_partial_write](#list_range_partial_write)
@@ -89,13 +115,11 @@ However using the `list` function that `CMake` provides it is possible to add al
 * [list_range_try_get](#list_range_try_get)
 * [range_from_indices](#range_from_indices)
 * [range_indices](#range_indices)
+* [range_indices_valid](#range_indices_valid)
 * [range_instanciate](#range_instanciate)
 * [range_parse](#range_parse)
 * [range_partial_unpack](#range_partial_unpack)
 * [range_simplify](#range_simplify)
-* [list_isvalid](#list_isvalid)
-* [list_new](#list_new)
-* [list_values](#list_values)
 * [set_difference](#set_difference)
 * [set_isequal](#set_isequal)
 * [set_issubset](#set_issubset)
@@ -106,7 +130,83 @@ However using the `list` function that `CMake` provides it is possible to add al
 
 ## <a name="encoded_list"></a> `encoded_list`
 
+ creates encoded lists from the specified arguments
+
+
+
+
+## <a name="encoded_list_append"></a> `encoded_list_append`
+
+
+
+
+
+## <a name="encoded_list_decode"></a> `encoded_list_decode`
+
  faster
+
+
+
+
+## <a name="encoded_list_get"></a> `encoded_list_get`
+
+
+
+
+
+## <a name="encoded_list_peek_back"></a> `encoded_list_peek_back`
+
+
+
+
+
+## <a name="encoded_list_peek_front"></a> `encoded_list_peek_front`
+
+
+
+
+
+## <a name="encoded_list_pop_back"></a> `encoded_list_pop_back`
+
+
+
+
+
+## <a name="encoded_list_pop_front"></a> `encoded_list_pop_front`
+
+
+
+
+
+## <a name="encoded_list_remove_at"></a> `encoded_list_remove_at`
+
+
+
+
+
+## <a name="encoded_list_remove_item"></a> `encoded_list_remove_item`
+
+
+
+
+
+## <a name="encoded_list_set"></a> `encoded_list_set`
+
+
+
+
+
+## <a name="encoded_list_to_cmake_string"></a> `encoded_list_to_cmake_string`
+
+
+
+
+
+## <a name="is_encoded_list"></a> `is_encoded_list`
+
+
+
+ returns true iff the arguments passed are in encoded list format
 
 
 
@@ -118,6 +218,102 @@ However using the `list` function that `CMake` provides it is possible to add al
  if end_index is less than start_index then the indices are in declining order
  ie index_range(5 3) => 5 4
  (do not confuse this function with the `range_` functions)
+
+
+
+
+## <a name="linked_list_insert_after"></a> `linked_list_insert_after`
+
+ `(<linked list> <where: <linked list node> = <linked list>.tail >  <any>... )-><linked list node>`
+ 
+ inserts a new linked list node after `where`. if where is null then the tail of the list is used.
+ the arguments passed after where are used as the value of the new node
+
+
+
+
+## <a name="linked_list_insert_before"></a> `linked_list_insert_before`
+
+ `(<linked list> <where: <linked list node> = <linked list>.head)-><linked list node>`
+
+ inserts a new linked list node into the linked list before where and returns it.
+
+
+
+
+## <a name="linked_list_new"></a> `linked_list_new`
+
+ `()-><linked list>`
+ 
+ creates a new linked list 
+ 
+ ```
+ <linked list node> ::= <null> | {
+   head: <linked list node>|<null>
+   tail: <linekd list node>|<null>
+ }
+ ```
+
+
+
+
+## <a name="linked_list_node_new"></a> `linked_list_node_new`
+
+ `(<any>...)-><linked list node>`
+ 
+ creates a new linked list node which contains the value specified
+ 
+
+
+
+
+## <a name="linked_list_peek_back"></a> `linked_list_peek_back`
+
+
+
+
+
+## <a name="linked_list_peek_front"></a> `linked_list_peek_front`
+
+
+
+
+
+## <a name="linked_list_pop_back"></a> `linked_list_pop_back`
+
+
+
+
+
+## <a name="linked_list_pop_front"></a> `linked_list_pop_front`
+
+
+
+
+
+## <a name="linked_list_push_back"></a> `linked_list_push_back`
+
+
+
+
+
+## <a name="linked_list_push_front"></a> `linked_list_push_front`
+
+
+
+
+
+## <a name="linked_list_remove"></a> `linked_list_remove`
+
+
+
+
+
+## <a name="linked_list_replace"></a> `linked_list_replace`
+
+ `(<linked list> <where:<linked list node>> <any>...)-><linked list node>`
+  
+ replaces the specified linked list node and returns new node
 
 
 
@@ -358,6 +554,13 @@ However using the `list` function that `CMake` provides it is possible to add al
  gets the labelled value from the specified list
  set(thelist a b c d)
  list_get_labelled_value(thelist b) -> c
+
+
+
+
+## <a name="list_get_lean"></a> `list_get_lean`
+
+ quickly gets the items from the specified list
 
 
 
@@ -630,6 +833,15 @@ However using the `list` function that `CMake` provides it is possible to add al
 
 
 
+## <a name="is_range"></a> `is_range`
+
+
+
+
+
+
+
+
 ## <a name="list_range_get"></a> `list_range_get`
 
  returns the elements of the specified list ref which are indexed by specified range
@@ -692,6 +904,8 @@ However using the `list` function that `CMake` provides it is possible to add al
 
 ## <a name="list_range_try_get"></a> `list_range_try_get`
 
+ `(<&list> )`
+
  returns the elements of the specified list ref which are indexed by specified range
 
 
@@ -723,6 +937,13 @@ However using the `list` function that `CMake` provides it is possible to add al
  **Examples**
  ```
  ```
+
+
+
+
+## <a name="range_indices_valid"></a> `range_indices_valid`
+
+ returns all valid indices for the specified range
 
 
 
@@ -769,24 +990,6 @@ However using the `list` function that `CMake` provides it is possible to add al
 
  tries to simplify the specified range for the given length
  his is done by getting the indices and then getting the range from indices
-
-
-
-
-## <a name="list_isvalid"></a> `list_isvalid`
-
-
-
-
-
-## <a name="list_new"></a> `list_new`
-
-
-
-
-
-## <a name="list_values"></a> `list_values`
-
 
 
 

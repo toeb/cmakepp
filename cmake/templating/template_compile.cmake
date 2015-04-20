@@ -109,8 +109,12 @@ function(template_compile input)
       ## handle code fragment
       set(code "${CMAKE_MATCH_1}")
 
-      ## special case <%>
-      if("${code}" MATCHES "^>([a-zA-Z_0-9]+ )(.*)")
+      if("${code}" MATCHES "^>>([a-zA-Z_0-9]+ )(.*)")
+        set(func "${CMAKE_MATCH_1}")
+        cmake_string_escape("${CMAKE_MATCH_2}")
+        ans(output)
+        set(code "${func}(${output})\n")
+      elseif("${code}" MATCHES "^>([a-zA-Z_0-9]+ )(.*)")
         set(output_var "${CMAKE_MATCH_1}")
         cmake_string_escape("${CMAKE_MATCH_2}")
         ans(output)
@@ -140,6 +144,7 @@ function(template_compile input)
   endforeach()
 
   address_append_string("${result}" "\n template_end()")
+
 
 
   address_get(${result})

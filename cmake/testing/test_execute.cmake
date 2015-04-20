@@ -6,7 +6,6 @@ function(test_execute test)
 
   #initialize variables which test can use
 
-#  set(test_name "${test}")
   get_filename_component(test_name "${test}" NAME_WE) 
 
   # intialize message listener
@@ -23,6 +22,8 @@ function(test_execute test)
   message(STATUS "test directory is ${test_dir}")  
   pushd("${test_dir}" --create)
   timer_start("test duration")
+
+
   call("${test}"())
   
   set(time)

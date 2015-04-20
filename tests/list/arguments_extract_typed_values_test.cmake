@@ -31,6 +31,7 @@ set(myvalue true)
   assert(NOT myvalue)
   assert(myvalue2)
   assertf({config.asd} STREQUAL "bsd")
+ 
   assert(${rest} EQUALS kakaka jfjfjf)
   assert(callback)
   

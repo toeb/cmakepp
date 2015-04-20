@@ -24,14 +24,24 @@ Functions in cmake are not variables - they have a separate global only scope in
 ### Function List
 
 
+* [anonymous_function](#anonymous_function)
+* [anonymous_function_new](#anonymous_function_new)
+* [arguments_anonymous_function](#arguments_anonymous_function)
+* [arguments_cmake_code](#arguments_cmake_code)
+* [arguments_cmake_string](#arguments_cmake_string)
 * [arguments_encoded_list](#arguments_encoded_list)
+* [arguments_extract](#arguments_extract)
+* [arguments_foreach](#arguments_foreach)
+* [arguments_function](#arguments_function)
 * [arguments_sequence](#arguments_sequence)
 * [arguments_string](#arguments_string)
 * [bind](#bind)
 * [call](#call)
 * [check_function](#check_function)
 * [curry_compile_encoded_list](#curry_compile_encoded_list)
+* [define_function](#define_function)
 * [function_capture](#function_capture)
+* [function_define_new](#function_define_new)
 * [function_help](#function_help)
 * [function_import](#function_import)
 * [function_import_dispatcher](#function_import_dispatcher)
@@ -47,6 +57,7 @@ Functions in cmake are not variables - they have a separate global only scope in
 * [invocation_arguments_sequence](#invocation_arguments_sequence)
 * [invocation_argument_encoded_list](#invocation_argument_encoded_list)
 * [invocation_argument_string](#invocation_argument_string)
+* [is_anonymous_function](#is_anonymous_function)
 * [is_function](#is_function)
 * [is_function_cmake](#is_function_cmake)
 * [is_function_file](#is_function_file)
@@ -61,10 +72,69 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ### Function Descriptions
 
+## <a name="anonymous_function"></a> `anonymous_function`
+
+
+
+
+
+## <a name="anonymous_function_new"></a> `anonymous_function_new`
+
+
+
+
+
+## <a name="arguments_anonymous_function"></a> `arguments_anonymous_function`
+
+
+
+
+
+## <a name="arguments_cmake_code"></a> `arguments_cmake_code`
+
+ `(<start index> <end index>)-> <cmake code>`
+ 
+ captures the cmake code for the calling function and returns it as a string  
+
+
+
+
+## <a name="arguments_cmake_string"></a> `arguments_cmake_string`
+
+
+
+ recreates the invocation arguments which when evaluated are identical
+ to the arguments passed to the function where this macro was invoked
+
+
+
+
 ## <a name="arguments_encoded_list"></a> `arguments_encoded_list`
 
- (${ARGC}) => 
  
+
+ returns an encoded list for the specified arguments passed to
+ current function invocation.
+ 
+ you can only use this inside of a cmake function and not inside a macro
+
+
+
+
+## <a name="arguments_extract"></a> `arguments_extract`
+
+
+
+
+
+## <a name="arguments_foreach"></a> `arguments_foreach`
+
+
+
+
+
+## <a name="arguments_function"></a> `arguments_function`
+
 
 
 
@@ -111,9 +181,28 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 
+## <a name="define_function"></a> `define_function`
+
+ define an inline function
+ e.g. `define_function(my_func() message(hello))`
+
+
+
+
 ## <a name="function_capture"></a> `function_capture`
 
  captures variables from the current scope in the function
+
+
+
+
+## <a name="function_define_new"></a> `function_define_new`
+
+ `(<signarture> <cmake code>)-><function name>`
+
+ defines an anonymous cmake function and returns its reference (name)
+ the code needs to begin with the signature without the name e.g. `(arg1 arg2)` 
+  
 
 
 
@@ -203,6 +292,12 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 ## <a name="invocation_argument_string"></a> `invocation_argument_string`
+
+
+
+
+
+## <a name="is_anonymous_function"></a> `is_anonymous_function`
 
 
 

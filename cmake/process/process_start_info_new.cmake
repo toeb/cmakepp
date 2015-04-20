@@ -16,7 +16,7 @@
 ##  ans(info)
 ##  template_out_json(${info}) %>` 
 function(process_start_info_new)
-  arguments_encoded_list(${ARGC})
+  arguments_encoded_list(0 ${ARGC})
   ans(arguments_list)
 
   list_extract_any_labelled_value(arguments_list WORKING_DIRECTORY)

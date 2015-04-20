@@ -9,12 +9,9 @@ function(bcp_extract_unit_clauses f clauses)
   map_keys(${clauses})
   ans(clause_indices)
 
-
-
   set(unit_literals)
 
-
-  foreach(ci   ${clause_indices}  )
+  foreach(ci ${clause_indices})
     # ## get clause's literal indices
     map_tryget(${clauses} ${ci})
     ans(clause)

@@ -1,7 +1,7 @@
 function(test)
 
 
-  macro(arguments_encoded_list2)
+  macro(arguments_encoded_list)
     string_codes()
     set(str)
     foreach(i RANGE 0 100)
@@ -10,7 +10,7 @@ function(test)
     string(SUBSTRING "${str}" 1 -1 str)
     set(eval_this "
 
-      macro(arguments_encoded_list2)
+      macro(arguments_encoded_list)
         string_encode_list(\"${str}\")
         string(REPLACE \"${free_token}${free_token}\" \"\" __ans \"\${__ans}\")
         string(REPLACE \"${free_token}\" \"\\;\" __ans \"\${__ans}\")
@@ -20,13 +20,13 @@ function(test)
    # _message("${eval_this}")
     eval("${eval_this}")
 
-    arguments_encoded_list2()
+    arguments_encoded_list()
 
   endmacro()
 
 
   function(test)
-    arguments_encoded_list2()
+    arguments_encoded_list()
     return_ans()
   endfunction()
 
