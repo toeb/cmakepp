@@ -1,6 +1,8 @@
 ![cmakepp logo](https://raw.githubusercontent.com/toeb/cmakepp/master/logo.png "cmakepp logo")
 
 ## A CMake Enhancement Suite
+
+[![Join the chat at https://gitter.im/toeb/cmakepp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/toeb/cmakepp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)](https://travis-ci.org/toeb/cmakepp)
 [![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)](https://github.com/toeb/cmakepp/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/network)
