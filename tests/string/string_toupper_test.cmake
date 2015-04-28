@@ -1,0 +1,36 @@
+function(test)
+  set(res "")
+  # Word is transformed to upper case (1/3)
+  set(input "test")
+  string_toupper("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "TEST")
+
+  set(res "")
+  # Word is transformed to upper case (2/3)
+  set(input "Test")
+  string_toupper("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "TEST")
+
+  set(res "")
+  # Word is transformed to upper case (3/3)
+  set(input "test multiple")
+  string_toupper("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "TEST MULTIPLE")
+
+  set(res "")
+  # Upper case string stays unchanged
+  set(input "TEST MULTIPLE")
+  string_toupper("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "TEST MULTIPLE")
+
+  set(res "")
+  # Empty string
+  set(input "")
+  string_trim("${input}")
+  ans(res)
+  assert("${res}_" STREQUAL "_")
+endfunction()

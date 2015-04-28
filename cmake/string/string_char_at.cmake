@@ -1,13 +1,13 @@
-## <%=markdown_template_function_header("(<index:int> <input:string>)-><char>")%>
+## `(<input:<string>> <index:<int>>)-><string>`
 ##
-## returns the character at the position specified. strings are indexed 0 based
-## indices less than -1 are translated into length - |index|
+## Returns the character at the specified position (index). 
+## Indexing of strings starts at 0. Indices less than -1 are translated into "length - |index|"
 ##
 ## *Examples*
-## ```cmake
-## string_char_at("abcdefg" 3)  # => "d"
-## string_char_at("abcdefg" -3) # => "f"
-## ```
+## set(input "example")
+## string_char_at("${input}" 3) # => "m"
+## string_char_at("${input}"-3) # => "l"
+##
 ##
 function(string_char_at input index)
   string(LENGTH "${input}" len)

@@ -1,5 +1,12 @@
-# transforms the specifiedstring to lower case
-function(string_tolower str)
-  string(TOLOWER "${str}" str)
-  return_ref(str)
+## `(<input:<string>>)-><string>`
+##
+## Transforms the specified string to lower case.
+## 
+## **Examples**
+##  string_tolower("UPPER") # => "upper"
+##
+##
+function(string_tolower input)
+  string(TOLOWER "${input}" input)
+  return_ref(input)
 endfunction()

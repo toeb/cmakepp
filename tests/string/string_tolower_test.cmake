@@ -1,0 +1,36 @@
+function(test)
+  set(res "")
+  # Word is transformed to lower case (1/3)
+  set(input "TEST")
+  string_tolower("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "test")
+
+  set(res "")
+  # Word is transformed to lower case (2/3)
+  set(input "Test")
+  string_tolower("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "test")
+
+  set(res "")
+  # Word is transformed to lower case (3/3)
+  set(input "TEST MULTIPLE")
+  string_tolower("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "test multiple")
+
+  set(res "")
+  # Lower case string stays unchanged
+  set(input "test multiple")
+  string_tolower("${input}")
+  ans(res)
+  assert("${res}" STREQUAL "test multiple")
+
+  set(res "")
+  # Empty string
+  set(input "")
+  string_trim("${input}")
+  ans(res)
+  assert("${res}_" STREQUAL "_")
+endfunction()
