@@ -14,14 +14,14 @@ function(string_repeat what n)
   if(${n} LESS 1)
     return()
   endif()
-  
-  foreach(i RANGE 1 ${n})
-    if(${i} GREATER 1)
+
+  set(res "${what}")
+
+  if(${n} GREATER 1)
+    foreach(i RANGE 2 ${n})
       set(res "${res}${separator}${what}")
-    else()
-      set(res "${what}")
-    endif()
-  endforeach()
-  
+    endforeach()
+  endif()
+
   return_ref(res)
 endfunction()
