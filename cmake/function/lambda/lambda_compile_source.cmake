@@ -41,7 +41,7 @@
       cmake_string_escape("${current_string}")
       ans(current_string)
 
-      string_replace_first("${string_token}" "\"${current_string}\"" "${code}")
+      string_replace_first("${code}" "${string_token}" "\"${current_string}\"")
       ans(code)
     endwhile()
 
