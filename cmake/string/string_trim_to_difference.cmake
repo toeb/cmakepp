@@ -1,4 +1,4 @@
-## `(<lhs:<string reference>> <rhs:<string reference>>)-><lhs:<string reference>> <rhs:<string reference>>`
+## `(<lhs:<string&>> <rhs:<string&>>)-><lhs:<string&>> <rhs:<string&>>`
 ##
 ## Removes the beginning of the string that matches
 ## from reference string "lhs" and "rhs". 

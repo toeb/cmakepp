@@ -1,0 +1,6 @@
+function(test)
+  set(res "")
+  set(input "abc")
+  string_split_parts("${input}" 1)
+  ans(res)
+endfunction()

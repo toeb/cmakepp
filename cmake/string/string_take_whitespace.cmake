@@ -1,4 +1,4 @@
-## `(<__str_ref:<string reference>>)-><__str_ref:<string reference>>`
+## `(<__str_ref:<string&>>)-><__str_ref:<string&>>`
 ##
 ## Removes preceeding whitespaces of the input string reference.
 ## See **Examples** for passing references.
