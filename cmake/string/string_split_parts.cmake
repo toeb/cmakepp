@@ -5,12 +5,17 @@
 ##
 ## **Examples**
 ##  set(input "abc")
-##  string_split_parts("${input}" 1) # => 
+##  string_split_parts("${input}" 1) # => linked_list("a", "b", "c")
+##  string_split_parts("${input}" 2) # => linked_list("ab", "c")
+##  string_split_parts("${input}" 3) # => linked_list("abc")
 ##
 ##
 function(string_split_parts str length)
   address_new()
   ans(first_node)
+  if(${length} LESS 1)
+    return_ref(first_node)
+  endif()
   
   set(current_node ${first_node})
   while(true)      

@@ -1,4 +1,12 @@
-# replaces first occurence of stirng_search with string_replace in string_input
+## `(<string_search:<string>> <string_replace:<string>> <string_input:<string>>)-><res:<string>>`
+##
+## Replaces the first occurence of "string_search" with "string_replace" in the input string "string_input".
+##
+## **Examples**
+##  set(input "abc")
+##  string_replace_first("a" "z" "${input}") # => "zbc"
+##
+##
 function(string_replace_first  string_search string_replace string_input)
 	string(FIND "${string_input}" "${string_search}" index)
 	if("${index}" LESS "0")
