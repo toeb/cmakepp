@@ -1,7 +1,16 @@
-## pads the specified string to be as long as specified
-## if the string is longer then nothing is padded
-## if no delimiter is specified than " " (space) is used
-## if --prepend is specified the padding is inserted into front of string
+## `(<str:<string>> <len:<int>> <argn:<string>>)-><str:<string>>`
+##  
+## Pads the specified string to be as long as specified length "len".
+##  - If the string is longer then nothing is padded
+##  - If no delimiter is specified than " " (space) is used
+##  - If "--prepend" is specified for "argn" the padding is inserted at the beginning of "str"
+##
+## **Examples**
+##  set(input "word")
+##  string_pad("${input}" 6) # => "word  "
+##  string_pad("${input}" 4) # => "word"
+##
+##
 function(string_pad str len)  
   set(delimiter ${ARGN})
   list_extract_flag(delimiter --prepend)
@@ -11,7 +20,6 @@ function(string_pad str len)
   endif()  
   string(LENGTH "${str}" actual)  
   if(${actual} LESS ${len})
-
     math(EXPR n "${len} - ${actual}") 
 
     string_repeat("${delimiter}" ${n})
