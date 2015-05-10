@@ -30,3 +30,32 @@ function(project_package_descriptor_reader project)
   endif()
 
 endfunction()
+
+function(project_package_descriptor_initialize_new project)
+  map_tryget("${project}" "content_dir")
+  ans(content_dir)
+  glob_single("${content_dir}/package.*")
+  ans(package_file)
+
+  if(NOT package_file)
+    message("no pakcage file")
+    return()
+  endif()
+
+
+  log("using existing package_descriptor in '${package_file}'")
+
+  path_relative("${content_dir}" "${package_file}")
+  ans(relative_package_file)
+
+  map_tryget(${project} project_descriptor)
+  ans(project_descriptor)
+
+  map_set(${project_descriptor} package_descriptor_file "${relative_package_file}")
+
+  return()
+
+endfunction()
+
+
+task_enqueue("[]() message(wot); event_addhandler(project_on_new project_package_descriptor_initialize_new)")

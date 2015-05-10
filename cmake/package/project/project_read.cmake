@@ -28,8 +28,7 @@ function(project_read)
   endif()
 
   if(NOT project_file)
-    error("no project file found for location '{location}' " --function project_read)
-    return()
+    throw("no project file found for location '{location}' " --function project_read)
   endif()
 
 
@@ -37,16 +36,14 @@ function(project_read)
   ans(project_handle)
 
   if(NOT project_handle)
-    error("not a valid project file '{project_file}' " --function project_read)
-    return()
+    throw("not a valid project file '{project_file}' " --function project_read)
   endif()
 
 
   ## derive content dir from configured relative project file path
   assign(project_file_path = project_handle.project_descriptor.project_file)
   if(NOT project_file_path)
-    error("project_descriptor.project_file is missing" --function project_read)
-    return()
+    throw("project_descriptor.project_file is missing" --function project_read)
   endif()
   string_remove_ending("${project_file}" "/${project_file_path}")
   ans(content_dir)

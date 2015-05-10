@@ -66,7 +66,7 @@
           git_lean(clone --reference "${repo_cache_dir}" "${remote_uri}" "${target_dir}")
           ans_extract(error)
           if(error)
-            message(FATAL_ERROR "failed to reference clone")
+            message(FATAL_ERROR "failed to reference clone (${error}) ${__ans}")
           endif()
           pushd("${target_dir}")
             git_lean(checkout "${git_ref}")

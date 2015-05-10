@@ -47,11 +47,10 @@ function(project_open content_dir)
   
 
   ## emit events
-
-
   ## if project is new emit that event
-  project_state_matches("${project_handle}" "^(unknown)$")
+  project_state_matches("${project_handle}" "unknown")
   ans(is_new)
+
   if(is_new)
     event_emit(project_on_new ${project_handle})
     project_state_change("${project_handle}" closed)
