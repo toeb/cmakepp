@@ -22,6 +22,7 @@
     assign(revision = package_handle.scm_descriptor.ref.revision)
 
     git_cached_clone("${remote_uri}" "${target_dir}" --ref "${revision}" ${args})
+    rethrow(true)
     ans(target_dir)
 
     map_set(${package_handle} content_dir "${target_dir}")

@@ -1,8 +1,14 @@
 
 function(message)
-	cmake_parse_arguments("" "PUSH_AFTER;POP_AFTER;DEBUG;INFO;FORMAT;PUSH;POP" "LEVEL" "" ${ARGN})
-	set(log_level ${_LEVEL})
-	set(text ${_UNPARSED_ARGUMENTS})
+	cmake_parse_arguments("" "PUSH_AFTER;POP_AFTER;INFO;FORMAT;PUSH;POP" "" "" ${ARGN})
+	## format
+	if(_FORMAT)
+		format("${_UNPARSED_ARGUMENTS}")
+		ans(text)
+	else()
+		set(text ${_UNPARSED_ARGUMENTS})
+	endif()
+
 
 	## indentation
 	if(_PUSH)
@@ -24,26 +30,7 @@ function(message)
 	## end of indentationb
 
 
-	## log_level
-	if(_DEBUG)
-		if(NOT log_level)
-			set(log_level 3)
-		endif()
-		set(text STATUS ${text})
-	endif()
-	if(_INFO)
-		if(NOT log_level)
-			set(log_level 2)
-		endif()
-		set(text STATUS ${text})
-	endif()
-	if(NOT log_level)
-		set(log_level 0)
-	endif()
 
-	if(NOT MESSAGE_LEVEL)
-		set(MESSAGE_LEVEL 3)
-	endif()
 
 	list(GET text 0 modifier)
 	if(${modifier} MATCHES "FATAL_ERROR|STATUS|AUTHOR_WARNING|WARNING|SEND_ERROR|DEPRECATION")
@@ -52,15 +39,8 @@ function(message)
 		set(modifier)
 	endif()
 
-	## format
-	if(_FORMAT)
-		format( "${text}")
-		ans(text)
-	endif()
+	
 
-	if(NOT MESSAGE_DEPTH )
-		set(MESSAGE_DEPTH -1)
-	endif()
 
 	if(NOT text)
 		return()
@@ -70,22 +50,9 @@ function(message)
 	ans(message)
 	map_set(${message} text "${text}")
 	map_set(${message} indent_level ${message_indent_level})
-	map_set(${message} log_level ${log_level})
 	map_set(${message} mode "${modifier}")
 	event_emit(on_message ${message})
 
-	if(log_level GREATER MESSAGE_LEVEL)
-		return()
-	endif()
-	if(MESSAGE_QUIET)
-		return()
-	endif()
-	# check if deep message are to be ignored
-	if(NOT MESSAGE_DEPTH LESS 0)
-		if("${message_indent_level}" GREATER "${MESSAGE_DEPTH}")
-			return()
-		endif()
-	endif()
 
 	tock()
 
