@@ -1,9 +1,13 @@
 ## `(<remote uri:<~uri>> <?target_dir> [--readonly] ([--file <>]|[--read<>]) [--ref <git ref>])-> `
 ##
+## clones the specified remote repository to the specified target directory
 ##
+## **flags**
+## `--file <repository path>`  
+## `--read <repository path>`  
 function(git_cached_clone remote_uri)
   set(args ${ARGN})
-
+  
 
   list_extract_flag(args --readonly)
   ans(readonly)
