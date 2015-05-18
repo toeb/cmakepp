@@ -58,4 +58,4 @@ function(project_package_descriptor_initialize_new project)
 endfunction()
 
 
-task_enqueue("[]() message(wot); event_addhandler(project_on_new project_package_descriptor_initialize_new)")
+task_enqueue("[]()  event_addhandler(project_on_new project_package_descriptor_initialize_new)")

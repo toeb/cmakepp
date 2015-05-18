@@ -1,5 +1,18 @@
 function(test)
 
+## should be able to pull the correct repo
+  package_source_pull_git("https://github.com/toeb/cmakepp" "clone3")
+  package_source_pull_git("https://github.com/toeb/cmakepp" "clone3")
+  ans(res)
+  assertf("{res.content_dir}" STREQUAL "${test_dir}/clone3")
+
+
+  # package_source_pull_git("https://github.com/toeb/cmakepp" "clone3")
+  # package_source_pull_git("https://github.com/toeb/accounting" "clone3")
+  # ans(res)
+  # assert(res)
+  # todo: existing dir with no git, existing dir with git. ...
+
 
 
   package_source_pull_git("https://github.com/toeb/cmakepp" "clone3")

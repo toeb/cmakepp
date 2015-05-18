@@ -14,7 +14,7 @@ function(package_source_pull_git uri)
   ans(package_handle)
 
   if(NOT package_handle)
-      return()
+    return()
   endif()
 
 
@@ -22,9 +22,20 @@ function(package_source_pull_git uri)
   ans(is_git)
 
   if(is_git)
-    ## if directory exists then 
+    log("'${target_dir}' is already a git repository. checking if it is the same")
+    package_source_resolve_git("${target_dir}")
+    ans(target_repo)
+    assign(target_revision = target_repo.scm_descriptor.ref.revision)
+    assign(package_revision = package_handle.scm_descriptor.ref.revision)
+    if("${target_revision}_" STREQUAL "${package_revision}_")
+      log("'${target_dir}' is already a git repository is already up to date.")
+      map_set(${package_handle} content_dir "${target_dir}")
+      return_ref(package_handle)
+    endif()
+    log("removing '${target_dir}' because it is incompatible with {uri.uri}")
+
+    rm(-r "${target_dir}")
     ##http://stackoverflow.com/questions/2411031/how-do-i-clone-into-a-non-empty-directory
-    message(WARNING "this operation will fail because the directory already exists")
   endif()
 
   assign(remote_uri = package_handle.scm_descriptor.ref.uri)
