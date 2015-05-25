@@ -1,4 +1,3 @@
-
 ## writes a file_map to the pwd.
 ## empty directories are not created
 ## fm is parsed according to obj()

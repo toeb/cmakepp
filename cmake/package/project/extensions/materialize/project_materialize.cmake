@@ -8,7 +8,7 @@
 ##
 ## returns the package handle on success
 ## 
-## **events**: 
+## **emits**: 
 ## * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
 ## * `[pwd=target_dir]project_on_package_materialized(<project handle> <package handle>)`
 ##
@@ -17,6 +17,10 @@
 ## * adds the specified package to the `package cache` if it does not exist 
 ## * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
 ## * `package_handle.materialization_descriptor = <materialization handle>`
+##
+## **throws**
+## * invalid_package_uri - uri cannot be resolved
+## * invalid_package_dir 
 ##
 ## ```
 ## <materialization handle> ::= {
@@ -69,9 +73,10 @@ function(project_materialize project_handle package_uri)
 
   ## get a package handle from uri
   package_source_resolve(${package_source} "${package_uri}" --cache ${package_cache})
+
   ans(package_handle)
   if(NOT package_handle)
-    return()
+    throw("invalid_package_uri" "could not resolve package uri {package_uri}" --function project_materialize)
   endif()
 
 
@@ -110,8 +115,7 @@ function(project_materialize project_handle package_uri)
   map_set(${package_handle} content_dir ${package_content_dir})
 
   if("${package_content_dir}" STREQUAL "${project_dir}")
-    message(WARNING"project_materialize: invalid package dir '${package_content_dir}'")
-    return()
+    throw("invalid_package_dir" "the specified content dir is the project dir: '${project_dir}'")
   endif()
 
   pushd(${installation_dir} --create)
@@ -125,7 +129,7 @@ function(project_materialize project_handle package_uri)
     if(NOT pull_handle)
       map_remove(${package_handle} materialization_descriptor)
       popd()
-      return()
+      throw("package_pull_error" "could not pull package")
     endif()
 
     map_set(${package_materializations} ${package_uri} ${package_handle})

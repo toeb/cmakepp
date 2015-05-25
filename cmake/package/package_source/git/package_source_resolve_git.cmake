@@ -19,6 +19,7 @@ function(package_source_resolve_git uri)
   assign(rev = package_handle.scm_descriptor.ref.revision)
 
   git_cached_clone("${remote_uri}" --ref ${rev} --read package.cmake)
+  rethrow(true)
   ans(package_descriptor_content)
 
   json_deserialize("${package_descriptor_content}")
