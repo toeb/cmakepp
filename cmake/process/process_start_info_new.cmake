@@ -23,6 +23,9 @@ function(process_start_info_new)
   ans(working_directory)
   list_extract_any_labelled_value(arguments_list TIMEOUT)
   ans(timeout)
+  list_extract_flag(arguments_list --passthru)
+  ans(passthru)
+
 
   if(NOT timeout)
     set(timeout -1)
@@ -47,6 +50,7 @@ function(process_start_info_new)
   map_set(${process_start_info} command_arguments "${arguments_list}")
   map_set(${process_start_info} working_directory "${working_directory}")  
   map_set(${process_start_info} timeout "${timeout}")
+  map_set(${process_start_info} passthru ${passthru})
 
   return_ref(process_start_info)
 endfunction()

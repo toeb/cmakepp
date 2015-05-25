@@ -74,14 +74,24 @@ function(process_execute process_handle)
     set(timeout)
   endif()
 
+  map_tryget(${process_start_info} passthru)
+  ans(passthru)
+
+  if(passthru)
+    set(output_vars)
+  else()
+    set(output_vars   
+      OUTPUT_VARIABLE stdout
+      ERROR_VARIABLE stderr
+    )
+  endif()
   #message("executing ${command} ${command_arguments_string}")
 
   set(eval_this "
     execute_process(
       COMMAND ${command} ${command_arguments_string}
       RESULT_VARIABLE exit_code
-      OUTPUT_VARIABLE stdout
-      ERROR_VARIABLE stderr
+      ${output_vars}
       WORKING_DIRECTORY ${cwd}
       ${timeout}
     )
@@ -94,9 +104,10 @@ function(process_execute process_handle)
     map_set(${process_handle} pid)
   endif()
   map_set(${process_handle} exit_code "${exit_code}")
-  map_set(${process_handle} stdout "${stdout}")
-  map_set(${process_handle} stderr "${stderr}")
-
+  if(NOT passthru)
+    map_set(${process_handle} stdout "${stdout}")
+    map_set(${process_handle} stderr "${stderr}")
+  endif()
   ## change state
   process_handle_change_state(${process_handle} terminated)
 
