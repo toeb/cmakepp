@@ -2,6 +2,41 @@ function(test)
 
 
 
+  promise_from_anonymous(() message("before_start") timer_start(t1))
+  ans(p3)
+  message("1 ${p3}")
+  promise_start(${p3})
+  promise_then_execute(${p3}  COMMAND ${CMAKE_COMMAND} -E sleep 1)
+  ans(p3)
+  message("1 ${p3}")
+
+  promise_wait(${p3})
+  ans(result)
+
+
+  return()
+
+
+  promise_then_anonymous(${p3} () message(after_start) timer_print_elapsed(t1) json_print(\${ARGN}))
+  ans(p3)
+
+
+
+return()
+
+  promise_from_anonymous(() return(1))
+  ans(uut)
+
+  
+  promise_start(${uut})
+  
+  promise_wait(${uut})
+  ans(value)
+
+  assert(${value} STREQUAL 1) 
+
+
+
   ##
   promise_then_anonymous("1" () math(EXPR i "\${ARGN} + \${ARGN}") return(\${i}))
   ans(promise)
@@ -137,14 +172,26 @@ function(test)
   promise_execute(COMMAND ${CMAKE_COMMAND} -E sleep 4)
   ans(p2)
 
-  promise_execute(COMMAND ${CMAKE_COMMAND} -E sleep 5)
+
+  promise_from_anonymous(() message("before_start") timer_start(t1))
+  ans(p3)
+  promise_start(${p3})
+  promise_wait(${p3})
+  promise_then_execute(${p3}  COMMAND ${CMAKE_COMMAND} -E sleep 1)
   ans(p3)
 
 
+  promise_then_anonymous(${p3} () message(after_start) timer_print_elapsed(t1) json_print(\${ARGN}))
+  ans(p3)
+  promise_then_anonymous(${p3} () message(number3finished))
+  ans(p3)
 
   promise_all("${p1}" "${p2}" "${p3}")
   ans(p4)
   promise_wait("${p4}")
+
+
+
   
 
 
