@@ -1,6 +1,21 @@
 function(test)
 
 
+  promise(() return(20) )
+  ans(p1)
+
+  promise_start("${p1}")
+
+  message("p1 ${p1}")
+  ans(p2)
+
+  json_print(${p1})
+
+  message("p1 ${p2}")
+
+  return()
+
+
 
   promise_from_anonymous(() message("before_start") timer_start(t1))
   ans(p3)

@@ -12,8 +12,6 @@ function(task_invoke task)
   ans(arguments)
   call2("${callable}" ${arguments})
   ans(res)
-  
-
   map_set(${task} return_value ${res})
   return_ref(res)    
 endfunction()
