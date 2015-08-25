@@ -7,6 +7,7 @@ function(test)
   promise_start("${p1}")
 
   message("p1 ${p1}")
+  promise_wait("${p1}")
   ans(p2)
 
   json_print(${p1})
