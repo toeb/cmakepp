@@ -41,3 +41,4 @@ function(glob)
 
   return_ref(paths)
 endfunction()
+

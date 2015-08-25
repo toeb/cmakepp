@@ -16,8 +16,19 @@ function(promise)
       promise_from_task("${promise}")
       ans(promise)
     else()
-      promise_from_value("${promise}")
-      ans(promise)
+      is_anonymous_function(${ARGN})
+      ans(is_anonymous_function)
+      if( is_anonymous_function)              
+        arguments_anonymous_function(0 ${ARGC})
+        ans(function)
+        promise_from_callable("${function}")
+        ans(promise)
+      else()
+        promise_from_value("${promise}")
+        ans(promise)
+      endif()
+
+      
     endif()
   endif()
   task_queue_global()
@@ -26,54 +37,5 @@ function(promise)
 
   return_ref(promise)
 endfunction()
-
-function(promise_new)
-  map_new()
-  ans(promise)
-  map_set_special("${promise}" $type promise)
-  map_set("${promise}" promise_state "pending")
-  return_ref(promise)
-endfunction()
-
-function(promise_from_value)
-  promise_new()
-  ans(promise)
-  map_set("${promise}" promise_state "resolved")
-  map_set("${promise}" value "${ARGN}")
-  return_ref(promise)
-endfunction()
-  
-function(promise_from_task)
-  promise_new()
-  ans(promise)
-
-  task("${ARGN}")
-  ans(task)
-
-  if(NOT task)
-    return()
-  endif()
-
-  map_set("${promise}" task "${task}")
-  
-  return(${promise})
-endfunction()
-
-
-function(promise_from_callable callable)
-  task_new("${callable}")
-  ans(task)
-  promise_from_task("${task}")
-  ans(promise)
-  return_ref(promise)
-endfunction()
-
-function(promise_from_anonymous)
-  arguments_anonymous_function(0 ${ARGC})
-  ans(function)
-  promise_from_callable("${function}")
-  return_ans()
-endfunction()
-
 
 

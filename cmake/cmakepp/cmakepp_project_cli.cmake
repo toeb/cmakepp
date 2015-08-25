@@ -17,6 +17,7 @@ function(cmakepp_project_cli)
   if(verbose)
 
     event_addhandler("on_log_message" "[](entry)message(FORMAT '{entry.function}: {entry.message}')")
+    event_addhandler("project_on_new" "[](entry) message(FORMAT '{event.event_id}')")
     event_addhandler("project_on_opening" "[](proj) message(FORMAT '{event.event_id}: {proj.content_dir}'); message(PUSH)")
     event_addhandler("project_on_opened" "[](proj) message(FORMAT '{event.event_id}')")
     event_addhandler("project_on_loading" "[](proj) message(FORMAT '{event.event_id}'); message(PUSH)")
@@ -41,6 +42,9 @@ function(cmakepp_project_cli)
   endif()
 
 
+  list_pop_front(args)
+  ans(cmd)
+
   list_extract_flag(args --save)
   ans(save)
 
@@ -56,18 +60,28 @@ function(cmakepp_project_cli)
   else()
     project_read("${project_dir}")
     ans(project)
+    ## removes the current config directory
+    if("${cmd}" STREQUAL reinit)
+      map_tryget("${project}" project_descriptor )
+      ans(project_descriptor)
+      map_tryget("${project_descriptor}" config_dir)
+      ans(config_dir)
+      project_close("${project}")
+      log("reinitializing project - deleting config dir ${project_dir}/${config_dir}")
+      rm(-r "${project_dir}/${config_dir}")
+      set(cmd init)
+    endif()
   endif()
-
-  list_pop_front(args)
-  ans(cmd)
 
   if(NOT cmd)
     set(cmd run)
   endif()
   
+  ## creates the project int the specified path
   if("${cmd}" STREQUAL "init")
     list_pop_front(args)
     ans(path)
+    log("initializeing project in ${path}")
     project_open("${path}")
     ans(project)
   endif()
@@ -90,6 +104,7 @@ function(cmakepp_project_cli)
 
 
   if("${cmd}" STREQUAL "init")
+
   elseif("${cmd}" STREQUAL "get")
 
     if("${args}" MATCHES "(.+)\\((.*)\\)$")

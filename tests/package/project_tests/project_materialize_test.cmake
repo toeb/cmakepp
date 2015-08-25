@@ -26,11 +26,12 @@ function(test)
   assertf("{tracker.project_on_package_materialized[0].args[1]}" STREQUAL "{handle}")
   assert(EXISTS "${test_dir}/packages/mock_A-0.0.0")
 
+  ## does not exist
   timer_start(t2)
   project_materialize("${project}" "meh")
   ans(handle)
   timer_print_elapsed(t2)
-
+  assert(EXCEPTION "invalid_package_uri" "${handle}")
   assert(NOT handle)
 
 
