@@ -11,6 +11,10 @@
 ##
 function(string_remove_beginning original beginning)
   string(LENGTH "${beginning}" len)
+  string(LENGTH "${original}" orig_len)
+  if(len GREATER orig_len)
+    set(len 0)
+  endif()
   string(SUBSTRING "${original}" ${len} -1 original)
 
   return_ref(original)
