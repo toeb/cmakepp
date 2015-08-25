@@ -74,10 +74,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_decode_delimited"></a> `string_decode_delimited`
 
- tries to parse a delimited string
- returns either the original or the parsed delimited string
- delimiters can be specified via varargs
- see also string_take_delimited
 
 
 
@@ -101,24 +97,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 ## <a name="format"></a> `format`
-
- [**`format(<template string>)-><string>`**](format.cmake)
-
- this function utilizes [`assign(...)`](#assign) to evaluate expressions which are enclosed in handlebars: `{` `}`
- 
-
- *Examples*
- ```cmake
- # create a object
- obj("{a:1,b:[2,3,4,5,6],c:{d:3}}")
- ans(data)
- ## use format to print navigated expressiosn:
- format("{data.a} + {data.c.d} = {data.b[2]}") => "1 + 3 = 4"
- format("some numbers: {data.b[2:$]}") =>  "some numbers: 4;5;6"
- ...
- ```
- *Note:* You may not use ASCII-29 since it is used interally in this function. If you don't know what this means - don't worry
- 
 
 
 
@@ -144,6 +122,7 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_codes"></a> `string_codes`
 
+ special chars [||||;|@|]|↔|†|‡
 
 
 
@@ -161,14 +140,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 
 ## <a name="string_char_at"></a> `string_char_at`
-
- [**`string_char_at(<index:int> <input:string>)-><char>`**](string_char_at.cmake)
-
- returns the character at the position specified. strings are indexed 0 based
- indices less than -1 are translated into length - |index|
-
- *Examples*
- 
 
 
 
@@ -206,15 +177,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_isnumeric"></a> `string_isnumeric`
 
- returns true if the string is a integer (number)
- does not match non integers
 
 
 
 
 ## <a name="string_shorten"></a> `string_shorten`
 
- shortens the string to be at most max_length long
 
 
 
@@ -227,20 +195,11 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_eval"></a> `string_eval`
 
- evaluates the string <str> in the current scope
- this is done by macro variable expansion
- evaluates both ${} and @ style variables
 
 
 
 
 ## <a name="delimiters"></a> `delimiters`
-
- **`delimiters()->[delimiter_begin, delimiter_end]`**
-
- parses delimiters and retruns a list of length 2 containing the specified delimiters. 
- The usefullness of this function becomes apparent when you use [string_take_delimited](#string_take_delimited)
- 
 
 
 
@@ -260,18 +219,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="regex_search"></a> `regex_search`
 
+ matches the first occurens of regex and returns it
 
 
 
 
 ## <a name="string_char_at_set"></a> `string_char_at_set`
-
- `(<str:<string>> <index:<int>> <char:<string>>)-><string>`
-
- Sets the character at the specified position (index) to the input 'char'. 
- Indexing of strings starts at 0. Indices less than -1 are translated into "length - |index|"
- 
- **Examples**
 
 
 
@@ -285,13 +238,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_take_delimited"></a> `string_take_delimited`
 
- if the beginning of the str_name is a delimited string
- the undelimited string is returned  and removed from str_name
- you can specify the delimiter (default is doublequote "")
- you can also specify begin and end delimiter 
- the delimiters may only be one char 
- the delimiters are removed from the result string
- escaped delimiters are unescaped
 
 
 
@@ -304,9 +250,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_take_any_delimited"></a> `string_take_any_delimited`
 
- takes a string which is delimited by any of the specified
- delimiters 
- string_take_any_delimited(<string&> <delimiters:<delimiter...>>)
 
 
 
@@ -343,18 +286,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_isempty"></a> `string_isempty`
 
- returns true if the given string is empty
- normally because cmake evals false, no,  
- which destroys tests for real emtpiness
-
-
 
 
 
 
 ## <a name="ascii_generate_table"></a> `ascii_generate_table`
 
- generates the ascii table and stores it in the global ascii_table variable  
 
 
 
@@ -373,19 +310,12 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_pad"></a> `string_pad`
 
- pads the specified string to be as long as specified
- if the string is longer then nothing is padded
- if no delimiter is specified than " " (space) is used
- if --prepend is specified the padding is inserted into front of string
 
 
 
 
 ## <a name="string_take_address"></a> `string_take_address`
 
- string_take_address
-
- takes an address from the string ref  
 
 
 
@@ -446,23 +376,11 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_combine"></a> `string_combine`
 
- combines the varargs into a string joining them with separator
- e.g. string_combine(, a b c) => "a,b,c"
 
 
 
 
 ## <a name="string_to_title"></a> `string_to_title`
-
- `(<str:<string>>)-><string>`
-
- Transforms the input string to title case.
- Tries to be smart and keeps some words small.
-
- **Examples**
-  "the function string_totitle works"
-  -> "The Function string_totitle Works"
-
 
 
 
@@ -470,8 +388,6 @@ So I have created somewhat alot of functions which does things that you might ne
 
 ## <a name="string_trim_to_difference"></a> `string_trim_to_difference`
 
- removes the beginning of the string that matches
- from ref lhs and ref rhs
 
 
 
