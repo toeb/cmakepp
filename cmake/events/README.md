@@ -64,39 +64,23 @@ assert(EQUALS ${result} answer1 "i am an argument")
 
 ## <a name="event"></a> `event`
 
- `(<event-id>):<event>`
-
- tries to get the `<event>` identified by `<event-id>`
- if it does not exist a new `<event>` is created by  [`event_new(...)`](#event_new)
 
 
 
 
 ## <a name="events"></a> `events`
 
- `()-> <event>`
-
- returns the global events map it contains all registered events.
 
 
 
 
 ## <a name="events_track"></a> `events_track`
 
- `(<event-id...>)-><event tracker>`
-
- sets up a function which listens only to the specified events
- 
 
 
 
 
 ## <a name="event_addhandler"></a> `event_addhandler`
-
- `event_addhandler(<~event> <~callable>)-><event handler>`
-
- adds an event handler to the specified event. returns an `<event handler>`
- which can be used to remove the handler from the event.
 
 
 
@@ -104,92 +88,47 @@ assert(EQUALS ${result} answer1 "i am an argument")
 
 ## <a name="event_cancel"></a> `event_cancel`
 
- `()-><null>`
-
- only usable inside event handlers. cancels the current event and returns
- after this handler.
 
 
 
 
 ## <a name="event_clear"></a> `event_clear`
 
- `(<~event>)-><void>`
-
- removes all handlers from the specified event
 
 
 
 
 ## <a name="event_emit"></a> `event_emit`
 
- `(<~event> <args:<any...>>)-><any...>`
-
- emits the specified event. goes throug all event handlers registered to
- this event and 
- if event handlers are added during an event they will be called as well
-
- if a event calls event_cancel() 
- all further event handlers are disregarded
-
- returns the accumulated result of the single event handlers
 
 
 
 
 ## <a name="event_get"></a> `event_get`
 
- `(<~event>)-><event>`
-  
- returns the `<event>` identified by `<event-id>` 
- if the event does not exist `<null>` is returned.
 
 
 
 
 ## <a name="event_handler"></a> `event_handler`
 
- `(<~callable>)-><event handler>` 
-
- creates an <event handler> from the specified callable
- and returns it. a `event_handler` is also a callable
 
 
 
 
 ## <a name="event_handlers"></a> `event_handlers`
 
- `(<event>)-><event handler...>`
-
- returns all handlers registered for the event
 
 
 
 
 ## <a name="event_handler_call"></a> `event_handler_call`
 
- `(<event> <event handler>)-><any>`
-
- calls the specified event handler for the specified event.
 
 
 
 
 ## <a name="event_new"></a> `event_new`
-
- `(<?event-id>)-><event>`
-
- creates an registers a new event which is identified by
- `<event-id>` if the id is not specified a unique id is generated
- and used.
- 
- returns a new <event> object: 
- {
-   event_id:<event-id>
-   handlers: <callable...> 
-   ... (psibbly cancellable, aggregations)
- }
- also defines a global function called `<event-id>` which can be used to emit the event
 
 
 
@@ -197,20 +136,11 @@ assert(EQUALS ${result} answer1 "i am an argument")
 
 ## <a name="event_removehandler"></a> `event_removehandler`
 
- `(<event handler>)-><bool>`
-
- removes the specified handler from the event idenfied by event_id
- returns true if the handler was removed
 
 
 
 
 ## <a name="is_event"></a> `is_event`
-
- `(<any>)-><bool>`
-
- returns true if the specified value is an event
- an event is a ref which is callable and has an event_id
 
 
 

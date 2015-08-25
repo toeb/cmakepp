@@ -187,31 +187,11 @@ I provide the following functions for you to interact with `expr`.
 
 ## <a name="expr"></a> `expr`
 
- `(<expression>)-><any>`
-
- parses, compiles and evaluates the specified expression. The compilation result
- is cached (per cmake run)
-
 
 
 
 
 ## <a name="arguments_expression"></a> `arguments_expression`
-
- `(<begin index> <end index> <parameter definition>...)-><any>...`
-
-
- parses the arguments of the calling function cmakepp expressions
- expects `begin index` to be the index of first function parameters (commonly 0)
- and `end index` to be the index of the last function parameter to parse (commonly ${ARGC})
- var args are named arguments which will be set to be available in the function scope
-
- named arguments passed to function have a higher precedence than positional arguments 
-
- __sideffects__:
- * `arguments_expression_result` is a address of an object containing all parsed data
- * scope operations may modify the parent scope of the function
- 
 
 
 
@@ -219,21 +199,6 @@ I provide the following functions for you to interact with `expr`.
 
 ## <a name="cmakepp_enable_expressions"></a> `cmakepp_enable_expressions`
 
- `(${CMAKE_CURRENT_LIST_LINE})-><any>`
-
- you need to pass `${CMAKE_CURRENT_LIST_LINE}` for this to work
-
- this macro enables all expressions in the current scope
- it will only work in a CMake file scioe or inside a cmake function scope.
- You CANNOT use it in a loop, if statement, macro etc (everything that has a begin/end)
- Every expression inside that scope (and its subscopes) will be evaluated.  
-
- **Implementation Note**:
- This is achieved by parsing the while cmake file (and thus potentially takes very long)
- Afterwards the line which you pass as an argument is used to find the location of this macro
- every argument for every following expression in the current code scope is scanned for
- `$[...]` brackets which are in turn lexed,parsed and compiled (see `expr()`) and injected
- into the code which is in turn included
 
 
 

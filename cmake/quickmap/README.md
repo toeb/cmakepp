@@ -109,10 +109,6 @@ address_print(${themap})
 
 ## <a name="ref"></a> `ref`
 
- ref() -> <address> 
- 
- begins a new reference value and returns its address
- ref needs to be ended via end() call
 
 
 
@@ -125,7 +121,6 @@ address_print(${themap})
 
 ## <a name="var"></a> `var`
 
- captures a list of variable as a key value pair
 
 
 

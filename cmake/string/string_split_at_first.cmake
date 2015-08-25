@@ -5,8 +5,8 @@
 ## See **Examples** for passing references.
 ##
 ## **Examples**
-##  set(input "a@b@c")
-##  string_split_at_first(partA partB "${input}" "@") # => partA equals "a", partB equals "b@c"
+##  set(input "a@@b@@c")
+##  string_split_at_first(partA partB "${input}" "@@") # => partA equals "a", partB equals "b@@c"
 ##
 ##
 function(string_split_at_first parta partb input separator)

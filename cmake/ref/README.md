@@ -12,21 +12,20 @@ I wrapped the get_property and set_property commands in these shorter and simple
 * [address_append](#address_append)
 * [address_append_string](#address_append_string)
 * [address_delete](#address_delete)
-* [ref_get](#ref_get)
-* [address_type_get](#address_type_get)
-* [address_type_matches](#address_type_matches)
-* [is_address](#is_address)
+* [address_get](#address_get)
 * [address_new](#address_new)
 * [address_peek_back](#address_peek_back)
 * [address_peek_front](#address_peek_front)
 * [address_pop_back](#address_pop_back)
 * [address_pop_front](#address_pop_front)
-* [ref_prepend](#ref_prepend)
 * [address_print](#address_print)
 * [address_push_back](#address_push_back)
 * [address_push_front](#address_push_front)
-* [ref_set](#ref_set)
+* [address_set](#address_set)
 * [address_set_new](#address_set_new)
+* [address_type_get](#address_type_get)
+* [address_type_matches](#address_type_matches)
+* [is_address](#is_address)
 
 ### Function Descriptions
 
@@ -48,25 +47,7 @@ I wrapped the get_property and set_property commands in these shorter and simple
 
 
 
-## <a name="ref_get"></a> `ref_get`
-
-
-
-
-
-## <a name="address_type_get"></a> `address_type_get`
-
-
-
-
-
-## <a name="address_type_matches"></a> `address_type_matches`
-
-
-
-
-
-## <a name="is_address"></a> `is_address`
+## <a name="address_get"></a> `address_get`
 
 
 
@@ -102,12 +83,6 @@ I wrapped the get_property and set_property commands in these shorter and simple
 
 
 
-## <a name="ref_prepend"></a> `ref_prepend`
-
-
-
-
-
 ## <a name="address_print"></a> `address_print`
 
 
@@ -126,13 +101,31 @@ I wrapped the get_property and set_property commands in these shorter and simple
 
 
 
-## <a name="ref_set"></a> `ref_set`
+## <a name="address_set"></a> `address_set`
 
 
 
 
 
 ## <a name="address_set_new"></a> `address_set_new`
+
+
+
+
+
+## <a name="address_type_get"></a> `address_type_get`
+
+
+
+
+
+## <a name="address_type_matches"></a> `address_type_matches`
+
+
+
+
+
+## <a name="is_address"></a> `is_address`
 
 
 

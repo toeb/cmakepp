@@ -48,25 +48,24 @@ c = 3
 
 ## <a name="map_iterator"></a> `map_iterator`
 
- initializes a new mapiterator
 
 
 
 
 ## <a name="map_iterator_break"></a> `map_iterator_break`
 
+ use this macro inside of a while(true) loop it breaks when the iterator is over
+ e.g. this prints all key values in the map
+ while(true) 
+   map_iterator_break(myiterator)
+   message("${myiterator.key} = ${myiterator.value}")
+ endwhile()
 
 
 
 
 ## <a name="map_iterator_next"></a> `map_iterator_next`
 
- this function moves the map iterator to the next position
- and returns true if it was possible
- e.g.
- map_iterator_next(myiterator) 
- ans(ok) ## is true if iterator had a next element
- variables ${myiterator.key} and ${myiterator.value} are available
 
 
 

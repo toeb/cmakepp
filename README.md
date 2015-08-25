@@ -1,8 +1,6 @@
 ![cmakepp logo](https://raw.githubusercontent.com/toeb/cmakepp/master/logo.png "cmakepp logo")
 
 ## A CMake Enhancement Suite
-
-[![Join the chat at https://gitter.im/toeb/cmakepp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/toeb/cmakepp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Travis branch](https://img.shields.io/travis/toeb/cmakepp/master.svg)](https://travis-ci.org/toeb/cmakepp)
 [![GitHub stars](https://img.shields.io/github/stars/toeb/cmakepp.svg?)](https://github.com/toeb/cmakepp/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/toeb/cmakepp.svg)](https://github.com/toeb/cmakepp/network)
@@ -15,14 +13,17 @@
 Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the `cmakepp.cmake` file.  To find functionality browse the `README.md` files throughout this project.
 
 
- 
+
 # Feature Overview
 
 `cmakepp` has a lot of different functions. I tried to subdivide them into some meaningful sections. 
 
 
+* [Buildserver](cmake/buildserver/README.md)
 * [Creating Checksums](cmake/checksum/README.md)
+* [CMake handling functions](cmake/cmake/README.md)
 * [Collections](cmake/collections/README.md)
+* [Date/Time](cmake/datetime/README.md)
 * [Events](cmake/events/README.md)
 * [`cmakepp` Expression Syntax](cmake/expr/README.md)
 * [Filesystem](cmake/filesystem/README.md)
@@ -32,9 +33,14 @@ Look through the files in the package.  Most functions will be commented and the
 * [Navigation Functions](cmake/navigation/README.md)
 * [Objects ](cmake/object/README.md)
 * [Dependency Management](cmake/package/README.md)
+* [User Data](cmake/persistence/README.md)
 * [Process Management](cmake/process/README.md)
+* [Quick Map Syntax](cmake/quickmap/README.md)
+* [Reference Values](cmake/ref/README.md)
+* [Windows Registry](cmake/reg/README.md)
 * [Parsing and handling semantic versions](cmake/semver/README.md)
 * [String Functions](cmake/string/README.md)
+* [Tasks and Promises](cmake/task/README.md)
 * [Templating ](cmake/templating/README.md)
 * [Uniform Resource Identifiers (URIs)](cmake/uri/README.md)
 * [HTTP Client](cmake/web/README.md)
@@ -45,6 +51,15 @@ Look through the files in the package.  Most functions will be commented and the
 # Samples 
 
 I have developed some samples to show off `cmakepp`'s capabilities. Here you can find an overview of these samples
+
+https://github.com/open-source-parsers/jsoncpp/archive/1.6.0.tar.gz
+https://github.com/leethomason/tinyxml2/archive/2.2.0.tar.gz
+https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz
+
+
+
+
+
 
 
 * [Compiling a simple progam by including `cmakepp` and pulling `eigen` library ](samples/01-include-cmakepp-pull-eigen/README.md)
@@ -284,9 +299,9 @@ This is possible by overwriting CMakes default return() function with a macro. I
  "headers":{
   "Accept":"*/*",
   "Host":"httpbin.org",
-  "User-Agent":"curl/7.16.1"
+  "User-Agent":"curl/7.38.0"
  },
- "origin":"87.157.223.4",
+ "origin":"85.180.182.43",
  "url":"http://httpbin.org/get?key=value"
 }
 

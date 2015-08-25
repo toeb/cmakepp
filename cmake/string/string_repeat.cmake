@@ -5,7 +5,7 @@
 ## **Examples**
 ##  set(input "a")
 ##  string_repeat("${input}" 2) # => "aa"
-##  string_repeat("${input}" 2 "@") # => "a@a"
+##  string_repeat("${input}" 2 "@@") # => "a@@a"
 ##
 ##  
 function(string_repeat what n)

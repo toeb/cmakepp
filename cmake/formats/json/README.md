@@ -91,30 +91,19 @@ This is done by creating a hash from the input string and using it as a cache ke
 
 ## <a name="json_deserialize"></a> `json_deserialize`
 
- `(<json code>)->{}`
-
- deserializes the specified json code. In combination with json there are a few things
- that need mention:
- * semicolons.  If you use semicolons in json then they will be deserialized as
-   ASCII 31 (Unit Separator) which allows cmake to know the difference to the semicolons in a list
-   if you want semicolons to appear in cmake then use a json array. You can always use `string_decode_semicolon()`
-   to obtain the string as it was in json
-   eg. `[1,2,3] => 1;2;3`  `"1;2;3" => 1${semicolon_code}2${semicolon_code}3`
- 
 
 
 
 
 ## <a name="json_escape"></a> `json_escape`
 
+ function to escape json
 
 
 
 
 ## <a name="json_extract_string_value"></a> `json_extract_string_value`
 
- quickly extracts string properties values from a json string
- useful for large json files with unique property keys
 
 
 
@@ -139,6 +128,9 @@ This is done by creating a hash from the input string and using it as a cache ke
 
 ## <a name="json_read"></a> `json_read`
 
+ reads a json file from the specified location
+ the location may be relative (see explanantion of path() function)
+ returns a map or nothing if reading fails 
 
 
 
@@ -157,6 +149,7 @@ This is done by creating a hash from the input string and using it as a cache ke
 
 ## <a name="json_write"></a> `json_write`
 
+ write the specified object reference to the specified file
 
 
 

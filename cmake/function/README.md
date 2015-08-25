@@ -92,9 +92,6 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="arguments_cmake_code"></a> `arguments_cmake_code`
 
- `(<start index> <end index>)-> <cmake code>`
- 
- captures the cmake code for the calling function and returns it as a string  
 
 
 
@@ -103,20 +100,10 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 
- recreates the invocation arguments which when evaluated are identical
- to the arguments passed to the function where this macro was invoked
-
-
 
 
 ## <a name="arguments_encoded_list"></a> `arguments_encoded_list`
 
- 
-
- returns an encoded list for the specified arguments passed to
- current function invocation.
- 
- you can only use this inside of a cmake function and not inside a macro
 
 
 
@@ -147,21 +134,37 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="arguments_string"></a> `arguments_string`
 
- returns the argument string which was passed to the parent function
- it takes into considerations quoted arguments
- todo: start and endindex
 
 
 
 
 ## <a name="bind"></a> `bind`
 
+ is the same as function_capture.
+ deprecate one of the two
+
+ binds variables to the function
+ by caputring their current value and storing
+ them
+ let funcA : ()->res
+ bind(funcA var1 var2)
+ will store var1 and var2 and provide them to the funcA call
 
 
 
 
 ## <a name="call"></a> `call`
 
+ dynamic function call method
+ can call the following
+ * a cmake macro or function
+ * a cmake file containing a single function
+ * a lambda expression (see lambda())
+ * a object with __call__ operation defined
+ * a property reference ie this.method()
+ CANNOT  call 
+ * a navigation path
+ no output except through return values or referneces
 
 
 
@@ -174,35 +177,24 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="curry_compile_encoded_list"></a> `curry_compile_encoded_list`
 
- (["[" <capture vars> "]"] <callable> "(" (<argument>|<assignment>)* ")" ["=>" <?func_name>(<arg names>)  ])->
-
-
 
 
 
 
 ## <a name="define_function"></a> `define_function`
 
- define an inline function
- e.g. `define_function(my_func() message(hello))`
 
 
 
 
 ## <a name="function_capture"></a> `function_capture`
 
- captures variables from the current scope in the function
 
 
 
 
 ## <a name="function_define_new"></a> `function_define_new`
 
- `(<signarture> <cmake code>)-><function name>`
-
- defines an anonymous cmake function and returns its reference (name)
- the code needs to begin with the signature without the name e.g. `(arg1 arg2)` 
-  
 
 
 
@@ -227,18 +219,25 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="function_import_table"></a> `function_import_table`
 
+ imports the specified map as a function table which is callable via <function_name>
+ whis is a performance enhancement 
 
 
 
 
 ## <a name="function_lines_get"></a> `function_lines_get`
 
+ returns the function content in a list of lines.
+ cmake does nto support a list containing a strings which in return contain semicolon
+ the workaround is that all semicolons in the source are replaced by a separate line containsing the string ![[[SEMICOLON]]]
+ so the number of lines a function has is the number of lines minus the number of lines containsing only ![[[SEMICOLON]]]
 
 
 
 
 ## <a name="function_new"></a> `function_new`
 
+ creates a and defines a function (with random name)
 
 
 
@@ -255,6 +254,7 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 
 
+
 ## <a name="function_signature_regex"></a> `function_signature_regex`
 
 
@@ -263,6 +263,9 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="function_string_get"></a> `function_string_get`
 
+ returns the implementation of the function (a string containing the source code)
+ this only works for functions files and function strings. CMake does not offer
+ a possibility to get the implementation of a defined function or macro.
 
 
 
@@ -275,6 +278,7 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="function_string_rename"></a> `function_string_rename`
 
+ injects code into  function (right after function is called) and returns result
 
 
 
@@ -305,6 +309,7 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="is_function"></a> `is_function`
 
+returns true if the the val is a function string or a function file
 
 
 
@@ -329,18 +334,22 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="is_function_string"></a> `is_function_string`
 
+returns true if the the string val is a function
 
 
 
 
 ## <a name="load_function"></a> `load_function`
 
+ reads a functions and returns it
 
 
 
 
 ## <a name="rcall"></a> `rcall`
 
+ allows a single line call with result 
+ ie rcall(some_result = obj.getSomeInfo(arg1 arg2))
 
 
 
@@ -359,10 +368,6 @@ Functions in cmake are not variables - they have a separate global only scope in
 
 ## <a name="wrap_platform_specific_function"></a> `wrap_platform_specific_function`
 
- defines the function called ${function_name} to call an operating system specific function
- uses ${CMAKE_SYSTEM_NAME} to look for a function called ${function_name}${CMAKE_SYSTEM_NAME}
- if it exists it is wrapped itno ${function_name}
- else ${function_name} is defined to throw an error if it is called
 
 
 

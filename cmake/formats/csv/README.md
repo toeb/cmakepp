@@ -12,6 +12,10 @@
 
 ## <a name="csv_deserialize"></a> `csv_deserialize`
 
+ deserializes a csv string 
+ currently expects the first line to be the column headers
+ rows are separated by \n or \r\n
+ every value is delimited by double quoutes ""
 
 
 

@@ -255,10 +255,6 @@ json_print(${res})
 
 ## <a name="uri_check_scheme"></a> `uri_check_scheme`
 
- 
- checks to see if all specified items are in list 
- using list_check_items
- 
 
 
 
@@ -266,24 +262,17 @@ json_print(${res})
 ## <a name="uri_coerce"></a> `uri_coerce`
 
 
- forces the specified variable reference to become an uri
-
 
 
 
 ## <a name="uri_decode"></a> `uri_decode`
 
- decodes an uri encoded string ie replacing codes %XX with their ascii values
 
 
 
 
 ## <a name="uri_encode"></a> `uri_encode`
 
- encodes a string to uri format 
- if you can pass decimal character codes  which are encoded 
- if you do not pass any codes  the characters  recommended by rfc2396
- are encoded
 
 
 
@@ -296,9 +285,6 @@ json_print(${res})
 
 ## <a name="uri_normalize_input"></a> `uri_normalize_input`
 
- normalizes the input for the uri
- expects <uri> to have a property called input
- ensures a property called uri is added to <uri> which contains a valid uri string 
 
 
 
@@ -317,10 +303,6 @@ json_print(${res})
 
 ## <a name="uri_parse"></a> `uri_parse`
 
- parses an uri
- input can be any path or uri
- whitespaces in segments are allowed if string is delimited by double or single quotes(non standard behaviour)
-{
 
 
 
@@ -333,8 +315,6 @@ json_print(${res})
 
 ## <a name="uri_parse_file"></a> `uri_parse_file`
 
- expects last_segment property to exist
- ensures file_name, file, extension exists
 
 
 
@@ -347,7 +327,6 @@ json_print(${res})
 
 ## <a name="uri_parse_query"></a> `uri_parse_query`
 
- parses the query field of uri and sets  the uri.params field to the parsed data
 
 
 
@@ -360,25 +339,12 @@ json_print(${res})
 
 ## <a name="uri_qualify_local_path"></a> `uri_qualify_local_path`
 
- tries to interpret the uri as a local path and replaces it 
- with a normalized local path (ie file:// ...)
- returns a new uri
 
 
 
 
 ## <a name="uri_recommended_to_escape"></a> `uri_recommended_to_escape`
 
- characters specified in rfc2396
- 37 %  (percent)
- 126 ~ (tilde) 
- 1-32 (control chars) (nul is not allowed) 
- 127 (del)
- 32 (space)
- 35 (#) sharp fragment identifer
- 60 (<) 62 (>) 34 (") delimiters 
- unwise 
- 123 { 125 } 124 | 92 \ 94 ^ 91 [ 93 ] 96 `
 
 
 
@@ -391,7 +357,6 @@ json_print(${res})
 
 ## <a name="uri_to_localpath"></a> `uri_to_localpath`
 
- formats an <uri~> to a localpath 
 
 
 

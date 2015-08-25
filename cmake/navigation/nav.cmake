@@ -4,7 +4,7 @@
 # nav(a.b.c = d.e.f) -> assignes the value of d.e.f to a.b.c
 # nav(a.b.c += d.e) adds the value of d.e to the value of a.b.c
 # nav(a.b.c -= d.e) removes the value of d.e from a.b.c
-# nav(a.b.c FORMAT "{d.e}@{d.f}") formats the string and assigns a.b.c to it
+# nav(a.b.c FORMAT "{d.e}@@{d.f}") formats the string and assigns a.b.c to it
 # nav(a.b.c CLONE_DEEP d.e.f) clones the value of d.e.f depely and assigns it to a.b.c
 function(nav navigation_expression)
   set(args ${ARGN})

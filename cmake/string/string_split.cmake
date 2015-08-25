@@ -5,8 +5,8 @@
 ## TODO: does not handle strings containing list separators properly
 ##
 ## **Examples**
-##  set(input "a@b@c")
-##  string_split("${input}" "@") # => "a;b;c"
+##  set(input "a@@b@@c")
+##  string_split("${input}" "@@") # => "a;b;c"
 ##
 ##
 function(string_split  string_subject split_regex)

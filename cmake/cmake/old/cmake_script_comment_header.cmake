@@ -1,12 +1,11 @@
 
   function(cmake_script_comment_header content)
     set(args ${ARGN})
-    list_extract_flag(args --depth)
+    list_extract_labelled_value(args --depth)
     ans(expected_depth)
-    if("${expected_depth}_" STREQUAL "")
+    if("${expected_depth}_" STREQUAL "_")
       set(expected_depth 1)
     endif()
-
     string_repeat( "#" "${expected_depth}")
     ans(expected_depth)
     cmake_script_parse("${content}" --comment-header --ignore-newlines)

@@ -8,9 +8,9 @@
   )
 
   set(materialization_functions
-    materialize/project_materialize.cmake
-    materialize/project_dematerialize.cmake
-    materialize/project_materialize_dependencies.cmake
+    extensions/materialize/project_materialize.cmake
+    extensions/materialize/project_dematerialize.cmake
+    extensions/materialize/project_materialize_dependencies.cmake
   )
 
   set(dependency_functions

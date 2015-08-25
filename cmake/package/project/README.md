@@ -198,161 +198,48 @@ Hooks are invoked for every package which allows it to react to the project life
 
 ## <a name="project_open"></a> `project_open`
 
- `(<content_dir> [<~project handle>])-><project handle>` 
-
- opens the specified project by setting default values for the existing or new project handle and setting its content_dir property to the fully qualified path specified.
- if no project handle was given a new one is created.
- if the state of the project handle is `unknown` it was never opened before. It is first transitioned to `closed` after emitting the `project_on_new` event.
- then the project handle is transitioned from `closed` to `open` first the `project_on_opening` event is emitted followed by `project_on_open`.  Afterwards the state is changed to `open` and then the `project_on_opened` event us emitted.  
- returns the project handle of the project on success. fails if the project handle is in a state other than `unknown` or `closed`. 
- 
- *note* that the default project does not contain a package source. it will have to be configured once manually for every new project
-
-
- **events**
-  * `project_on_new(<project handle>)`
-  * `project_on_opening(<project handle>)`
-  * `project_on_open(<project handle>)`
-  * `project_on_opened(<project handle>)`
-  * `project_on_state_enter(<project handle>)`
-  * `project_on_state_leave(<project handle>)`
-  * extensions also emit events.
-
- **assumes** 
- * `project_handle.project_descriptor.state` is either `unknown`(null) or `closed`
- 
- **ensures**
- * `content_dir` is set to the absolute path of the project
- * `project_descriptor.state` is set to `open`
 
 
 
 
 ## <a name="project_close"></a> `project_close`
 
- `(<project handle>)-><project file:<path>>`
-
- closes the specified project
-
- **events**
-  * `project_on_closing(<project handle>)`
-  * `project_on_close(<project handle>)`
-  * `project_on_closed(<project handle>)`
 
 
 
 
 ## <a name="project_read"></a> `project_read`
 
- `(<package handle> | <project dir> | <project file>)-><project handle>`
- 
-  Opens a project at `<project dir>` which defaults to the current directory (see `pwd()`). 
-  If a project file is specified it is openend and the project dir is derived.  
- 
-  Checks wether the project is consistent and if not acts accordingly. Loads the project and all its dependencies
-  also loads all materialized packages which are not part of the project's dependency graph
- 
- **returns** 
- * `<project handle>` the handle to the current project (contains the `project_descriptor`) 
- 
- **events**
- * `project_on_opening(<project handle>)` emitted when the `<project handle>` exists but nothing is loaded yet
- * `project_on_open(<project handle>)` emitted  so that custom handlers can perform actions like loading, initializing, etc
- * `project_on_opened(<project handle>)` emitted after the project was checked and loaded
- * events have access to the follwowing in their scope: 
-   * `project_dir:<qualified path>` the location of this projects root directory
-   * `project_handle:<project handle>` the handle to the project 
 
 
 
 
 ## <a name="project_write"></a> `project_write`
 
- saves the project 
 
 
 
 
 ## <a name="project_materialize"></a> `project_materialize`
 
- `(<project handle> <volatile uri> <target dir>?)-><package handle>?`
-
- materializes a package for the specified project.
- if the package is already materialized the existing materialization handle
- is returned
- the target dir is treated relative to project root. if the target_dir
- is not given a target dir will be derived e.g. `<project root>/packages/mypackage-0.2.1-alpha`
-
- returns the package handle on success
- 
- **events**: 
- * `[pwd=target_dir]project_on_package_materializing(<project handle> <package handle>)`
- * `[pwd=target_dir]project_on_package_materialized(<project handle> <package handle>)`
-
- **sideffects**:
- * `IN` takes the package from the cache if it exits
- * adds the specified package to the `package cache` if it does not exist 
- * `project_handle.project_descriptor.package_materializations.<package uri> = <materialization handle>`
- * `package_handle.materialization_descriptor = <materialization handle>`
-
- ```
- <materialization handle> ::= {
-   content_dir: <path> # path relative to project root
-   package_handle: <package handle>
- }
- ```
 
 
 
 
 ## <a name="project_dematerialize"></a> `project_dematerialize`
 
- `(<project handle> <package uri>)-><package handle>`
-
- **sideeffects**
- * removes `project_handle.project_descriptor.package_installations.<package_uri>` 
- * removes `package_handle.materialization_descriptor`
- 
-
- **events**:
- * `[pwd=package content dir]project_on_package_dematerializing(<project handle> <package handle>)`
- * `[pwd=package content dir]project_on_package_dematerialized(<project handle> <package handle>)`
- 
 
 
 
 
 ## <a name="project_materialize_dependencies"></a> `project_materialize_dependencies`
 
- `(<project handle>)-><materialization handle>...`
-
-
- **returns**
- * the `materialization handle`s of all changed packages
-
- **sideffects**
- * see `project_materialize`
- * see `project_dematerialize`
-
- **events**
- * `project_on_dependencies_materializing(<project handle>)`
- * `project_on_dependencies_materialized(<project handle>)`
- * events from `project_materialize` and project `project_dematerialize`
 
 
 
 
 ## <a name="project_change_dependencies"></a> `project_change_dependencies`
 
- `(<project handle> <action...>)-><dependency changeset>`
-
- changes the dependencies of the specified project handle
- expects the project_descriptor to contain a valid package source
- returns the dependency changeset 
- **sideffects**
- * adds new '<dependency configuration>' `project_handle.project_descriptor.installation_queue`
- **events**
- * `project_on_dependency_configuration_changed(<project handle> <changeset>)` is called if dpendencies need to be changed
 
 
 
