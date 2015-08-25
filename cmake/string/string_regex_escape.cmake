@@ -1,4 +1,4 @@
-## `(<str:<string>>)-><str:<string>>`
+## `(<str:<string>>)-><string>`
 ##  
 ## Escapes chars used by regex strings in the input string "str".
 ## Escaped characters: "\ / ] [ * . - ^ $ ? ) ( |"

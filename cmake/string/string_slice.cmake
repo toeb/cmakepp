@@ -1,4 +1,4 @@
-## `(<str:<string>> <start_index:<int>> <end_index:<int>>)-><result:<string>>`
+## `(<str:<string>> <start_index:<int>> <end_index:<int>>)-><string>`
 ##
 ## Extracts a portion from string "str" at the specified index: [start_index, end_index)
 ## Indexing of slices starts at 0. Indices less than -1 are translated into "length - |index|"

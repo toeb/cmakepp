@@ -1,4 +1,4 @@
-## `(<str:<string>> <index:<int>>)-><idx:<int>>`
+## `(<str:<string>> <index:<int>>)-><int>`
 ##  
 ## Normalizes the index "index" of a corresponding input string "str".
 ## Negative indices are transformed into positive values: length - |index|

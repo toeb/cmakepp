@@ -1,4 +1,4 @@
-## `(<str:<string>> <max_length:<int>>)-><res:<string>>`
+## `(<str:<string>> <max_length:<int>>)-><string>`
 ##
 ## Shortens the string "str" to be at most "max_length" characters long.
 ## Note on "max_length": max_length includes the shortener string (default 3 chars "...").

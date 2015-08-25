@@ -1,4 +1,4 @@
-## `(<original:<string>> <ending:<string>>)-><original:<string>>`
+## `(<original:<string>> <ending:<string>>)-><string>`
 ##
 ## Removes the back "n"-chars of the string "original".
 ## Number of chars "n" is calculated based on string "ending".

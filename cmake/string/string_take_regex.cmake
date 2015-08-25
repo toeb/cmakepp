@@ -1,4 +1,4 @@
-## `(<str_name:<string&>> <regex:<string>> <replace:<string>>)-><str_name:<string&>> <match:<string>>`
+## `(<str_name:<string&>> <regex:<string>> <replace:<string>>)-><str_name:<string&>> <string>`
 ##
 ## Tries to match the regex at the begging of ${${str_name}} and returns the match.
 ## Side effect: Input reference ${str_name} is shortened in the process.

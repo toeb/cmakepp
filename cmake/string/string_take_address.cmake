@@ -1,4 +1,4 @@
-## `(<str_ref:<string&>>)-><str_ref:<string&>> <res:<string>>`
+## `(<str_ref:<string&>>)-><str_ref:<string&>> <string>`
 ##
 ## Removes an address (regex format: ":[1-9][0-9]*") from a string reference and returns the address in "res".
 ## The address is also removed from the input string reference (str_ref).

@@ -1,4 +1,4 @@
-## `(<what:<string>> <n:<int>>)-><res:<string>>`
+## `(<what:<string>> <n:<int>>)-><string>`
 ##
 ## Repeats string "what" "n" times and separates them with an optional separator
 ##

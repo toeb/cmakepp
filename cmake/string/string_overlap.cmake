@@ -1,4 +1,4 @@
-## `(<lhs:<string>> <rhs:<string>>)-><result:<string>>`
+## `(<lhs:<string>> <rhs:<string>>)-><string>`
 ##  
 ## Returns the overlapping part of input strings "lhs" and "rhs".
 ## Starts at first char and continues until chars don't match.

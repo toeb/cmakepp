@@ -1,4 +1,4 @@
-## `(<original:<string>> <beginning:<string>>)-><original:<string>>`
+## `(<original:<string>> <beginning:<string>>)-><string>`
 ##
 ## Removes the beginning "n"-chars of the string "original".
 ## Number of chars "n" is calculated based on string "beginning".

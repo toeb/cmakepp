@@ -1,4 +1,4 @@
-## `(<str:<string>> <pattern:<string>> <replace:<string>>)-><res:<string>>`
+## `(<str:<string>> <pattern:<string>> <replace:<string>>)-><string>`
 ##
 ## Replaces all occurences of "pattern" with "replace" in the input string "str".
 ##

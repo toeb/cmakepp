@@ -1,4 +1,4 @@
-## `(<str_ref:<string&>> <delimiters:<delimiter:<string>>...>>)-><str_ref:<string&>> <match:<string>>`
+## `(<str_ref:<string&>> <delimiters:<delimiter:<string>>...>>)-><str_ref:<string&>> <string>`
 ##
 ## Removes delimiters of a string and the undelimited string is returned.
 ## The undelimited string is also removed from the input string reference (__str_ref).

@@ -1,4 +1,4 @@
-## `()-><str:<string>>`
+## `()-><string>`
 ##  
 ## Returns a randomly generated string.
 ## TODO: implement

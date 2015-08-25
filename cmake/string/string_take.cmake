@@ -1,4 +1,4 @@
-## `(<str_name:<string&>> <match:<string>>)-><str_name:<string&>> <match:<string>>`
+## `(<str_name:<string&>> <match:<string>>)-><str_name:<string&>> string>`
 ##
 ## Removes "match" from a string reference "str_name" and returns the "match" string.
 ## Only matches from the beginning of the string reference.

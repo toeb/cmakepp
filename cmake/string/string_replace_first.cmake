@@ -1,4 +1,4 @@
-## `(<string_input:<string>> <string_search:<string>> <string_replace:<string>>)-><res:<string>>`
+## `(<string_input:<string>> <string_search:<string>> <string_replace:<string>>)-><string>`
 ##
 ## Replaces the first occurence of "string_search" with "string_replace" in the input string "string_input".
 ##

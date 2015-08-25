@@ -1,4 +1,4 @@
-## `(<input:<string>>)-><res:<string>>`
+## `(<input:<string>>)-><string>`
 ##  
 ## Replaces all non-alphanumerical characters in the string "input" with an underscore 
 ##

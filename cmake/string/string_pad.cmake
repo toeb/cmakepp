@@ -1,4 +1,4 @@
-## `(<str:<string>> <len:<int>> <argn:<string>>)-><str:<string>>`
+## `(<str:<string>> <len:<int>> <argn:<string>>)-><string>`
 ##  
 ## Pads the specified string to be as long as specified length "len".
 ##  - If the string is longer then nothing is padded
