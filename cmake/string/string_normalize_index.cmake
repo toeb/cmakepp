@@ -1,4 +1,15 @@
-# normalizes the index of str (negativ indices are transformed into positive onces)
+## `(<str:<string>> <index:<int>>)-><int>`
+##  
+## Normalizes the index "index" of a corresponding input string "str".
+## Negative indices are transformed into positive values: length - |index|
+## Returns -1 if index is out of bounds (index > length of string or length - |index| + 1 < 0)
+##
+## **Examples**
+##  set(input "abcd")
+##  string_normalize_index("${input}" 3) # => 3
+##  string_normalize_index("${input}" -2) # => 3
+##
+##
 function(string_normalize_index str index)
 
   set(idx ${index})

@@ -1,10 +1,20 @@
-## if the beginning of the str_name is a delimited string
-## the undelimited string is returned  and removed from str_name
-## you can specify the delimiter (default is doublequote "")
-## you can also specify begin and end delimiter 
-## the delimiters may only be one char 
-## the delimiters are removed from the result string
-## escaped delimiters are unescaped
+## `(<__str_ref:<string&>>)-><__str_ref:<string&>> <string>`
+##
+## Removes delimiters of a string and the undelimited string is returned.
+## The undelimited string is also removed from the input string reference (__str_ref).
+## Notes on the delimiter:
+##  - Default is double quote ""
+##  - Beginning and end delimiter can be specified
+##  - May only be a single char
+##  - Escaped delimiters are unescaped
+##
+## **Examples**
+##  set(in_ref_str "'a string'")
+##  string_take_delimited(in_ref_str ') # => in_ref_str equals "" and res equals "a string"
+##  set(in_ref_str "'a string'")
+##  string_take_delimited(in_ref_str "''") # => same as above
+##
+##
 function(string_take_delimited __string_take_delimited_string_ref )
   regex_delimited_string(${ARGN})
   ans(__string_take_delimited_regex)

@@ -1,13 +1,22 @@
-# returns the the parts of the string that overlap
-# e.g. string_overlap(abcde abasd) returns ab
+## `(<lhs:<string>> <rhs:<string>>)-><string>`
+##  
+## Returns the overlapping part of input strings "lhs" and "rhs".
+## Starts at first char and continues until chars don't match.
+##
+## **Examples**
+##  set(input1 "abcd")
+##  set(input2 "abyx")
+##  string_overlap("${input1}" "${input2}") # => "ab"
+##  set(input2 "wxyz")
+##  string_overlap("${input1}" "${input2}") # => ""
+##
+##
 function(string_overlap lhs rhs)
   string(LENGTH "${lhs}" lhs_length)
   string(LENGTH "${rhs}" rhs_length)
 
   math_min("${lhs_length}" "${rhs_length}")
   ans(len)
-
-
 
   math(EXPR last "${len}-1")
 
@@ -24,6 +33,6 @@ function(string_overlap lhs rhs)
       break()
     endif()
   endforeach()
-  return_ref(result)
 
+  return_ref(result)
 endfunction()
