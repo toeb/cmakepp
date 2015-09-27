@@ -1,3 +1,4 @@
+
 ## `(<promise>)-><void>`
 ##
 ## internal function which resolves a continuation
