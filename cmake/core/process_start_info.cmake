@@ -1,4 +1,4 @@
-## takes a <command line~> or <process start info~>
+## takes a ~<command line> or ~<process start info>
 ## and returns a valid  process start info
 function(process_start_info)
   set(__args ${ARGN})

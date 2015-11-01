@@ -41,6 +41,8 @@ function(process_execute process_handle)
   map_tryget(${process_start_info} working_directory)
   ans(cwd)
 
+
+
   map_tryget(${process_start_info} command)
   ans(command)
 
@@ -49,6 +51,10 @@ function(process_execute process_handle)
 
   map_tryget(${process_start_info} command_arguments)
   ans(command_arguments)
+
+
+  map_tryget(${process_start_info} passthru)
+  ans(passthru)
 
 
   #command_line_args_combine(${command_arguments})
@@ -76,12 +82,19 @@ function(process_execute process_handle)
 
   #message("executing ${command} ${command_arguments_string}")
 
+
+  set(output_handling "  OUTPUT_VARIABLE stdout\n  ERROR_VARIABLE stderr")
+
+  if(passthru)
+    set(output_handling)
+  endif()
+
+
   set(eval_this "
     execute_process(
       COMMAND ${command} ${command_arguments_string}
+      ${output_handling}
       RESULT_VARIABLE exit_code
-      OUTPUT_VARIABLE stdout
-      ERROR_VARIABLE stderr
       WORKING_DIRECTORY ${cwd}
       ${timeout}
     )

@@ -45,9 +45,12 @@ function(test)
   assertf({res.command_arguments} CONTAINS "echo")
   assertf({res.working_directory} STREQUAL "${test_dir}")
   assertf({res.timeout} STREQUAL "2")
+  assertf({res.passthru} STREQUAL "false")
 
 
-  
 
+  process_start_info_new(cmake -E echo "a;b" "c;d" TIMEOUT 2 --passthru)  
+  ans(res)
+  assertf({res.passthru} STREQUAL "true")
 return()
 endfunction()

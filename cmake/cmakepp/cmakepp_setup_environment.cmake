@@ -6,6 +6,8 @@
 function(cmakepp_setup_environment)
   cmakepp_config(base_dir)
   ans(base_dir)
+
+
   
   message(STATUS "creating alias `icmakepp`")  
   alias_create("icmakepp" "cmake -P ${base_dir}/cmakepp.cmake icmake")
@@ -20,5 +22,5 @@ function(cmakepp_setup_environment)
   shell_env_set(CMAKEPP_PATH "${base_dir}/cmakepp.cmake")
 
 
-
+  
 endfunction()

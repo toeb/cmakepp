@@ -5,6 +5,7 @@
 ## See **Examples** for passing references.
 ##
 ## **Examples**
+## 
 ##  set(input "a@@b@@c")
 ##  string_split_at_first(partA partB "${input}" "@@") # => partA equals "a", partB equals "b@@c"
 ##
