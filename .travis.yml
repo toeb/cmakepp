@@ -45,7 +45,7 @@ install:
   #- sudo apt-get install cmake
   #- cmake --version
   # install cmake --
-  - wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz"
+  - wget "http://www.cmake.org/files/${CMAKE_DIR}/cmake-${CMAKE_VERSION}.tar.gz" --no-check-certificate
   - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
   - cmake -Hcmake-${CMAKE_VERSION} -B_builds -DCMAKE_BUILD_TYPE=Release -DCMAKE_USE_OPENSSL=ON -DCMAKE_INSTALL_PREFIX="`pwd`/_install"
   - cmake --build _builds --target install
