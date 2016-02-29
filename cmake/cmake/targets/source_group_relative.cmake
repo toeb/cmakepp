@@ -9,9 +9,15 @@ function(source_group_relative  base_dir)
     path_relative("${base_dir}" "${parent_dir}")
     ans(relative_dir_path)
 
-    string(REPLACE "/" "\\" relative_dir_path "${relative_dir_path}" )
-    source_group(${relative_dir_path} FILES ${file})
+    if(NOT "${relative_dir_path}" STREQUAL ".")
+        string(REPLACE "../" "" relative_dir_path "${relative_dir_path}")
+        string(REPLACE "/" "\\" relative_dir_path "${relative_dir_path}" )
+        
+        source_group(${relative_dir_path} FILES ${file})
 
+    endif()
+
+    
 
 
 
