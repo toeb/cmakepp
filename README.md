@@ -10,7 +10,7 @@
 
 
 # Usage
-Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are avaiable as soon as you include the `cmakepp.cmake` file.  To find functionality browse the `README.md` files throughout this project.
+Look through the files in the package.  Most functions will be commented and the other's usage can be inferred.  All functions are available as soon as you include the `cmakepp.cmake` file.  To find functionality browse the `README.md` files throughout this project.
 
 
 
