@@ -1,3 +1,5 @@
+## ''
+## wraps the git executable into an easy to use function
 function(git)
   find_package(Git)
   if(NOT GIT_FOUND)
