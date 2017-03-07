@@ -42,7 +42,8 @@ function(require_package_binary package_uri package_path)
 
     message("package is not built... building")
     cmake(.. ${ARGN} -DCMAKE_INSTALL_PREFIX=stage --passthru)
-    cmake(--build . --target install --passthru)
+    cmake(--build . --target install --config Release --passthru)
+    cmake(--build . --target install --config Debug --passthru)
  
     message("done building ${package_id}")
 
@@ -55,6 +56,27 @@ function(require_package_binary package_uri package_path)
   popd()
 
   set(package_stage_dir "${package_path}/build/stage")
+  message("result is at ${package_stage_dir}")
+  return_ref(package_stage_dir)
+
+
+
+endfunction()
+
+function(require_package_headeronly package_uri package_path)
+   path("${package_path}")
+  ans(package_path)
+
+
+  if(NOT EXISTS "${package_path}")
+    pull_package("${package_uri}" "${package_path}")
+  endif()
+
+  pushd("${package_path}" --create)
+  #...
+  popd()
+
+  set(package_stage_dir "${package_path}")
   message("result is at ${package_stage_dir}")
   return_ref(package_stage_dir)
 
