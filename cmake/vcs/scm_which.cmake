@@ -3,7 +3,7 @@
   ##
   ## returns the scm found `"git"|"svn"|"hg"` in specified directory
   function(scm_which)
-    message(FATAL_ERROR notimplemented)
+    #message(FATAL_ERROR notimplemented)
     path("${ARGN}")
     ans(path)
     pushd("${path}")

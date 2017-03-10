@@ -61,7 +61,7 @@
           ans(__letsv_value_parsed)
 
           if(NOT __letsv_success)
-            message(FATAL_ERROR "could not parse ${__letsv_type} from ${__letsv_value}")
+            message(FATAL_ERROR "could not parse ${__letsv_type} from '${__letsv_value}'")
           endif()
           set(__letsv_value ${__letsv_value_parsed})
 

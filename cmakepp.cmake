@@ -20,6 +20,10 @@ set_property(GLOBAL PROPERTY cmakepp_include_guard true)
 
 cmake_policy(SET CMP0007 NEW)
 cmake_policy(SET CMP0012 NEW)
+if(POLICY CMP0053)
+  ## for template compile
+  cmake_policy(SET CMP0053 OLD)
+endif()
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 OLD)
 endif()
