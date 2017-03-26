@@ -1,4 +1,5 @@
 ## adds version info to the specified target
+## heavily inspired by https://github.com/halex2005/CMakeHelpers
 function(target_version_info)
   arguments_extract_typed_values(0 ${ARGC} 
         <target:<string>>       
