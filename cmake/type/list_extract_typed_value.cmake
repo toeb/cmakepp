@@ -1,12 +1,36 @@
 
+##  
+##
+## extracts a `<typed_value>` from the specified list
+## ```
+##   <typed_value>: ("<"|"[") ["--"] <parameter-name> [ "=>" <argument-name> ] [":" "<" <type-name> ">" ["?"] [ "=" <any> ] ] (">"|"]")
+## ```
+## the formal definition is relatively hard to understand but using examples it should be easy
+## 
+## ```
+##    set(list1 a --test c b)
+##    set(list2 a b c)
+##    list_extract_typed_value(list1 [--test])  #=> "test;true"  rest=>a c b
+##    list_extract_typed_value(list1 [--test])  #=> ""
+##    list_extract_typed_value(list1 [--test:<any>=4])  #=> "test;4"
+##    
+## ```
+
 
   function(list_extract_typed_value __lst __letsv_def)
     regex_cmake()
-   # message("${${__lst}}")
-    set(__letsv_regex "^([<\\[])(${regex_cmake_flag})(:(.*))?(\\]|>)$")
+    set(__letsv_regex "^([<\\[])(${regex_cmake_flag})(\\{(.*)\\})?(=>(${regex_cmake_identifier}))?(:(.*))?(\\]|>)$")
     if("${__letsv_def}" MATCHES "${__letsv_regex}")
-      set(__letsv_name ${CMAKE_MATCH_2})
-      set(__letsv_type ${CMAKE_MATCH_3})
+      if(CMAKE_MATCH_6)
+        set(__letsv_name ${CMAKE_MATCH_6})
+      else()
+        set(__letsv_name ${CMAKE_MATCH_2})
+      endif()
+      set(__letsv_type ${CMAKE_MATCH_8})
+      set(__letsv_comment ${CMAKE_MATCH_4})
+      if(__letsv_comment)
+        message(INFO "${__letsv_comment}")
+      endif()
       if("${CMAKE_MATCH_1}" STREQUAL "<")
         set(__letsv_positional true)
       else()

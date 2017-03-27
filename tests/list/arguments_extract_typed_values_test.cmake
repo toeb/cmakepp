@@ -4,7 +4,7 @@ function(test)
     arguments_extract_typed_values(0 ${ARGC} 
       <test:<any>...> 
       <test2:<any>>
-      [--config:<map>]
+      [--config{this is da comment}:<map>]
       [--myvalue] 
       [--myvalue2] 
       [--myvalue3:<int>?]
@@ -13,6 +13,8 @@ function(test)
       [--callback:<callable>]
       [--int6:<int>=4]
       [--int7:<int>=4]
+      [--int99=>my_int_value:<int>=99]
+      [--int100:<int>=100]
     )
     ans(rest)
   #  print_vars(__extracted_names ${__extracted_names} rest)
@@ -36,9 +38,16 @@ set(myvalue true)
   assert(callback)
   
   assert(NOT myvalue3)
+  ASSERT("${myvalue3}_" STREQUAL "_")
   assert(${myvalue4} STREQUAL 3)
   assert(${int5} STREQUAL "0")
   assert(${int6} STREQUAL "4")
   assert(${int7} STREQUAL "9")
+
+  assert(NOT int99)
+  assert("${my_int_value}" STREQUAL "99")
+
+  assert(int100)
+  assert("${int100}" STREQUAL "100")
 
   endfunction()

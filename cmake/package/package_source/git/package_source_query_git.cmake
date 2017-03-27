@@ -1,11 +1,27 @@
 ## returns a list of valid package uris which contain the scheme gitscm
 ## you can specify a query for ref/branch/tag by adding ?ref=* or ?ref=name
 ## only ?ref=* returns multiple uris
-  function(package_source_query_git uri)
+  function(package_source_query_git)
+    arguments_extract_typed_values(0 ${ARGC} 
+      <uri:<uri>> 
+      [--package-handle=>return_package_handle]
+      #<test2:<any>>
+      #[--config:<map>]
+      #[--myvalue] 
+      #[--myvalue2] 
+      #[--myvalue3:<int>?]
+      #[--myvalue4:<int>?]
+      #[--int5:<int>?]
+      #[--callback:<callable>]
+      #[--int6:<int>=4]
+      #[--int7:<int>=4]
+    )
+
     set(args ${ARGN})
 
-    list_extract_flag(args --package-handle)
-    ans(return_package_handle)
+
+    # list_extract_flag(args --package-handle)
+    # ans(return_package_handle)
 
     uri_coerce(uri)
 
