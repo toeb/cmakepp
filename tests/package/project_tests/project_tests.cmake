@@ -1,5 +1,8 @@
 function(test)
 
+  message(INFO discontinued)
+  return()
+
   project_open(".")
   ans(project)
 
