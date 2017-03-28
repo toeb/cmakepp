@@ -1,10 +1,10 @@
 function(test)
 
-  function(test_fu)
-    arguments_extract_typed_values(0 ${ARGC} 
-      <test:<any>...> 
+    
+  parameter_definition(test_fu
+      <test{"first parameter"}:<any>...> 
       <test2:<any>>
-      [--config{this is da comment}:<map>]
+      [--config{"this is da comment"}:<map>]
       [--myvalue] 
       [--myvalue2] 
       [--myvalue3:<int>?]
@@ -16,12 +16,25 @@ function(test)
       [--int99=>my_int_value:<int>=99]
       [--int100:<int>=100]
     )
+
+  function(test_fu)
+    arguments_extract_defined_value_map(0 ${ARGC} test_fu)
+    ans_extract(values)
     ans(rest)
-  #  print_vars(__extracted_names ${__extracted_names} rest)
-    foreach(name ${__extracted_names} rest)
-      set(${name} ${${name}} PARENT_SCOPE)
+
+    map_keys("${values}")
+    ans(keys)
+    foreach(name ${keys} )
+      map_tryget("${values}" "${name}")
+      ans(value)
+      set(${name} ${value} PARENT_SCOPE)
     endforeach()
+
+    set(rest ${rest} PARENT_SCOPE)
+
   endfunction()
+
+help(test_fu)
 
 
 set(myvalue true)
@@ -49,5 +62,6 @@ set(myvalue true)
 
   assert(int100)
   assert("${int100}" STREQUAL "100")
+
 
   endfunction()

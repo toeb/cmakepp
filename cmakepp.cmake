@@ -59,6 +59,8 @@ endfunction()
 #   return()
 # endfunction()
 
+include("${cmakepp_base_dir}/cmake/type/parameter_definition.cmake")
+
 include("${cmakepp_base_dir}/cmake/task/task_enqueue.cmake")
 
 ## includes all cmake files of cmakepp 
@@ -122,6 +124,9 @@ config_setup("cmakepp_config" ${cmakepp_config_definition})
 set(cmakepp_is_loaded true)
 task_enqueue("[]()") ## dummy
 tqr()
+
+## register all function defs
+parameter_definition("")
 
 
 ## check if in script mode and script file is equal to this file

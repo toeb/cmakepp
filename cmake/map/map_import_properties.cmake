@@ -8,4 +8,3 @@ macro(map_import_properties __map)
     ans("${key}")
   endforeach()
 endmacro()
-

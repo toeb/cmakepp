@@ -1,8 +1,13 @@
 ## returns a pacakge descriptor for the specified git uri 
 ## takes long for valid uris because the whole repo needs to be checked out
+parameter_definition(
+  package_source_resolve_git 
+  <uri{"the query uri of a git package"}:<uri>> 
+)
 function(package_source_resolve_git uri)
-  set(args ${ARGN})
-
+  arguments_extract_defined_values(0 ${ARGC} package_source_resolve_git)
+  ans(args)
+  
   uri_coerce(uri)
 
   package_source_query_git("${uri}" --package-handle)
