@@ -1,5 +1,9 @@
 function(http_put_test)
+  ## is not a stable test because of external parameters.
+  ## deactivating...
 
+
+  return()
 
 
 
