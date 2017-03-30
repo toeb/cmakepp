@@ -1,10 +1,9 @@
-## returns a list of valid package uris which contain the scheme gitscm
-## you can specify a query for ref/branch/tag by adding ?ref=* or ?ref=name
-## only ?ref=* returns multiple uris
+
 parameter_definition(
   package_source_query_git 
   <uri{"the query uri of a git package"}:<uri>> 
   [--package-handle{"if set, return a package handle instead of <unique_uri>"}=>return_package_handle]
+  "#returns a list of valid gitscm:// `<package uri>`s. You can specify a query for ref/branch/tag by adding `?ref=*`, `?ref=name`, `?ref=<hash>`. Only when using `?ref=*` are multiple `<package uri>`s returned."
 )
 function(package_source_query_git)
   arguments_extract_defined_values(0 ${ARGC} package_source_query_git)
@@ -37,6 +36,10 @@ function(package_source_query_git)
   assign(branch = uri.params.branch)  
   assign(tag = uri.params.tag)
   assign(rev = uri.params.rev)
+
+  ## todo: check if unused params are passed
+  ## which should result in a warning
+
 
   set(ref ${ref} ${branch} ${tag})
   list_pop_front(ref)

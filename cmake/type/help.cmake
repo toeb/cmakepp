@@ -4,11 +4,19 @@ function(help)
   ans(res)
   if(NOT res)
     message(INFO "no help found for function ${ARGN}")
+    return()
   endif() 
 
-  map_import_properties(${res} positionals nonpositionals name)
+  map_import_properties(${res} positionals nonpositionals name description)
 
   message("Usage:")
+
+  if(description)
+    string_indent("${description}" "\t" 50)
+    ans(description)
+    message("${description}\n")
+  endif()
+
   message("\tpositional parameters: ")
   set(counter 0)
   foreach(positional ${positionals})

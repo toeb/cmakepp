@@ -1,4 +1,6 @@
 function(test)
+  
+  
 
   fwrite("test/asdasd/package.cmake" "{\"id\":\"mypkg\"}")
   mkdir("test/asdasd2")

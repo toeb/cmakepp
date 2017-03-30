@@ -8,7 +8,7 @@ function(package_source_resolve_path uri)
 
     list(LENGTH package_handle count)
     if(NOT "${count}" EQUAL 1)
-        error("could not find a unique immutbale uri for {uri.uri}")
+        error("could not find a unique immutable uri for {uri.uri}")
         return()
     endif()
 
@@ -16,3 +16,4 @@ function(package_source_resolve_path uri)
     return_ref(package_handle)
 
 endfunction()
+

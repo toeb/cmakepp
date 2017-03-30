@@ -1,21 +1,25 @@
+parameter_definition(target_add_auto
+    <--name{"the name of the target, if empty or '.' the current folder name is used as project name"}:<string>=.>
+    [--cppFeatures:<string>=cxx_variadic_templates;cxx_override]
+    [--version{"the version of this target"}:<semver>=0.0.1]
+    [--include-dir{"directory containing the public headers"}=>includeDir:<path>=include]
+    [--source-dir{"directory containing the source files and private headers"}=>sourceDir:<string>=src]
+    [--install{"generate install targets"}:<bool>=true]
+    [--shared{"generate shared lib target"}:<bool>=true]
+    [--static{"generate static lib target"}:<bool>=true]
+    [--tests:<bool>=true]
+    [--executable:<bool>=false]
+    [--linkLibraries:<string>=]
+    [--verbose]
+    "#generates automatic targets for the current folder. assumes default package layout:
+     # * directory `src` containing compilable files
+     # * directory `header` containing public header files (which are installed)
+     # * asdasd"    
+ )
 
 function(target_add_auto)
-    arguments_extract_typed_values(0 ${ARGC}         
-        <--name:<string>=.>
-        [--cppFeatures:<string>=cxx_variadic_templates;cxx_override]
-        [--version:<semver>=0.0.1]
-        [--includeDir:<string>=include]
-        [--sourceDir:<string>=src]
-        [--install:<bool>=true]
-        [--shared:<bool>=true]
-        [--static:<bool>=true]
-        [--tests:<bool>=true]
-        [--executable:<bool>=false]
-        [--linkLibraries:<string>=]
-        [--verbose]
-       
-     )
-
+    arguments_extract_defined_values(0 ${ARGC} target_add_auto)
+    
 
     if("${name}_" STREQUAL "_" OR "${name}_" STREQUAL "._")
       ## get target name from current path
