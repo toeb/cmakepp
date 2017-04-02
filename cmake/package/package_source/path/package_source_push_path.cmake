@@ -8,10 +8,10 @@ function(package_source_push_path)
         set(source_args ${ARGN})
         set(args)
     endif()
+
     list_pop_front(source_args)
     ans(source)
         
-
     ## get target dir
     list_pop_front(args)
     ans(target_dir)
@@ -29,7 +29,7 @@ function(package_source_push_path)
         error("could not pull `${source_args}` ")
         return()
     endif()
-
+    
     if(NOT EXISTS "${target_dir}/package.cmake")
         assign(package_descriptor = package_handle.package_descriptor)
         json_write("${target_dir}/package.cmake" "${package_descriptor}")

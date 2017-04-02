@@ -3,7 +3,7 @@ parameter_definition(
   package_source_query_git 
   <uri{"the query uri of a git package"}:<uri>> 
   [--package-handle{"if set, return a package handle instead of <unique_uri>"}=>return_package_handle]
-  "#returns a list of valid gitscm:// `<package uri>`s. You can specify a query for ref/branch/tag by adding `?ref=*`, `?ref=name`, `?ref=<hash>`. Only when using `?ref=*` are multiple `<package uri>`s returned."
+  "#returns a list of valid `<package uri>`s. You can specify a query for ref/branch/tag by adding `?ref=*`, `?ref=name`, `?ref=<hash>`. Only when using `?ref=*` are multiple `<package uri>`s returned."
 )
 function(package_source_query_git)
   arguments_extract_defined_values(0 ${ARGC} package_source_query_git)
@@ -91,7 +91,7 @@ function(package_source_query_git)
     ans(scm_descriptor)
     assign(rev = scm_descriptor.ref.revision)
     set(result "${remote_uri}?rev=${rev}")
-    log("git_package_source: query {uri.uri} found {result}" --trace)
+    log("git_package_source: query '{uri.uri}' found '{result}'" --trace)
     if(return_package_handle)
       set(package_handle)
       assign(!package_handle.uri = result)
