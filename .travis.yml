@@ -26,6 +26,7 @@ env:
 matrix:
   allow_failures:
     - env: CMAKE_DIR="v2.8" CMAKE_VERSION="2.8.7"
+    - os: osx
 notifications:
   slack: fallto:MlnVOMNkx8YopsaSSxqh2Rcr
 before_install:
