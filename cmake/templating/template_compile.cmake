@@ -73,12 +73,11 @@ function(template_compile input)
     "${input}"
   )
   string(REGEX REPLACE 
-    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\r\n]+)"
+    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\"'\r\n]+)"
     "${delimiter_code}=\"{\\1}\"${delimiter_code}"
     input
     "${input}"
   )
-
 
 
   string(REGEX MATCHALL "(${code_fragment_regex})|(${literal_fragment_regex})" fragments "${input}")

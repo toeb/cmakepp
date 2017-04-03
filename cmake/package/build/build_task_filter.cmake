@@ -1,0 +1,25 @@
+function(build_task_filter taskList filter)
+    if("${filter}_" STREQUAL "_")
+      return_ref(taskList)
+    endif() 
+
+    string(REPLACE "'" "\"" filter "${filter}")
+
+    set(result)
+    foreach(buildTask ${${taskList}})
+      map_tryget(${buildTask} parameters)
+      ans(parameters)
+      template_compile("${filter}")
+      ans(compiled)
+
+      template_run_scoped("${parameters}" "${filter}")
+      ans(evaluatedFilter)
+
+      eval_predicate_cmake("${evaluatedFilter}")
+      ans(predicate)
+      if(predicate)
+        list(APPEND result "${buildTask}")
+      endif()
+    endforeach()
+    return_ref(result)
+  endfunction()
