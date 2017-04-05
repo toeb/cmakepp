@@ -73,7 +73,7 @@ function(template_compile input)
     "${input}"
   )
   string(REGEX REPLACE 
-    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\"'\r\n]+)"
+    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\"'\r\n\\/]+)"
     "${delimiter_code}=\"{\\1}\"${delimiter_code}"
     input
     "${input}"
@@ -86,7 +86,7 @@ function(template_compile input)
   string(REPLACE "${delimiter_start_escape_code}" "${delimiter_start}"  fragments "${fragments}")
   string(REPLACE "${delimiter_end_escape_code}" "${delimiter_end}"  fragments "${fragments}")
   string(REPLACE "${shorthand_indicator_escape_code}" "${shorthand_indicator}"  fragments "${fragments}")
-  string(REPLACE "${shorthand_indicator_code}" "${shorthand_indicator}" fragments "${fragments}")
+  string(REPLACE "${shorthand_indicator_code}" "${shorthand_hindicator}" fragments "${fragments}")
   
   
   address_new()

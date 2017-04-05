@@ -1,10 +1,11 @@
 function(test)
 
-  build_matrix("{
+  build_task_matrix("{
     generator:{
       '@os STREQUAL Windows': [
-      'cmake -DCMAKE_INSTALL_PREFIX=@install_dir @content_dir ',
-      'cmake --build . --target install --config @config']
+      'message(INFO build @package_descriptor.id @@ @package_descriptor.version in @config )',
+      '>cmake -DCMAKE_INSTALL_PREFIX=@install_dir @content_dir ',
+      '>cmake --build . --target install --config @config']
 
       },
     matrix:{
@@ -14,7 +15,7 @@ function(test)
     }
     }")
   ans(res)
-return()
+
 
 
   build_task_filter(res "'@generator' STREQUAL 'Visual Studio 2015'")
@@ -24,7 +25,7 @@ return()
  git_package_source()
  ans(git_source)
 
-  package_source_push_path(${git_source} "https://github.com/leethomason/tinyxml2.git?ref=4.0.1" => sources)
+  package_source_push_path(${git_source} "file:///C:/Users/Tobiass/Documents/projects/tinyxml2?ref=4.0.1" => sources)
   package_source_pull_path(sources --reference)
   ans(ph)
 
@@ -35,7 +36,15 @@ return()
 
     pushd("bt${i}" --create)
 
-    build_task_execute("${bt}" "${ph}")
+    build_task_parameters(${bt} ${ph}
+       --install-dir "${pth}/stage/@package_descriptor.id/@package_descriptor.version/@config" 
+       --verbose
+      )
+    ans(parameters)
+
+
+    build_task_execute(${bt} ${parameters})
+
     math(EXPR i "${i} + 1")
     popd()
   endforeach()

@@ -1,0 +1,23 @@
+## executes a single command in a separate process
+function(build_task_command_execute command)
+    set(handle)
+    if("${command}" MATCHES "^\\>(.*)$")
+        message("executing shell: ${CMAKE_MATCH_1}")
+        shell("${CMAKE_MATCH_1}" --process-handle)
+        ans(handle)
+    else()
+        message("executing cmake: ${command}")
+        execute_script("${command}" --process-handle --passthru)
+        ans(handle)
+    endif()
+    map_tryget(${handle} exit_code)
+    ans(error)
+
+    if(error)
+        message("failed to execute '${command}'")
+        message(FORMAT "{handle.stderr}")
+        return(false)
+    endif()
+
+    return(true)
+endfunction()

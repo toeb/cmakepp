@@ -1,4 +1,4 @@
-  function(build_matrix )
+  function(build_task_matrix )
     data("${ARGN}")
     ans(config)
 
