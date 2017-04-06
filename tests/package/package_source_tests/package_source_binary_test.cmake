@@ -1,12 +1,13 @@
 function(test)
+#'cmake>message(INFO \\\"build @package_descriptor.id@@@package_descriptor.version in @config\\\")',
+      #'shell>cmake -DCMAKE_INSTALL_PREFIX=@install_dir @content_dir',
+      #'shell>cmake --build . --target install --config @config']
 
   build_task_matrix("{
     generator:{
       '@os STREQUAL Windows': [
-      'message(INFO build @package_descriptor.id @@ @package_descriptor.version in @config )',
-      '>cmake -DCMAKE_INSTALL_PREFIX=@install_dir @content_dir ',
-      '>cmake --build . --target install --config @config']
-
+      'inline>message(INFO \\\"build @package_descriptor.id@@@package_descriptor.version in @config\\\")'
+      ]
       },
     matrix:{
       config:['release','debug'], 

@@ -70,6 +70,7 @@ macro(regex_cmake)
   set(regex_cmake_command_invocation.regex_cmake_identifier CMAKE_MATCH_2)
   set(regex_cmake_command_invocation.arguments CMAKE_MATCH_4)
 
+  
 
 
   set(regex_cmake_function_begin "(^|${cmake_regex_newline})(${regex_cmake_space})?function(${regex_cmake_space})?\\([^\\)\\(]*\\)")

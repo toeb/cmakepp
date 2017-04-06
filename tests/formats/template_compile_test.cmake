@@ -1,4 +1,21 @@
 function(test)
+  
+
+
+
+  data("{a:1,b:{c:2}}")
+  ans(data)
+  template_run("@data.a@data.b.c@data.a")
+  ans(res)
+  assert("${res}" STREQUAL "121")
+
+  template_run("@data.a/@data.b.c/@data.a@")
+  ans(res)
+  assert("${res}" STREQUAL "1/2/1")
+
+
+  return()
+
   obj("{id:1,b:{c:3}}")
   ans(data)
   template_run("[<%={data.id}%>](<%={data.id}%>)")
@@ -17,9 +34,15 @@ function(test)
   set(val1 abc)
   template_run("@set(val1 def)\@val1@")
   ans(res)
-  assert("${res}" STREQUAL "def@")
+  assert("${res}" STREQUAL "def")
 
+  # @ will evaluate to ""
   template_run("@")
+  ans(res)
+  assert("${res}_" STREQUAL "_")
+
+  ## @ only works when escaped
+  template_run("@@")
   ans(res)
   assert("${res}" STREQUAL "@")
 

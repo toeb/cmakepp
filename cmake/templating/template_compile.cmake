@@ -29,7 +29,7 @@
 ##
 ## **NOTE** *never use ascii 16 17 18 28 29 31* as these special chars are used internally
 function(template_compile input)
-
+  regex_cmake()
   ## encode input
   set(delimiter_start "<%")
   set(delimiter_end "%>")
@@ -65,15 +65,17 @@ function(template_compile input)
   set(regex_cmake_function "[a-zA-Z_0-9]+\\([^\n${shorthand_indicator_code}]*\\)")
 
 
-
   string(REGEX REPLACE 
     "${shorthand_indicator_code}(${regex_cmake_function})"
     "${delimiter_code}=\\1${delimiter_code}"
     input
     "${input}"
   )
+
+
   string(REGEX REPLACE 
-    "${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\"'\r\n\\/]+)"
+    #"${shorthand_indicator_code}([^ ${shorthand_indicator_code}${delimiter_code}\"'\r\n\\/]+)"
+    "${shorthand_indicator_code}((${regex_cmake_identifier})(\\.${regex_cmake_identifier})*)"
     "${delimiter_code}=\"{\\1}\"${delimiter_code}"
     input
     "${input}"
