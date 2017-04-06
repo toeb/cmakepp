@@ -3,20 +3,20 @@ function(test)
 
 
 
-  string_indent("aasdasdja  kshdlkasjdl kajsddalska  sdkajsd
-asdasdkasdkajsdlkajsd
-asdlasdk
-asdasd
-alskdjalksjdlkasjdlkajsdlkajsdlkajslkdjalksjdlkajsdlkajsdlkajsdlkjasldk" "    " 20)
+#   string_indent("aasdasdja  kshdlkasjdl kajsddalska  sdkajsd
+# asdasdkasdkajsdlkajsd
+# asdlasdk
+# asdasd
+# alskdjalksjdlkasjdlkajsdlkajsdlkajslkdjalksjdlkajsdlkajsdlkajsdlkjasldk" "    " 20)
 
-  assert("${__ans}" STREQUAL "     aasdasdja  kshdlkasjdl
-     kajsddalska  sdkajsd
+#   assert("${__ans}" STREQUAL "     aasdasdja  kshdlkasjdl
+#      kajsddalska  sdkajsd
     
-     asdasdkasdkajsdlkajsd
+#      asdasdkasdkajsdlkajsd
     
-     asdlasdk
-     asdasd
-     alskdjalksjdlkasjdlkajsdlkajsdlkajslkdjalksjdlkajsdlkajsdlkajsdlkjasldk")
+#      asdlasdk
+#      asdasd
+#      alskdjalksjdlkasjdlkajsdlkajsdlkajslkdjalksjdlkajsdlkajsdlkajsdlkjasldk")
 
 
   
