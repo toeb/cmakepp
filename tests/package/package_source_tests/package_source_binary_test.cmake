@@ -6,18 +6,27 @@ function(test)
   build_task_matrix("{
     generator:{
       '@os STREQUAL Windows': [
-      'inline>message(INFO \\\"build @package_descriptor.id@@@package_descriptor.version in @config\\\")'
+      'inline>message(INFO \\\"build @package_descriptor.id@@@package_descriptor.version in @config\\\")',
+      'shell>cmake -DCMAKE_INSTALL_PREFIX=@install_dir @content_dir',
+      'shell>cmake --build . --target install --config @config'
+
       ]
       },
     matrix:{
       config:['release','debug'], 
       generator:['Visual Studio 2015 AMD64','Visual Studio 2015'],
       os:$os_families()
+    },
+    output:{
+      include:'include',
+      libs:'libs',
+      bin:'bin',
+      defs:'asd'
+
     }
     }")
   ans(res)
-
-
+#
 
   build_task_filter(res "'@generator' STREQUAL 'Visual Studio 2015'")
   ans(filtered)

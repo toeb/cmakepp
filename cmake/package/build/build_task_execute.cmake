@@ -4,7 +4,7 @@
 function(build_task_execute buildTask parameters)
     build_task_command_eval(${buildTask} ${parameters})
     ans(commands)
-
+    ## todo - success handling + timestamp
     foreach(command ${commands})
         build_task_command_execute(${command})
         ans(success)
