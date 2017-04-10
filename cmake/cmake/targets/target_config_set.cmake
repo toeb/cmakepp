@@ -14,7 +14,7 @@ function(target_config_set targetName targetConfig propertyName)
             return(false)
         endif()
 
-        set(propertyName ${propertyName}_${targetConfig}")
+        set(propertyName "${propertyName}_${targetConfig}")
     endif()
     target_set("${targetName}" "${propertyName}" ${ARGN})
     return(true)

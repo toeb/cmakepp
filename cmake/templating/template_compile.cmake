@@ -62,7 +62,7 @@ function(template_compile input)
   ## match all fragments (literal and code fragments)
   set(code_fragment_regex "${delimiter_code}([^${delimiter_code}]*)${delimiter_code}")
   set(literal_fragment_regex "([^${delimiter_code}]+)")
-  set(regex_cmake_function "[a-zA-Z_0-9]+\\([^\n${shorthand_indicator_code}]*\\)")
+  set(regex_cmake_function "(${regex_cmake_identifier})?\\(([^\n${shorthand_indicator_code}]*)\\)")
 
 
   string(REGEX REPLACE 
@@ -71,6 +71,7 @@ function(template_compile input)
     input
     "${input}"
   )
+
 
 
   string(REGEX REPLACE 
@@ -126,7 +127,9 @@ function(template_compile input)
       if("${code}" MATCHES "^=(.*)")  
         set(code "${CMAKE_MATCH_1}")
         if("${code}" MATCHES "${regex_cmake_function}")
-          set(code "set(__ans) \n ${code} \n template_out(\"\${__ans}\")")
+          set(exprcode "expr(\"${CMAKE_MATCH_1}(${CMAKE_MATCH_2})\")")
+         # message("func: '${exprcode}'")
+          set(code "set(__ans) \n ${exprcode} \n template_out(\"\${__ans}\")")
         else()
           set(code "template_out_format(${code})")
         endif()
