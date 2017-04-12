@@ -10,13 +10,17 @@
 
     path_qualify(target_dir)
 
+    log("package_source_pull_git: pulling '${uri}' to '${target_dir}'...")
+
     package_source_resolve_git("${uri}")
     ans(package_handle)
 
     if(NOT package_handle)
+        error("package_source_pulll_git: could not resolve package '${uri}'")
         return()
     endif()
 
+    log("package_source_pull_git: resolved {package_handle.package_descriptor.id}@{package_handle.package_descriptor.version} from '${uri}'")
 
     assign(remote_uri = package_handle.scm_descriptor.ref.uri)
     assign(revision = package_handle.scm_descriptor.ref.revision)

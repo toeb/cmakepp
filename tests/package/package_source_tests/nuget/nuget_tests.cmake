@@ -1,5 +1,7 @@
 function(test)
-
+  if(NOT WIN32)
+    return()
+  endif()
 #nuget(help pack --passthru)
 
   git_package_source()

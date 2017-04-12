@@ -7,8 +7,10 @@ function(build_task_command_execute command)
         set(type "${CMAKE_MATCH_1}")
         set(command "${CMAKE_MATCH_2}")
     endif()
-    
+    path(.)
+    ans(cwd)
    # message("executing '${type}' -- ${command}")
+    log("executing '${command}' as ${type} in ${cwd}" --function "build_task_command_execute")
 
     if("${type}" STREQUAL "inline")
         eval_ref(command)

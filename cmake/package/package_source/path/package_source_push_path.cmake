@@ -20,15 +20,19 @@ function(package_source_push_path)
         ans(target_dir)        
     endif()
 
+    
     path_qualify(target_dir)
 
-    assign(package_handle = source.pull(${source_args} "${target_dir}"))
+    log("package_source_push_path: pushing {source.name}({source_args}) to '${target_dir}'...")    
 
+    assign(package_handle = source.pull(${source_args} "${target_dir}"))
 
     if(NOT package_handle)
         error("could not pull `${source_args}` ")
         return()
     endif()
+
+    log("package_source_push_path: pushed {package_handle.package_descriptor.id}@{package_handle.package_descriptor.version} to '${target_dir}'")
     
     if(NOT EXISTS "${target_dir}/package.cmake")
         assign(package_descriptor = package_handle.package_descriptor)

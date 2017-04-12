@@ -1,16 +1,17 @@
 
 
-  parameter_definition(build_task_parameters
-    <--build-task{"the build task to execute"}=>buildTask:<map>>
+  parameter_definition(build_task_configure
+    <--build-task{"the build task to execute"}=>build_task:<map>>
     <--package-handle{"the package to build with specified task"}=>packageHandle:<map>>
     [--install-dir{"the <~path> where to install the result of the build"}=>install_dir:<string>="stage/@package_descriptor.id/@package_descriptor.version"]
     [--build-dir{"the <~path> where to build the result"}=>build_dir:<string>=build]
     [--content-dir{"the readonly <~path> where the sources lie"}=>content_dir:<string>="@package_handle.content_dir"]
     [--verbose{"extensive log info"}]
-    "#executes a build task, "
+    "#configureds build tasks"
     )
-  function(build_task_parameters)
-    arguments_extract_defined_value_map(0 ${ARGC} build_task_parameters)    
+  function(build_task_configure)
+    arguments_extract_defined_value_map(0 ${ARGC} build_task_configure)    
+    
     ans_extract(args)
     ans(rest)
 
@@ -19,10 +20,17 @@
 
 
     ## create a clone as to not modify input args
-    map_tryget(${buildTask} parameters)
+    map_tryget(${build_task} parameters)
     ans(parameters)
     map_clone_deep(${parameters})
     ans(parameters)
+    ##right here dude!
+    json_print(${build_task})
+    map_tryget(${build_task} output)
+    ans(output)
+    map_clone(${output})
+    ans(output)
+
 
     ## setup environment
     assign(parameters.package_descriptor = args.packageHandle.package_descriptor)
@@ -35,9 +43,15 @@
     build_task_parameters_eval(${parameters})
     ans(parameters)
     
+    map_template_evaulate_scoped("${output}" "${parameters}")
+    ans(output)
+
+
+    json_print(${output})
+
 
     if(verbose)
-        map_tryget(${buildTask} command_template)
+        map_tryget(${build_task} commands)
         ans(command_template)
 
         template_run_scoped(${parameters} "${command_template}")
@@ -53,6 +67,7 @@
             ans(cmd)
             message(INFO ">>> ${cmd}")
         endforeach()
+        message(POP)
     endif()
 
 

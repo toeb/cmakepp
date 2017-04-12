@@ -8,7 +8,7 @@ function(package_source_resolve_git)
   arguments_extract_defined_values(0 ${ARGC} package_source_resolve_git)
   ans(args) 
   
-  log("git_package_source: resolving '{uri.uri}'")
+  log("package_source_resolve_git: resolving '{uri.uri}'...")
 
   package_source_query_git("${uri}" --package-handle)
   ans(package_handle)
@@ -24,7 +24,6 @@ function(package_source_resolve_git)
   assign(rev = package_handle.scm_descriptor.ref.revision)
   assign(type = package_handle.scm_descriptor.ref.type)
   assign(default_version = package_handle.scm_descriptor.ref.name)
-
   ## tries to extract version from tag information by parsing the tag name
   if("${type}" STREQUAL "tags")
     semvers_extract("${default_version}")
@@ -45,7 +44,7 @@ function(package_source_resolve_git)
   ##  try to get package descriptor
   git_cached_clone("${remote_uri}" --ref ${rev} --read package.cmake)
   ans(package_descriptor_content)
-  
+
   json_deserialize("${package_descriptor_content}")
   ans(package_descriptor)
   
@@ -58,6 +57,8 @@ function(package_source_resolve_git)
   ans(package_descriptor)
 
   map_set(${package_handle} package_descriptor ${package_descriptor})
+
+  log("package_source_resolve_git: successfully resolved {package_descriptor.id}@{package_descriptor.version}")
 
   return_ref(package_handle)
 endfunction()

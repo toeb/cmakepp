@@ -1,60 +1,53 @@
-  function(build_task_matrix )
-    data("${ARGN}")
-    ans(config)
+function(build_task_matrix )
+  data("${ARGN}")
+  ans(config)
 
-    map_tryget(${config} matrix)
-    ans(buildMatrices)
+  map_tryget(${config} parameters)
+  ans(parameters)
 
 
-    if(buildMatrices)
-      map_permutate(${buildMatrices})
-      ans(buildMatrices)
+  if(parameters)
+    map_permutate(${parameters})
+    ans(parameters)
+  endif()
+
+
+  ## get commands 
+  map_tryget(${config} commands)
+  ans(commands)
+
+  map_coerce("${commands}" "default")
+  ans(commands)
+
+
+  set(tasks)
+  while(true)
+    list_pop_front(parameters)
+    ans(currentMat)
+    if(NOT currentMat)
+      break()
+    endif()
+
+    map_filter_template_key("${commands}" "${currentMat}")
+    ans(commandsKey)
+
+    if("${commandsKey}_" STREQUAL "_")
+      set(commandsKey default)
+    endif()
+
+    map_tryget(${commands} "${commandsKey}")
+    ans(commandsTemplate)
+
+
+    if("${commandsTemplate}_" STREQUAL "_")
+      continue()
     endif()
 
 
-    ## get generators 
-    map_tryget(${config} generator)
-    ans(generators)
+    build_task_new("${commandsKey}" "${commandsTemplate}" "${currentMat}")
+    ans(buildTask)
 
-    map_coerce("${generators}" "default")
-    ans(generators)
-
-
-    set(tasks)
-
-    while(true)
-      list_pop_front(buildMatrices)
-      ans(currentMat)
-      if(NOT currentMat)
-        break()
-      endif()
-
-      map_filter_template_key("${generators}" "${currentMat}")
-      ans(generatorKey)
-
-      if("${generatorKey}_" STREQUAL "_")
-        set(generatorKey default)
-      endif()
-
-      map_tryget(${generators} "${generatorKey}")
-      ans(generatorTemplate)
-
-
-      if("${generatorTemplate}_" STREQUAL "_")
-        continue()
-      endif()
-
-      template_run_scoped(${currentMat} "${generatorTemplate}")
-      ans(generatorEvaluated)
-
-      map_new()
-      ans(buildTask)
-      map_set(${buildTask} name "${generatorKey}")
-      map_set(${buildTask} command ${generatorEvaluated})
-      map_set(${buildTask} command_template "${generatorTemplate}")
-      map_set(${buildTask} parameters ${currentMat})
-
-      list(APPEND tasks ${buildTask})
-    endwhile()
-    return_ref(tasks)
-  endfunction()
+    list(APPEND tasks ${buildTask})
+  endwhile()
+  return_ref(tasks)
+endfunction()

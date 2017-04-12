@@ -26,10 +26,10 @@ function(test)
     }
     }")
   ans(res)
-#
+
 
   build_task_filter(res "'@generator' STREQUAL 'Visual Studio 2015'")
-  ans(filtered)
+ans(filtered)
 
 
  git_package_source()
@@ -46,7 +46,7 @@ function(test)
 
     pushd("bt${i}" --create)
 
-    build_task_parameters(${bt} ${ph}
+    build_task_configure(${bt} ${ph}
        --install-dir "${pth}/stage/@package_descriptor.id/@package_descriptor.version/@config" 
        --verbose
       )

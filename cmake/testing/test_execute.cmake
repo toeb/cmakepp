@@ -1,5 +1,5 @@
 function(test_execute test)
-  event_addhandler(on_log_message "[](msg) message(FORMAT '{msg.message}') ")
+  event_addhandler(on_log_message "[](msg) message(FORMAT '{msg.function}> {msg.message}') ")
   ans(handler)
 
   message(STATUS "running test ${test}...")
