@@ -25,6 +25,7 @@
     map_clone_deep(${parameters})
     ans(parameters)
     ##right here dude!
+    message("buildtask")
     json_print(${build_task})
     map_tryget(${build_task} output)
     ans(output)

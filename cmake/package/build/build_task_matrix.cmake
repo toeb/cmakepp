@@ -6,19 +6,31 @@ function(build_task_matrix )
   ans(parameters)
 
 
+
   if(parameters)
+    map_remove(${config} parameters)    
     map_permutate(${parameters})
     ans(parameters)
   endif()
 
 
+ 
   ## get commands 
   map_tryget(${config} commands)
   ans(commands)
-
+  
   map_coerce("${commands}" "default")
   ans(commands)
 
+
+  map_tryget(${config} output)
+  ans(output)
+
+  map_coerce("${commands}" "default")
+  ans(output)
+
+
+  
 
   set(tasks)
   while(true)

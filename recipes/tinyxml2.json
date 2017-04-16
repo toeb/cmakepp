@@ -1,32 +1,32 @@
 {
   "uri":"https://github.com/leethomason/tinyxml2.git?tag=4.0.1",
+  "parameters":
+  {
+    "config":["release", "debug"],
+    "generator":["Visual Studio 2015"],
+    "os":"Windows"
+  },
   "build_descriptor":
   {
+    "$if":"true",
     "commands": 
     [
       "shell>cmake -DCMAKE_INSTALL_PREFIX=\"@install_dir\" \"@content_dir\"",
       "shell>cmake --build . --target install --config @config"
-    ]
-
-    ,
-    "parameters":
+    ]        
+  },
+  "binary_descriptor": 
+  {
+    "$if":"@os STREQUAL 'Windows'",
+    "cpp":
     {
-      "config":["release", "debug"],
-      "generator":["Visual Studio 2015"],
-      "os":"Windows"
-    },
-    "output":
-    {
-      "cpp":
-      {
         "include_dirs":"@install_dir/include",
         "library_dirs":"@install_dir/lib",
-        "definitions":{
+        "definitions":
+        {
           "GOT_TINYXML2":true
-        }
-      },
-      "output":"@install_dir/bin/**"
+        }      
     }
-  }  
+  }
 
 }

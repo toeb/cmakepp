@@ -1,0 +1,10 @@
+
+  function(map_conditional_predicate_eval parameters predicate)
+    if("${predicate}_" STREQUAL "true_")
+      return(true)
+    elseif("${predicate}_" STREQUAL "false_")
+      return(false)
+    endif()
+    eval_predicate_template_cmake("${parameters}" "${predicate}")
+    return_ans()
+  endfunction()

@@ -96,7 +96,7 @@ function(dfs_callback callback)
 
     map_set(${visited} "${node}" true)
 
-    map_keys(${node})
+    map_keys("${node}")
     ans(map_keys)
 
     list(LENGTH map_keys map_length)
@@ -106,7 +106,7 @@ function(dfs_callback callback)
     
     set(map_element_index 0)
     foreach(map_element_key ${map_keys})
-      map_tryget(${node} ${map_element_key})
+      map_tryget("${node}" ${map_element_key})
       ans(map_element_value)
       list_push_back(path "${map_element_key}")
       dfs_callback_emit(map_element_begin)
