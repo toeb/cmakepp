@@ -4,6 +4,16 @@ function(test)
   ans(recipe)
 
 
+  map_clone_deep("${recipe}")
+  ans(recipe)
+
+
+  map_tryget(${recipe} uri)
+  ans(uri)
+
+
+  map_remove(${recipe} uri)
+
   map_tryget(${recipe} parameters)
   ans(parameters)
 
@@ -15,37 +25,57 @@ function(test)
   list_peek_front(parameters)
   ans(param)
 
+  
 
-  # foreach(param ${parameters})
-  #   map_conditional_evaluate("${param}" "${recipe}")
-  #   ans(result)
-  #   message("nununununu")
-  #   json_print("${result}")
+  
+  map_set(${param} config release)
 
-  # endforeach()
+  json_print(${param})
 
+  map_template_evaluate_scoped( "${param}" "${recipe}")
+  ans(evaluatedRecipe)
 
-
-
-      data("{
-        '$if':'@config STREQUAL release',
-        '$then':
-        {
-          '$if':'true',
-          'asdasd':'asdasdasd'
+  json_print("${evaluatedRecipe}")
+  map_conditional_evaluate("${param}" ${evaluatedRecipe})
+  ans(result)
 
 
-        },
-        '$else':2
-        }")
-    #  ans(recipe)
-    
-      map_set(${param} config release)
+  json_print(${result})
 
-      map_conditional_evaluate("${param}" ${recipe})
-      ans(result)
 
-      json_print(${result})
+
+
+
+  file_anchor_require_dir(.packages)
+  ans(binary_dir)
+
+
+
+  default_package_source()
+  ans(source)
+
+
+  package_source_push_path(${source} "${uri}" => "${binary_dir}/source")
+  ans(packageHandle)
+
+  map_tryget(${packageHandle} content_dir)
+  ans(content_dir)
+
+
+  map_set(${param} "content_dir" "${content_dir}")
+
+
+  map_set(${param} "build_dir" "${binary_dir}/build")
+
+  map_set(${param} "install_dir" "${binary_dir}/stage")
+
+
+
+  json_print(${param})
+
+
+
+
 
   return()
 
@@ -54,19 +84,6 @@ function(test)
   ans(build_descriptor)
 
 
-  map_tryget(${recipe} uri)
-  ans(uri)
-
-
-  file_anchor_require_dir(.packages)
-  ans(binary_dir)
-
-  default_package_source()
-  ans(source)
-
-
-  package_source_push_path(${source} "${uri}" => "${binary_dir}/source")
-  ans(packageHandle)
 
 
   build_task_matrix("${build_descriptor}")

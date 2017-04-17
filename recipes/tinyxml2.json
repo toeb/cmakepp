@@ -17,7 +17,7 @@
   },
   "binary_descriptor": 
   {
-    "$if":"@os STREQUAL 'Windows'",
+    "$if":"'@os' STREQUAL 'Windows'",
     "cpp":
     {
         "include_dirs":"@install_dir/include",
