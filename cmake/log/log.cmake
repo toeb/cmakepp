@@ -31,6 +31,15 @@
 ## %>
 ## ```
 function(log)
+
+  map_tryget(global log)
+  ans(log)
+  if(NOT log)
+    map_new()
+    ans(log)
+    map_set(global log "${log}")
+  endif()
+
   event_handlers(on_log_message)
   ans(has_handlers)
   if(NOT has_handlers)
@@ -60,6 +69,8 @@ function(log)
   if(__current_function_name)
     set(member_function "${__current_function_name}")
   endif()
+
+
   ans(error_code)
   map_new()
   ans(entry)

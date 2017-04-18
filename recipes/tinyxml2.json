@@ -22,6 +22,7 @@
     {
         "include_dirs":"@install_dir/include",
         "library_dirs":"@install_dir/lib",
+        "libs":"tinyxml2.lib",
         "definitions":
         {
           "GOT_TINYXML2":true

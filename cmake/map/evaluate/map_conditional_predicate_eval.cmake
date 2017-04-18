@@ -5,6 +5,7 @@
     elseif("${predicate}_" STREQUAL "false_")
       return(false)
     endif()
+   # message(" map_conditional_predicate_eval>>>>   ${predicate}")
     eval_predicate_template_cmake("${parameters}" "${predicate}")
     return_ans()
   endfunction()

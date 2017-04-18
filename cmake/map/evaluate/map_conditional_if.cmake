@@ -1,10 +1,12 @@
 
 
   function(map_conditional_if parameters)
+    
     set(map ${ARGN})
 
     map_tryget("${map}" $if)
     ans(condition)
+  
 
         
     map_has("${map}" "$then")
@@ -25,8 +27,12 @@
     endif()
     
 
-    map_conditional_predicate_eval("${parameters}" "${condition}")
+
+    map_conditional_predicate_eval("${parameters}" "${condition}")    
     ans(evaluatedConditions)
+
+
+
 
 
     if(evaluatedConditions)
