@@ -1,6 +1,6 @@
 
   parameter_definition(recipe_load
-    [--target-dir{"the build task to execute"}=>target_dir:<string>]
+    [--target-dir{"the directory where to load the recipe to"}=>target_dir:<string>]
     "#loads a recipe"
     )
   function(recipe_load recipe)
@@ -13,11 +13,8 @@
     endif()
 
 
-
-
     map_clone_deep("${recipe}")
     ans(recipe)
-
 
 
     map_tryget(${recipe} parameters)
@@ -29,8 +26,12 @@
     ans(uri)
     default_package_source()
     ans(source)
+
+
+    log("pulling package '${uri}'...")
     package_source_push_path(${source} "${uri}" => "${target_dir}/source")
     ans(packageHandle)
+    log("...done pulling package '${uri}'")
 
     if(NOT packageHandle)
       error("could not load package '${uri}'")
@@ -59,6 +60,7 @@
     map_set(${param} config release)
     map_set(${param} "build_dir" "${target_dir}/build")
     map_set(${param} "install_dir" "${target_dir}/stage")
+    map_tryget(${param} install_dir)
     map_set(${param} "content_dir" "${content_dir}")
 
 
@@ -74,16 +76,51 @@
     map_conditional_evaluate("" ${evaluated_binary_descriptor})
     ans(evaluated_binary_descriptor)
 
+    log("executing build task...")
     build_task_execute("${evaluated_build_descriptor}" ${param})
+    ans(success)
+    if(NOT success)
+        error("...failed to execute build task")
+        return()
+    endif()
 
-    json_write("${target_dir}/recipe.json" ${recipe})
-    json_write("${target_dir}/parameters.json" ${param})
-    json_write("${target_dir}/build.json" ${evaluated_build_descriptor})
-    json_write("${target_dir}/binary.json" ${evaluated_binary_descriptor})
-    json_write("${target_dir}/package.json" "${packageHandle}")
+    log("...done executing build task.")
+
+    checksum_dir("${install_dir}")
+    ans(install_checksum)
+
+
+
+    map_set(${evaluated_binary_descriptor} checksum_files "${install_checksum}")
+
 
     map_append(${packageHandle} builds "${evaluated_build_descriptor}")
     map_append(${packageHandle} binaries "${evaluated_binary_descriptor}")
+
+
+
+    map_dfs_references_once(${packageHandle})
+    ans(references)
+    map_keys(${references})
+    ans(references)
+    foreach(reference ${references})
+        map_keys(${reference})
+        ans(keys)
+        foreach(key ${keys})
+            map_tryget(${reference} "${key}")
+            ans(value)
+            path_replace_relative("${target_dir}" "${value}")
+            ans(newValue)
+            #message("${reference}.${key} = '${value}' => '${newValue}'")
+
+            map_set(${reference} "${key}" "${newValue}")
+        endforeach()
+    endforeach()
+
+
+
+
+    json_write("${target_dir}/package.json" "${packageHandle}")
 
 
     return_ref(packageHandle)

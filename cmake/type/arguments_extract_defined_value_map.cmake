@@ -2,12 +2,15 @@
 
 macro(arguments_extract_defined_value_map __start_arg_index __end_arg_index __name)
   arguments_encoded_list("${__start_arg_index}" "${__end_arg_index}")
+  set(__current_function_name "${__name}")
   ans(__arg_res)
   parameter_definition_get("${__name}")
-  ans(defs)
-  list_extract_defined_values(__arg_res "${defs}")
+  ans(___defs)
+  
+  if(___defs)
+    list_extract_defined_values(__arg_res "${___defs}")
+  endif()
 
-  set(__current_function_name "${__name}")
 
   #ans_extract(values)
   #ans(rest)  

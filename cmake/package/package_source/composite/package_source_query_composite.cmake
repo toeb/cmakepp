@@ -7,7 +7,11 @@
 ## the uri so the best source is queryied first
 ## if a source returns a rating of 999 all other sources are disregarded
 function(package_source_query_composite uri)
+  arguments_extract_defined_values(0 ${ARGC} package_source_query_composite)
   uri_coerce(uri)
+
+  log("querying for '{uri.uri}'")
+
 
   set(args ${ARGN})
 
@@ -47,6 +51,10 @@ function(package_source_query_composite uri)
     if(rating EQUAL 0)
       break()
     endif()
+
+
+    log("querying package source '{current.source_name}' (rating: {rating})")
+
 
     map_tryget(${current} source)
     ans(source)

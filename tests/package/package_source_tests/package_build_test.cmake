@@ -4,6 +4,8 @@ function(test)
   
 
 
+
+
   ## set binary dir
   file_anchor_require_dir(.packages)
   ans(binary_dir)
@@ -26,7 +28,11 @@ function(test)
 
 
 
+  function(recipe_require)
 
+
+  endfunction()
+  
 
 
 

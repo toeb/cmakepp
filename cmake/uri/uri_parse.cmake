@@ -45,7 +45,7 @@ function(uri_parse str)
 
 
   map_set(${res} input "${str}")
-
+  
 
   ## normalize input of uri
   uri_normalize_input("${res}" ${flags})
