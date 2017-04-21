@@ -1,10 +1,26 @@
+function(package_handle_build)
+
+
+endfunction()
+
+
 
   parameter_definition(recipe_load
+    <--recipe{"recipe map or recipe file"}:<data>>
     [--target-dir{"the directory where to load the recipe to"}=>target_dir:<string>]
+    [--package-source{"use the specified package source"}=>source]
     "#loads a recipe"
     )
   function(recipe_load recipe)
     arguments_extract_defined_values(0 ${ARGC} recipe_load)    
+
+    set(package_handle_filename package.json)
+
+
+    if(NOT recipe)
+        error("no recipe specified")
+        return()
+    endif()
 
 
     if(NOT target_dir)
@@ -13,42 +29,111 @@
     endif()
 
 
+    log("loading recipe {recipe.uri}...")
+
+
+    if(NOT IS_DIRECTORY "${target_dir}")
+        log("creating directory for recipe")
+        mkdir("${target_dir}")
+    endif()
+
+
+
+    ## create a clone as to not modify recipe (safety first)
     map_clone_deep("${recipe}")
     ans(recipe)
+
+    
+
+ 
+    ## do everything relative from target_dir here
+    pushd("${target_dir}")
+
+
+
+
+    ## read existing package handle
+    fread_data("${package_handle_filename}")
+    ans(package_handle)
+
+
+    if(NOT package_handle)
+        log("package does not exist yet. ")
+        
+        if(NOT source)
+            log("no package source specified - using default package source")
+            default_package_source()
+            ans(source)
+        endif()    
+
+        ## get package
+        map_tryget(${recipe} uri)
+        ans(uri)
+
+        log("pulling package '${uri}'...")
+        package_source_push_path(${source} "${uri}" => "${target_dir}/source")
+        ans(package_handle)
+
+        
+        checksum_dir("${target_dir}/source")
+        ans(source_checksum)
+
+        map_set(${package_handle} content_checksum ${source_checksum})
+
+        log("...done. pulled '${uri}' (source chksum: ${source_checksum})")
+
+
+    else()
+        log("found package at '${target_dir}'")
+
+
+        log("checking consistency of source....")
+
+        checksum_dir("${target_dir}/source")
+        ans(source_checksum)
+        
+        map_tryget(${package_handle} content_checksum)
+        ans(existing_checksum)
+
+        if(NOT "${source_checksum}_" STREQUAL "${existing_checksum}_")
+            error("inconsistent source found (expected chksum '${existing_checksum}' but got  '${source_checksum}' )")
+            popd()
+            return()
+        endif()
+
+    endif()
+
+    fwrite_data("${package_handle_filename}" ${package_handle})
+
 
 
     map_tryget(${recipe} parameters)
     ans(parameters)
 
 
-    ## get package
-    map_tryget(${recipe} uri)
-    ans(uri)
-    default_package_source()
-    ans(source)
+    ## todo:  handle multiple binary dscritpors
+    ## set build config 
+    ## so that it can be built by different function
 
 
-    log("pulling package '${uri}'...")
-    package_source_push_path(${source} "${uri}" => "${target_dir}/source")
-    ans(packageHandle)
-    log("...done pulling package '${uri}'")
 
-    if(NOT packageHandle)
-      error("could not load package '${uri}'")
-      return()
-    endif()
+    return(${package_handle})
 
-    map_tryget(${packageHandle} content_dir)
+
+    
+
+    map_tryget(${package_handle} content_dir)
     ans(content_dir)
+
 
 
     map_tryget(${recipe} build_descriptor)
     ans(build_descriptor)
-    map_set(${packageHandle} build_descriptor ${build_descriptor})
+    map_set(${package_handle} build_descriptor ${build_descriptor})
     
     map_tryget(${recipe} binary_descriptor)
     ans(binary_descriptor)
-    map_set(${packageHandle} binary_descriptor ${binary_descriptor})
+    map_set(${package_handle} binary_descriptor ${binary_descriptor})
 
 
     map_permutate(${parameters})
@@ -94,12 +179,12 @@
     map_set(${evaluated_binary_descriptor} checksum_files "${install_checksum}")
 
 
-    map_append(${packageHandle} builds "${evaluated_build_descriptor}")
-    map_append(${packageHandle} binaries "${evaluated_binary_descriptor}")
+    map_append(${package_handle} builds "${evaluated_build_descriptor}")
+    map_append(${package_handle} binaries "${evaluated_binary_descriptor}")
 
 
 
-    map_dfs_references_once(${packageHandle})
+    map_dfs_references_once(${package_handle})
     ans(references)
     map_keys(${references})
     ans(references)
@@ -120,8 +205,8 @@
 
 
 
-    json_write("${target_dir}/package.json" "${packageHandle}")
+    json_write("${target_dir}/package.json" "${package_handle}")
 
 
-    return_ref(packageHandle)
+    return_ref(package_handle)
   endfunction()  

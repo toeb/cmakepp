@@ -11,14 +11,11 @@ function(test)
   ans(binary_dir)
 
 
-  ## load some recipe
-  json_read(${cmakepp_base_dir}/recipes/tinyxml2.json)
-  ans(recipe)
 
   ## goto some dir
   pushd(${binary_dir} --create)
 
-  recipe_load("${recipe}")
+  recipe_load("${cmakepp_base_dir}/recipes/tinyxml2.json")
   ans(packageHandle)
 
 
@@ -28,15 +25,18 @@ function(test)
 
 
 
-  function(recipe_require)
+  recipe_load("${cmakepp_base_dir}/recipes/tinyxml2.json")
+  ans(packageHandle)
 
-
-  endfunction()
-  
-
+  json_print(${packageHandle})
 
 
 
+  fwrite("source/values.txt")
+  recipe_load("${cmakepp_base_dir}/recipes/tinyxml2.json")
+  ans(packageHandle)
+
+  json_print(${packageHandle})
 
 
 endfunction()
