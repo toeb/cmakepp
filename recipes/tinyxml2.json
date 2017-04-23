@@ -1,5 +1,5 @@
 {
-  "uri":"https://github.com/leethomason/tinyxml2.git?tag=4.0.1",
+  "query_uri":"https://github.com/leethomason/tinyxml2.git?tag=4.0.1",
   "parameters":
   {
     "config":["release", "debug"],

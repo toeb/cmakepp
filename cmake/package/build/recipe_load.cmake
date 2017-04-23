@@ -1,7 +1,144 @@
-function(package_handle_build)
 
 
+  parameter_definition(recipe_binary
+    <--package-handle{"recipe map or recipe file"}=>package_handle:<data>>
+    <--parameters{"parameters"}=>param:<data>>        
+    "#loads a recipe"
+    )
+
+function(recipe_binary )
+    arguments_extract_defined_values(0 ${ARGC} recipe_binary)    
+
+    map_tryget(${param} recipe_dir)
+    ans(recipe_dir)
+
+    pushd("${recipe_dir}")
+
+
+    checksum_object("${param}")
+    ans(param_checksum)
+
+    
+
+
+    pushd(${param_checksum} --create)
+    ans(target_dir)
+
+
+    map_tryget(${package_handle} content_dir)
+    ans(content_dir)
+
+
+    map_tryget(${package_handle} build_descriptor)
+    ans(build_descriptor)
+
+
+
+
+
+    map_set(${param} "build_dir" "${target_dir}/build")
+    map_set(${param} "install_dir" "${target_dir}/stage")
+    map_set(${param} "content_dir" "${content_dir}")
+
+    json_print(${param})
+
+    map_template_evaluate_scoped(${param} ${build_descriptor})
+    ans(evaluated_build_descriptor)
+    map_conditional_evaluate("" ${evaluated_build_descriptor})
+    ans(evaluated_build_descriptor)
+
+
+
+    log("executing build task...")
+    build_task_execute("${evaluated_build_descriptor}" ${param})
+    ans(success)
+    if(NOT success)
+        error("...failed to execute build task")
+        return()
+    endif()
+
+    log("...done executing build task.")
+
+
+
+    popd()    
+    popd()
+
+    return("${target_dir}/stage")
+
+    return()
+
+    map_set(${param} config release)
+    map_set(${param} "build_dir" "${target_dir}/build")
+    map_set(${param} "install_dir" "${target_dir}/stage")
+    map_tryget(${param} install_dir)
+    map_set(${param} "content_dir" "${content_dir}")
+
+
+    map_template_evaluate_scoped(${param} ${build_descriptor})
+    ans(evaluated_build_descriptor)
+
+    map_conditional_evaluate("" ${evaluated_build_descriptor})
+    ans(evaluated_build_descriptor)
+
+    map_template_evaluate_scoped("${param}" ${binary_descriptor})
+    ans(evaluated_binary_descriptor)
+
+    map_conditional_evaluate("" ${evaluated_binary_descriptor})
+    ans(evaluated_binary_descriptor)
+
+    log("executing build task...")
+    build_task_execute("${evaluated_build_descriptor}" ${param})
+    ans(success)
+    if(NOT success)
+        error("...failed to execute build task")
+        return()
+    endif()
+
+    log("...done executing build task.")
+
+    checksum_dir("${install_dir}")
+    ans(install_checksum)
+
+
+
+    map_set(${evaluated_binary_descriptor} checksum_files "${install_checksum}")
+
+
+    map_append(${package_handle} builds "${evaluated_build_descriptor}")
+    map_append(${package_handle} binaries "${evaluated_binary_descriptor}")
+
+
+
+    map_dfs_references_once(${package_handle})
+    ans(references)
+    map_keys(${references})
+    ans(references)
+    foreach(reference ${references})
+        map_keys(${reference})
+        ans(keys)
+        foreach(key ${keys})
+            map_tryget(${reference} "${key}")
+            ans(value)
+            path_replace_relative("${target_dir}" "${value}")
+            ans(newValue)
+            #message("${reference}.${key} = '${value}' => '${newValue}'")
+
+            map_set(${reference} "${key}" "${newValue}")
+        endforeach()
+    endforeach()
+
+
+
+
+    json_write("${target_dir}/package.json" "${package_handle}")
+
+
+    return_ref(package_handle)
+
+        
 endfunction()
+
 
 
 
@@ -29,7 +166,7 @@ endfunction()
     endif()
 
 
-    log("loading recipe {recipe.uri}...")
+    log("loading recipe {recipe.query_uri}...")
 
 
     if(NOT IS_DIRECTORY "${target_dir}")
@@ -67,11 +204,11 @@ endfunction()
         endif()    
 
         ## get package
-        map_tryget(${recipe} uri)
-        ans(uri)
+        map_tryget(${recipe} query_uri)
+        ans(query_uri)
 
-        log("pulling package '${uri}'...")
-        package_source_push_path(${source} "${uri}" => "${target_dir}/source")
+        log("pulling package '${query_uri}'...")
+        package_source_push_path(${source} "${query_uri}" => "${target_dir}/source")
         ans(package_handle)
 
         
@@ -80,7 +217,7 @@ endfunction()
 
         map_set(${package_handle} content_checksum ${source_checksum})
 
-        log("...done. pulled '${uri}' (source chksum: ${source_checksum})")
+        log("...done. pulled '${query_uri}' (source chksum: ${source_checksum})")
 
 
     else()
@@ -103,17 +240,29 @@ endfunction()
 
     endif()
 
+
+    map_set(${package_handle} recipe_dir "${target_dir}")
+
+
+
+    map_merge(${package_handle} ${recipe})
+    ans(package_handle)
+
+
     fwrite_data("${package_handle_filename}" ${package_handle})
 
 
 
-    map_tryget(${recipe} parameters)
-    ans(parameters)
+ ##   map_tryget(${recipe} parameters)
+  #  ans(parameters)
 
 
     ## todo:  handle multiple binary dscritpors
     ## set build config 
     ## so that it can be built by different function
+
+
+
 
 
 
