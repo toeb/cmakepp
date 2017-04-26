@@ -4,13 +4,13 @@
   {
     "config":["release", "debug"],
     "generator":["Visual Studio 2015"],
-    "os":"Windows"
+    "os":"Windows",
   },
-  "build_descriptor":
+  "generator":
   {
     "$if":"true",
     "commands": 
-    [
+    [      
       "shell>cmake -DCMAKE_INSTALL_PREFIX=\"@install_dir\" \"@content_dir\"",
       "shell>cmake --build . --target install --config @config"
     ]        
@@ -27,7 +27,7 @@
         {
           "GOT_TINYXML2":true
         }      
-    }
   }
+}
 
 }

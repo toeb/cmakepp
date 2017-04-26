@@ -68,7 +68,7 @@ function(cmake_environment)
     site_name(host_name)
     assign(!result.host_name = host_name)     
     assign(!result.architecture = res.CMAKE_HOST_SYSTEM_PROCESSOR) 
-    
+    assign(!result.cmake.default_generator = res.CMAKE_GENERATOR)
   #  map_tryget(${res} CMAKE_SIZEOF_VOID_P)
    # ans(byte_size_voidp)
    # math(EXPR architecture "${byte_size_voidp} * 8")

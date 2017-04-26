@@ -2,7 +2,7 @@
 ## `(<project>)-><void>`
 ##  
 ## writes the package_descriptor to a package_descriptor_file
-## it it is configured. does not overwrite package_descriptor_file
+## if it is configured. does not overwrite package_descriptor_file
 ## if it was newly set
 function(project_package_descriptor_writer project)
   map_import_properties(${project} project_descriptor content_dir)
