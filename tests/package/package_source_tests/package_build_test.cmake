@@ -1,4 +1,9 @@
 function(test)
+
+
+
+
+
   cmake_environment()
   ans(env)
 
@@ -44,15 +49,15 @@ function(test)
   ans(result)
 
 
-  map_tryget(${result} install_dir)
-  ans(install_dir)
+  assign(install_dir = result.params.install_dir)
 
+print_vars(install_dir)
 
   checksum_dir("${install_dir}")
   ans(chk1)
   message("${chk1}")
 
-  fwrite("${install_dir}/test.txt")
+  fwrite("${install_dir}/test.txt" "mu")
   checksum_dir("${install_dir}")
   ans(chk1)
   message("${chk1}")
@@ -64,7 +69,18 @@ function(test)
 
 
 
-  package_handle_build(${packageHandle} {config:'release'})
+  pushd(${install_dir})
+  checksum_glob_ignore("**" "!test.txt" --recurse)
+  ans(chk1)
+  popd()
+  message("${chk1}")
+
+
+
+
+
+
+  #package_handle_build(${packageHandle} {config:'release'})
 
 
 

@@ -66,7 +66,7 @@ function(package_source_query_path uri)
 
   if(content)
     pushd("${path}")
-      checksum_glob_ignore(${content})
+      checksum_glob_ignore(${content} --recurse)
       ans(hash)
     popd()
   else()

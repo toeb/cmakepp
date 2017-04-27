@@ -8,7 +8,7 @@ function(checksum_glob_ignore)
     set(args ${ARGN})
     list_extract_labelled_keyvalue(args --algorithm)
     ans(algorithm)
-    glob_ignore(${args} --recurse ${algorithm})
+    glob_ignore(${args})
     ans(files)
 
 
