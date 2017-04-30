@@ -20,31 +20,33 @@ function(test)
   recipe_load("${cmakepp_base_dir}/recipes/tinyxml2.json")
   ans(packageHandle)
 
-   parameter_definition(build_cached
-    <--package-handle{""}:<data>>
-    [--cache-dir{"the directory of the cache for the specified package-handle"}=>cache_dir:<string>]    
-    "#returns a cached build or builds and caches a build"
-    )
+
+
+    
+
+
+  timer_start("initial build")
+  package_handle_build_cached(${packageHandle} {config:'release'})
+  ans(result)
+  timer_print_elapsed("initial build")
+
+
+  timer_start("second build")
+  package_handle_build_cached(${packageHandle} {config:'release'})
+  ans(result)
+  timer_print_elapsed("second build")
+
+
+  timer_start("third build")  
+  fwrite("install/dummy.txt")
+  package_handle_build_cached(${packageHandle} {config:'release'})
+  ans(result)
+  timer_print_elapsed("second build")
 
 
 
 
-   function(cached_path)
-
-
-   endfunction()
-
-  function(build_cached )
-    arguments_extract_defined_values(0 ${ARGC} build_cached)    
-
-
-    # needs to react if package handle | content changed
-    # needs to react on different parameters
-
-
-  endfunction()
-
-
+return()
   package_handle_build(${packageHandle} {config:'release'})
   ans(result)
 
