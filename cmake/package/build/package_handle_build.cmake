@@ -43,7 +43,7 @@ function(package_handle_build )
     map_set(${params} "install_dir" "${install_dir}")        
     map_set(${params} "build_dir" "${build_dir}")        
     map_set(${params} "content_dir" "${content_dir}")
-
+    
 
 
     map_template_evaluate_scoped(${params} ${generator})

@@ -41,13 +41,19 @@
     endif()
 
 
+
     package_handle_build(
       "${package_handle}" 
       "${params}" 
       --target-dir "${target_dir}" 
-      --install_dir "${install_dir}"
+      --install-dir "${install_dir}"
       ${args})
     ans(build_descriptor)
+
+
+    
+
+
 
     fwrite_data("${install_dir}/.build-descriptor.json" "${build_descriptor}")   
     content_dir_update("${install_dir}")

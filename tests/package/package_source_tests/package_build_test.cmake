@@ -1,11 +1,12 @@
 function(test)
 
 
+  
+  
 
 
 
-  cmake_environment()
-  ans(env)
+  
 
 
   ## set binary dir
@@ -20,8 +21,73 @@ function(test)
   recipe_load("${cmakepp_base_dir}/recipes/tinyxml2.json")
   ans(packageHandle)
 
+  
 
 
+
+  package_handle_binary_generator(${packageHandle})
+  ans(result)
+
+
+
+
+
+  json_print(${result})
+
+
+
+return()
+
+
+  build_params(--generator "Visual Studio 15 2017 Win64" --release)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+
+
+  build_params(--generator "Visual Studio 15 2017 Win64" --debug)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+
+  build_params(--generator "Visual Studio 15 2017" --release)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+
+  build_params(--generator "Visual Studio 15 2017" --debug)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+
+
+  build_params(--generator "Visual Studio 14 2015 Win64" --debug)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+  
+  build_params(--generator "Visual Studio 14 2015 Win64" --release)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+
+
+
+  build_params(--generator "Visual Studio 14 2015" --debug)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+
+
+  build_params(--generator "Visual Studio 14 2015" --release)
+  ans(param)
+  package_handle_build_config("${packageHandle}" "${param}")
+  ans(descr)
+
+
+
+
+return()
     
 
 
