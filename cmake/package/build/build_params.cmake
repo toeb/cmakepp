@@ -12,9 +12,16 @@
 
 
     if(NOT generator)
-      cmake_environment()
-      ans(env)
-      assign(generator = env.cmake.default_generator)
+      is_script_mode()
+      ans(isScriptMode)
+      if(isScriptMode)
+        cmake_environment()
+        ans(env)
+        assign(generator = env.cmake.default_generator)
+      else()
+        set(generator "${CMAKE_GENERATOR}")
+      endif()
+      
     endif()    
 
 
