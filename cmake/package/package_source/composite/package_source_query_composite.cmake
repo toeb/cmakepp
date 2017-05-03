@@ -53,11 +53,11 @@ function(package_source_query_composite uri)
     endif()
 
 
-    log("querying package source '{current.source_name}' (rating: {rating})")
 
 
     map_tryget(${current} source)
     ans(source)
+    log("querying package source '{source.source_name}' (rating: {rating})")
     ## query the source
     ## args (especially --package-handle will be passed along)
     assign(current_result = source.query("${uri}" ${args}))

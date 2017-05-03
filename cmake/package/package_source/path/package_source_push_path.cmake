@@ -1,11 +1,15 @@
 ## (<installed package> <~uri> [--reference] [--consume] <package_content_copy_args:<args...>?>)
 ##
+parameter_definition(package_source_push_path
+  )
 function(package_source_push_path)
-    if("${ARGN}" MATCHES "(.*);=>;?(.*)")
+    arguments_extract_defined_values(0 ${ARGC} package_source_push_path)
+    ans(args)    
+    if("${args}" MATCHES "(.*);=>;?(.*)")
         set(source_args "${CMAKE_MATCH_1}")
         set(args "${CMAKE_MATCH_2}")
     else()
-        set(source_args ${ARGN})
+        set(source_args ${args})
         set(args)
     endif()
 
@@ -23,7 +27,7 @@ function(package_source_push_path)
     
     path_qualify(target_dir)
 
-    log("package_source_push_path: pushing {source.name}({source_args}) to '${target_dir}'...")    
+    log("pushing {source.name}({source_args}) to '${target_dir}'...")    
 
     assign(package_handle = source.pull(${source_args} "${target_dir}"))
 
@@ -32,9 +36,10 @@ function(package_source_push_path)
         return()
     endif()
 
-    log("package_source_push_path: pushed {package_handle.package_descriptor.id}@{package_handle.package_descriptor.version} to '${target_dir}'")
+    log("pushed {package_handle.package_descriptor.id}@{package_handle.package_descriptor.version} to '${target_dir}'")
     
     if(NOT EXISTS "${target_dir}/package.cmake")
+        log("no package descriptor existed.  writing package.cmake")
         assign(package_descriptor = package_handle.package_descriptor)
         json_write("${target_dir}/package.cmake" "${package_descriptor}")
     endif()

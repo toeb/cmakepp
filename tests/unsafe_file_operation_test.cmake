@@ -8,7 +8,7 @@ function(test)
 
   function(unsafe_scope_unlock)
 
-  endif()
+  endfunction()
 
 
 endfunction()
