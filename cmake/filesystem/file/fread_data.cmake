@@ -1,3 +1,5 @@
+
+
 ## tries to read the spcified file format
 function(fread_data path)
   set(args ${ARGN})
@@ -18,18 +20,24 @@ function(fread_data path)
 
   endif()
 
-
+  set(result)
   if("${mime_type}" MATCHES "application/json")
     json_read("${path}")
-    return_ans()
+    ans(result)
   elseif("${mime_type}" MATCHES "application/x-quickmap")
     qm_read("${path}")
-    return_ans()
+    ans(result)
   elseif("${mime_type}" MATCHES "application/x-serializedcmake")
     cmake_read("${path}")
-    return_ans()
+    ans(result)
   else()
     return()
   endif()
+
+  ## set target file property which allows identification of where the map was read
+  ## if it was a single map
+  map_source_file_set("${result}" "${path}")      
+
+  return(${result})
 
 endfunction()

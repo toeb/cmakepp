@@ -122,7 +122,7 @@
     package_handle_build_generator("${package_handle}")
     ans(auto_generator)
     if(auto_generator)
-        map_set(${package_handle} generator "${auto_generator}")
+        map_set(${package_handle} build_descriptor "${auto_generator}")
     endif()
 
 

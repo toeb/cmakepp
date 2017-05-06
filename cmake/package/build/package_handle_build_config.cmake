@@ -15,7 +15,7 @@
 
     # generates the build direcotry for specified config
     template_run_scoped("${params}" "@string_tolower($system.name)-x@architecture-@compilers.cxx.id@compilers.cxx.major_version@.@compilers.cxx.minor_version-@config")
-    ans(install_dir_ext)
+    ans(build_id)
 
 
     path_qualify(target_dir)
@@ -25,7 +25,7 @@
     ans(install_dir)
 
 
-    set(install_dir "${install_dir}/${install_dir_ext}")
+    set(install_dir "${install_dir}/${build_id}")
 
 
     package_handle_build_cached(
@@ -35,8 +35,10 @@
       --install-dir "${install_dir}"
       ${args}
       )
-    ans(build_descriptor)
+    ans(build_info)
     
-
-    return(${build_descriptor})
+    map_set(${build_info} id "${build_id}")
+    return(${build_info})
   endfunction()
+
+

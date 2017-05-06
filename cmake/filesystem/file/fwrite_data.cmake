@@ -10,7 +10,21 @@
   ##          *.json files serialize to json
   ##
   function(fwrite_data target_file)
+    
     set(args ${ARGN})
+
+    ## check first arg is a map with a stored $target_file hidden property
+    ## then we can use this as the target file
+    ## this field only exists if fread_data was used to read data
+    map_source_file_get("${target_file}")
+    ans(new_target_file)
+    if(new_target_file)
+      set(args ${target_file})
+      set(target_file "${new_target_file}")      
+    endif()   
+
+
+
 
     ## choose mime type
     list_extract_labelled_value(args --mime-type)
@@ -67,5 +81,8 @@
 
     ## write and return data
     fwrite("${target_file}" "${serialized}")
+
+    map_source_file_set("${data}" "${target_file}")    
+
     return_ref(data)
   endfunction()

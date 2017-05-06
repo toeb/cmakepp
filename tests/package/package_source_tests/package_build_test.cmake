@@ -1,11 +1,15 @@
 function(test)
 
 
+
+  
+
   pushd(tinyxml2 --create)
   ## furst thing - how do i get the build params to --build > (maybe also trhough uri?)
   ## how do i cash the package name once?
-  recipe_build("https://github.com/leethomason/tinyxml2.git?tag=4.0.1")
+  recipe_build("${cmakepp_base_dir}/recipes/tinyxml2.json")
   ans(res)
+  #recipe_build("https://github.com/leethomason/tinyxml2.git?tag=4.0.1")
   json_print(${res})
   popd()
 

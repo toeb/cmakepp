@@ -11,7 +11,8 @@ function(package_handle_build_generator package_handle)
     return(${generator})
   endif()
 
-
+  
+  
 
   ## curretnly only know of a cmake generator
   if(EXISTS "${content_dir}/CMakeLists.txt")

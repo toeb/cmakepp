@@ -4,11 +4,9 @@
   {
     "config":["release", "debug"],
     "generator":["Visual Studio 2015"],
-    "os":"Windows",
   },
-  "generator":
+  "build_descriptor":
   {
-    "$if":"true",
     "commands": 
     [      
       "shell>cmake -DCMAKE_INSTALL_PREFIX=\"@install_dir\" \"@content_dir\"",
