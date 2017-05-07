@@ -1,9 +1,12 @@
 
-
+ parameter_definition(cmake_build_environment)
 function(cmake_build_environment)
-  if(ARGN)
-    cmake_configure_script("cmake_build_environment()" -G ${ARGN})
+  arguments_extract_defined_values(0 ${ARGC} cmake_build_environment)    
+  ans(args)
+  if(args)
+    cmake_configure_script("cmake_build_environment()" -G ${args})
     ans(res)
+    log("got args returning directly")
     return(${res})
   endif()
 

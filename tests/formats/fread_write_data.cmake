@@ -1,6 +1,5 @@
 function(test)
 
-
   ## shows that the file frome where a map comes is stored along the data
   
   fwrite_data("test.json" "{ value1:'asd', value2:'bsd'}")

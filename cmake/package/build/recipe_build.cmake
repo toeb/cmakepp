@@ -1,16 +1,27 @@
 
+parameter_definition(
+  recipe_build 
+  [--build-params:<any>]
+  )
   
 function(recipe_build)
-  recipe_load(${ARGN})
+  arguments_extract_defined_values(0 ${ARGC} recipe_build)
+  ans(args)
+
+  recipe_load(${args})
   ans(package_handle)
 
   if(NOT package_handle)
     return()
   endif()
 
-
-  build_params()
-  ans(build_params)
+  if(NOT build_params)
+    build_params()
+    ans(build_params)
+    message("buildparams x ${build_params}")
+  endif()
+  
+  json_print(${build_params})
 
   package_handle_build_config("${package_handle}" "${build_params}") 
   ans(build)

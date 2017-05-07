@@ -10,7 +10,7 @@
     arguments_extract_defined_values(0 ${ARGC} build_params)    
     ans(args)
 
-
+    log("generating build params")
     if(NOT generator)
       is_script_mode()
       ans(isScriptMode)
@@ -37,12 +37,17 @@
       set(config release)
     endif()
 
+    string_tolower("${config}")
+    ans(config)
+
     cmake_build_environment("${generator}" ${args})
     ans(param)
 
     map_set(${param} config ${config})
 
-
+    log("config is {config}")
+    log("generator is {generator}")
+    log("build param is {param}")
 
     return(${param})
 

@@ -2,7 +2,27 @@ function(test)
 
 
 
+  cd("d:/test1" --create)
+
+
+
+
+  cmake_configure_script(" 
+      foreach(configType \${CMAKE_CONFIGURATION_TYPES})
+        message(\${configType})
+        build_params(--config \${configType})
+        ans(params)
+        pushd(d:/test1)
+        recipe_build(${cmakepp_base_dir}/recipes/tinyxml2.json --build-params \${params})     
+      endforeach()      
+    " 
+    --target-dir "d:/test1/cmake"
+    --passthru)
+
+  return()
   
+
+  return()
 
   pushd(tinyxml2 --create)
   ## furst thing - how do i get the build params to --build > (maybe also trhough uri?)
