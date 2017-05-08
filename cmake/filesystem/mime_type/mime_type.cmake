@@ -6,10 +6,12 @@ function(mime_type file)
   path_qualify(file)
 
   if(NOT EXISTS "${file}")
+    #message("no file")
     return(false)
   endif()
 
   if(IS_DIRECTORY "${file}")
+   # message("is dir")
     return(false)
   endif()
 
@@ -21,7 +23,12 @@ function(mime_type file)
     return_ref(mime_type)
   endif()
 
-  mime_type_from_filename("${file}")
 
-  return_ans()
+
+  mime_type_from_filename("${file}")
+  ans(mime_type)
+
+
+  return_ref(mime_type)
+  
 endfunction()

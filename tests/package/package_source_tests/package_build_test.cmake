@@ -1,23 +1,67 @@
 function(test)
-
-
-
+ # rm(-r d:/test1)
   cd("d:/test1" --create)
 
+  cmake_configure_script("
+      recipe_load(${cmakepp_base_dir}/recipes/tinyxml2.json)
+      ans(recipe)  
+      package_handle_build_configurations(\${recipe})
+    "
 
-
-
-  cmake_configure_script(" 
-      foreach(configType \${CMAKE_CONFIGURATION_TYPES})
-        message(\${configType})
-        build_params(--config \${configType})
-        ans(params)
-        pushd(d:/test1)
-        recipe_build(${cmakepp_base_dir}/recipes/tinyxml2.json --build-params \${params})     
-      endforeach()      
-    " 
-    --target-dir "d:/test1/cmake"
+    --target-dir d:/test1
     --passthru)
+  ans(res)
+  #json_print(${res})
+  return()
+
+  if(NOT EXISTS "d:/test1")
+    cd("d:/test1" --create)
+
+
+    cmake_configure_script(" 
+        foreach(configType \${CMAKE_CONFIGURATION_TYPES})
+          message(\${configType})
+          build_params(--config \${configType})
+          ans(params)
+          pushd(d:/test1)
+          recipe_build(${cmakepp_base_dir}/recipes/tinyxml2.json --build-params \${params})     
+        endforeach()      
+      " 
+      --target-dir "d:/test1/cmake"
+      --passthru)
+
+  endif()
+
+
+
+    function(package_handle_builds_load path)
+      path_qualify(path)
+
+      glob("${path}/**/.build-info*")
+      ans(paths)
+      json_print(${paths})
+      set(builds)
+      foreach(path ${paths})
+        fread_data("${path}")
+        ans(data)
+        
+        json_print(${data})
+      endforeach()
+      return_ref(builds)
+    endfunction()
+
+    function(package_handle_build_filter build_list)
+
+    endfunction()
+
+
+
+
+
+    package_handle_builds_load("d:/test1/install")
+    ans(builds)
+
+    json_print(${builds})
 
   return()
   

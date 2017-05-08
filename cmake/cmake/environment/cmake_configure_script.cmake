@@ -6,7 +6,6 @@ parameter_definition(
   cmake_configure_script 
   <--script:<string>>
   [--target-dir:<path>]
-  [--passthru]
 )
 function(cmake_configure_script)
   arguments_extract_defined_values(0 ${ARGC} cmake_configure_script)
@@ -63,9 +62,6 @@ function(cmake_configure_script)
     ans(res)  
   endif()
 
-  if(passthru)
-    message("${stdout}")
-  endif()
 
   if(target_dir)
     popd()

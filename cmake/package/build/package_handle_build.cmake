@@ -65,7 +65,7 @@ function(package_handle_build )
     map_new()
     ans(build_info)
 
-    map_set(${build_info} params ${params})    
+    map_set(${build_info} build_parameters ${params})    
     map_set(${build_info} build_descriptor ${evaluated_build_descriptor})
 
 

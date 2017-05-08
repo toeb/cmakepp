@@ -16,13 +16,11 @@ function(recipe_build)
   endif()
 
   if(NOT build_params)
+    ## get default build params
     build_params()
     ans(build_params)
-    message("buildparams x ${build_params}")
   endif()
   
-  json_print(${build_params})
-
   package_handle_build_config("${package_handle}" "${build_params}") 
   ans(build)
 

@@ -19,7 +19,6 @@ function(fread_data path)
     endif()
 
   endif()
-
   set(result)
   if("${mime_type}" MATCHES "application/json")
     json_read("${path}")

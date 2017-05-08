@@ -5,13 +5,22 @@ function(wrap_executable_bare alias executable)
 
   eval("
     function(${alias})
+      set(args \${ARGN})
+      list_extract_flag(args --passthru)
+      ans(passthru)
       pwd()
-      ans(cwd)
-      #message(\"\${ARGN}\")
-      execute_process(COMMAND \"${executable}\" ${ARGN} \${ARGN}
+      ans(cwd)      
+      set(output)
+      set(stdout)
+      if(NOT passthru)
+        set(output 
+          OUTPUT_VARIABLE stdout 
+          ERROR_VARIABLE stdout 
+          )
+      endif()
+      execute_process(COMMAND \"${executable}\" ${ARGN} \${args}
         WORKING_DIRECTORY  \"\${cwd}\"
-        OUTPUT_VARIABLE stdout 
-        ERROR_VARIABLE stdout 
+        \${output}
         RESULT_VARIABLE error
       )
       list(INSERT stdout 0 \${error})
