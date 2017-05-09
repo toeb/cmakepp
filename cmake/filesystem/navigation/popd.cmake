@@ -4,6 +4,7 @@
 function(popd)
   stack_pop(__global_push_d_stack)
   ans(pwd)
+
   cd("${pwd}" ${ARGN})
   return_ans()
 endfunction()

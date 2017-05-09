@@ -8,7 +8,6 @@ function(test)
       package_handle_build_configurations(\${recipe})
     "
 
-    --target-dir d:/test1
     --passthru)
   ans(res)
   #json_print(${res})

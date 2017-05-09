@@ -16,5 +16,6 @@ function(cd)
     mkdir("${path}")
   endif()
   address_set(__global_cd_current_directory "${path}")
+
   return_ref(path)
 endfunction()

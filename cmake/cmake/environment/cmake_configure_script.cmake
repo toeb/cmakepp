@@ -62,6 +62,9 @@ function(cmake_configure_script)
     ans(res)  
   endif()
 
+  if(passthru)
+    message("${stdout}")
+  endif()
 
   if(target_dir)
     popd()

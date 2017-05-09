@@ -129,6 +129,8 @@
     fwrite_data("${package_handle_filename}" ${package_handle})
 
 
+    popd()#target_dir
+
     return(${package_handle})
 
 
