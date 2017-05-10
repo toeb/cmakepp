@@ -1,7 +1,14 @@
 
 
 function(cmake_host_system)
-  cmake_check_configure_mode()
+ 
+  cmake_is_configure_mode()
+  ans(is_config_mode)
+  if(NOT is_config_mode)
+    cmake_configure_script("cmake_host_system()")
+    return_ans()
+  endif()
+
 
   map_new()
   ans(sys)

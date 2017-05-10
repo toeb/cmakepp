@@ -2,13 +2,18 @@
  parameter_definition(build_params
     [--generator:<string>]
     [--config:<string>]
+    [--linkage:<string>]
     [--release]
     [--debug]
+    [--shared]
+    [--static]
     
     )
   function(build_params)
     arguments_extract_defined_values(0 ${ARGC} build_params)    
     ans(args)
+
+
 
     log("generating build params")
     if(NOT generator)
@@ -33,6 +38,18 @@
       set(config debug)
     endif()
 
+    if(shared)
+      set(linkage shared)
+    endif()
+    if(static)
+      set(linkage static)
+    endif()
+
+    if(NOT linkage)
+      ## prefer shared linkage
+      set(linkage shared)
+    endif()
+
     if(NOT config)
       set(config release)
     endif()
@@ -44,10 +61,7 @@
     ans(param)
 
     map_set(${param} config ${config})
-
-    log("config is {config}")
-    log("generator is {generator}")
-    log("build param is {param}")
+    map_set(${param} linkage ${linkage})
 
     return(${param})
 

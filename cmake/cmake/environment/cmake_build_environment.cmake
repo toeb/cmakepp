@@ -4,10 +4,8 @@ function(cmake_build_environment)
   arguments_extract_defined_values(0 ${ARGC} cmake_build_environment)    
   ans(args)
   if(args AND NOT "${CMAKE_GENERATOR}" STREQUAL "${args}")
-    message("args are ${args}")    
     cmake_configure_script("cmake_build_environment()" -G ${args})
     ans(res)
-    log("got args returning directly")
     return(${res})
   endif()
 
@@ -28,7 +26,6 @@ function(cmake_build_environment)
   cmake_system()
   ans(sys)
 
-  map_set(${env} system "${sys}")
 
   # if(CMAKE_CROSSCOMPILING)
   #   map_set(${env} is_crosscompiling "true")
@@ -48,9 +45,24 @@ function(cmake_build_environment)
   if(NOT cfg)
     set(cfg release)
   endif()
-  map_set(${env} config "${cfg}")
-  map_set(${env} architecture "${architecture}")
+
+  if(DEFINED BUILD_SHARED_LIBS)
+    
+    if(BUILD_SHARED_LIBS)
+      set(lnk shared)
+    else()    
+      set(lnk static)
+    endif()
+  else()
+    set(lnk shared)
+  endif()
+
+  
   map_set(${env} generator ${CMAKE_GENERATOR})
+  map_set(${env} config "${cfg}")
+  map_set(${env} linkage "${lnk}")
+  map_set(${env} architecture "${architecture}")
+  map_set(${env} system "${sys}")
   map_set(${env} compilers ${compilers})
 
 

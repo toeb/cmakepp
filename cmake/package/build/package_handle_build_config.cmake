@@ -14,7 +14,7 @@
     arguments_extract_defined_values(0 ${ARGC} package_handle_build_config)    
 
     # generates the build direcotry for specified config
-    template_run_scoped("${params}" "@string_tolower($system.name)-x@architecture-@compilers.cxx.id@compilers.cxx.major_version@.@compilers.cxx.minor_version-@config")
+    template_run_scoped("${params}" "@string_tolower($system.name)-x@architecture-@compilers.cxx.id@compilers.cxx.version-@config")
     ans(build_id)
 
 
