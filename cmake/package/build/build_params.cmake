@@ -47,11 +47,27 @@
 
     if(NOT linkage)
       ## prefer shared linkage
-      set(linkage shared)
+      if(DEFINED BUILD_SHARED_LIBS)
+        if(BUILD_SHARED_LIBS)
+          set(linkage shared)
+        else()
+          set(linkage static)
+        endif()
+      else()
+        set(linkage *)
+      endif()
     endif()
 
     if(NOT config)
-      set(config release)
+      if(DEFINED CMAKE_BUILD_TYPE)
+        if(CMAKE_BUILD_TYPE)
+          set(config "${CMAKE_BUILD_TYPE}")
+        else()
+        endif()
+      else()
+        set(config *)
+      endif()
+      
     endif()
 
     string_tolower("${config}")

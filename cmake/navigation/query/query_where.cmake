@@ -13,11 +13,10 @@ function(query_where query)
   foreach(selector ${selectors})
     map_tryget(${query} "${selector}")
     ans(predicate)
-
     if("${selector}" STREQUAL " ")
       set(selector)
       set(foreach_item false)
-    elseif("${selector}" MATCHES "(.*)\\[.*\\]$")
+    elseif("${selector}" MATCHES "(.*)\\[.*\\]")
       set(foreach_item true)
       set(target_property ${CMAKE_MATCH_1})
     else()
@@ -29,6 +28,8 @@ function(query_where query)
 
     query_literal("${predicate}" __query_predicate)
     ans(success)
+
+
 
     if(success)
       set(matched_values)

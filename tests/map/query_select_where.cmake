@@ -1,5 +1,15 @@
 function(test)
 
+
+  data("[{a:'asd'},{a:'bsd'},{a:'csd'}]")
+  ans(data)
+  
+
+  query_where("{'[:].a':'?/[ac]sd/'}" ${data})
+  ans(res)
+  json_print(${res})
+  
+
   function(test_query_where query )
     data("${ARGN}")
     ans(data)
