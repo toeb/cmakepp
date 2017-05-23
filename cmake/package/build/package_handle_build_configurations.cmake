@@ -6,10 +6,12 @@ function(package_handle_build_configurations )
   arguments_extract_defined_values(0 ${ARGC} package_handle_build_configurations)    
   ans(args)
 
+  log("building package '{package_handle.package_descriptor.id}@{package_handle.package_descriptor.version}' for each configuration type (${CMAKE_CONFIGURATION_TYPES}) ")
+
   cmake_is_configure_mode()
   ans(is_config)
   if(NOT is_config)
-    error("only allowed in configure mode")
+    fatal("only allowed in configure mode")
     return()
   endif()
 

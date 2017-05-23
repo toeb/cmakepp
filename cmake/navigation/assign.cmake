@@ -28,7 +28,7 @@
       ans(__ref)
 
       if("${ARGN}" MATCHES "^\\(.*\\)$")
-        ref_nav_get("${${__ref}}" "&${__rvalue}")
+        ref_nav_get("${${__ref}}" "%${__rvalue}")
         ans(__value)
 
         map_tryget(${__value} ref)

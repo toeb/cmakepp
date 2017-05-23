@@ -15,7 +15,7 @@
 
     path_qualify(target_dir)
 
-    log("building package cached {package_handle.package_descriptor.id}")
+    log("building package cached '{package_handle.package_descriptor.id}'")
 
 
     path_qualify_from("${target_dir}" "${install_dir}")

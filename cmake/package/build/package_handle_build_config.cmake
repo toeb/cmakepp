@@ -17,9 +17,9 @@
     template_run_scoped("${params}" "@string_tolower($system.name)-x@architecture-@compilers.cxx.id@compilers.cxx.version-@config")
     ans(build_id)
 
+    log("build id is '${build_id}'")
 
     path_qualify(target_dir)
-
 
     path_qualify_from("${target_dir}" "${install_dir}")
     ans(install_dir)

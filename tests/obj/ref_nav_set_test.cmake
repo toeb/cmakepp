@@ -28,4 +28,7 @@ function(test)
   test_uut("{a:[123,{b:123},345]}" "{a:[123,345]}" "!a[1[.b" 123)
   test_uut("{a:{b:{c:123}}}" "{a:{b:{c:234}}}" "!a.b.c" 123)
 
+
+  ## todo.  let ref_nav set range values ie ![:].a = 1232
+
 endfunction()

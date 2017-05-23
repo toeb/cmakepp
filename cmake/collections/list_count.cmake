@@ -13,3 +13,6 @@ function(list_count __list_count_lst __list_count_predicate)
   endforeach()
   return("${__list_count_counter}")
 endfunction()
+
+
+

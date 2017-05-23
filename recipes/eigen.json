@@ -1,0 +1,16 @@
+{
+  "query_uri":"bitbucket:eigen/eigen",  
+  "build_descriptor":
+  {
+    "commands": "",
+    "targets":
+    {
+      "name":"default=eigen",
+      "include_dirs":"", 
+      "libs":"name", 
+      "content":"", 
+      "definitions":""
+    }
+
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "query_uri":"https://github.com/zeromq/libzmq.git",  
+  "build_descriptor":
+  {
+    "commands": 
+    [      
+      "shell>cmake -DCMAKE_INSTALL_PREFIX=\"@install_dir\" \"@content_dir\"",
+      "shell>cmake --build . --target install --config @config"
+    ],
+    "cpp":
+    {
+      
+    }
+
+  }
+}

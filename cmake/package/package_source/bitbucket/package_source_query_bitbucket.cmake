@@ -3,13 +3,17 @@
 ## 
 ##
 ## 
+  parameter_definition(package_source_query_bitbucket
+    <--uri:<uri>>
+    [--package-handle=>return_package_handle]
+  )
 function(package_source_query_bitbucket uri)
-  set(args ${ARGN})
+  arguments_extract_defined_values(0 ${ARGC} package_source_query_bitbucket)    
+  ans(args)
 
-  list_extract_flag(args --package-handle)
-  ans(return_package_handle)
+  #list_extract_flag(args --package-handle)
+  #ans(return_package_handle)
 
-  uri_coerce(uri)
 
   uri_check_scheme(${uri} "bitbucket?")
   ans(scheme_ok)

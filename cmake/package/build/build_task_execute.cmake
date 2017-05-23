@@ -1,14 +1,14 @@
-
-
-
-
+parameter_definition(build_task_execute)
 function(build_task_execute buildTask buildParameters)    
-    map_tryget(${buildTask} commands)    
+    arguments_extract_defined_values(0 ${ARGC} build_task_execute)
+    log("executing build task...")
+
+    map_tryget("${buildTask}" commands)    
     ans(commands)
 
-    map_tryget(${buildParameters} build_dir)
+    map_tryget("${buildParameters}" build_dir)
     ans(build_dir)
-    log("trying to build in '${build_dir}'" --function "build_task_execute")
+    log("trying to build in '${build_dir}'")
 
     pushd("${build_dir}" --create)
     ans(build_dir)
