@@ -10,15 +10,15 @@
     "targets":
     [
       {
-        "type":"native",
+        "type":"library",
         "include_dirs":"@install_dir/include",
         "output":"bin/**",
         "libs":["@install_dir/bin/*"],
         "definitions":["GOT_TINYXML2"]
       },
       {
-          "name":"testtarget",
-          "type":"native"
+          "name":"testtarget",          
+          "type":"interface"
 
       }
 

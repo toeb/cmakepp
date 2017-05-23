@@ -56,23 +56,32 @@ endfunction()
   # endif()
 
 
-parameter_definition(cmake_target_from_build_info_targets
+parameter_definition(cmake_import_target_from_build_info_targets
   <--target-namespace{"namespace for targets of package handle"}=>target_namespace:<target_identifier>>
   )
-function(cmake_target_from_build_info_targets)
-  arguments_extract_defined_values(0 ${ARGC} cmake_target_from_build_info_targets)    
+function(cmake_import_target_from_build_info_targets)
+  arguments_extract_defined_values(0 ${ARGC} cmake_import_target_from_build_info_targets)    
   ans(target_configurations)
 
 
   assign(name = target_configurations[:].name)
-
   list_unique(name)
   ans(name)
-
   list(LENGTH name size )
   if(NOT "${size}" STREQUAL "1")
     fatal("all build info targets need to have the same name")
   endif()
+
+  assign(type = target_configurations[:].type)
+  list_unique(type)
+  ans(type)
+  list(LENGTH type size)  
+  if(NOT "${size}" STREQUAL "1")
+    fatal("all build info targets need to have the same target type")
+  endif()
+
+
+
 
   if(NOT name OR "${name}_" STREQUAL "default_")
     set(cmake_target_name "${target_namespace}")
@@ -88,15 +97,21 @@ function(cmake_target_from_build_info_targets)
 
   #assign(ids = target_configurations[:].build_id)
 
-  assign(configs  = )
-
+  assign(configs  = target_configurations[:].build_parameters.config)
+  assign(linkages = target_configurations[:].build_parameters.linkage)
 
   map_new()
   ans(cmake_target)
   map_set(${cmake_target} name "${cmake_target_name}")
+  map_set(${cmake_target} type "${type}")
 
+  foreach(config ${configs})
+    map_new()
+    ans(config_properties)
 
-  json_print(${target_configurations})
+    map_set(${cmake_target} ${config} ${config_properties})
+
+  endforeach()
 
 
 
@@ -105,7 +120,56 @@ function(cmake_target_from_build_info_targets)
 
 endfunction()
 
+parameter_definition(cmake_target_import
+  <--cmake-target{""}=>cmake_target:<map>>
+  )
+function(cmake_target_import)  
+  arguments_extract_defined_values(0 ${ARGC} cmake_target_import)    
+  ans(args)
 
+  log("trying to import target {cmake_target.name}")
+
+  map_tryget(${cmake_target} name)
+  ans(name)
+  map_tryget(${cmake_target} type)
+  ans(type)
+
+  if(NOT ("${type}" STREQUAL library) AND NOT ("${type}" STREQUAL "interface"))
+    fatal("cannot import cmake target of type '${type}'")
+  endif()
+
+  set(scope GLOBAL)
+  set(imported IMPORTED)
+
+  set(linkage SHARED) # or STATIC  or INTERFACE
+
+  if("${type}" STREQUAL "interface")
+    set(linkage "INTERFACE")  
+  endif()
+
+  add_library("${name}" ${linkage} ${imported} ${scope})
+
+
+  if(imported)
+
+    ## depending on config using generator expression
+    target_set("${name}" INTERFACE_INCLUDE_DIRECTORIES ...)
+
+
+    if("${linkage}" STREQUAL "SHARED")
+      target_set("${name}" IMPORTED_LOCATION_<CONFIG>)
+      target_set("${name}" IMPORTED_IMPLIB_<CONFIG>)
+    elseif("${linkage}" STREQUAL "INTERFACE")
+
+    elseif("${linkage}" STREQUAL "STATIC")
+      target_set("${name}" IMPORTED_LOCATION_<CONFIG>)
+
+    endif()
+
+  endif()
+  return()
+
+endfunction()
 parameter_definition(build_info_targets_import
   <--target-namespace{"namespace for targets of package handle"}=>target_namespace:<target_identifier>>
   )
@@ -130,16 +194,21 @@ function(build_info_targets_import)
     map_tryget(${evaluated_targets} "${package_target_name}")
     ans(target_configurations)
 
-    cmake_target_from_build_info_targets("${target_namespace}" ${target_configurations})
+    cmake_import_target_from_build_info_targets("${target_namespace}" ${target_configurations})
     ans_append(cmake_targets)
 
 
+
+
+  endforeach()
+
+  foreach(cmake_target ${cmake_targets})
+    cmake_target_import(${cmake_target})
   endforeach()
 
   return_ref(cmake_targets)
 
 
-  return(${evaluated_targets})
 
 
   # set(bin_dir bin)
