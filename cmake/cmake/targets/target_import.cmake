@@ -1,7 +1,7 @@
+parameter_definition(
+  build_info_evaluate_targets
 
-
-
-parameter_definition(build_info_evaluate_targets)
+  )
 function(build_info_evaluate_targets)
   arguments_extract_defined_values(0 ${ARGC} build_info_evaluate_targets)    
   ans(build_infos)
@@ -63,6 +63,9 @@ function(cmake_import_target_from_build_info_targets)
   arguments_extract_defined_values(0 ${ARGC} cmake_import_target_from_build_info_targets)    
   ans(target_configurations)
 
+  ## targets are only available if in script mode
+  cmake_check_configure_mode()
+
 
   assign(name = target_configurations[:].name)
   list_unique(name)
@@ -105,14 +108,104 @@ function(cmake_import_target_from_build_info_targets)
   map_set(${cmake_target} name "${cmake_target_name}")
   map_set(${cmake_target} type "${type}")
 
+  # set default values  (default to release config)
+
+  # map_set(${cmake_target} include_dirs)
+  # map_set(${cmake_target} library) ## if library == empty -> use name as library name
+
+
+
+  # then set release specific values
   foreach(config ${configs})
     map_new()
     ans(config_properties)
 
-    map_set(${cmake_target} ${config} ${config_properties})
+
+    set(build_parameters)
+    set(target_configuration)
+    foreach(current_target_configuration ${target_configurations})
+      map_tryget("${current_target_configuration}" "build_parameters")
+      ans(build_parameters)
+
+      map_tryget(${build_parameters} config)
+      ans(current_config)
+
+      if("${current_config}_" STREQUAL "${config}_")
+        set(target_configuration ${current_target_configuration})
+        break()
+      endif()
+    endforeach()
+
+    if(NOT target_configuration)
+      fatal("could not associate config '${config}' with target_configuration config")
+    endif()
+
+
+    map_tryget(${target_configuration} include_dirs)
+    ans(include_dirs)
+    map_tryget(${target_configuration} output)
+    ans(output)
+    map_tryget(${target_configuration} libs)
+    ans(libs)
+
+    message("parameters for ${config} ######")
+    print_vars(build_parameters)
+    print_vars(target_configuration)
+
+    map_tryget(${build_parameters} install_dir)
+    ans(install_dir)
+
+
+    map_template_evaluate_scoped("${build_parameters}" "${include_dirs}")
+    ans(include_dirs)
+    if(include_dirs)
+      map_set(${config_properties} include_dirs ${include_dirs})      
+    endif()
+
+    map_template_evaluate_scoped("${build_parameters}" "${libs}")
+    ans(libs)
+    if(libs)
+      pushd("${install_dir}")
+        glob(${libs})
+        ans(library_locations)
+      popd()
+    endif()
+
+    
+    map_template_evaluate_scoped("${build_parameters}" "${output}")
+    ans(output)
+    if(output)
+      pushd("${install_dir}")
+        glob(${output})
+        ans(output)
+        map_set(${config_properties} content_files ${output})
+      popd()
+    endif()
+
+    #map_set(${config_properties} imported_location ${libs})
+    #map_set(${config_properties} imported_implib "")
+    #map_set(${config_properties} content_files ${output})
+    #map_set(${config_properties} content_files )
+
+    map_keys(${config_properties})
+    ans(has_keys)
+
+    if(has_keys)
+      map_set(${cmake_target} ${config} ${config_properties})
+    endif()
+
 
   endforeach()
 
+
+
+  map_tryget(${cmake_target} release)
+  ans(release_config)
+
+
+  if(release_config)
+    map_defaults(${cmake_target} "${release_config}")
+  endif()
 
 
   return(${cmake_target})
