@@ -1,6 +1,59 @@
 function(test)
 
 
+  function(refset values expressions force value)
+    list_pop_front(expressions)
+    ans(current_expression)
+
+    set(result)
+
+    print_vars(expression indices expressions force value refs )
+
+    if("${current_expression}" MATCHES "^[<>].*[<>]$")
+      message("range")
+    else()
+    foreach(ref ${refs})
+      is_address("${ref}")
+      ans(is_address)
+      if(is_address)
+        list(APPEND result "${ref}")
+      else()
+        if(force)
+          map_new()
+          ans_apend(result)
+        endif()
+      endif()
+    endforeach()
+
+
+    foreach(ref ${result})
+      #refset("${")
+      map_set("${ref}" "${property}" "${value}")
+    endforeach()
+
+
+    endif()
+    
+
+    return()
+  endfunction()
+
+
+  data("[{a:1},{a:2}]")
+  ans(dat)
+
+  navigation_expression_parse("a")  
+  ans(expression)
+
+  refset("${dat}" "" "" "${expression}" false "myval")
+  ans(res)
+
+
+
+  json_print(${res})
+
+
+
 
 
 
