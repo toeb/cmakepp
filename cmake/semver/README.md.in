@@ -138,7 +138,7 @@ The following functions are usable for semantic versioning.
   - returns `0` if they are the same
 * `semver_higher(<lhs:semverish> <rhs:semverish>)` returns the semantic version which is higher.
 * `semver_gt(<lhs:semverish> <rhs:semverish>)` returns true iff left semver is greater than right semver
-* `semver_cosntraint_evaluate(<version constraint> <lazy_version>)` returns true if `<lazy_version>` satisfies `<version cosntraint>`
+* `semver_constraint_evaluate(<version constraint> <lazy_version>)` returns true if `<lazy_version>` satisfies `<version constraint>`
   - `semver_constraint_evaluate("=0.0.1" "0.0.1")` -> true
   - `semver_constraint_evaluate("=0.0.1" "0.0.2")` -> false
     - `semver_constraint_evaluate("!0.0.1" "0.0.1")` -> false
